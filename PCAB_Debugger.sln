@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34525.116
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PCAB_Debugger_GUI", "PCAB_Debugger_GUI\PCAB_Debugger_GUI.csproj", "{BE7E5AA6-FDFB-4233-9F11-D7539ED5BBCD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BE7E5AA6-FDFB-4233-9F11-D7539ED5BBCD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE7E5AA6-FDFB-4233-9F11-D7539ED5BBCD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE7E5AA6-FDFB-4233-9F11-D7539ED5BBCD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE7E5AA6-FDFB-4233-9F11-D7539ED5BBCD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7C9712B6-0869-42FA-9BFA-C704A3FD78BB}
+	EndGlobalSection
+EndGlobal
