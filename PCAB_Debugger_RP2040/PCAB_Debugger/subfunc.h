@@ -7,4 +7,4 @@ bool strCompare(const std::string &a, const std::string &b, const bool ignoreCas
 bool strCompare(const std::string &a, const std::string &b);
 int conv_uint(const std::string &str);
 cmd getCMD(const std::string &strCMD);
-std::string getCMDLINE();
+std::string getCMDLINE(const bool retchar);

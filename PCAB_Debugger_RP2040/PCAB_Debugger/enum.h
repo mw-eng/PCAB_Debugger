@@ -18,6 +18,7 @@ enum code{
     SaveMEM,
     LoadMEM,
     RST,
+    CUI,
     NONE
 };
 

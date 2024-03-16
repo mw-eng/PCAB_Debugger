@@ -10,6 +10,7 @@
 #include "config.h"
 #include "subfunc.h"
 #include "pico/binary_info.h"
+#include "onewire_library.h"
 
 uint8_t DAT[FLASH_PAGE_SIZE]; //MAX256BYTE
 uint64_t SENS_TMP[15]; //Temp Senser IDs
@@ -98,6 +99,14 @@ void setup()
     gpio_set_dir(SW_4_PIN , GPIO_IN);
     gpio_set_dir(SW_5_PIN , GPIO_IN);
     gpio_set_dir(SW_6_PIN , GPIO_IN);
+
+    gpio_init(SNS_TEMP_PIN);
+    gpio_init(SNS_VD_PIN);
+    gpio_init(SNS_ID_PIN);
+    gpio_set_dir(SW_6_PIN , GPIO_IN);
+    gpio_set_dir(SW_6_PIN , GPIO_IN);
+    gpio_set_dir(SW_6_PIN , GPIO_IN);
+
     loadMEMORY();
     //Memory Config Auto Load
     if(DAT[0] == 1 && gpio_get(SW_1_PIN))
@@ -112,106 +121,123 @@ void setup()
         if(DAT[53] != 1){gpio_put(LPW_MOD_PIN, 1);}
         else{gpio_put(LPW_MOD_PIN, 0);}
     }
-    uart_puts(UART_ID, "PCAB Debugger BOOT.\n>");
+    if(DAT[100] != 1){ uart_puts(UART_ID, "PCAB Debugger BOOT.\n>"); }
+    else{ uart_puts(UART_ID, "BOOT\n"); }
 }
 
 int main() {
     setup();
     while(1){
-        std::string cmdline = getCMDLINE();
-        if(trim(cmdline).empty()){uart_puts(UART_ID, ">");}
+        std::string cmdline;
+        if(DAT[100] != 1){cmdline = getCMDLINE(true);}
+        else{cmdline = getCMDLINE(false);}
+        if(trim(cmdline).empty() && DAT[100] != 1){uart_puts(UART_ID, ">");}
         else
         {
-            uart_puts(UART_ID, ("CMD : " + cmdline).c_str());
+            if(DAT[100] != 1){uart_puts(UART_ID, ("CMD : " + cmdline).c_str());}
             cmd cmdDAT = getCMD(cmdline);
             switch(cmdDAT.cmd_code)
             {
                 case WrtPS:
                     writePHASE(15);
-                    uart_puts(UART_ID,"Phase setting write.\n>");
+                    if(DAT[100] != 1){uart_puts(UART_ID,"Phase setting write.\n>");}
+                    else{uart_puts(UART_ID, "DONE\n");}
                     break;
                 case GetPS:
-                    if(0 < cmdDAT.id && cmdDAT.id < 50){uart_puts(UART_ID,("PS" + std::to_string(cmdDAT.id) + ">" + std::to_string(DAT[cmdDAT.id] * 5.625) + "deg\n>").c_str());}
-                    else{uart_puts(UART_ID,"ID error.\n>");}
+                    if(0 < cmdDAT.id && cmdDAT.id < 50)
+                    {
+                        if(DAT[100] != 1){uart_puts(UART_ID,("PS" + std::to_string(cmdDAT.id) + ">" + std::to_string(DAT[cmdDAT.id] * 5.625) + "deg\n>").c_str());}
+                        else{uart_puts(UART_ID, (std::to_string(DAT[cmdDAT.id]) + "\n").c_str());}
+                    }
+                    else{if(DAT[100] != 1){uart_puts(UART_ID,"ID error.\n>");}else{uart_puts(UART_ID, "ERR\n");}}
                     break;
                 case SetPS:
-                    if(0 < cmdDAT.id && cmdDAT.id < 50){DAT[cmdDAT.id] = cmdDAT.arg;uart_puts(UART_ID,("Set Phase No," + std::to_string(cmdDAT.id) + " / Phase = " + std::to_string(cmdDAT.arg * 5.625) + "deg\n>").c_str());}
-                    else{uart_puts(UART_ID,"ID error.\n>");}
+                    if(0 < cmdDAT.id && cmdDAT.id < 50){
+                        if(DAT[100] != 1){DAT[cmdDAT.id] = cmdDAT.arg;uart_puts(UART_ID,("Set Phase No," + std::to_string(cmdDAT.id) + " / Phase = " + std::to_string(cmdDAT.arg * 5.625) + "deg\n>").c_str());}
+                        else{uart_puts(UART_ID, "DONE\n");}
+                    }
+                    else{if(DAT[100] != 1){uart_puts(UART_ID,"ID error.\n>");}else{uart_puts(UART_ID, "ERR\n");}}
                     break;
                 case GetTMP:
-                    uart_puts(UART_ID,"Command not implemented.\n>");
+                    if(DAT[100] != 1){uart_puts(UART_ID,"Command not implemented.\n>");}else{uart_puts(UART_ID, "0\n");}
                     break;
                 case GetId:
-                    uart_puts(UART_ID,"Command not implemented.\n>");
+                    if(DAT[100] != 1){uart_puts(UART_ID,"Command not implemented.\n>");}else{uart_puts(UART_ID, "0\n");}
                     break;
                 case GetVd:
-                    uart_puts(UART_ID,"Command not implemented.\n>");
+                    if(DAT[100] != 1){uart_puts(UART_ID,"Command not implemented.\n>");}else{uart_puts(UART_ID, "0\n");}
                     break;
                 case GetSTB_AMP:
-                    if(DAT[50] == 0) {uart_puts(UART_ID,"AMP RUN MODE NOW.\n>");}
-                    else if(DAT[50] == 1) {uart_puts(UART_ID,"AMP STANDBY MODE NOW.\n>");}
+                    if(DAT[50] == 0) {if(DAT[100] != 1){uart_puts(UART_ID,"AMP RUN MODE NOW.\n>");}else{uart_puts(UART_ID,"RUN\n");}}
+                    else if(DAT[50] == 1) {if(DAT[100] != 1){uart_puts(UART_ID,"AMP STANDBY MODE NOW.\n>");}else{uart_puts(UART_ID,"STB\n");}}
                     break;
                 case SetSTB_AMP:
-                    if(cmdDAT.arg == 0) {DAT[50] = 0;gpio_put(STB_AMP_PIN, 1);uart_puts(UART_ID,"AMP RUN MODE.\n>");}
-                    else if(cmdDAT.arg == 1) {DAT[50] = 1;gpio_put(STB_AMP_PIN, 0);uart_puts(UART_ID,"AMP STANDBY MODE.\n>");}
-                    else{uart_puts(UART_ID,"Argument error.\n>");}
+                    if(cmdDAT.arg == 0) {DAT[50] = 0;gpio_put(STB_AMP_PIN, 1);if(DAT[100] != 1){uart_puts(UART_ID,"AMP RUN MODE.\n>");}else{uart_puts(UART_ID,"DONE");}}
+                    else if(cmdDAT.arg == 1) {DAT[50] = 1;gpio_put(STB_AMP_PIN, 0);if(DAT[100] != 1){uart_puts(UART_ID,"AMP STANDBY MODE.\n>");}else{uart_puts(UART_ID,"DONE");}}
+                    else{if(DAT[100] != 1){uart_puts(UART_ID,"Argument error.\n>");}else{uart_puts(UART_ID,"ERR\n");}}
                     break;
                 case GetSTB_DRA:
-                    if(DAT[51] == 0) {uart_puts(UART_ID,"DRA RUN MODE NOW.\n>");}
-                    else if(DAT[51] == 1) {uart_puts(UART_ID,"DRA STANDBY MODE NOW.\n>");}
+                    if(DAT[51] == 0) {if(DAT[100] != 1){uart_puts(UART_ID,"DRA RUN MODE NOW.\n>");}else{uart_puts(UART_ID,"RUN\n");}}
+                    else if(DAT[51] == 1) {if(DAT[100] != 1){uart_puts(UART_ID,"DRA STANDBY MODE NOW.\n>");}else{uart_puts(UART_ID,"STB\n");}}
                     break;
                 case SetSTB_DRA:
-                    if(cmdDAT.arg == 0) {DAT[51] = 0;gpio_put(STB_DRA_PIN, 1);uart_puts(UART_ID,"DRA RUN MODE.\n>");}
-                    else if(cmdDAT.arg == 1) {DAT[51] = 1;gpio_put(STB_DRA_PIN, 0);uart_puts(UART_ID,"DRA STANDBY MODE.\n>");}
-                    else{uart_puts(UART_ID,"Argument error.\n>");}
+                    if(cmdDAT.arg == 0) {DAT[51] = 0;gpio_put(STB_DRA_PIN, 1);if(DAT[100] != 1){uart_puts(UART_ID,"DRA RUN MODE.\n>");}else{uart_puts(UART_ID,"DONE");}}
+                    else if(cmdDAT.arg == 1) {DAT[51] = 1;gpio_put(STB_DRA_PIN, 0);if(DAT[100] != 1){uart_puts(UART_ID,"DRA STANDBY MODE.\n>");}else{uart_puts(UART_ID,"DONE");}}
+                    else{if(DAT[100] != 1){uart_puts(UART_ID,"Argument error.\n>");}else{uart_puts(UART_ID,"ERR\n");}}
                     break;
                 case GetSTB_LNA:
-                    if(DAT[52] == 0) {uart_puts(UART_ID,"LNA RUN MODE NOW.\n>");}
-                    else if(DAT[52] == 1) {uart_puts(UART_ID,"LNA STANDBY MODE NOW.\n>");}
+                    if(DAT[52] == 0) {if(DAT[100] != 1){uart_puts(UART_ID,"LNA RUN MODE NOW.\n>");}else{uart_puts(UART_ID,"RUN\n");}}
+                    else if(DAT[52] == 1) {if(DAT[100] != 1){uart_puts(UART_ID,"LNA STANDBY MODE NOW.\n>");}else{uart_puts(UART_ID,"STB\n");}}
                     break;
                 case SetSTB_LNA:
-                    if(cmdDAT.arg == 0) {DAT[52] = 0;gpio_put(STB_LNA_PIN, 1);uart_puts(UART_ID,"LNA RUN MODE.\n>");}
-                    else if(cmdDAT.arg == 1) {DAT[52] = 1;gpio_put(STB_LNA_PIN, 0);uart_puts(UART_ID,"LNA STANDBY MODE.\n>");}
-                    else{uart_puts(UART_ID,"Argument error.\n>");}
+                    if(cmdDAT.arg == 0) {DAT[52] = 0;gpio_put(STB_LNA_PIN, 1);if(DAT[100] != 1){uart_puts(UART_ID,"LNA RUN MODE.\n>");}else{uart_puts(UART_ID,"DONE");}}
+                    else if(cmdDAT.arg == 1) {DAT[52] = 1;gpio_put(STB_LNA_PIN, 0);if(DAT[100] != 1){uart_puts(UART_ID,"LNA STANDBY MODE.\n>");}else{uart_puts(UART_ID,"DONE");}}
+                    else{if(DAT[100] != 1){uart_puts(UART_ID,"Argument error.\n>");}else{uart_puts(UART_ID,"ERR\n");}}
                     break;
                 case GetLPM:
-                    if(DAT[53] == 0) {uart_puts(UART_ID,"FULL POWER MODE NOW.\n>");}
-                    else if(DAT[53] == 1) {uart_puts(UART_ID,"LOW POWER MODE NOW.\n>");}
+                    if(DAT[53] == 0) {if(DAT[100] != 1){uart_puts(UART_ID,"FULL POWER MODE NOW.\n>");}else{uart_puts(UART_ID,"FUL\n");}}
+                    else if(DAT[53] == 1) {if(DAT[100] != 1){uart_puts(UART_ID,"LOW POWER MODE NOW.\n>");}else{uart_puts(UART_ID,"LOW\n");}}
                     break;
                 case SetLPM:
                     if(cmdDAT.arg == 0) {DAT[53] = 0;gpio_put(LPW_MOD_PIN, 1);uart_puts(UART_ID,"FULL POWER MODE.\n>");}
                     else if(cmdDAT.arg == 1) {DAT[53] = 1;gpio_put(LPW_MOD_PIN, 0);uart_puts(UART_ID,"LOW POWER MODE.\n>");}
-                    else{uart_puts(UART_ID,"Argument error.\n>");}
-                    break;
-                case SetALD:
-                    if(cmdDAT.arg == 0) {DAT[0] = 0;uart_puts(UART_ID,"NON-AUTO LOAD MODE.\n>");}
-                    else if(cmdDAT.arg == 1) {DAT[0] = 1;uart_puts(UART_ID,"AUTO LOAD MODE.\n>");}
-                    else{uart_puts(UART_ID,"Argument error.\n>");}
+                    else{if(DAT[100] != 1){uart_puts(UART_ID,"Argument error.\n>");}else{uart_puts(UART_ID,"ERR\n");}}
                     break;
                 case GetALD:
-                    if(DAT[0] == 1 && gpio_get(SW_1_PIN)){uart_puts(UART_ID,"AUTO LOAD MODE.\n>");}
-                    else{uart_puts(UART_ID,"NON-AUTO LOAD MODE.\n>");}
+                    if(DAT[0] == 1 && gpio_get(SW_1_PIN)){if(DAT[100] != 1){uart_puts(UART_ID,"AUTO LOAD MODE.\n>");}else{uart_puts(UART_ID,"ENB\n");}}
+                    else{if(DAT[100] != 1){uart_puts(UART_ID,"NON-AUTO LOAD MODE.\n>");}else{uart_puts(UART_ID,"DIS\n");}}
+                    break;
+                case SetALD:
+                    if(cmdDAT.arg == 0) {DAT[0] = 0;if(DAT[100] != 1){uart_puts(UART_ID,"NON-AUTO LOAD MODE.\n>");}else{uart_puts(UART_ID,"DONE");}}
+                    else if(cmdDAT.arg == 1) {DAT[0] = 1;if(DAT[100] != 1){uart_puts(UART_ID,"AUTO LOAD MODE.\n>");}else{uart_puts(UART_ID,"DONE");}}
+                    else{if(DAT[100] != 1){uart_puts(UART_ID,"Argument error.\n>");}else{uart_puts(UART_ID,"ERR\n");}}
                     break;
                 case SaveMEM:
                     saveMEMORY();
-                    uart_puts(UART_ID,"Save Memory DONE.\n>");
+                    if(DAT[100] != 1){uart_puts(UART_ID,"Save Memory DONE.\n>");}else{uart_puts(UART_ID,"DONE\n");}
                     break;
                 case LoadMEM:
                     loadMEMORY();
-                    uart_puts(UART_ID,"ReLoad Memory DONE.\n>");
+                    if(DAT[100] != 1){uart_puts(UART_ID,"ReLoad Memory DONE.\n>");}else{uart_puts(UART_ID,"DONE\n");}
                     break;
                 case RST:
                     for(int i = 1 ; i < 50 ; i++){DAT[i] = 0;}writePHASE(15);
-                    uart_puts(UART_ID, "ALL Phase 0deg\n");
+                    uart_puts(UART_ID, "ALL PHASE 0\n");
                     DAT[50] = 0;gpio_put(STB_AMP_PIN, 1);uart_puts(UART_ID,"AMP RUN MODE.\n");
                     DAT[51] = 0;gpio_put(STB_DRA_PIN, 1);uart_puts(UART_ID,"DRA RUN MODE.\n");
                     DAT[52] = 0;gpio_put(STB_LNA_PIN, 1);uart_puts(UART_ID,"LNA RUN MODE.\n");
                     DAT[53] = 0;gpio_put(LPW_MOD_PIN, 1);uart_puts(UART_ID,"FULL POWER MODE.\n");
-                    DAT[0] = 1;uart_puts(UART_ID,"AUTO LOAD MODE.\n>");
+                    DAT[0] = 1;uart_puts(UART_ID,"AUTO LOAD MODE.\n");
+                    DAT[100] = 0;uart_puts(UART_ID,"CUI MODE.\n");
                     uart_puts(UART_ID,"Preset DONE.\n>");
                     break;
+                case CUI:
+                    if(cmdDAT.arg != 1){DAT[100] = 0; uart_puts(UART_ID,"CUI MODE.\n>");}
+                    else{DAT[100] = 1; uart_puts(UART_ID, "DONE\n");}
+                    break;
                 default:
-                    uart_puts(UART_ID,"Command not found.\n>");
+                    if(DAT[100] != 1){uart_puts(UART_ID,"Command not found.\n>");}
+                    else{uart_puts(UART_ID, "ERR\n");}
                     break;
             }
         }
@@ -227,4 +253,5 @@ DAT[50]:AMP STBY
 DAT[51]:DRA STBY
 DAT[52]:LNA STBY
 DAT[53]:Low Power Mode
+DAT[100]:IO MODE
 */

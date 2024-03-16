@@ -47,7 +47,7 @@ int conv_uint(const std::string &str)
     return -1;
 }
 
-std::string getCMDLINE()
+std::string getCMDLINE(const bool retchar)
 {
     char chBF;
     int cnt = 0;
@@ -55,7 +55,7 @@ std::string getCMDLINE()
     do
     {
         chBF = uart_getc(UART_ID);
-        uart_puts(UART_ID, (std::string() + chBF).c_str());
+        if(retchar){uart_puts(UART_ID, (std::string() + chBF).c_str());}
         cmdline += chBF;
         cnt++;
         if (cnt >= CMD_MAX)
@@ -96,5 +96,6 @@ cmd getCMD(const std::string &strCMD)
     if (strCompare(trim(strCMD).substr(0, 4), "SMEM", true)) { return cmd(code::SaveMEM, -1, -1); }
     if (strCompare(trim(strCMD).substr(0, 4), "LMEM", true)) { return cmd(code::LoadMEM, -1, -1); }
     if (strCompare(trim(strCMD).substr(0, 3), "RST", true)) { return cmd(code::RST, -1, -1); }
+    if (strCompare(trim(strCMD).substr(0, 3), "CUI", true)) { return cmd(code::CUI, -1, conv_uint(trim(strCMD).substr(4))); }
     return cmd(code::NONE, -1, -1);
 }
