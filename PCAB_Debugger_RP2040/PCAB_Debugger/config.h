@@ -42,3 +42,4 @@
 #define DAT_ADDRESS 0x1F0000 // Block31(W25Q16)
 //#define DAT_ADDRESS 0xFF0000    //Block255(W25Q128)
 #define CMD_MAX 256
+#define OW_MAX 15

@@ -1,6 +1,7 @@
 set(ProjectName "PCAB_Debugger")
 project(${ProjectName} C CXX ASM)
 
+add_subdirectory(onewire_library)
 add_executable(${ProjectName}
     PCAB_Debugger.cpp
     subfunc.cpp

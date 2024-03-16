@@ -2,20 +2,25 @@
 #include <string>
 #include <iostream>
 #include "pico/stdlib.h"
+#include "pico/binary_info.h"
 #include "hardware/uart.h"
 #include "hardware/spi.h"
 #include "hardware/flash.h"
 #include "hardware/sync.h"
 #include "hardware/gpio.h"
+#include "hardware/pio.h"
+
 #include "config.h"
 #include "subfunc.h"
-#include "pico/binary_info.h"
-#include "onewire_library.h"
+
+#include "onewire_library.h"    // onewire library functions
+#include "ow_rom.h"             // onewire ROM command codes
+#include "ds18b20.h"            // ds18b20 function codes
 
 uint8_t DAT[FLASH_PAGE_SIZE]; //MAX256BYTE
-uint64_t SENS_TMP[15]; //Temp Senser IDs
-uint64_t SENS_Vd[15]; //Vd Senser IDs
-uint64_t SENS_Id[15]; //Id Senser IDs
+uint64_t SENS_TMP[OW_MAX]; //Temp Senser IDs
+int SENS_TMP_NUM;           //Temp Senser Number
+OW ow;
 
 void saveMEMORY()
 {
@@ -99,6 +104,20 @@ void setup()
     gpio_set_dir(SW_4_PIN , GPIO_IN);
     gpio_set_dir(SW_5_PIN , GPIO_IN);
     gpio_set_dir(SW_6_PIN , GPIO_IN);
+
+    // 1-wire
+    PIO pio = pio0;
+    uint offset;
+    SENS_TMP_NUM = -1;
+    // add the program to the PIO shared address space
+    if (pio_can_add_program (pio, &onewire_program)) {
+        offset = pio_add_program (pio, &onewire_program);
+        // claim a state machine and initialise a driver instance
+        if (ow_init (&ow, pio, offset, SNS_TEMP_PIN)) {
+            // find and display 64-bit device addresses
+            SENS_TMP_NUM = ow_romsearch (&ow, SENS_TMP, OW_MAX, OW_SEARCH_ROM);
+        }
+    }
 
     gpio_init(SNS_TEMP_PIN);
     gpio_init(SNS_VD_PIN);

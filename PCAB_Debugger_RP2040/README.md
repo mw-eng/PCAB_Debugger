@@ -23,4 +23,5 @@ SetALD {0/1} | Set auto load date<br>1 : Auto LOAD MODE<br>0 : Non-Auto LOAD MOD
 GetALD | Get auto load date<br>1 : Auto LOAD MODE<br>0 : Non-Auto LOAD MODE<br>Non-Auto LOAD MODE if disabled by hardware.
 SMEM | Save Memory
 LMEM | ReLoad Memory
+CUI {0/1} | CUI Control Use<br>0 : CUI MODE<br>1 : GUI MODE
 RST | Preset Config.<br>PS all 0<br>STB all 0(RUN MODE)<br>LPM 0(Full Power MODE)<br>ALD 1(Auto LOAD MODE)
