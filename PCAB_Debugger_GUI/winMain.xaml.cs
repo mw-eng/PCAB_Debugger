@@ -93,10 +93,101 @@ namespace PCAB_Debugger_GUI
                     CONTL_GRID.IsEnabled = true;
                     _state = true;
                     ((TextBlock)((Viewbox)CONNECT_BUTTON.Content).Child).Text = "Disconnect";
+                    string stb;
+                    stb = _mod.PCAB_CMD("GetSTB.AMP", 1);
+                    if (stb == "STB") { CHECKBOX_Checked("STBAMP", null); } else { CHECKBOX_Unchecked("STBAMP", null); }
+                    stb = _mod.PCAB_CMD("GetSTB.DRA", 1);
+                    if (stb == "STB") { CHECKBOX_Checked("STBDRA", null); } else { CHECKBOX_Unchecked("STBDRA", null); }
+                    stb = _mod.PCAB_CMD("GetSTB.LNA", 1);
+                    if (stb == "STB") { CHECKBOX_Checked("STBLNA", null); } else { CHECKBOX_Unchecked("STBLNA", null); }
+                    stb = _mod.PCAB_CMD("GetLPM", 1);
+                    if (stb == "LOW") { CHECKBOX_Checked("LPM", null); } else { CHECKBOX_Unchecked("LPM", null); }
+                    stb = _mod.PCAB_CMD("GetALD", 1);
+                    if (stb == "ENB") { CHECKBOX_Checked("ALD", null); } else { CHECKBOX_Unchecked("ALD", null); }
                 }
             }
         }
 
+
+        private void READMEM_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void SAVEMEM_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void WRITEPS_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void RESET_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void CHECKBOX_Checked(object sender, RoutedEventArgs e)
+        {
+            if(typeof(CheckBox) == sender.GetType())
+            {
+
+            }
+            else
+            {
+                switch ((string)sender)
+                {
+                    case "STBAMP":
+                        STBAMP_CHECKBOX.IsChecked = true;
+                        break;
+                    case "STBDRA":
+                        STBDRA_CHECKBOX.IsChecked = true;
+                        break;
+                    case "STBLNA":
+                        STBLNA_CHECKBOX.IsChecked = true;
+                        break;
+                    case "LPM":
+                        SETLPM_CHECKBOX.IsChecked = true;
+                        break;
+                    case "ALD":
+                        SETALD_CHECKBOX.IsChecked = true;
+                        break;
+                    default: break;
+                }
+            }
+        }
+
+        private void CHECKBOX_Unchecked(object sender, RoutedEventArgs e)
+        {
+            if (typeof(CheckBox) == sender.GetType())
+            {
+
+            }
+            else
+            {
+                switch ((string)sender)
+                {
+                    case "STBAMP":
+                        STBAMP_CHECKBOX.IsChecked = false;
+                        break;
+                    case "STBDRA":
+                        STBDRA_CHECKBOX.IsChecked = false;
+                        break;
+                    case "STBLNA":
+                        STBLNA_CHECKBOX.IsChecked = false;
+                        break;
+                    case "LPM":
+                        SETLPM_CHECKBOX.IsChecked = false;
+                        break;
+                    case "ALD":
+                        SETALD_CHECKBOX.IsChecked = false;
+                        break;
+                    default: break;
+                }
+            }
+        }
         private void OnError(object sender, PCABEventArgs e)
         {
             _mod.PCAB_AutoTaskStop();

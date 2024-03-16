@@ -83,9 +83,9 @@ namespace PCAB_Debugger_GUI
         {
             do
             {
-                if(_task == true)
+                Thread.Sleep((int)waiteTime);
+                if (_task == true)
                 {
-                    Thread.Sleep((int)waiteTime);
                     _mod.DiscardInBuffer();
                     _mod.WriteLine("GetId");
                     string id = _mod.ReadLine();
