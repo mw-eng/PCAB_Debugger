@@ -145,10 +145,10 @@ void setup()
 
 int main() {
     setup();
+
+    std::string cmdline;
+    const float conversion_factor = 3.3f / (1 << 12);
     while(1){
-        std::string cmdline;
-        const float conversion_factor = 3.3f / (1 << 12);
-        uint16_t result;
         if(DAT[100] != 1){cmdline = getCMDLINE(true);}
         else{cmdline = getCMDLINE(false);}
         if(trim(cmdline).empty() && DAT[100] != 1){uart_puts(UART_ID, ">");}
@@ -179,16 +179,16 @@ int main() {
                     else{if(DAT[100] != 1){uart_puts(UART_ID,"ID error.\n>");}else{uart_puts(UART_ID, "ERR\n");}}
                     break;
                 case GetTMP:
-                    ow_reset (&ow);
-                    ow_send (&ow, OW_SKIP_ROM);
-                    ow_send (&ow, DS18B20_CONVERT_T);
-                    while (ow_read(&ow) == 0);
                     int num;
-                    if(SENS_TMP_NUM < cmdDAT.cmd_code){if(DAT[100] != 1){uart_puts(UART_ID,"ID Not Found.\n>");}else{uart_puts(UART_ID, "ERR\n");}}
+                    if(SENS_TMP_NUM < cmdDAT.id){if(DAT[100] != 1){uart_puts(UART_ID,"ID Not Found.\n>");}else{uart_puts(UART_ID, "ERR\n");}}
                     else{
-                        if(cmdDAT.cmd_code != 0){num = cmdDAT.cmd_code + 1;}
+                        if(cmdDAT.id != 0){num = cmdDAT.id + 1;}
                         else{num = SENS_TMP_NUM;}
-                        for (int i = num; i < num; i += 1) {
+                        ow_reset (&ow);
+                        ow_send (&ow, OW_SKIP_ROM);
+                        ow_send (&ow, DS18B20_CONVERT_T);
+                        while (ow_read(&ow) == 0);
+                        for (int i = cmdDAT.id; i < num; i += 1) {
                             ow_reset (&ow);
                             ow_send (&ow, OW_MATCH_ROM);
                             for (int b = 0; b < 64; b += 8) {
@@ -206,13 +206,13 @@ int main() {
                     break;
                 case GetId:
                     adc_select_input(SNS_ID_SELIN);
-                    result = adc_read();
+                    uint16_t result = adc_read();
                     if(DAT[100] != 1){uart_puts(UART_ID,(std::to_string(((result * conversion_factor) - 1.65) / 0.09) + "A\n>").c_str());}
                     else{uart_puts(UART_ID, (std::to_string(result * conversion_factor) + "\n").c_str());}
                     break;
                 case GetVd:
                     adc_select_input(SNS_VD_SELIN);
-                    result = adc_read();
+                    uint16_t result = adc_read();
                     if(DAT[100] != 1){uart_puts(UART_ID,(std::to_string(result * conversion_factor * 0.099) + "V\n>").c_str());}
                     else{uart_puts(UART_ID, (std::to_string(result * conversion_factor) + "\n").c_str());}
                     break;
