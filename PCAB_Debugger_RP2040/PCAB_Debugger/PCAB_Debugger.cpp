@@ -120,8 +120,10 @@ void setup()
         }
     }
 
-    adc_gpio_init(SNS_VD_PIN);
+    // ADC
+    adc_init();
     adc_gpio_init(SNS_ID_PIN);
+    adc_gpio_init(SNS_VD_PIN);
 
     loadMEMORY();
     //Memory Config Auto Load
