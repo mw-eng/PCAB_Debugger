@@ -1,0 +1,46 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:PCAB_Debugger_GUI">
+    <Style TargetType="{x:Type TextBox}" x:Key="VIEW_TEXT_MULTI">
+        <Setter Property="TextWrapping" Value="Wrap" />
+        <Setter Property="IsReadOnly" Value="True" />
+        <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
+        <Setter Property="AcceptsReturn" Value="True"/>
+    </Style>
+    <Style TargetType="{x:Type TextBox}" x:Key="VIEW_TEXT_LINE">
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="TextWrapping" Value="NoWrap" />
+        <Setter Property="IsReadOnly" Value="True" />
+    </Style>
+    <Style TargetType="{x:Type TextBox}" x:Key="EDIT_TEXT_LINE">
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="TextWrapping" Value="NoWrap" />
+        <Setter Property="IsReadOnly" Value="False" />
+    </Style>
+    <Style TargetType="{x:Type ComboBox}" x:Key="COMBOBOX_CONTENT_CENTER">
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+    </Style>
+    <Style TargetType="{x:Type CheckBox}" x:Key="CHECKBOX_CONTENT_CENTER">
+        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+    </Style>
+    <x:Array xmlns:sys="clr-namespace:System;assembly=mscorlib" Type="{x:Type sys:String}" x:Key="PS_List">
+        <sys:String>  0   deg (00000)</sys:String>
+        <sys:String> 22.5 deg (00010)</sys:String>
+        <sys:String> 45   deg (00100)</sys:String>
+        <sys:String> 67.5 deg (00110)</sys:String>
+        <sys:String> 90   deg (01000)</sys:String>
+        <sys:String>112.5 deg (01010)</sys:String>
+        <sys:String>135   deg (01100)</sys:String>
+        <sys:String>157.5 deg (01110)</sys:String>
+        <sys:String>180   deg (10000)</sys:String>
+        <sys:String>202.5 deg (10010)</sys:String>
+        <sys:String>225   deg (10100)</sys:String>
+        <sys:String>247.5 deg (10110)</sys:String>
+        <sys:String>270   deg (11000)</sys:String>
+        <sys:String>292.5 deg (11010)</sys:String>
+        <sys:String>315   deg (11100)</sys:String>
+        <sys:String>337.5 deg (11110)</sys:String>
+    </x:Array>
+</ResourceDictionary>

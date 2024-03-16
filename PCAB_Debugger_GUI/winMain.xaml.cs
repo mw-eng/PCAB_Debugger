@@ -16,6 +16,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Management;
 using System.Collections;
+using static PCAB_Debugger_GUI.PCAB;
+using System.Text.RegularExpressions;
 
 namespace PCAB_Debugger_GUI
 {
@@ -25,6 +27,8 @@ namespace PCAB_Debugger_GUI
     public partial class winMain : Window
     {
         ShowSerialPortName.SerialPortTable[] ports;
+        PCAB _mod;
+        bool _state;
 
         public winMain()
         {
@@ -38,6 +42,7 @@ namespace PCAB_Debugger_GUI
             Settings.Default.Reset();
             this.Title += "_DEBUG MODE";
 #endif
+            _state = false;
             SERIAL_PORTS_COMBOBOX_RELOAD();
         }
 
@@ -56,53 +61,141 @@ namespace PCAB_Debugger_GUI
             SERIAL_PORTS_COMBOBOX_RELOAD();
         }
 
+        private void SERIAL_PORTS_COMBOBOX_DropDownClosed(object sender, EventArgs e)
+        {
+            if(SERIAL_PORTS_COMBOBOX.SelectedIndex < 0) { CONNECT_BUTTON.IsEnabled = false; }
+            else { CONNECT_BUTTON.IsEnabled = true; }
+        }
+
         private void CONNECT_BUTTON_Click(object sender, RoutedEventArgs e)
         {
-            if (mod?.IsOpen == true)
+            if (_state)
             {
-                if (MessageBox.Show("Disconnect communication with PCAB.", "Warning", MessageBoxButton.OKCancel, MessageBoxImage.Warning)
-                    == MessageBoxResult.OK)
-                {
-                    mod.Close();
-                    mod = null;
-                    SERIAL_PORTS_COMBOBOX.IsEnabled = true;
-                    CONTL_GRID.IsEnabled = false;
-                    ((TextBlock)((Viewbox)CONNECT_BUTTON.Content).Child).Text = "Connect";
-                }
-                else { return; }
+                _mod.PCAB_AutoTaskStop();
+                _mod = null;
+                _state = false;
+                SERIAL_PORTS_COMBOBOX.IsEnabled = true;
+                WAITE_TIME_TEXTBOX.IsEnabled = true;
+                INIT_CHECKBOX.IsEnabled = true;
+                CONTL_GRID.IsEnabled = false;
+                ((TextBlock)((Viewbox)CONNECT_BUTTON.Content).Child).Text = "Connect";
             }
             else
             {
-                mod = new SerialPort();
-                mod.PortName = ports[SERIAL_PORTS_COMBOBOX.SelectedIndex].Name;
-                mod.BaudRate = 9600;
-                mod.DataBits = 8;
-                mod.Parity = Parity.None;
-                mod.StopBits = StopBits.One;
-                mod.Handshake = Handshake.None;
-                mod.DtrEnable = false;
-                mod.Encoding = Encoding.ASCII;
-                mod.NewLine = "\n";
-                mod.ReadBufferSize = 2048;
-                mod.ErrorReceived += SerialErrorReceivedEventHandler;
-                try { mod.Open(); }
-                catch (UnauthorizedAccessException) { MessageBox.Show("Serial port open Error.\nAlready used.\n", "Error", MessageBoxButton.OK, MessageBoxImage.Error); mod = null; return; }
-                catch (Exception) { MessageBox.Show("Serial port open Error.\n{e.ToString()}\n", "Error", MessageBoxButton.OK, MessageBoxImage.Error); mod = null; return; }
-                SERIAL_PORTS_COMBOBOX.IsEnabled = false;
-                CONTL_GRID.IsEnabled = true;
-                ((TextBlock)((Viewbox)CONNECT_BUTTON.Content).Child).Text = "Disconnect";
+                _mod = new PCAB(ports[SERIAL_PORTS_COMBOBOX.SelectedIndex].Name);
+                _mod.OnUpdateDAT += OnUpdateDAT;
+                _mod.OnError += OnError;
+                if (_mod.PCAB_AutoTaskStart(uint.Parse(WAITE_TIME_TEXTBOX.Text),INIT_CHECKBOX.IsChecked))
+                {
+                    SERIAL_PORTS_COMBOBOX.IsEnabled = false;
+                    WAITE_TIME_TEXTBOX.IsEnabled = false;
+                    INIT_CHECKBOX.IsEnabled = false;
+                    CONTL_GRID.IsEnabled = true;
+                    _state = true;
+                    ((TextBlock)((Viewbox)CONNECT_BUTTON.Content).Child).Text = "Disconnect";
+                }
             }
         }
 
-        private void SerialErrorReceivedEventHandler(object sender, SerialErrorReceivedEventArgs e)
+        private void OnError(object sender, PCABEventArgs e)
         {
-            MessageBox.Show("" + sender.ToString() + e.EventType.ToString(), "Error",MessageBoxButton.OK,MessageBoxImage.Error);
-            try { mod.Close(); }
-            catch { }
-            mod = null;
+            _mod.PCAB_AutoTaskStop();
+            MessageBox.Show(e.Message.ToString(), "Error",MessageBoxButton.OK,MessageBoxImage.Error);
+            _state = false;
+            _mod = null;
             SERIAL_PORTS_COMBOBOX.IsEnabled = true;
             CONTL_GRID.IsEnabled = false;
             ((TextBlock)((Viewbox)CONNECT_BUTTON.Content).Child).Text = "Connect";
+        }
+
+        private void OnUpdateDAT(object sender, PCABEventArgs e)
+        {
+            if(e.ReceiveDAT.Length != 3) { return; }
+            if (_mod != null)
+            {
+                _mod.Id_now = e.ReceiveDAT[0];
+                _mod.Vd_now = e.ReceiveDAT[1];
+                _mod.TEMP_now = e.ReceiveDAT[2];
+            }
+            string[] arrBf = e.ReceiveDAT[2].Trim(',').Split(',');
+            List<string> list = new List<string>();
+            int cnt = 0;
+            foreach(string strBf in arrBf)
+            {
+                string[] bf = strBf.Split(':');
+                list.Add(bf[1]);
+            }
+            Dispatcher.BeginInvoke(new Action(() =>
+            {
+                SNS_ID_LABEL.Content = ((double.Parse(e.ReceiveDAT[0]) - 1.65) / 0.09).ToString("0.00");
+                SNS_VD_LABEL.Content = (double.Parse(e.ReceiveDAT[1]) * 0.099).ToString("0.00");
+                TEMP01.Content = (double.Parse(list[0])).ToString("0.00");
+                TEMP02.Content = (double.Parse(list[1])).ToString("0.00");
+                TEMP03.Content = (double.Parse(list[2])).ToString("0.00");
+                TEMP04.Content = (double.Parse(list[3])).ToString("0.00");
+                TEMP05.Content = (double.Parse(list[4])).ToString("0.00");
+                TEMP06.Content = (double.Parse(list[5])).ToString("0.00");
+                TEMP07.Content = (double.Parse(list[6])).ToString("0.00");
+                TEMP08.Content = (double.Parse(list[7])).ToString("0.00");
+                TEMP09.Content = (double.Parse(list[8])).ToString("0.00");
+                TEMP10.Content = (double.Parse(list[9])).ToString("0.00");
+                TEMP11.Content = (double.Parse(list[10])).ToString("0.00");
+                TEMP12.Content = (double.Parse(list[11])).ToString("0.00");
+                TEMP13.Content = (double.Parse(list[12])).ToString("0.00");
+                TEMP14.Content = (double.Parse(list[13])).ToString("0.00");
+                TEMP15.Content = (double.Parse(list[14])).ToString("0.00");
+            }));
+        }
+
+        private void DEC_TextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            // 0-9およびa-f/A-Fのみ
+            e.Handled = !new Regex("[0-9]").IsMatch(e.Text);
+        }
+
+        private void DEC_TextBox_PreviewExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            // 貼付け場合
+            if (e.Command == ApplicationCommands.Paste)
+            {
+                string strTXT = Clipboard.GetText();
+                for (int cnt = 0; cnt < strTXT.Length; cnt++)
+                {
+                    if (!new Regex("[0-9]|[ ]").IsMatch(strTXT[cnt].ToString()))
+                    {
+                        // 処理済み
+                        e.Handled = true;
+                        break;
+                    }
+                }
+            }
+        }
+        private void DEC_TextBox_PreviewLostKeyboardForcus(object sender, KeyboardFocusChangedEventArgs e)
+        {
+            try
+            {
+                uint uintVal = Convert.ToUInt32(((TextBox)sender).Text);
+                if (0 <= uintVal && uintVal <= 65535) { return; }
+                MessageBox.Show("0-65535の範囲で入力してください");
+                e.Handled = true;
+            }
+            catch
+            {
+                MessageBox.Show("0-65535の範囲で入力してください");
+                e.Handled = true;
+            }
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (_state)
+            {
+                if (MessageBox.Show("Communication with PCAB\nDo you want to disconnect and exit?", "Worning", MessageBoxButton.OKCancel, MessageBoxImage.Warning) == MessageBoxResult.OK)
+                {
+                    _mod.PCAB_AutoTaskStop(); _mod = null; _state = false;
+                }
+                else { e.Cancel = true; }
+            }
         }
     }
 }
