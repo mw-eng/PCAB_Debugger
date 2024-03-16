@@ -18,6 +18,16 @@
 #include "ow_rom.h"             // onewire ROM command codes
 #include "ds18b20.h"            // ds18b20 function codes
 
+/*
+uint8_t DAT[FLASH_PAGE_SIZE]; //MAX256BYTE
+DAT[0]:Set auto load date
+DAT[1-49]:PS1 to PS49 StateBin
+DAT[50]:AMP STBY
+DAT[51]:DRA STBY
+DAT[52]:LNA STBY
+DAT[53]:Low Power Mode
+DAT[100]:IO MODE
+*/
 uint8_t DAT[FLASH_PAGE_SIZE]; //MAX256BYTE
 uint64_t SENS_TMP[OW_MAX]; //Temp Senser IDs
 int SENS_TMP_NUM;           //Temp Senser Number
@@ -294,14 +304,3 @@ int main() {
     }
     return 0;
 }
-
-/*
-uint8_t DAT[FLASH_PAGE_SIZE]; //MAX256BYTE
-DAT[0]:Set auto load date
-DAT[1-49]:PS1 to PS49 StateBin
-DAT[50]:AMP STBY
-DAT[51]:DRA STBY
-DAT[52]:LNA STBY
-DAT[53]:Low Power Mode
-DAT[100]:IO MODE
-*/
