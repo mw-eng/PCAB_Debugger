@@ -199,7 +199,7 @@ int main() {
                         ow_send (&ow, OW_SKIP_ROM);
                         ow_send (&ow, DS18B20_CONVERT_T);
                         while (ow_read(&ow) == 0);
-                        for (int i = sta; i < num; i += 1) {
+                        for (int i = sta; i < num; i++) {
                             ow_reset (&ow);
                             ow_send (&ow, OW_MATCH_ROM);
                             for (int b = 0; b < 64; b += 8) {

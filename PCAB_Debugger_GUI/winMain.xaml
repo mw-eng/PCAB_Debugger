@@ -1,0 +1,38 @@
+﻿<Window x:Class="PCAB_Debugger_GUI.winMain"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PCAB_Debugger_GUI"
+        mc:Ignorable="d"
+        Title="PCAB Debugger" Height="450" Width="800" Loaded="Window_Loaded">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="8*"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="5*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+            <Viewbox Margin="5,5,5,5"><Label Content="Serial Port"/></Viewbox>
+            <ComboBox x:Name="SERIAL_PORTS_COMBOBOX" Grid.Column="1" Margin="5,5,5,5" FontSize="16" VerticalContentAlignment="Center" DropDownOpened="SERIAL_PORTS_COMBOBOX_DropDownOpened"/>
+            <Button x:Name="CONNECT_BUTTON" Grid.Column="2" Margin="5,5,5,5" Click="CONNECT_BUTTON_Click"><Viewbox><TextBlock>Connect</TextBlock></Viewbox></Button>
+        </Grid>
+            <TabControl Grid.Row="1" x:Name="CONTL_GRID" FontSize="16" Margin="5,5,5,5">
+                <TabItem Header="CONTROL">
+                <Grid Background="#FFE5E5E5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="47*"/>
+                        <ColumnDefinition Width="65*"/>
+                    </Grid.ColumnDefinitions>
+                </Grid>
+            </TabItem>
+                <TabItem Header="VNA">
+                <Grid Background="#FFE5E5E5"></Grid>
+            </TabItem>
+            </TabControl>
+    </Grid>
+</Window>

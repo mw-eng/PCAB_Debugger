@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34525.116
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PCAB_Debugger_GUI", "PCAB_Debugger_GUI\PCAB_Debugger_GUI.csproj", "{BE7E5AA6-FDFB-4233-9F11-D7539ED5BBCD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PCAB_Debugger_GUI", "PCAB_Debugger_GUI\PCAB_Debugger_GUI.csproj", "{6D12DC96-76ED-41B9-9271-FE5B9C1982C5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +11,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{BE7E5AA6-FDFB-4233-9F11-D7539ED5BBCD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BE7E5AA6-FDFB-4233-9F11-D7539ED5BBCD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BE7E5AA6-FDFB-4233-9F11-D7539ED5BBCD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BE7E5AA6-FDFB-4233-9F11-D7539ED5BBCD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D12DC96-76ED-41B9-9271-FE5B9C1982C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D12DC96-76ED-41B9-9271-FE5B9C1982C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D12DC96-76ED-41B9-9271-FE5B9C1982C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D12DC96-76ED-41B9-9271-FE5B9C1982C5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
