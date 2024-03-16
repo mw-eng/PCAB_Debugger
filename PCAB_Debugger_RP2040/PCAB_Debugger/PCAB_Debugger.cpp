@@ -180,16 +180,16 @@ int main() {
                     else{if(DAT[100] != 1){uart_puts(UART_ID,"ID error.\n>");}else{uart_puts(UART_ID, "ERR\n");}}
                     break;
                 case GetTMP:
-                    int num;
-                    if(SENS_TMP_NUM < cmdDAT.id){if(DAT[100] != 1){uart_puts(UART_ID,"ID Not Found.\n>");}else{uart_puts(UART_ID, "ERR\n");}}
+                    int num,sta;
+                    if(SENS_TMP_NUM < cmdDAT.id || cmdDAT.id < 0){if(DAT[100] != 1){uart_puts(UART_ID,"ID Not Found.\n>");}else{uart_puts(UART_ID, "ERR\n");}}
                     else{
-                        if(cmdDAT.id != 0){num = cmdDAT.id + 1;}
-                        else{num = SENS_TMP_NUM;}
+                        if(cmdDAT.id != 0){sta = cmdDAT.id - 1; num = cmdDAT.id;}
+                        else{sta = 0; num = SENS_TMP_NUM;}
                         ow_reset (&ow);
                         ow_send (&ow, OW_SKIP_ROM);
                         ow_send (&ow, DS18B20_CONVERT_T);
                         while (ow_read(&ow) == 0);
-                        for (int i = cmdDAT.id; i < num; i += 1) {
+                        for (int i = sta; i < num; i += 1) {
                             ow_reset (&ow);
                             ow_send (&ow, OW_MATCH_ROM);
                             for (int b = 0; b < 64; b += 8) {
@@ -198,7 +198,7 @@ int main() {
                             ow_send (&ow, DS18B20_READ_SCRATCHPAD);
                             int16_t temp = 0;
                             temp = ow_read (&ow) | (ow_read (&ow) << 8);
-                            if(DAT[100] != 1){uart_puts(UART_ID, ("ID" + std::to_string(i) + "[" + std::to_string(SENS_TMP[i]) + "] : " + std::to_string((temp / 16.0)) + "\n").c_str());}
+                            if(DAT[100] != 1){uart_puts(UART_ID, ("ID" + std::to_string(i+1) + "[" + std::to_string(SENS_TMP[i]) + "] : " + std::to_string((temp / 16.0)) + "\n").c_str());}
                             else{uart_puts(UART_ID,(std::to_string(SENS_TMP[i]) + ":" + std::to_string((temp / 16.0)) + ",").c_str());}
                         }
                         if(DAT[100] != 1){uart_puts(UART_ID,">");}
