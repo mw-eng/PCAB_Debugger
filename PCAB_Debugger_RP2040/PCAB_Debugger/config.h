@@ -30,7 +30,9 @@
 
 #define SNS_TEMP_PIN 24
 #define SNS_VD_PIN 26
+#define SNS_VD_SELIN 0
 #define SNS_ID_PIN 27
+#define SNS_ID_SELIN 1
 
 #define SW_1_PIN 8
 #define SW_2_PIN 9

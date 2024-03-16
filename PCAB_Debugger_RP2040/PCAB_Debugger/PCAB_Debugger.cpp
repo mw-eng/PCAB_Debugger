@@ -9,6 +9,7 @@
 #include "hardware/sync.h"
 #include "hardware/gpio.h"
 #include "hardware/pio.h"
+#include "hardware/adc.h"
 
 #include "config.h"
 #include "subfunc.h"
@@ -119,12 +120,8 @@ void setup()
         }
     }
 
-    gpio_init(SNS_TEMP_PIN);
-    gpio_init(SNS_VD_PIN);
-    gpio_init(SNS_ID_PIN);
-    gpio_set_dir(SW_6_PIN , GPIO_IN);
-    gpio_set_dir(SW_6_PIN , GPIO_IN);
-    gpio_set_dir(SW_6_PIN , GPIO_IN);
+    adc_gpio_init(SNS_VD_PIN);
+    adc_gpio_init(SNS_ID_PIN);
 
     loadMEMORY();
     //Memory Config Auto Load
@@ -178,13 +175,44 @@ int main() {
                     else{if(DAT[100] != 1){uart_puts(UART_ID,"ID error.\n>");}else{uart_puts(UART_ID, "ERR\n");}}
                     break;
                 case GetTMP:
-                    if(DAT[100] != 1){uart_puts(UART_ID,"Command not implemented.\n>");}else{uart_puts(UART_ID, "0\n");}
+                    ow_reset (&ow);
+                    ow_send (&ow, OW_SKIP_ROM);
+                    ow_send (&ow, DS18B20_CONVERT_T);
+                    while (ow_read(&ow) == 0);
+                    int num;
+                    if(SENS_TMP_NUM < cmdDAT.cmd_code){if(DAT[100] != 1){uart_puts(UART_ID,"ID Not Found.\n>");}else{uart_puts(UART_ID, "ERR\n");}}
+                    else{
+                        if(cmdDAT.cmd_code != 0){num = cmdDAT.cmd_code + 1;}
+                        else{num = SENS_TMP_NUM;}
+                        for (int i = num; i < num; i += 1) {
+                            ow_reset (&ow);
+                            ow_send (&ow, OW_MATCH_ROM);
+                            for (int b = 0; b < 64; b += 8) {
+                                ow_send (&ow, SENS_TMP[i] >> b);
+                            }
+                            ow_send (&ow, DS18B20_READ_SCRATCHPAD);
+                            int16_t temp = 0;
+                            temp = ow_read (&ow) | (ow_read (&ow) << 8);
+                            if(DAT[100] != 1){uart_puts(UART_ID, ("ID" + std::to_string(i) + "[" + std::to_string(SENS_TMP[i]) + "] : " + std::to_string((temp / 16.0)) + "\n").c_str());}
+                            else{uart_puts(UART_ID,(std::to_string(SENS_TMP[i]) + ":" + std::to_string((temp / 16.0)) + ",").c_str());}
+                        }
+                        if(DAT[100] != 1){uart_puts(UART_ID,">");}
+                        else{uart_puts(UART_ID,"\n");}
+                    }
                     break;
                 case GetId:
-                    if(DAT[100] != 1){uart_puts(UART_ID,"Command not implemented.\n>");}else{uart_puts(UART_ID, "0\n");}
+                    const float conversion_factor = 3.3f / (1 << 12);
+                    adc_select_input(SNS_ID_SELIN);
+                    uint16_t result = adc_read();
+                    if(DAT[100] != 1){uart_puts(UART_ID,(std::to_string(((result * conversion_factor) - 1.65) / 0.09) + "A\n>").c_str());}
+                    else{uart_puts(UART_ID, (std::to_string(result * conversion_factor) + "\n").c_str());}
                     break;
                 case GetVd:
-                    if(DAT[100] != 1){uart_puts(UART_ID,"Command not implemented.\n>");}else{uart_puts(UART_ID, "0\n");}
+                    const float conversion_factor = 3.3f / (1 << 12);
+                    adc_select_input(SNS_VD_SELIN);
+                    uint16_t result = adc_read();
+                    if(DAT[100] != 1){uart_puts(UART_ID,(std::to_string(result * conversion_factor * 0.099) + "V\n>").c_str());}
+                    else{uart_puts(UART_ID, (std::to_string(result * conversion_factor) + "\n").c_str());}
                     break;
                 case GetSTB_AMP:
                     if(DAT[50] == 0) {if(DAT[100] != 1){uart_puts(UART_ID,"AMP RUN MODE NOW.\n>");}else{uart_puts(UART_ID,"RUN\n");}}

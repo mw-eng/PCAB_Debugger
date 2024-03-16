@@ -8,9 +8,9 @@ Command | Description
 WrtPS | Write phase shifter binary
 GetPS{x} | {x} : Phase Shifter No<br>Get phase shifter settings buffer value<br>*This is not the current setting.*
 SetPS{x} {DEC}| {x} : Phase Shifter No<br>{HEX} : state binray 
-GetTMP{x} | {x} : Temp IC No<br>
-GetId{x} | {x} : SNS_Id No<br>
-GetVd{x} | {x} : SNS_Vd No<br>
+GetTMP{x} | {x} : Temp IC No<br>Specifying 0 for {0} retrieves all temperature data.
+GetId | Get Id Value.<br>
+GetVd | Get Vd Value.<br>
 GetSTB.AMP | Get AMP STBY<br>
 SetSTB.AMP {0/1}| Set AMP STBY<br>1 : Standby MODE<br>0 : Run MODE
 GetSTB.DRA | Get DRA STBY<br>

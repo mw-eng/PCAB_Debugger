@@ -43,6 +43,7 @@ bool strCompare(const std::string a, const std::string b) { return strCompare(a,
 
 int conv_uint(const std::string &str)
 {
+    if(str.length() <= 0){return -1;}
     if (std::all_of(str.cbegin(), str.cend(), isdigit)) { return stoi(str); }
     return -1;
 }
