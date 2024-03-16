@@ -198,7 +198,7 @@ int main() {
                             ow_send (&ow, DS18B20_READ_SCRATCHPAD);
                             int16_t temp = 0;
                             temp = ow_read (&ow) | (ow_read (&ow) << 8);
-                            if(DAT[100] != 1){uart_puts(UART_ID, ("ID" + std::to_string(i+1) + "[" + std::to_string(SENS_TMP[i]) + "] : " + std::to_string((temp / 16.0)) + "\n").c_str());}
+                            if(DAT[100] != 1){uart_puts(UART_ID, ("ID" + std::to_string(i+1) + "[" + std::to_string(SENS_TMP[i]) + "] : " + std::to_string((temp / 16.0)) + "degC\n").c_str());}
                             else{uart_puts(UART_ID,(std::to_string(SENS_TMP[i]) + ":" + std::to_string((temp / 16.0)) + ",").c_str());}
                         }
                         if(DAT[100] != 1){uart_puts(UART_ID,">");}
