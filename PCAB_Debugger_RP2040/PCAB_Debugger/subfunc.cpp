@@ -73,8 +73,8 @@ cmd getCMD(const std::string &strCMD)
     if (strCompare(trim(strCMD).substr(0, 5), "WrtPS", true)) { return cmd(code::WrtPS, -1, -1); }
     if (strCompare(trim(strCMD).substr(0, 5), "GetPS", true)) { return cmd(code::GetPS, conv_uint(trim(strCMD).substr(5)), -1); }
     if (strCompare(trim(strCMD).substr(0, 6), "GetTMP", true)) { return cmd(code::GetTMP, conv_uint(trim(strCMD).substr(6)), -1); }
-    if (strCompare(trim(strCMD).substr(0, 5), "GetId", true)) { return cmd(code::GetId, conv_uint(trim(strCMD).substr(5)), -1); }
-    if (strCompare(trim(strCMD).substr(0, 5), "GetVd", true)) { return cmd(code::GetVd, conv_uint(trim(strCMD).substr(5)), -1); }
+    if (strCompare(trim(strCMD).substr(0, 5), "GetId", true)) { return cmd(code::GetId, -1, -1); }
+    if (strCompare(trim(strCMD).substr(0, 5), "GetVd", true)) { return cmd(code::GetVd, -1, -1); }
     if (strCompare(trim(strCMD).substr(0, 10), "GetSTB.AMP", true)) { return cmd(code::GetSTB_AMP, -1, -1); }
     if (strCompare(trim(strCMD).substr(0, 10), "GetSTB.DRA", true)) { return cmd(code::GetSTB_DRA, -1, -1); }
     if (strCompare(trim(strCMD).substr(0, 10), "GetSTB.LNA", true)) { return cmd(code::GetSTB_LNA, -1, -1); }

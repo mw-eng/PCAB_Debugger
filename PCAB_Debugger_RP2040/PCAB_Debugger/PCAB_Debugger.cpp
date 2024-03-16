@@ -145,6 +145,8 @@ int main() {
     setup();
     while(1){
         std::string cmdline;
+        const float conversion_factor = 3.3f / (1 << 12);
+        uint16_t result;
         if(DAT[100] != 1){cmdline = getCMDLINE(true);}
         else{cmdline = getCMDLINE(false);}
         if(trim(cmdline).empty() && DAT[100] != 1){uart_puts(UART_ID, ">");}
@@ -201,16 +203,14 @@ int main() {
                     }
                     break;
                 case GetId:
-                    const float conversion_factor = 3.3f / (1 << 12);
                     adc_select_input(SNS_ID_SELIN);
-                    uint16_t result = adc_read();
+                    result = adc_read();
                     if(DAT[100] != 1){uart_puts(UART_ID,(std::to_string(((result * conversion_factor) - 1.65) / 0.09) + "A\n>").c_str());}
                     else{uart_puts(UART_ID, (std::to_string(result * conversion_factor) + "\n").c_str());}
                     break;
                 case GetVd:
-                    const float conversion_factor = 3.3f / (1 << 12);
                     adc_select_input(SNS_VD_SELIN);
-                    uint16_t result = adc_read();
+                    result = adc_read();
                     if(DAT[100] != 1){uart_puts(UART_ID,(std::to_string(result * conversion_factor * 0.099) + "V\n>").c_str());}
                     else{uart_puts(UART_ID, (std::to_string(result * conversion_factor) + "\n").c_str());}
                     break;
