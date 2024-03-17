@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PCAB_Debugger_GUI"
         mc:Ignorable="d"
-        Title="PCAB Debugger" Height="720" Width="1280" Loaded="Window_Loaded" Closing="Window_Closing">
+        Title="PCAB Debugger" Height="720" Width="1280" Loaded="Window_Loaded" Closing="Window_Closing" Icon="/PCAB_Debugger_GUI.ico">
     <Window.Resources>
         <ResourceDictionary Source="./Style.xaml"/>
     </Window.Resources>
@@ -43,8 +43,9 @@
                 <Viewbox Grid.Column="4" Margin="10" HorizontalAlignment="Right"><CheckBox x:Name="INIT_CHECKBOX" Content="PCAB Initialization" /></Viewbox>
             </Grid>
         </Grid>
-        <TabControl Grid.Row="1" x:Name="CONTL_GRID" FontSize="18" Margin="5" IsEnabled="False">
-            <TabItem Header="CONTROL">
+        <Grid Grid.Row="1" x:Name="CONTL_GRID" IsEnabled="False">
+        <!--<TabControl Grid.Row="1" x:Name="CONTL_GRID" FontSize="18" Margin="5" IsEnabled="False">
+            <TabItem Header="CONTROL">-->
                 <Grid Background="#FFE5E5E5">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="10*"/>
@@ -291,10 +292,11 @@
                         </Grid>
                     </Grid>
                 </Grid>
-            </TabItem>
+            <!--</TabItem>
             <TabItem Header="VNA" IsEnabled="False">
                 <Grid Background="#FFE5E5E5"></Grid>
             </TabItem>
-        </TabControl>
+        </TabControl>-->
+        </Grid>
     </Grid>
 </Window>
