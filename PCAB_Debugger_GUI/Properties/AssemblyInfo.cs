@@ -7,12 +7,12 @@ using System.Windows;
 // アセンブリに関する一般的な情報は、次の方法で制御されます
 // アセンブリに関連付けられている情報を変更するには、
 // これらの属性値を変更してください。
-[assembly: AssemblyTitle("PCAB_Debugger_GUI")]
+[assembly: AssemblyTitle("PCAB_DebuggerGUI")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("PCAB_Debugger_GUI")]
-[assembly: AssemblyCopyright("Copyright ©  2024")]
+[assembly: AssemblyCompany("OrientMicrowave")]
+[assembly: AssemblyProduct("PCAB_DebuggerGUI")]
+[assembly: AssemblyCopyright("Copyright © Orient Microwave Corp.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

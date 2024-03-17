@@ -185,7 +185,8 @@ int main() {
                     break;
                 case SetPS:
                     if(0 < cmdDAT.id && cmdDAT.id < 50){
-                        if(DAT[100] != 1){DAT[cmdDAT.id] = cmdDAT.arg;uart_puts(UART_ID,("Set Phase No," + std::to_string(cmdDAT.id) + " / Phase = " + std::to_string(cmdDAT.arg * 5.625) + "deg\n>").c_str());}
+                        DAT[cmdDAT.id] = cmdDAT.arg;
+                        if(DAT[100] != 1){uart_puts(UART_ID,("Set Phase No," + std::to_string(cmdDAT.id) + " / Phase = " + std::to_string(cmdDAT.arg * 5.625) + "deg\n>").c_str());}
                         else{uart_puts(UART_ID, "DONE\n");}
                     }
                     else{if(DAT[100] != 1){uart_puts(UART_ID,"ID error.\n>");}else{uart_puts(UART_ID, "ERR\n");}}

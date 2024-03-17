@@ -34,6 +34,7 @@ namespace PCAB_Debugger_GUI
 #endif
             _state = false;
             SERIAL_PORTS_COMBOBOX_RELOAD();
+            if(SERIAL_PORTS_COMBOBOX.Items.Count > 0) { SERIAL_PORTS_COMBOBOX.SelectedIndex = 0; }
         }
 
         private void SERIAL_PORTS_COMBOBOX_RELOAD()
@@ -110,7 +111,7 @@ namespace PCAB_Debugger_GUI
                     {
                         if(typeof(Grid) == objBf.GetType())
                         {
-                            if (((Grid)objBf).Name == "PS" + i.ToString("00") + "_GRID")
+                            if (((Grid)objBf).Name == "PS" + (i + 1).ToString("00") + "_GRID")
                             {
                                 foreach (object objChild in ((Grid)objBf).Children)
                                 {
@@ -129,9 +130,9 @@ namespace PCAB_Debugger_GUI
         private void LOADMEM_Click(object sender, RoutedEventArgs e)
         {
             string strBf = _mod.PCAB_CMD("LMEM", 1);
-            read_conf();
             if (strBf == "DONE\n")
             {
+                read_conf();
                 MessageBox.Show("Load memory done.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             else
@@ -187,11 +188,9 @@ namespace PCAB_Debugger_GUI
 
         private void RESET_Click(object sender, RoutedEventArgs e)
         {
-            _mod.PCAB_CMD("RST", 1);
-            Thread.Sleep(2000);
-            _mod.DiscardInBuffer();
-            if (_mod.PCAB_CMD("CUI 1", 1) == "DONE\n")
+            if (_mod.PCAB_PRESET())
             {
+                read_conf();
                 MessageBox.Show("Preset done.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             else
@@ -255,19 +254,19 @@ namespace PCAB_Debugger_GUI
                 switch (((CheckBox)sender).Name)
                 {
                     case "STBAMP_CHECKBOX":
-                        if (_mod.PCAB_CMD("SetSTB.AMP 1", 1) != "DONE\n") { MessageBox.Show("SetSTB.AMP Command Error", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
+                        if (_mod.PCAB_CMD("SetSTB.AMP 0", 1) != "DONE\n") { MessageBox.Show("SetSTB.AMP Command Error", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
                         break;
                     case "STBDRA_CHECKBOX":
-                        if (_mod.PCAB_CMD("SetSTB.DRA 1", 1) != "DONE\n") { MessageBox.Show("SetSTB.DRA Command Error", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
+                        if (_mod.PCAB_CMD("SetSTB.DRA 0", 1) != "DONE\n") { MessageBox.Show("SetSTB.DRA Command Error", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
                         break;
                     case "STBLNA_CHECKBOX":
-                        if (_mod.PCAB_CMD("SetSTB.LNA 1", 1) != "DONE\n") { MessageBox.Show("SetSTB.LNA Command Error", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
+                        if (_mod.PCAB_CMD("SetSTB.LNA 0", 1) != "DONE\n") { MessageBox.Show("SetSTB.LNA Command Error", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
                         break;
                     case "SETLPM_CHECKBOX":
-                        if (_mod.PCAB_CMD("SetLPM 1", 1) != "DONE\n") { MessageBox.Show("SetLPM Command Error", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
+                        if (_mod.PCAB_CMD("SetLPM 0", 1) != "DONE\n") { MessageBox.Show("SetLPM Command Error", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
                         break;
                     case "SETALD_CHECKBOX":
-                        if (_mod.PCAB_CMD("SetALD 1", 1) != "DONE\n") { MessageBox.Show("SetALD Command Error", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
+                        if (_mod.PCAB_CMD("SetALD 0", 1) != "DONE\n") { MessageBox.Show("SetALD Command Error", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
                         break;
                     default: break;
                 }
@@ -311,6 +310,7 @@ namespace PCAB_Debugger_GUI
         private void OnError(object sender, PCABEventArgs e)
         {
             _mod.PCAB_AutoTaskStop();
+            _mod.Close();
             MessageBox.Show(e.Message.ToString(), "Error",MessageBoxButton.OK,MessageBoxImage.Error);
             _state = false;
             _mod = null;
@@ -381,6 +381,7 @@ namespace PCAB_Debugger_GUI
                 }
             }
         }
+
         private void DEC_TextBox_PreviewLostKeyboardForcus(object sender, KeyboardFocusChangedEventArgs e)
         {
             try

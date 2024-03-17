@@ -30,11 +30,13 @@ namespace PCAB_Debugger_GUI
             _mod.Encoding = Encoding.ASCII;
             _mod.NewLine = "\n";
             _mod.ReadBufferSize = 2048;
-            _mod.WriteTimeout = 1000;
-            _mod.ReadTimeout = 1000;
+            _mod.WriteTimeout = 5000;
+            _mod.ReadTimeout = 5000;
         }
 
-        ~PCAB() { if (_mod?.IsOpen == true) { try { _mod.Close(); } catch { } }_mod = null; }
+        ~PCAB() { this.Close();  }
+
+        public void Close() { if (_mod?.IsOpen == true) { try { _mod.Close(); } catch { } } _mod = null; }
 
         public bool PCAB_AutoTaskStart(UInt32 waiteTime, bool? initialize)
         {
@@ -62,6 +64,32 @@ namespace PCAB_Debugger_GUI
 
         public void PCAB_AutoTaskStop() { _task = false; }
 
+        public bool PCAB_PRESET()
+        {
+            if (!autoOpen()) { return false; }
+            _task = null;
+            while (_state) { Thread.Sleep(59); }
+            _state = true;
+            try
+            {
+                _mod.WriteLine("RST");
+                _mod.WriteLine("CUI 1");
+                Thread.Sleep(2000);
+                _mod.DiscardInBuffer();
+                _mod.WriteLine("GetIDN");
+                string[] arrBf = _mod.ReadLine().Split(',');
+                _state = false;
+                _task = true;
+                if (arrBf[0] != "PCAB") { return false; }
+                else { return true; }
+            }
+            catch (Exception e)
+            {
+                OnError?.Invoke(this, new PCABEventArgs(null, e.Message));
+                return false;
+            }
+        }
+
         public string PCAB_CMD(string cmd,int readLine)
         {
             if (!autoOpen()) { return "ERR"; }
@@ -88,29 +116,35 @@ namespace PCAB_Debugger_GUI
 
         private void PCAB_Task(UInt32 waiteTime)
         {
-            do
+            try
             {
-                Thread.Sleep((int)waiteTime);
-                if (_task == true)
+                do
                 {
-                    while (_state) { Thread.Sleep(53); }
-                    _state = true;
-                    _mod.DiscardInBuffer();
-                    _mod.WriteLine("GetId");
-                    string id = _mod.ReadLine();
-                    _mod.WriteLine("GetVd");
-                    string vd = _mod.ReadLine();
-                    _mod.WriteLine("GetTMP0");
-                    string temp = _mod.ReadLine();
-                    if(Id_now != id || Vd_now != vd || TEMP_now != temp)
+                    Thread.Sleep((int)waiteTime);
+                    if (_task == true)
                     {
-                        string[] dat = { id, vd, temp };
-                        OnUpdateDAT?.Invoke(this, new PCABEventArgs(dat, null));
+                        while (_state) { Thread.Sleep(53); }
+                        _state = true;
+                        _mod.DiscardInBuffer();
+                        _mod.WriteLine("GetId");
+                        string id = _mod.ReadLine();
+                        _mod.WriteLine("GetVd");
+                        string vd = _mod.ReadLine();
+                        _mod.WriteLine("GetTMP0");
+                        string temp = _mod.ReadLine();
+                        if (Id_now != id || Vd_now != vd || TEMP_now != temp)
+                        {
+                            string[] dat = { id, vd, temp };
+                            OnUpdateDAT?.Invoke(this, new PCABEventArgs(dat, null));
+                        }
+                        _state = false;
                     }
-                    _state = false;
-                }
-            }while(_task != false);
-            _mod?.Close();
+                } while (_task != false);
+                _mod?.Close();
+            }catch (Exception e)
+            {
+                OnError?.Invoke(this, new PCABEventArgs(null, e.Message));
+            }
         }
 
         private bool autoOpen()
