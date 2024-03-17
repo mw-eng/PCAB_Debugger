@@ -219,15 +219,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:PCAB_DebuggerGUI"
-        "ProductCode" = "8:{5F49688D-BA55-48CA-899D-A24AFA0CF3C3}"
-        "PackageCode" = "8:{7EA804DF-713F-47B6-87C5-B02BB8C9B39F}"
+        "ProductCode" = "8:{51CF2848-FB6B-4349-AB97-8062F21B7F13}"
+        "PackageCode" = "8:{9617EDC3-F97C-4A11-8BAB-4FD4E6576B43}"
         "UpgradeCode" = "8:{198D4CD5-58E0-4489-9EBD-6C88B79D8A3B}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.0.0-alpha.1"
+        "ProductVersion" = "8:1.0.0"
         "Manufacturer" = "8:OrientMicrowaveCorp."
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
@@ -769,7 +769,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_55219439E27A4BB88D2EDAAFB85C87A6"
             {
-            "SourcePath" = "8:..\\PCAB_Debugger_GUI\\obj\\Debug\\PCAB_Debugger_GUI.exe"
+            "SourcePath" = "8:..\\PCAB_Debugger_GUI\\obj\\Release\\PCAB_Debugger_GUI.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_74480F6C3B5E4178865AAF909950A49F"
