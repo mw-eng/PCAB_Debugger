@@ -261,8 +261,8 @@ int main() {
                     else if(DAT[53] == 1) {if(DAT[100] != 1){uart_puts(UART_ID,"LOW POWER MODE NOW.\n>");}else{uart_puts(UART_ID,"LOW\n");}}
                     break;
                 case SetLPM:
-                    if(cmdDAT.arg == 0) {DAT[53] = 0;gpio_put(STB_LNA_PIN, 1);if(DAT[100] != 1){uart_puts(UART_ID,"FULL POWER MODE.\n>");}else{uart_puts(UART_ID,"DONE\n");}}
-                    else if(cmdDAT.arg == 1) {DAT[53] = 1;gpio_put(STB_LNA_PIN, 0);if(DAT[100] != 1){uart_puts(UART_ID,"LOW POWER MODE.\n>");}else{uart_puts(UART_ID,"DONE\n");}}
+                    if(cmdDAT.arg == 0) {DAT[53] = 0;gpio_put(LPW_MOD_PIN, 1);if(DAT[100] != 1){uart_puts(UART_ID,"FULL POWER MODE.\n>");}else{uart_puts(UART_ID,"DONE\n");}}
+                    else if(cmdDAT.arg == 1) {DAT[53] = 1;gpio_put(LPW_MOD_PIN, 0);if(DAT[100] != 1){uart_puts(UART_ID,"LOW POWER MODE.\n>");}else{uart_puts(UART_ID,"DONE\n");}}
                     else{if(DAT[100] != 1){uart_puts(UART_ID,"Argument error.\n>");}else{uart_puts(UART_ID,"ERR\n");}}
                     break;
                 case GetALD:
