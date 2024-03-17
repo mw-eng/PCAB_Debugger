@@ -232,8 +232,8 @@ int main() {
                     else if(DAT[50] == 1) {if(DAT[100] != 1){uart_puts(UART_ID,"AMP STANDBY MODE NOW.\n>");}else{uart_puts(UART_ID,"STB\n");}}
                     break;
                 case SetSTB_AMP:
-                    if(cmdDAT.arg == 0) {DAT[50] = 0;gpio_put(STB_AMP_PIN, 1);if(DAT[100] != 1){uart_puts(UART_ID,"AMP RUN MODE.\n>");}else{uart_puts(UART_ID,"DONE");}}
-                    else if(cmdDAT.arg == 1) {DAT[50] = 1;gpio_put(STB_AMP_PIN, 0);if(DAT[100] != 1){uart_puts(UART_ID,"AMP STANDBY MODE.\n>");}else{uart_puts(UART_ID,"DONE");}}
+                    if(cmdDAT.arg == 0) {DAT[50] = 0;gpio_put(STB_AMP_PIN, 1);if(DAT[100] != 1){uart_puts(UART_ID,"AMP RUN MODE.\n>");}else{uart_puts(UART_ID,"DONE\n");}}
+                    else if(cmdDAT.arg == 1) {DAT[50] = 1;gpio_put(STB_AMP_PIN, 0);if(DAT[100] != 1){uart_puts(UART_ID,"AMP STANDBY MODE.\n>");}else{uart_puts(UART_ID,"DONE\n");}}
                     else{if(DAT[100] != 1){uart_puts(UART_ID,"Argument error.\n>");}else{uart_puts(UART_ID,"ERR\n");}}
                     break;
                 case GetSTB_DRA:
@@ -241,8 +241,8 @@ int main() {
                     else if(DAT[51] == 1) {if(DAT[100] != 1){uart_puts(UART_ID,"DRA STANDBY MODE NOW.\n>");}else{uart_puts(UART_ID,"STB\n");}}
                     break;
                 case SetSTB_DRA:
-                    if(cmdDAT.arg == 0) {DAT[51] = 0;gpio_put(STB_DRA_PIN, 1);if(DAT[100] != 1){uart_puts(UART_ID,"DRA RUN MODE.\n>");}else{uart_puts(UART_ID,"DONE");}}
-                    else if(cmdDAT.arg == 1) {DAT[51] = 1;gpio_put(STB_DRA_PIN, 0);if(DAT[100] != 1){uart_puts(UART_ID,"DRA STANDBY MODE.\n>");}else{uart_puts(UART_ID,"DONE");}}
+                    if(cmdDAT.arg == 0) {DAT[51] = 0;gpio_put(STB_DRA_PIN, 1);if(DAT[100] != 1){uart_puts(UART_ID,"DRA RUN MODE.\n>");}else{uart_puts(UART_ID,"DONE\n");}}
+                    else if(cmdDAT.arg == 1) {DAT[51] = 1;gpio_put(STB_DRA_PIN, 0);if(DAT[100] != 1){uart_puts(UART_ID,"DRA STANDBY MODE.\n>");}else{uart_puts(UART_ID,"DONE\n");}}
                     else{if(DAT[100] != 1){uart_puts(UART_ID,"Argument error.\n>");}else{uart_puts(UART_ID,"ERR\n");}}
                     break;
                 case GetSTB_LNA:
@@ -250,8 +250,8 @@ int main() {
                     else if(DAT[52] == 1) {if(DAT[100] != 1){uart_puts(UART_ID,"LNA STANDBY MODE NOW.\n>");}else{uart_puts(UART_ID,"STB\n");}}
                     break;
                 case SetSTB_LNA:
-                    if(cmdDAT.arg == 0) {DAT[52] = 0;gpio_put(STB_LNA_PIN, 1);if(DAT[100] != 1){uart_puts(UART_ID,"LNA RUN MODE.\n>");}else{uart_puts(UART_ID,"DONE");}}
-                    else if(cmdDAT.arg == 1) {DAT[52] = 1;gpio_put(STB_LNA_PIN, 0);if(DAT[100] != 1){uart_puts(UART_ID,"LNA STANDBY MODE.\n>");}else{uart_puts(UART_ID,"DONE");}}
+                    if(cmdDAT.arg == 0) {DAT[52] = 0;gpio_put(STB_LNA_PIN, 1);if(DAT[100] != 1){uart_puts(UART_ID,"LNA RUN MODE.\n>");}else{uart_puts(UART_ID,"DONE\n");}}
+                    else if(cmdDAT.arg == 1) {DAT[52] = 1;gpio_put(STB_LNA_PIN, 0);if(DAT[100] != 1){uart_puts(UART_ID,"LNA STANDBY MODE.\n>");}else{uart_puts(UART_ID,"DONE\n");}}
                     else{if(DAT[100] != 1){uart_puts(UART_ID,"Argument error.\n>");}else{uart_puts(UART_ID,"ERR\n");}}
                     break;
                 case GetLPM:
@@ -259,8 +259,8 @@ int main() {
                     else if(DAT[53] == 1) {if(DAT[100] != 1){uart_puts(UART_ID,"LOW POWER MODE NOW.\n>");}else{uart_puts(UART_ID,"LOW\n");}}
                     break;
                 case SetLPM:
-                    if(cmdDAT.arg == 0) {DAT[53] = 0;gpio_put(LPW_MOD_PIN, 1);uart_puts(UART_ID,"FULL POWER MODE.\n>");}
-                    else if(cmdDAT.arg == 1) {DAT[53] = 1;gpio_put(LPW_MOD_PIN, 0);uart_puts(UART_ID,"LOW POWER MODE.\n>");}
+                    if(cmdDAT.arg == 0) {DAT[53] = 0;gpio_put(STB_LNA_PIN, 1);if(DAT[100] != 1){uart_puts(UART_ID,"FULL POWER MODE.\n>");}else{uart_puts(UART_ID,"DONE\n");}}
+                    else if(cmdDAT.arg == 1) {DAT[53] = 1;gpio_put(STB_LNA_PIN, 0);if(DAT[100] != 1){uart_puts(UART_ID,"LOW POWER MODE.\n>");}else{uart_puts(UART_ID,"DONE\n");}}
                     else{if(DAT[100] != 1){uart_puts(UART_ID,"Argument error.\n>");}else{uart_puts(UART_ID,"ERR\n");}}
                     break;
                 case GetALD:
@@ -268,8 +268,8 @@ int main() {
                     else{if(DAT[100] != 1){uart_puts(UART_ID,"NON-AUTO LOAD MODE.\n>");}else{uart_puts(UART_ID,"DIS\n");}}
                     break;
                 case SetALD:
-                    if(cmdDAT.arg == 0) {DAT[0] = 0;if(DAT[100] != 1){uart_puts(UART_ID,"NON-AUTO LOAD MODE.\n>");}else{uart_puts(UART_ID,"DONE");}}
-                    else if(cmdDAT.arg == 1) {DAT[0] = 1;if(DAT[100] != 1){uart_puts(UART_ID,"AUTO LOAD MODE.\n>");}else{uart_puts(UART_ID,"DONE");}}
+                    if(cmdDAT.arg == 0) {DAT[0] = 0;if(DAT[100] != 1){uart_puts(UART_ID,"NON-AUTO LOAD MODE.\n>");}else{uart_puts(UART_ID,"DONE\n");}}
+                    else if(cmdDAT.arg == 1) {DAT[0] = 1;if(DAT[100] != 1){uart_puts(UART_ID,"AUTO LOAD MODE.\n>");}else{uart_puts(UART_ID,"DONE\n");}}
                     else{if(DAT[100] != 1){uart_puts(UART_ID,"Argument error.\n>");}else{uart_puts(UART_ID,"ERR\n");}}
                     break;
                 case SaveMEM:
@@ -281,8 +281,8 @@ int main() {
                     if(DAT[100] != 1){uart_puts(UART_ID,"ReLoad Memory DONE.\n>");}else{uart_puts(UART_ID,"DONE\n");}
                     break;
                 case RST:
-                    for(int i = 1 ; i < 50 ; i++){DAT[i] = 0;}writePHASE(15);
-                    uart_puts(UART_ID, "ALL PHASE 0\n");
+                    for(int i = 1 ; i < 50 ; i++){DAT[i] = 0;}
+                    writePHASE(15);uart_puts(UART_ID, "ALL PHASE 0\n");
                     DAT[50] = 0;gpio_put(STB_AMP_PIN, 1);uart_puts(UART_ID,"AMP RUN MODE.\n");
                     DAT[51] = 0;gpio_put(STB_DRA_PIN, 1);uart_puts(UART_ID,"DRA RUN MODE.\n");
                     DAT[52] = 0;gpio_put(STB_LNA_PIN, 1);uart_puts(UART_ID,"LNA RUN MODE.\n");

@@ -7,7 +7,7 @@ Command | Description
 :--|:--
 WrtPS | Write phase shifter binary
 GetPS{x} | {x} : Phase Shifter No<br>Get phase shifter settings buffer value<br>*This is not the current setting.*
-SetPS{x} {DEC}| {x} : Phase Shifter No<br>{HEX} : state binray 
+SetPS{x} {DEC}| {x} : Phase Shifter No<br>{DEC} : state binray 
 GetTMP{x} | {x} : Temp IC No<br>Specifying 0 for {0} retrieves all temperature data.
 GetId | Get Id Value.<br>
 GetVd | Get Vd Value.<br>
@@ -21,6 +21,8 @@ GetLPM | Get low power mode<br>
 SetLPM {0/1} | Get low power mode<br>1 : Low Power MODE<br>0 : Full Power MODE
 SetALD {0/1} | Set auto load date<br>1 : Auto LOAD MODE<br>0 : Non-Auto LOAD MODE
 GetALD | Get auto load date<br>1 : Auto LOAD MODE<br>0 : Non-Auto LOAD MODE<br>Non-Auto LOAD MODE if disabled by hardware.
+GetID | Get Board ID
+SetID {x} | Set Bord ID<br>{x}:DEC
 SMEM | Save Memory
 LMEM | ReLoad Memory
 CUI {0/1} | CUI Control Use<br>0 : CUI MODE<br>1 : GUI MODE

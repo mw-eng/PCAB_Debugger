@@ -1,23 +1,13 @@
 ﻿using PCAB_Debugger_GUI.Properties;
 using System;
 using System.Collections.Generic;
-using System.IO.Ports;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Text.RegularExpressions;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Management;
-using System.Collections;
 using static PCAB_Debugger_GUI.PCAB;
-using System.Text.RegularExpressions;
+using static PCAB_Debugger_GUI.ShowSerialPortName;
 
 namespace PCAB_Debugger_GUI
 {
@@ -26,7 +16,7 @@ namespace PCAB_Debugger_GUI
     /// </summary>
     public partial class winMain : Window
     {
-        ShowSerialPortName.SerialPortTable[] ports;
+        SerialPortTable[] ports;
         PCAB _mod;
         bool _state;
 
@@ -49,8 +39,8 @@ namespace PCAB_Debugger_GUI
         private void SERIAL_PORTS_COMBOBOX_RELOAD()
         {
             SERIAL_PORTS_COMBOBOX.Items.Clear();
-            ports = ShowSerialPortName.GetDeviceNames();
-            foreach (ShowSerialPortName.SerialPortTable port in ports)
+            ports = GetDeviceNames();
+            foreach (SerialPortTable port in ports)
             {
                 SERIAL_PORTS_COMBOBOX.Items.Add(port.Caption);
             }
@@ -93,47 +83,141 @@ namespace PCAB_Debugger_GUI
                     CONTL_GRID.IsEnabled = true;
                     _state = true;
                     ((TextBlock)((Viewbox)CONNECT_BUTTON.Content).Child).Text = "Disconnect";
-                    string stb;
-                    stb = _mod.PCAB_CMD("GetSTB.AMP", 1);
-                    if (stb == "STB") { CHECKBOX_Checked("STBAMP", null); } else { CHECKBOX_Unchecked("STBAMP", null); }
-                    stb = _mod.PCAB_CMD("GetSTB.DRA", 1);
-                    if (stb == "STB") { CHECKBOX_Checked("STBDRA", null); } else { CHECKBOX_Unchecked("STBDRA", null); }
-                    stb = _mod.PCAB_CMD("GetSTB.LNA", 1);
-                    if (stb == "STB") { CHECKBOX_Checked("STBLNA", null); } else { CHECKBOX_Unchecked("STBLNA", null); }
-                    stb = _mod.PCAB_CMD("GetLPM", 1);
-                    if (stb == "LOW") { CHECKBOX_Checked("LPM", null); } else { CHECKBOX_Unchecked("LPM", null); }
-                    stb = _mod.PCAB_CMD("GetALD", 1);
-                    if (stb == "ENB") { CHECKBOX_Checked("ALD", null); } else { CHECKBOX_Unchecked("ALD", null); }
+                    read_conf();
                 }
             }
         }
 
-
-        private void READMEM_Click(object sender, RoutedEventArgs e)
+        private void read_conf()
         {
+            string strBf;
+            if (_mod.PCAB_CMD("GetSTB.AMP", 1) == "STB\n") { CHECKBOX_Checked("STBAMP", null); } else { CHECKBOX_Unchecked("STBAMP", null); }
+            if (_mod.PCAB_CMD("GetSTB.DRA", 1) == "STB\n") { CHECKBOX_Checked("STBDRA", null); } else { CHECKBOX_Unchecked("STBDRA", null); }
+            if (_mod.PCAB_CMD("GetSTB.LNA", 1) == "STB\n") { CHECKBOX_Checked("STBLNA", null); } else { CHECKBOX_Unchecked("STBLNA", null); }
+            if (_mod.PCAB_CMD("GetLPM", 1) == "LOW\n") { CHECKBOX_Checked("LPM", null); } else { CHECKBOX_Unchecked("LPM", null); }
+            if (_mod.PCAB_CMD("GetALD", 1) == "ENB\n") { CHECKBOX_Checked("ALD", null); } else { CHECKBOX_Unchecked("ALD", null); }
+            for(int i = 0; i < 15; i++)
+            {
+                strBf = _mod.PCAB_CMD("GetPS" + (i + 1).ToString(), 1);
+                if(int.TryParse(strBf.Trim('\n').Trim(' '),out _))
+                {
+                    foreach(object objBf in PS_GRID.Children)
+                    {
+                        if(typeof(Grid) == objBf.GetType())
+                        {
+                            if (((Grid)objBf).Name == "PS" + i.ToString("00") + "_GRID")
+                            {
+                                foreach (object objChild in ((Grid)objBf).Children)
+                                {
+                                    if (typeof(ComboBox) == objChild.GetType())
+                                    {
+                                        ((ComboBox)objChild).SelectedIndex = int.Parse(strBf.Trim('\n').Trim(' '));
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
+        private void LOADMEM_Click(object sender, RoutedEventArgs e)
+        {
+            string strBf = _mod.PCAB_CMD("LMEM", 1);
+            read_conf();
+            if (strBf == "DONE\n")
+            {
+                MessageBox.Show("Load memory done.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            else
+            {
+                MessageBox.Show("Load memory error.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void SAVEMEM_Click(object sender, RoutedEventArgs e)
         {
-
+            if (_mod.PCAB_CMD("SMEM", 1) == "DONE\n")
+            {
+                MessageBox.Show("Save memory done.","Success",MessageBoxButton.OK,MessageBoxImage.Information);
+            }
+            else
+            {
+                MessageBox.Show("Save memory error.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void WRITEPS_Click(object sender, RoutedEventArgs e)
         {
-
+            bool res = true;
+            foreach (object objBf in PS_GRID.Children)
+            {
+                if (typeof(Grid) == objBf.GetType())
+                {
+                    if (Regex.IsMatch(((Grid)objBf).Name, "PS[0-1][0-9]_GRID"))
+                    {
+                        foreach (object objChild in ((Grid)objBf).Children)
+                        {
+                            if (typeof(ComboBox) == objChild.GetType())
+                            {
+                                if (_mod.PCAB_CMD("SetPS" + int.Parse(((Grid)objBf).Name.Substring(2, 2)).ToString("0") +
+                                    " " + ((ComboBox)objChild).SelectedIndex.ToString("0"), 1) == "ERR\n")
+                                {
+                                    res = false;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            if (res && _mod.PCAB_CMD("WrtPS",1) == "DONE\n")
+            {
+                MessageBox.Show("Write phase config done.","Success",MessageBoxButton.OK,MessageBoxImage.Information);
+            }
+            else
+            {
+                MessageBox.Show("Write phase config error.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void RESET_Click(object sender, RoutedEventArgs e)
         {
-
+            _mod.PCAB_CMD("RST", 1);
+            Thread.Sleep(2000);
+            _mod.DiscardInBuffer();
+            if (_mod.PCAB_CMD("CUI 1", 1) == "DONE\n")
+            {
+                MessageBox.Show("Preset done.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            else
+            {
+                MessageBox.Show("Reset error.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void CHECKBOX_Checked(object sender, RoutedEventArgs e)
         {
             if(typeof(CheckBox) == sender.GetType())
             {
-
+                switch (((CheckBox)sender).Name)
+                {
+                    case "STBAMP_CHECKBOX":
+                        if (_mod.PCAB_CMD("SetSTB.AMP 1", 1) != "DONE\n") { MessageBox.Show("SetSTB.AMP Command Error", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
+                        break;
+                    case "STBDRA_CHECKBOX":
+                        if (_mod.PCAB_CMD("SetSTB.DRA 1", 1) != "DONE\n") { MessageBox.Show("SetSTB.DRA Command Error", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
+                        break;
+                    case "STBLNA_CHECKBOX":
+                        if (_mod.PCAB_CMD("SetSTB.LNA 1", 1) != "DONE\n") { MessageBox.Show("SetSTB.LNA Command Error", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
+                        break;
+                    case "SETLPM_CHECKBOX":
+                        if (_mod.PCAB_CMD("SetLPM 1", 1) != "DONE\n") { MessageBox.Show("SetLPM Command Error", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
+                        break;
+                    case "SETALD_CHECKBOX":
+                        if (_mod.PCAB_CMD("SetALD 1", 1) != "DONE\n") { MessageBox.Show("SetALD Command Error", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
+                        break;
+                    default: break;
+                }
             }
             else
             {
@@ -163,7 +247,25 @@ namespace PCAB_Debugger_GUI
         {
             if (typeof(CheckBox) == sender.GetType())
             {
-
+                switch (((CheckBox)sender).Name)
+                {
+                    case "STBAMP_CHECKBOX":
+                        if (_mod.PCAB_CMD("SetSTB.AMP 1", 1) != "DONE\n") { MessageBox.Show("SetSTB.AMP Command Error", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
+                        break;
+                    case "STBDRA_CHECKBOX":
+                        if (_mod.PCAB_CMD("SetSTB.DRA 1", 1) != "DONE\n") { MessageBox.Show("SetSTB.DRA Command Error", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
+                        break;
+                    case "STBLNA_CHECKBOX":
+                        if (_mod.PCAB_CMD("SetSTB.LNA 1", 1) != "DONE\n") { MessageBox.Show("SetSTB.LNA Command Error", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
+                        break;
+                    case "SETLPM_CHECKBOX":
+                        if (_mod.PCAB_CMD("SetLPM 1", 1) != "DONE\n") { MessageBox.Show("SetLPM Command Error", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
+                        break;
+                    case "SETALD_CHECKBOX":
+                        if (_mod.PCAB_CMD("SetALD 1", 1) != "DONE\n") { MessageBox.Show("SetALD Command Error", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
+                        break;
+                    default: break;
+                }
             }
             else
             {
@@ -188,6 +290,19 @@ namespace PCAB_Debugger_GUI
                 }
             }
         }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (_state)
+            {
+                if (MessageBox.Show("Communication with PCAB\nDo you want to disconnect and exit?", "Worning", MessageBoxButton.OKCancel, MessageBoxImage.Warning) == MessageBoxResult.OK)
+                {
+                    _mod.PCAB_AutoTaskStop(); _mod = null; _state = false;
+                }
+                else { e.Cancel = true; }
+            }
+        }
+
         private void OnError(object sender, PCABEventArgs e)
         {
             _mod.PCAB_AutoTaskStop();
@@ -277,16 +392,5 @@ namespace PCAB_Debugger_GUI
             }
         }
 
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            if (_state)
-            {
-                if (MessageBox.Show("Communication with PCAB\nDo you want to disconnect and exit?", "Worning", MessageBoxButton.OKCancel, MessageBoxImage.Warning) == MessageBoxResult.OK)
-                {
-                    _mod.PCAB_AutoTaskStop(); _mod = null; _state = false;
-                }
-                else { e.Cancel = true; }
-            }
-        }
     }
 }

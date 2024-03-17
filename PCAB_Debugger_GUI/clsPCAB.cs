@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO.Ports;
-using System.Linq;
-using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,6 +11,7 @@ namespace PCAB_Debugger_GUI
     {
         private bool? _task;    //true:run / false:stop / null:Interrupt
         private SerialPort _mod;
+        private bool _state;
         public event EventHandler<PCABEventArgs> OnUpdateDAT;
         public event EventHandler<PCABEventArgs> OnError;
         public string Vd_now { get; set; }
@@ -36,7 +34,7 @@ namespace PCAB_Debugger_GUI
 
         ~PCAB() { if (_mod?.IsOpen == true) { try { _mod.Close(); } catch { } }_mod = null; }
 
-        public bool PCAB_AutoTaskStart(UInt32 waiteTime,bool? initialize)
+        public bool PCAB_AutoTaskStart(UInt32 waiteTime, bool? initialize)
         {
             if (_mod?.IsOpen != true)
             {
@@ -45,18 +43,19 @@ namespace PCAB_Debugger_GUI
                 catch (Exception) { MessageBox.Show("Serial port open Error.\n{e.ToString()}\n", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return false; }
             }
             _task = true;
+            _state = false;
             _mod.DiscardInBuffer();
-            if (initialize == true)
+            try
             {
-                try
+                if (initialize == true)
                 {
                     _mod.WriteLine("RST");
-                    _mod.WriteLine("CUI 1");
-                    Thread.Sleep(2000);
-                    _mod.DiscardInBuffer();
                 }
-                catch { OnError?.Invoke(this, new PCABEventArgs(null, "Serial Connect Error.")); }
+                _mod.WriteLine("CUI 1");
+                Thread.Sleep(2000);
+                _mod.DiscardInBuffer();
             }
+            catch { OnError?.Invoke(this, new PCABEventArgs(null, "Serial Connect Error.")); }
             Task.Factory.StartNew(() => { PCAB_Task(waiteTime); });
             return true;
         }
@@ -71,13 +70,19 @@ namespace PCAB_Debugger_GUI
                 try { _mod.Open(); }
                 catch (UnauthorizedAccessException) { MessageBox.Show("Serial port open Error.\nAlready used.\n", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return null; }
                 catch (Exception) { MessageBox.Show("Serial port open Error.\n{e.ToString()}\n", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return null; }
+                _state = false;
             }
+            while (_state) {Thread.Sleep(59);}
+            _state = true;
             _mod.WriteLine(cmd);
             string ret = "";
             for (int i = 0; i < readLine; i++) { ret += _mod.ReadLine() + "\n"; }
+            _state = false;
             _task = true;
             return ret;
         }
+
+        public void DiscardInBuffer(){ _mod.DiscardInBuffer(); }
 
         private void PCAB_Task(UInt32 waiteTime)
         {
@@ -86,6 +91,8 @@ namespace PCAB_Debugger_GUI
                 Thread.Sleep((int)waiteTime);
                 if (_task == true)
                 {
+                    while (_state) { Thread.Sleep(53); }
+                    _state = true;
                     _mod.DiscardInBuffer();
                     _mod.WriteLine("GetId");
                     string id = _mod.ReadLine();
@@ -98,6 +105,7 @@ namespace PCAB_Debugger_GUI
                         string[] dat = { id, vd, temp };
                         OnUpdateDAT?.Invoke(this, new PCABEventArgs(dat, null));
                     }
+                    _state = false;
                 }
             }while(_task != false);
             _mod?.Close();
