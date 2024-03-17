@@ -1,7 +1,7 @@
 // UART Configure
 #define UART_ID uart0
-#define UART_BAUD_RATE 9600
-// #define UART_BAUD_RATE 115200
+//#define UART_BAUD_RATE 9600
+ #define UART_BAUD_RATE 115200
 #define UART_DATA_BITS 8
 #define UART_STOP_BITS 1
 #define UART_PARITY UART_PARITY_NONE
