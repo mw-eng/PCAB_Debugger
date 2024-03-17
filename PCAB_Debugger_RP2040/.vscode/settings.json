@@ -47,7 +47,9 @@
         "cinttypes": "cpp",
         "typeinfo": "cpp",
         "sstream": "cpp",
-        "cstring": "cpp"
+        "cstring": "cpp",
+        "charconv": "cpp",
+        "ctime": "cpp"
     },
     "cmake.statusbar.advanced": {
         "debug": {

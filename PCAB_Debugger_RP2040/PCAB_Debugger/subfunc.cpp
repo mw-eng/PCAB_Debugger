@@ -94,6 +94,8 @@ cmd getCMD(const std::string &strCMD)
     if (strCompare(trim(strCMD).substr(0, 6), "SetLPM", true)) { return cmd(code::SetLPM, -1, conv_uint(trim(strCMD).substr(7))); }
     if (strCompare(trim(strCMD).substr(0, 6), "SetALD", true)) { return cmd(code::SetALD, -1, conv_uint(trim(strCMD).substr(7))); }
     if (strCompare(trim(strCMD).substr(0, 6), "GetALD", true)) { return cmd(code::GetALD, -1, -1); }
+    if (strCompare(trim(strCMD).substr(0, 10), "SetID", true)) { return cmd(code::SetID, -1, conv_uint(trim(strCMD).substr(6))); }
+    if (strCompare(trim(strCMD).substr(0, 6), "GetID", true)) { return cmd(code::GetID, -1, -1); }
     if (strCompare(trim(strCMD).substr(0, 4), "SMEM", true)) { return cmd(code::SaveMEM, -1, -1); }
     if (strCompare(trim(strCMD).substr(0, 4), "LMEM", true)) { return cmd(code::LoadMEM, -1, -1); }
     if (strCompare(trim(strCMD).substr(0, 3), "RST", true)) { return cmd(code::RST, -1, -1); }

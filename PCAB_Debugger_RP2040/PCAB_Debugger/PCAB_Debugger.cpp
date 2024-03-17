@@ -27,6 +27,7 @@ DAT[51]:DRA STBY
 DAT[52]:LNA STBY
 DAT[53]:Low Power Mode
 DAT[100]:IO MODE
+DAT[101]:Board ID
 */
 uint8_t DAT[FLASH_PAGE_SIZE]; //MAX256BYTE
 uint64_t SENS_TMP[OW_MAX]; //Temp Senser IDs
@@ -271,6 +272,15 @@ int main() {
                     if(cmdDAT.arg == 0) {DAT[0] = 0;if(DAT[100] != 1){uart_puts(UART_ID,"NON-AUTO LOAD MODE.\n>");}else{uart_puts(UART_ID,"DONE\n");}}
                     else if(cmdDAT.arg == 1) {DAT[0] = 1;if(DAT[100] != 1){uart_puts(UART_ID,"AUTO LOAD MODE.\n>");}else{uart_puts(UART_ID,"DONE\n");}}
                     else{if(DAT[100] != 1){uart_puts(UART_ID,"Argument error.\n>");}else{uart_puts(UART_ID,"ERR\n");}}
+                    break;
+                case GetID:
+                    if(DAT[100] != 1){uart_puts(UART_ID, ("PCAB ID : " + std::to_string(DAT[101]) + "\n>").c_str());}
+                    else{uart_puts(UART_ID, (std::to_string(DAT[101]) + "\n").c_str());}
+                    break;
+                case SetID:
+                    DAT[101] = (uint8_t)cmdDAT.arg;
+                    if(DAT[100] != 1){uart_puts(UART_ID, "Board ID set in cache.\n>");}
+                    else{uart_puts(UART_ID, "DONE\n");}
                     break;
                 case SaveMEM:
                     saveMEMORY();

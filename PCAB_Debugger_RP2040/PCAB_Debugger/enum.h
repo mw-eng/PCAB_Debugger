@@ -17,6 +17,8 @@ enum code{
     GetALD,
     SaveMEM,
     LoadMEM,
+    GetID,
+    SetID,
     RST,
     CUI,
     NONE
