@@ -275,7 +275,7 @@ int main() {
                     break;
                 case GetID:
                     if(DAT[100] != 1){uart_puts(UART_ID, ("PCAB ID : " + std::to_string(DAT[101]) + "\n>").c_str());}
-                    else{uart_puts(UART_ID, (std::to_string(DAT[101]) + "\n").c_str());}
+                    else{uart_puts(UART_ID, ("PCAB," + std::to_string(DAT[101]) + "\n").c_str());}
                     break;
                 case SetID:
                     DAT[101] = (uint8_t)cmdDAT.arg;

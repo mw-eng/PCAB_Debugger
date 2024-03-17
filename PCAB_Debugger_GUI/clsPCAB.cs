@@ -30,20 +30,15 @@ namespace PCAB_Debugger_GUI
             _mod.Encoding = Encoding.ASCII;
             _mod.NewLine = "\n";
             _mod.ReadBufferSize = 2048;
+            _mod.WriteTimeout = 1000;
+            _mod.ReadTimeout = 1000;
         }
 
         ~PCAB() { if (_mod?.IsOpen == true) { try { _mod.Close(); } catch { } }_mod = null; }
 
         public bool PCAB_AutoTaskStart(UInt32 waiteTime, bool? initialize)
         {
-            if (_mod?.IsOpen != true)
-            {
-                try { _mod.Open(); }
-                catch (UnauthorizedAccessException) { MessageBox.Show("Serial port open Error.\nAlready used.\n", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return false; }
-                catch (Exception) { MessageBox.Show("Serial port open Error.\n{e.ToString()}\n", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return false; }
-            }
-            _task = true;
-            _state = false;
+            autoOpen();
             _mod.DiscardInBuffer();
             try
             {
@@ -56,6 +51,8 @@ namespace PCAB_Debugger_GUI
                 _mod.DiscardInBuffer();
             }
             catch { OnError?.Invoke(this, new PCABEventArgs(null, "Serial Connect Error.")); }
+
+            _task = true;
             Task.Factory.StartNew(() => { PCAB_Task(waiteTime); });
             return true;
         }
@@ -64,22 +61,19 @@ namespace PCAB_Debugger_GUI
 
         public string PCAB_CMD(string cmd,int readLine)
         {
+            autoOpen();
             _task = null;
-            if (_mod?.IsOpen != true)
-            {
-                try { _mod.Open(); }
-                catch (UnauthorizedAccessException) { MessageBox.Show("Serial port open Error.\nAlready used.\n", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return null; }
-                catch (Exception) { MessageBox.Show("Serial port open Error.\n{e.ToString()}\n", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return null; }
-                _state = false;
-            }
             while (_state) {Thread.Sleep(59);}
             _state = true;
-            _mod.WriteLine(cmd);
-            string ret = "";
-            for (int i = 0; i < readLine; i++) { ret += _mod.ReadLine() + "\n"; }
-            _state = false;
-            _task = true;
-            return ret;
+            try
+            {
+                _mod.WriteLine(cmd);
+                string ret = "";
+                for (int i = 0; i < readLine; i++) { ret += _mod.ReadLine() + "\n"; }
+                _state = false;
+                _task = true;
+                return ret;
+            }
         }
 
         public void DiscardInBuffer(){ _mod.DiscardInBuffer(); }
@@ -109,6 +103,16 @@ namespace PCAB_Debugger_GUI
                 }
             }while(_task != false);
             _mod?.Close();
+        }
+
+        private void autoOpen()
+        {
+            if (_mod?.IsOpen != true)
+            {
+                try { _mod.Open(); _state = false; }
+                catch (UnauthorizedAccessException) { MessageBox.Show("Serial port open Error.\nAlready used.\n", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return false; }
+                catch (Exception) { MessageBox.Show("Serial port open Error.\n{e.ToString()}\n", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return false; }
+            }
         }
 
         public class PCABEventArgs : EventArgs

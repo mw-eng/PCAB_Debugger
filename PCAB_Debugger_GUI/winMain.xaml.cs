@@ -161,7 +161,7 @@ namespace PCAB_Debugger_GUI
                             if (typeof(ComboBox) == objChild.GetType())
                             {
                                 if (_mod.PCAB_CMD("SetPS" + int.Parse(((Grid)objBf).Name.Substring(2, 2)).ToString("0") +
-                                    " " + ((ComboBox)objChild).SelectedIndex.ToString("0"), 1) == "ERR\n")
+                                    " " + ((ComboBox)objChild).SelectedIndex.ToString("0"), 1) != "DONE\n")
                                 {
                                     res = false;
                                 }
