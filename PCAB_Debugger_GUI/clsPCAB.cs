@@ -51,9 +51,9 @@ namespace PCAB_Debugger_GUI
                 _mod.DiscardInBuffer();
                 _mod.WriteLine("GetIDN");
                 string[] arrBf = _mod.ReadLine().Split(',');
-                if (arrBf[0] != "PCAB") { return false; }
+                if (arrBf[0] != "PCAB") { _mod.Close(); return false; }
             }
-            catch { OnError?.Invoke(this, new PCABEventArgs(null, "Serial Connect Error.")); }
+            catch { OnError?.Invoke(this, new PCABEventArgs(null, "Serial Connect Error.")); return false; }
 
             _task = true;
             Task.Factory.StartNew(() => { PCAB_Task(waiteTime); });
