@@ -341,7 +341,7 @@ namespace PCAB_Debugger_GUI
             Dispatcher.BeginInvoke(new Action(() =>
             {
                 SNS_ID_LABEL.Content = ((double.Parse(e.ReceiveDAT[0]) - 1.65) / 0.09).ToString("0.00");
-                SNS_VD_LABEL.Content = (double.Parse(e.ReceiveDAT[1]) * 0.099).ToString("0.00");
+                SNS_VD_LABEL.Content = (double.Parse(e.ReceiveDAT[1]) * 10.091).ToString("0.00");
                 TEMP01.Content = (double.Parse(list[0])).ToString("0.00");
                 TEMP02.Content = (double.Parse(list[1])).ToString("0.00");
                 TEMP03.Content = (double.Parse(list[2])).ToString("0.00");

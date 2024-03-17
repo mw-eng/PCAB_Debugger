@@ -226,7 +226,7 @@ int main() {
                 case GetVd:
                     adc_select_input(SNS_VD_SELIN);
                     result = adc_read();
-                    if(DAT[100] != 1){uart_puts(UART_ID,(std::to_string(result * conversion_factor * 0.099) + "V\n>").c_str());}
+                    if(DAT[100] != 1){uart_puts(UART_ID,(std::to_string(result * conversion_factor * 10.091) + "V\n>").c_str());}
                     else{uart_puts(UART_ID, (std::to_string(result * conversion_factor) + "\n").c_str());}
                     break;
                 case GetSTB_AMP:
