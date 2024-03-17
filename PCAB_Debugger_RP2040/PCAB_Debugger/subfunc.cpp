@@ -70,15 +70,23 @@ std::string getCMDLINE(const bool retchar)
 
 cmd getCMD(const std::string &strCMD)
 {
-    if (strCompare(trim(strCMD).substr(0, 5), "WrtPS", true)) { return cmd(code::WrtPS, -1, -1); }
-    if (strCompare(trim(strCMD).substr(0, 5), "GetPS", true)) { return cmd(code::GetPS, conv_uint(trim(strCMD).substr(5)), -1); }
-    if (strCompare(trim(strCMD).substr(0, 6), "GetTMP", true)) { return cmd(code::GetTMP, conv_uint(trim(strCMD).substr(6)), -1); }
-    if (strCompare(trim(strCMD).substr(0, 5), "GetId", true)) { return cmd(code::GetId, -1, -1); }
-    if (strCompare(trim(strCMD).substr(0, 5), "GetVd", true)) { return cmd(code::GetVd, -1, -1); }
     if (strCompare(trim(strCMD).substr(0, 10), "GetSTB.AMP", true)) { return cmd(code::GetSTB_AMP, -1, -1); }
     if (strCompare(trim(strCMD).substr(0, 10), "GetSTB.DRA", true)) { return cmd(code::GetSTB_DRA, -1, -1); }
     if (strCompare(trim(strCMD).substr(0, 10), "GetSTB.LNA", true)) { return cmd(code::GetSTB_LNA, -1, -1); }
+    if (strCompare(trim(strCMD).substr(0, 10), "SetSTB.AMP", true)) { return cmd(code::SetSTB_AMP, -1, conv_uint(trim(strCMD).substr(11))); }
+    if (strCompare(trim(strCMD).substr(0, 10), "SetSTB.DRA", true)) { return cmd(code::SetSTB_DRA, -1, conv_uint(trim(strCMD).substr(11))); }
+    if (strCompare(trim(strCMD).substr(0, 10), "SetSTB.LNA", true)) { return cmd(code::SetSTB_LNA, -1, conv_uint(trim(strCMD).substr(11))); }
     if (strCompare(trim(strCMD).substr(0, 6), "GetLPM", true)) { return cmd(code::GetLPM, -1, -1); }
+    if (strCompare(trim(strCMD).substr(0, 6), "SetLPM", true)) { return cmd(code::SetLPM, -1, conv_uint(trim(strCMD).substr(7))); }
+    if (strCompare(trim(strCMD).substr(0, 6), "SetALD", true)) { return cmd(code::SetALD, -1, conv_uint(trim(strCMD).substr(7))); }
+    if (strCompare(trim(strCMD).substr(0, 6), "GetALD", true)) { return cmd(code::GetALD, -1, -1); }
+    if (strCompare(trim(strCMD).substr(0, 6), "SetIDN", true)) { return cmd(code::SetIDN, -1, conv_uint(trim(strCMD).substr(7))); }
+    if (strCompare(trim(strCMD).substr(0, 6), "GetIDN", true)) { return cmd(code::GetIDN, -1, -1); }
+    if (strCompare(trim(strCMD).substr(0, 6), "GetTMP", true)) { return cmd(code::GetTMP, conv_uint(trim(strCMD).substr(6)), -1); }
+    if (strCompare(trim(strCMD).substr(0, 5), "WrtPS", true)) { return cmd(code::WrtPS, -1, -1); }
+    if (strCompare(trim(strCMD).substr(0, 5), "GetPS", true)) { return cmd(code::GetPS, conv_uint(trim(strCMD).substr(5)), -1); }
+    if (strCompare(trim(strCMD).substr(0, 5), "GetId", true)) { return cmd(code::GetId, -1, -1); }
+    if (strCompare(trim(strCMD).substr(0, 5), "GetVd", true)) { return cmd(code::GetVd, -1, -1); }
     if (strCompare(trim(strCMD).substr(0, 5), "SetPS", true))
     {
         std::vector<std::string> strVCT;
@@ -88,14 +96,6 @@ cmd getCMD(const std::string &strCMD)
         if (strVCT.size() == 2) { return cmd(code::SetPS, conv_uint(strVCT[0]), conv_uint(strVCT[1])); }
         else { return cmd(code::SetPS, -1, -1); }
     }
-    if (strCompare(trim(strCMD).substr(0, 10), "SetSTB.AMP", true)) { return cmd(code::SetSTB_AMP, -1, conv_uint(trim(strCMD).substr(11))); }
-    if (strCompare(trim(strCMD).substr(0, 10), "SetSTB.DRA", true)) { return cmd(code::SetSTB_DRA, -1, conv_uint(trim(strCMD).substr(11))); }
-    if (strCompare(trim(strCMD).substr(0, 10), "SetSTB.LNA", true)) { return cmd(code::SetSTB_LNA, -1, conv_uint(trim(strCMD).substr(11))); }
-    if (strCompare(trim(strCMD).substr(0, 6), "SetLPM", true)) { return cmd(code::SetLPM, -1, conv_uint(trim(strCMD).substr(7))); }
-    if (strCompare(trim(strCMD).substr(0, 6), "SetALD", true)) { return cmd(code::SetALD, -1, conv_uint(trim(strCMD).substr(7))); }
-    if (strCompare(trim(strCMD).substr(0, 6), "GetALD", true)) { return cmd(code::GetALD, -1, -1); }
-    if (strCompare(trim(strCMD).substr(0, 6), "SetIDN", true)) { return cmd(code::SetIDN, -1, conv_uint(trim(strCMD).substr(7))); }
-    if (strCompare(trim(strCMD).substr(0, 6), "GetIDN", true)) { return cmd(code::GetIDN, -1, -1); }
     if (strCompare(trim(strCMD).substr(0, 4), "SMEM", true)) { return cmd(code::SaveMEM, -1, -1); }
     if (strCompare(trim(strCMD).substr(0, 4), "LMEM", true)) { return cmd(code::LoadMEM, -1, -1); }
     if (strCompare(trim(strCMD).substr(0, 3), "RST", true)) { return cmd(code::RST, -1, -1); }
