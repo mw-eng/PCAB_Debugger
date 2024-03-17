@@ -85,6 +85,11 @@ namespace PCAB_Debugger_GUI
                     ((TextBlock)((Viewbox)CONNECT_BUTTON.Content).Child).Text = "Disconnect";
                     read_conf();
                 }
+                else
+                {
+                    _mod = null;
+                    MessageBox.Show("This PCAB does not apply.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
         }
 

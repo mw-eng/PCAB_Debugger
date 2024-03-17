@@ -38,7 +38,7 @@ namespace PCAB_Debugger_GUI
 
         public bool PCAB_AutoTaskStart(UInt32 waiteTime, bool? initialize)
         {
-            autoOpen();
+            if (!autoOpen()) { return false; }
             _mod.DiscardInBuffer();
             try
             {
@@ -49,6 +49,9 @@ namespace PCAB_Debugger_GUI
                 _mod.WriteLine("CUI 1");
                 Thread.Sleep(2000);
                 _mod.DiscardInBuffer();
+                _mod.WriteLine("GetIDN");
+                string[] arrBf = _mod.ReadLine().Split(',');
+                if (arrBf[0] != "PCAB") { return false; }
             }
             catch { OnError?.Invoke(this, new PCABEventArgs(null, "Serial Connect Error.")); }
 
@@ -61,7 +64,7 @@ namespace PCAB_Debugger_GUI
 
         public string PCAB_CMD(string cmd,int readLine)
         {
-            autoOpen();
+            if (!autoOpen()) { return "ERR"; }
             _task = null;
             while (_state) {Thread.Sleep(59);}
             _state = true;
@@ -73,6 +76,11 @@ namespace PCAB_Debugger_GUI
                 _state = false;
                 _task = true;
                 return ret;
+            }
+            catch(Exception e)
+            {
+                OnError?.Invoke(this, new PCABEventArgs(null, e.Message));
+                return "ERR\n";
             }
         }
 
@@ -105,14 +113,15 @@ namespace PCAB_Debugger_GUI
             _mod?.Close();
         }
 
-        private void autoOpen()
+        private bool autoOpen()
         {
             if (_mod?.IsOpen != true)
             {
-                try { _mod.Open(); _state = false; }
+                try { _mod.Open(); _state = false; return true; }
                 catch (UnauthorizedAccessException) { MessageBox.Show("Serial port open Error.\nAlready used.\n", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return false; }
                 catch (Exception) { MessageBox.Show("Serial port open Error.\n{e.ToString()}\n", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return false; }
             }
+            else { return true; }
         }
 
         public class PCABEventArgs : EventArgs

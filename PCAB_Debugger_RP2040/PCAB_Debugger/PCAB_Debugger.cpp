@@ -273,11 +273,11 @@ int main() {
                     else if(cmdDAT.arg == 1) {DAT[0] = 1;if(DAT[100] != 1){uart_puts(UART_ID,"AUTO LOAD MODE.\n>");}else{uart_puts(UART_ID,"DONE\n");}}
                     else{if(DAT[100] != 1){uart_puts(UART_ID,"Argument error.\n>");}else{uart_puts(UART_ID,"ERR\n");}}
                     break;
-                case GetID:
+                case GetIDN:
                     if(DAT[100] != 1){uart_puts(UART_ID, ("PCAB ID : " + std::to_string(DAT[101]) + "\n>").c_str());}
                     else{uart_puts(UART_ID, ("PCAB," + std::to_string(DAT[101]) + "\n").c_str());}
                     break;
-                case SetID:
+                case SetIDN:
                     DAT[101] = (uint8_t)cmdDAT.arg;
                     if(DAT[100] != 1){uart_puts(UART_ID, "Board ID set in cache.\n>");}
                     else{uart_puts(UART_ID, "DONE\n");}
