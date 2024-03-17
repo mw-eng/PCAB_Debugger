@@ -43,9 +43,8 @@
                 <Viewbox Grid.Column="4" Margin="10" HorizontalAlignment="Right"><CheckBox x:Name="INIT_CHECKBOX" Content="PCAB Initialization" /></Viewbox>
             </Grid>
         </Grid>
-        <Grid Grid.Row="1" x:Name="CONTL_GRID" IsEnabled="False">
-        <!--<TabControl Grid.Row="1" x:Name="CONTL_GRID" FontSize="18" Margin="5" IsEnabled="False">
-            <TabItem Header="CONTROL">-->
+        <TabControl Grid.Row="1" x:Name="CONTL_GRID" FontSize="18" Margin="5" IsEnabled="True">
+            <TabItem Header="CONTROL">
                 <Grid Background="#FFE5E5E5">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="10*"/>
@@ -292,11 +291,25 @@
                         </Grid>
                     </Grid>
                 </Grid>
-            <!--</TabItem>
-            <TabItem Header="VNA" IsEnabled="False">
-                <Grid Background="#FFE5E5E5"></Grid>
             </TabItem>
-        </TabControl>-->
-        </Grid>
+            <TabItem Header="VNA" IsEnabled="True">
+                <Grid Background="#FFE5E5E5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="8*"/>
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="6*"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+                        <Viewbox Grid.Column="0" Margin="5"><Label Content="VISA Address"/></Viewbox>
+                        <TextBox Grid.Column="1" x:Name="VISAADDR_TEXTBOX" Style="{StaticResource EDIT_TEXT_LINE}" TextWrapping="Wrap" Text="TCPIP0::OMCY200::hislip0::INSTR" Margin="5" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" FontSize="16"/>
+                        <Button Grid.Column="2" x:Name="VISA_CONNECT_BUTTON" Margin="5" IsEnabled="True" Click="VISA_CONNECT_BUTTON_Click"><Viewbox><TextBlock>Connect</TextBlock></Viewbox></Button>
+                    </Grid>
+                </Grid>
+            </TabItem>
+        </TabControl>
     </Grid>
 </Window>

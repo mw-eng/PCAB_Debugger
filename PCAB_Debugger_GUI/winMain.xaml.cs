@@ -403,5 +403,9 @@ namespace PCAB_Debugger_GUI
             }
         }
 
+        private void VISA_CONNECT_BUTTON_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
