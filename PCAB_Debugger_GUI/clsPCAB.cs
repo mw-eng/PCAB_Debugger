@@ -45,6 +45,7 @@ namespace PCAB_Debugger_GUI
             _mod.DiscardInBuffer();
             try
             {
+                _mod.WriteLine("");
                 if (initialize == true)
                 {
                     _mod.WriteLine("RST");

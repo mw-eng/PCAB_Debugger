@@ -49,6 +49,14 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+            }
         }
         "Release"
         {
@@ -65,6 +73,14 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+            }
         }
     }
     "Deployable"
@@ -203,15 +219,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:PCAB_DebuggerGUI"
-        "ProductCode" = "8:{78380BD4-8C82-4AD5-B7ED-A2D96B8A852A}"
-        "PackageCode" = "8:{0704DE8C-AB50-4856-97CD-B1C1070F978D}"
+        "ProductCode" = "8:{5F49688D-BA55-48CA-899D-A24AFA0CF3C3}"
+        "PackageCode" = "8:{7EA804DF-713F-47B6-87C5-B02BB8C9B39F}"
         "UpgradeCode" = "8:{198D4CD5-58E0-4489-9EBD-6C88B79D8A3B}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.0.0"
+        "ProductVersion" = "8:1.0.0-alpha.1"
         "Manufacturer" = "8:OrientMicrowaveCorp."
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"

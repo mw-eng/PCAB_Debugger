@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -129,8 +130,10 @@ namespace PCAB_Debugger_GUI
         private void LOADMEM_Click(object sender, RoutedEventArgs e)
         {
             string strBf = _mod.PCAB_CMD("LMEM", 1);
-            if (strBf == "DONE\n")
+            if (strBf != "ERR\n")
             {
+                _mod.PCAB_CMD("CUI 1", 1);
+                _mod.DiscardInBuffer();
                 read_conf();
                 MessageBox.Show("Load memory done.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
             }
