@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO.Ports;
-using System.Linq;
 using System.Management;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PCAB_Debugger_GUI
 {
@@ -28,11 +24,11 @@ namespace PCAB_Debugger_GUI
             {
                 //Nameプロパティを取得
                 var namePropertyValue = manageObj.GetPropertyValue("Name");
-                if (namePropertyValue == null)                {                    continue;                }
+                if (namePropertyValue == null) { continue; }
 
                 //Nameプロパティ文字列の一部が"(COM1)～(COM999)"と一致するときリストに追加"
                 string name = namePropertyValue.ToString();
-                if (check.IsMatch(name))                {                    deviceNameList.Add(name);                }
+                if (check.IsMatch(name)) { deviceNameList.Add(name); }
             }
 
             //戻り値作成
@@ -41,7 +37,7 @@ namespace PCAB_Debugger_GUI
             {
                 List<SerialPortTable> res = new List<SerialPortTable>();
                 res.Clear();
-                foreach(string port in ports)
+                foreach (string port in ports)
                 {
                     SerialPort serial = new SerialPort(port);
                     try

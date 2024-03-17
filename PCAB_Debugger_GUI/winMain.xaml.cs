@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -34,7 +33,7 @@ namespace PCAB_Debugger_GUI
 #endif
             _state = false;
             SERIAL_PORTS_COMBOBOX_RELOAD();
-            if(SERIAL_PORTS_COMBOBOX.Items.Count > 0) { SERIAL_PORTS_COMBOBOX.SelectedIndex = 0; }
+            if(SERIAL_PORTS_COMBOBOX.Items.Count > 0) { SERIAL_PORTS_COMBOBOX.SelectedIndex = 0; CONNECT_BUTTON.IsEnabled = true; }
         }
 
         private void SERIAL_PORTS_COMBOBOX_RELOAD()
@@ -314,9 +313,12 @@ namespace PCAB_Debugger_GUI
             MessageBox.Show(e.Message.ToString(), "Error",MessageBoxButton.OK,MessageBoxImage.Error);
             _state = false;
             _mod = null;
-            SERIAL_PORTS_COMBOBOX.IsEnabled = true;
+            Dispatcher.BeginInvoke(new Action(() =>
+            {
+                SERIAL_PORTS_COMBOBOX.IsEnabled = true;
             CONTL_GRID.IsEnabled = false;
             ((TextBlock)((Viewbox)CONNECT_BUTTON.Content).Child).Text = "Connect";
+            }));
         }
 
         private void OnUpdateDAT(object sender, PCABEventArgs e)
