@@ -21,7 +21,8 @@ namespace PCAB_Debugger_GUI
         public PCAB(string PortName)
         {
             _mod = new SerialPort(PortName);
-            _mod.BaudRate = 9600;
+            //_mod.BaudRate = 9600;
+            _mod.BaudRate = 115200;
             _mod.DataBits = 8;
             _mod.Parity = Parity.None;
             _mod.StopBits = StopBits.One;

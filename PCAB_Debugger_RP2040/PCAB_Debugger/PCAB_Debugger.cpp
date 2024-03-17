@@ -138,7 +138,7 @@ void setup()
 
     loadMEMORY();
     //Memory Config Auto Load
-    if(DAT[0] == 1 && gpio_get(SW_1_PIN))
+    if(DAT[0] == 1 && !gpio_get(SW_1_PIN))
     {
         writePHASE(15);
         if(DAT[50] != 1){gpio_put(STB_AMP_PIN, 1);}
@@ -266,7 +266,7 @@ int main() {
                     else{if(DAT[100] != 1){uart_puts(UART_ID,"Argument error.\n>");}else{uart_puts(UART_ID,"ERR\n");}}
                     break;
                 case GetALD:
-                    if(DAT[0] == 1 && gpio_get(SW_1_PIN)){if(DAT[100] != 1){uart_puts(UART_ID,"AUTO LOAD MODE.\n>");}else{uart_puts(UART_ID,"ENB\n");}}
+                    if(DAT[0] == 1 && !gpio_get(SW_1_PIN)){if(DAT[100] != 1){uart_puts(UART_ID,"AUTO LOAD MODE.\n>");}else{uart_puts(UART_ID,"ENB\n");}}
                     else{if(DAT[100] != 1){uart_puts(UART_ID,"NON-AUTO LOAD MODE.\n>");}else{uart_puts(UART_ID,"DIS\n");}}
                     break;
                 case SetALD:
