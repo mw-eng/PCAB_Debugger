@@ -6,6 +6,7 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using MWComLibCS.ExternalControl;
 using static PCAB_Debugger_GUI.PCAB;
 using static PCAB_Debugger_GUI.ShowSerialPortName;
 
@@ -19,6 +20,8 @@ namespace PCAB_Debugger_GUI
         SerialPortTable[] ports;
         PCAB _mod;
         bool _state;
+        IEEE488 instr;
+        int sesn;
 
         public winMain()
         {
@@ -35,6 +38,7 @@ namespace PCAB_Debugger_GUI
             _state = false;
             SERIAL_PORTS_COMBOBOX_RELOAD();
             if(SERIAL_PORTS_COMBOBOX.Items.Count > 0) { SERIAL_PORTS_COMBOBOX.SelectedIndex = 0; CONNECT_BUTTON.IsEnabled = true; }
+            sesn = VisaControlNI.NewResourceManager();
         }
 
         private void SERIAL_PORTS_COMBOBOX_RELOAD()
@@ -405,7 +409,21 @@ namespace PCAB_Debugger_GUI
 
         private void VISA_CONNECT_BUTTON_Click(object sender, RoutedEventArgs e)
         {
+        }
 
+        private void VISA_CONNECT_CHECK_BUTTON_Click(object sender, RoutedEventArgs e)
+        {
+            string strBF = VISAADDR_TEXTBOX.Text;
+            try
+            {
+                instr = new IEEE488(new VisaControlNI(sesn, strBF));
+                IEEE488_IDN idn = instr.IDN();
+                MessageBox.Show(" > " + idn.Vender + "\n" + idn.ModelNumber + "\n" + idn.RevisionCode + "\n" + idn.SerialNumber, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch(Exception err)
+            {
+                MessageBox.Show(err.Message,"Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
     }
 }

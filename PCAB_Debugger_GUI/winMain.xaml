@@ -306,7 +306,7 @@
                         </Grid.ColumnDefinitions>
                         <Viewbox Grid.Column="0" Margin="5"><Label Content="VISA Address"/></Viewbox>
                         <TextBox Grid.Column="1" x:Name="VISAADDR_TEXTBOX" Style="{StaticResource EDIT_TEXT_LINE}" TextWrapping="Wrap" Text="TCPIP0::OMCY200::hislip0::INSTR" Margin="5" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" FontSize="16"/>
-                        <Button Grid.Column="2" x:Name="VISA_CONNECT_BUTTON" Margin="5" IsEnabled="True" Click="VISA_CONNECT_BUTTON_Click"><Viewbox><TextBlock>Connect</TextBlock></Viewbox></Button>
+                        <Button Grid.Column="2" x:Name="VISA_CONNECT_CHECK_BUTTON" Margin="5" IsEnabled="True" Click="VISA_CONNECT_CHECK_BUTTON_Click"><Viewbox><TextBlock>Check</TextBlock></Viewbox></Button>
                     </Grid>
                 </Grid>
             </TabItem>
