@@ -484,6 +484,7 @@ namespace PCAB_Debugger_GUI
                 {
                     IEEE488 instr;
                     instr = new IEEE488(new VisaControlNI(sesn, VISAADDR_TEXTBOX.Text));
+                    instr.IEEE488_VisaControl.SetTimeout(uint.Parse(TIMEOUT_TEXTBOX.Text));
                     agPNA835x pna = new agPNA835x(instr);
                     uint[] channels;
                     uint[] sheets;

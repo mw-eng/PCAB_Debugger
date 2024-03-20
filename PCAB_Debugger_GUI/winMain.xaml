@@ -333,6 +333,11 @@
                             </StackPanel>
                         </GroupBox>
 
+                        <Viewbox Grid.Column="0" Margin="573,10,565,329"><Label Content="VISA TIMEOUT"/></Viewbox>
+                        <TextBox Grid.Column="0" x:Name="TIMEOUT_TEXTBOX" Style="{StaticResource EDIT_TEXT_LINE}" TextWrapping="Wrap" Text="2000" Margin="703,14,445,333" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" PreviewTextInput="DEC_TextBox_PreviewTextInput" CommandManager.PreviewExecuted="DEC_TextBox_PreviewExecuted" PreviewLostKeyboardFocus="DEC_TextBox_PreviewLostKeyboardForcus" FontSize="16"/>
+                        <Viewbox Grid.Column="0" Margin="823,11,393,329">
+                            <Label Content="[mS]"/>
+                        </Viewbox>
                         <Grid x:Name="LOOP_GRID" Grid.Row="0" Margin="10,161,10,10">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="1*"/>
