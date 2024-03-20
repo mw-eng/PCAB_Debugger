@@ -39,7 +39,7 @@ namespace PCAB_Debugger_GUI
             _state = false;
             SERIAL_PORTS_COMBOBOX_RELOAD();
             if(SERIAL_PORTS_COMBOBOX.Items.Count > 0) { SERIAL_PORTS_COMBOBOX.SelectedIndex = 0; CONNECT_BUTTON.IsEnabled = true; }
-            sesn = VisaControlNI.NewResourceManager();
+            //sesn = VisaControlNI.NewResourceManager();
         }
 
         #region Serial EVENT
@@ -136,6 +136,8 @@ namespace PCAB_Debugger_GUI
 
         private void LOADMEM_Click(object sender, RoutedEventArgs e)
         {
+            if (MessageBox.Show(""
+                , "Warning",MessageBoxButton.OKCancel,MessageBoxImage.Warning) != MessageBoxResult.OK) { return; }
             string strBf = _mod.PCAB_CMD("LMEM", 1);
             if (strBf != "ERR\n")
             {
@@ -308,6 +310,281 @@ namespace PCAB_Debugger_GUI
 
         #region VISA EVENT
 
+        //private void VISA_CONNECT_CHECK_BUTTON_Click(object sender, RoutedEventArgs e)
+        //{
+        //    string strBF = VISAADDR_TEXTBOX.Text;
+        //    try
+        //    {
+        //        IEEE488 instr;
+        //        instr = new IEEE488(new VisaControlNI(sesn, strBF));
+        //        IEEE488_IDN idn = instr.IDN();
+        //        MessageBox.Show("Vender\t\t: " + idn.Vender +
+        //                      "\nModel Number\t: " + idn.ModelNumber +
+        //                      "\nRevision Code\t: " + idn.RevisionCode +
+        //                      "\nSerial Number\t: " + idn.SerialNumber, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+        //    }
+        //    catch (Exception err)
+        //    {
+        //        MessageBox.Show(err.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        //    }
+        //}
+
+        //private void CH_Click(object sender, RoutedEventArgs e)
+        //{
+        //    if (((RadioButton)sender).Name == "CH_ALL")
+        //    {
+        //        CHANNEL_COMBOBOX.IsEnabled = false;
+        //        CH_SEL.IsChecked = false;
+        //    }
+        //    else
+        //    {
+        //        CHANNEL_COMBOBOX.IsEnabled = true;
+        //        CH_ALL.IsChecked = false;
+        //        CHANNEL_COMBOBOX.Items.Clear();
+        //        try
+        //        {
+        //            IEEE488 instr;
+        //            instr = new IEEE488(new VisaControlNI(sesn, VISAADDR_TEXTBOX.Text));
+        //            agPNA835x pna = new agPNA835x(instr);
+        //            foreach (uint i in pna.getChannelCatalog())
+        //            {
+        //                CHANNEL_COMBOBOX.Items.Add(i.ToString());
+        //            }
+        //        }
+        //        catch (Exception err)
+        //        {
+        //            MessageBox.Show(err.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        //        }
+        //    }
+        //}
+
+        //private void GETDAT_BUTTON_Click(object sender, RoutedEventArgs e)
+        //{
+        //    System.Windows.Forms.FolderBrowserDialog fbd = new System.Windows.Forms.FolderBrowserDialog();
+        //    fbd.Description = "Please Select Folder";
+        //    fbd.RootFolder = Environment.SpecialFolder.Desktop;
+        //    fbd.ShowNewFolderButton = true;
+        //    if (fbd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+        //    {
+        //        string dirPath = fbd.SelectedPath;
+        //        bool fileFLG = false;
+        //        string filePath;
+        //        int ps = -1;
+        //        string message;
+        //        foreach (object objBF in LOOP_GRID.Children)
+        //        {
+        //            if (typeof(RadioButton) == objBF.GetType())
+        //            {
+        //                if (((RadioButton)objBF).IsChecked == true)
+        //                {
+        //                    ps = int.Parse(((RadioButton)objBF).Content.ToString().Substring(2));
+        //                    break;
+        //                }
+        //            }
+        //        }
+        //        try
+        //        {
+        //            IEEE488 instr;
+        //            instr = new IEEE488(new VisaControlNI(sesn, VISAADDR_TEXTBOX.Text));
+        //            instr.IEEE488_VisaControl.SetTimeout(uint.Parse(TIMEOUT_TEXTBOX.Text));
+        //            agPNA835x pna = new agPNA835x(instr);
+        //            uint[] channels;
+        //            uint[] sheets;
+        //            List<SweepMode> trigMODE = new List<SweepMode>();
+        //            //Get Channel Lists
+        //            if (CH_ALL.IsChecked == true) { channels = pna.getChannelCatalog(); }
+        //            else { channels = new uint[] { uint.Parse(CHANNEL_COMBOBOX.Text) }; }
+        //            //Get Sheet Lists
+        //            sheets = pna.getSheetsCatalog();
+
+        //            //File Check
+        //            if (SCRE_CHECKBOX.IsChecked == true)
+        //            {
+        //                foreach (uint i in sheets)
+        //                {
+        //                    for (int num = 0; num < 64; num++)
+        //                    {
+        //                        if (System.IO.File.Exists(dirPath + "\\" + FILEHEADER_TEXTBOX.Text + "_" + num.ToString("00") + "_Sheet" + i.ToString() + ".png")) { fileFLG = true; }
+        //                    }
+        //                }
+        //            }
+        //            if (TRA_CHECKBOX.IsChecked == true)
+        //            {
+        //                foreach (uint i in sheets)
+        //                {
+        //                    for (int num = 0; num < 64; num++)
+        //                    {
+        //                        if (System.IO.File.Exists(dirPath + "\\" + FILEHEADER_TEXTBOX.Text + "_" + num.ToString("00") + "_Sheet" + i.ToString() + ".csv")) { fileFLG = true; }
+        //                    }
+        //                }
+        //            }
+        //            if (fileFLG)
+        //            {
+        //                if (MessageBox.Show("The file exists in the specified folder.\nDo you want to overwrite?",
+        //                    "Warning", MessageBoxButton.OKCancel, MessageBoxImage.Warning) == MessageBoxResult.Cancel) { return; }
+        //            }
+
+        //            for (int pss_num = 0; pss_num < 64; pss_num++)
+        //            {
+        //                //Write Phase State
+        //                if (_mod.PCAB_CMD("SetPS" + ps.ToString("0") + " " + pss_num.ToString("0"), 1) != "DONE\n")
+        //                {
+        //                    MessageBox.Show("Write phase config error.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        //                    return;
+        //                }
+        //                if (_mod.PCAB_CMD("WrtPS", 1) != "DONE\n")
+        //                {
+        //                    MessageBox.Show("Write phase config error.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        //                }
+        //                //Trigger SET
+        //                if (SING_CHECKBOX.IsChecked == true)
+        //                {
+        //                    foreach (uint i in channels)
+        //                    {
+        //                        trigMODE.Add(pna.getTriggerMode(i));
+        //                        pna.trigSingle(i);
+        //                    }
+        //                }
+        //                //Save Screen
+        //                if (SCRE_CHECKBOX.IsChecked == true)
+        //                {
+        //                    foreach (uint sh in sheets)
+        //                    {
+        //                        filePath = dirPath + "\\" + FILEHEADER_TEXTBOX.Text + "_" + pss_num.ToString("00") + "_Sheet" + sh.ToString() + ".png";
+
+        //                        pna.selectSheet(sh);
+        //                        if (!pna.GetScreen(filePath, out message))
+        //                        {
+        //                            if (SING_CHECKBOX.IsChecked == true)
+        //                            {
+        //                                for (int i = 0; i < channels.Length; i++)
+        //                                {
+        //                                    pna.setTriggerMode(channels[i], trigMODE[i]);
+        //                                }
+        //                            }
+        //                            MessageBox.Show(message, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+        //                            return;
+        //                        }
+        //                    }
+        //                }
+
+        //                //Save Trace
+        //                if (TRA_CHECKBOX.IsChecked == true)
+        //                {
+        //                    foreach (uint sh in sheets)
+        //                    {
+        //                        filePath = dirPath + "\\" + FILEHEADER_TEXTBOX.Text + "_" + pss_num.ToString("00") + "_Sheet" + sh.ToString() + ".csv";
+        //                        //Select Sheet
+        //                        pna.selectSheet(sh);
+        //                        //Get Trace DAT
+        //                        List<ChartDAT> dat = new List<ChartDAT>();
+        //                        foreach (uint win in pna.getWindowCatalog(sh))
+        //                        {
+        //                            List<TraceDAT> trace = new List<TraceDAT>();
+        //                            foreach (uint tra in pna.getTraceCatalog(win))
+        //                            {
+        //                                pna.selectTrace(win, tra);
+        //                                uint ch = pna.getSelectChannel();
+        //                                uint num = pna.getSelectMeasurementNumber();
+        //                                //string x = pna.getASCII("CALC" + ch.ToString() + ":MEAS" + num.ToString() + ":X:AXIS:UNIT?");
+        //                                string x = "X";
+        //                                string y = pna.getASCII("CALC" + ch.ToString() + ":MEAS" + num.ToString() + ":PAR?");
+        //                                y += "_" + pna.getASCII("CALC" + ch.ToString() + ":MEAS" + num.ToString() + ":FORM?");
+        //                                //y += "_" + pna.getASCII("CALC" + ch.ToString() + ":MEAS" + num.ToString() + ":X:AXIS:UNIT?");
+        //                                string mem = pna.getASCII("CALC" + ch.ToString() + ":MEAS" + num.ToString() + ":MATH:FUNC?");
+        //                                if (mem.ToUpper() != "NORM")
+        //                                {
+        //                                    y += "@" + mem + "[MEM]";
+        //                                }
+        //                                string[] valx = pna.getASCII("CALC" + ch.ToString() + ":MEAS" + num.ToString() + ":X?").Trim().Split(',');
+        //                                //string[] valy = pna.getASCII("CALC" + ch.ToString() + ":MEAS" + num.ToString() + ":Y?").Trim().Split(',');
+        //                                string[] valy = pna.getASCII("CALC" + ch.ToString() + ":MEAS" + num.ToString() + ":DATA:FDAT?").Trim().Split(',');
+        //                                trace.Add(new TraceDAT("CH" + ch.ToString(), x, y, valx, valy));
+        //                            }
+        //                            dat.Add(new ChartDAT("Win" + win.ToString(), trace.ToArray()));
+        //                        }
+        //                        //Write CSV Data
+        //                        using (StreamWriter sw = new StreamWriter(filePath, false, Encoding.UTF8))
+        //                        {
+        //                            System.Diagnostics.FileVersionInfo fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetExecutingAssembly().Location);
+
+        //                            sw.WriteLine("\"PCAB Debugger Ver," + fvi.ProductVersion + "\"");
+        //                            sw.WriteLine(fvi.LegalCopyright);
+        //                            sw.WriteLine();
+        //                            string strBF1 = "";
+        //                            string strBF2 = "";
+        //                            string strBF3 = "";
+        //                            int cnt = 0;
+        //                            foreach (ChartDAT chart in dat)
+        //                            {
+        //                                strBF1 += chart.WindowNumber + ",,";
+        //                                for (int i = 0; i < chart.Trace.Length - 1; i++)
+        //                                {
+        //                                    strBF1 += "," + ",";
+        //                                }
+        //                                foreach (TraceDAT trace in chart.Trace)
+        //                                {
+        //                                    strBF2 += trace.ChannelNumber + ",,";
+        //                                    strBF3 += trace.AxisX + "," + trace.AxisY + ",";
+        //                                    if (cnt < trace.ValueX.Length) { cnt = trace.ValueX.Length; }
+        //                                    if (cnt < trace.ValueY.Length) { cnt = trace.ValueY.Length; }
+        //                                }
+        //                            }
+        //                            sw.WriteLine(strBF1.Trim(','));
+        //                            sw.WriteLine(strBF2.Trim(','));
+        //                            sw.WriteLine(strBF3.Trim(','));
+
+        //                            for (int i = 0; i < cnt; i++)
+        //                            {
+        //                                strBF1 = "";
+        //                                foreach (ChartDAT chart in dat)
+        //                                {
+        //                                    foreach (TraceDAT trace in chart.Trace)
+        //                                    {
+        //                                        if (trace.ValueX.Length > i) { strBF1 += trace.ValueX[i]; }
+        //                                        strBF1 += ",";
+        //                                        if (trace.ValueY.Length > i) { strBF1 += trace.ValueY[i]; }
+        //                                        strBF1 += ",";
+        //                                    }
+        //                                }
+        //                                sw.WriteLine(strBF1.Trim(','));
+        //                            }
+        //                            sw.Close();
+        //                        }
+        //                    }
+        //                }
+        //                //Trigger ReSET
+        //                if (SING_CHECKBOX.IsChecked == true)
+        //                {
+        //                    for (int i = 0; i < channels.Length; i++)
+        //                    {
+        //                        pna.setTriggerMode(channels[i], trigMODE[i]);
+        //                    }
+        //                }
+        //            }
+
+        //            //Write Phase State0
+        //            if (_mod.PCAB_CMD("SetPS" + ps.ToString("0") + " 0", 1) != "DONE\n")
+        //            {
+        //                MessageBox.Show("Write phase config error.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        //                return;
+        //            }
+        //            if (_mod.PCAB_CMD("WrtPS", 1) != "DONE\n")
+        //            {
+        //                MessageBox.Show("Write phase config error.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        //            }
+
+        //            MessageBox.Show("Data acquisition completed.", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+        //        }
+        //        catch (Exception err)
+        //        {
+        //            MessageBox.Show(err.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        //        }
+        //    }
+        //}
+
+        #endregion
+
         private void DEC_TextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
             // 0-9およびa-f/A-Fのみ
@@ -347,282 +624,6 @@ namespace PCAB_Debugger_GUI
                 e.Handled = true;
             }
         }
-
-        private void VISA_CONNECT_CHECK_BUTTON_Click(object sender, RoutedEventArgs e)
-        {
-            string strBF = VISAADDR_TEXTBOX.Text;
-            try
-            {
-                IEEE488 instr;
-                instr = new IEEE488(new VisaControlNI(sesn, strBF));
-                IEEE488_IDN idn = instr.IDN();
-                MessageBox.Show("Vender\t\t: " + idn.Vender +
-                              "\nModel Number\t: " + idn.ModelNumber +
-                              "\nRevision Code\t: " + idn.RevisionCode +
-                              "\nSerial Number\t: " + idn.SerialNumber, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
-            }
-            catch (Exception err)
-            {
-                MessageBox.Show(err.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
-
-        private void CH_Click(object sender, RoutedEventArgs e)
-        {
-            if (((RadioButton)sender).Name == "CH_ALL")
-            {
-                CHANNEL_COMBOBOX.IsEnabled = false;
-                CH_SEL.IsChecked = false;
-            }
-            else
-            {
-                CHANNEL_COMBOBOX.IsEnabled = true;
-                CH_ALL.IsChecked = false;
-                CHANNEL_COMBOBOX.Items.Clear();
-                try
-                {
-                    IEEE488 instr;
-                    instr = new IEEE488(new VisaControlNI(sesn, VISAADDR_TEXTBOX.Text));
-                    agPNA835x pna = new agPNA835x(instr);
-                    foreach (uint i in pna.getChannelCatalog())
-                    {
-                        CHANNEL_COMBOBOX.Items.Add(i.ToString());
-                    }
-                }
-                catch (Exception err)
-                {
-                    MessageBox.Show(err.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-            }
-        }
-
-        private void GETDAT_BUTTON_Click(object sender, RoutedEventArgs e)
-        {
-            System.Windows.Forms.FolderBrowserDialog fbd = new System.Windows.Forms.FolderBrowserDialog();
-            fbd.Description = "Please Select Folder";
-            fbd.RootFolder = Environment.SpecialFolder.Desktop;
-            fbd.ShowNewFolderButton = true;
-            if (fbd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            {
-                string dirPath = fbd.SelectedPath;
-                bool fileFLG = false;
-                string filePath;
-                int ps = -1;
-                string message;
-                foreach (object objBF in LOOP_GRID.Children)
-                {
-                    if (typeof(RadioButton) == objBF.GetType())
-                    {
-                        if (((RadioButton)objBF).IsChecked == true)
-                        {
-                            ps = int.Parse(((RadioButton)objBF).Content.ToString().Substring(2));
-                            break;
-                        }
-                    }
-                }
-                try
-                {
-                    IEEE488 instr;
-                    instr = new IEEE488(new VisaControlNI(sesn, VISAADDR_TEXTBOX.Text));
-                    instr.IEEE488_VisaControl.SetTimeout(uint.Parse(TIMEOUT_TEXTBOX.Text));
-                    agPNA835x pna = new agPNA835x(instr);
-                    uint[] channels;
-                    uint[] sheets;
-                    List<SweepMode> trigMODE = new List<SweepMode>();
-                    //Get Channel Lists
-                    if (CH_ALL.IsChecked == true) { channels = pna.getChannelCatalog(); }
-                    else { channels = new uint[] { uint.Parse(CHANNEL_COMBOBOX.Text) }; }
-                    //Get Sheet Lists
-                    sheets = pna.getSheetsCatalog();
-
-                    //File Check
-                    if (SCRE_CHECKBOX.IsChecked == true)
-                    {
-                        foreach (uint i in sheets)
-                        {
-                            for (int num = 0; num < 64; num++)
-                            {
-                                if (System.IO.File.Exists(dirPath + "\\" + FILEHEADER_TEXTBOX.Text + "_" + num.ToString("00") + "_Sheet" + i.ToString() + ".png")) { fileFLG = true; }
-                            }
-                        }
-                    }
-                    if (TRA_CHECKBOX.IsChecked == true)
-                    {
-                        foreach (uint i in sheets)
-                        {
-                            for (int num = 0; num < 64; num++)
-                            {
-                                if (System.IO.File.Exists(dirPath + "\\" + FILEHEADER_TEXTBOX.Text + "_" + num.ToString("00") + "_Sheet" + i.ToString() + ".csv")) { fileFLG = true; }
-                            }
-                        }
-                    }
-                    if (fileFLG)
-                    {
-                        if (MessageBox.Show("The file exists in the specified folder.\nDo you want to overwrite?",
-                            "Warning", MessageBoxButton.OKCancel, MessageBoxImage.Warning) == MessageBoxResult.Cancel) { return; }
-                    }
-
-                    for (int pss_num = 0; pss_num < 64; pss_num++)
-                    {
-                        //Write Phase State
-                        if (_mod.PCAB_CMD("SetPS" + ps.ToString("0") + " " + pss_num.ToString("0"), 1) != "DONE\n")
-                        {
-                            MessageBox.Show("Write phase config error.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                            return;
-                        }
-                        if (_mod.PCAB_CMD("WrtPS", 1) != "DONE\n")
-                        {
-                            MessageBox.Show("Write phase config error.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                        }
-                        //Trigger SET
-                        if (SING_CHECKBOX.IsChecked == true)
-                        {
-                            foreach (uint i in channels)
-                            {
-                                trigMODE.Add(pna.getTriggerMode(i));
-                                pna.trigSingle(i);
-                            }
-                        }
-                        //Save Screen
-                        if (SCRE_CHECKBOX.IsChecked == true)
-                        {
-                            foreach (uint sh in sheets)
-                            {
-                                filePath = dirPath + "\\" + FILEHEADER_TEXTBOX.Text + "_" + pss_num.ToString("00") + "_Sheet" + sh.ToString() + ".png";
-
-                                pna.selectSheet(sh);
-                                if (!pna.GetScreen(filePath, out message))
-                                {
-                                    if (SING_CHECKBOX.IsChecked == true)
-                                    {
-                                        for (int i = 0; i < channels.Length; i++)
-                                        {
-                                            pna.setTriggerMode(channels[i], trigMODE[i]);
-                                        }
-                                    }
-                                    MessageBox.Show(message, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
-                                    return;
-                                }
-                            }
-                        }
-
-                        //Save Trace
-                        if (TRA_CHECKBOX.IsChecked == true)
-                        {
-                            foreach (uint sh in sheets)
-                            {
-                                filePath = dirPath + "\\" + FILEHEADER_TEXTBOX.Text + "_" + pss_num.ToString("00") + "_Sheet" + sh.ToString() + ".csv";
-                                //Select Sheet
-                                pna.selectSheet(sh);
-                                //Get Trace DAT
-                                List<ChartDAT> dat = new List<ChartDAT>();
-                                foreach (uint win in pna.getWindowCatalog(sh))
-                                {
-                                    List<TraceDAT> trace = new List<TraceDAT>();
-                                    foreach (uint tra in pna.getTraceCatalog(win))
-                                    {
-                                        pna.selectTrace(win, tra);
-                                        uint ch = pna.getSelectChannel();
-                                        uint num = pna.getSelectMeasurementNumber();
-                                        //string x = pna.getASCII("CALC" + ch.ToString() + ":MEAS" + num.ToString() + ":X:AXIS:UNIT?");
-                                        string x = "X";
-                                        string y = pna.getASCII("CALC" + ch.ToString() + ":MEAS" + num.ToString() + ":PAR?");
-                                        y += "_" + pna.getASCII("CALC" + ch.ToString() + ":MEAS" + num.ToString() + ":FORM?");
-                                        //y += "_" + pna.getASCII("CALC" + ch.ToString() + ":MEAS" + num.ToString() + ":X:AXIS:UNIT?");
-                                        string mem = pna.getASCII("CALC" + ch.ToString() + ":MEAS" + num.ToString() + ":MATH:FUNC?");
-                                        if (mem.ToUpper() != "NORM")
-                                        {
-                                            y += "@" + mem + "[MEM]";
-                                        }
-                                        string[] valx = pna.getASCII("CALC" + ch.ToString() + ":MEAS" + num.ToString() + ":X?").Trim().Split(',');
-                                        //string[] valy = pna.getASCII("CALC" + ch.ToString() + ":MEAS" + num.ToString() + ":Y?").Trim().Split(',');
-                                        string[] valy = pna.getASCII("CALC" + ch.ToString() + ":MEAS" + num.ToString() + ":DATA:FDAT?").Trim().Split(',');
-                                        trace.Add(new TraceDAT("CH" + ch.ToString(), x, y, valx, valy));
-                                    }
-                                    dat.Add(new ChartDAT("Win" + win.ToString(), trace.ToArray()));
-                                }
-                                //Write CSV Data
-                                using (StreamWriter sw = new StreamWriter(filePath, false, Encoding.UTF8))
-                                {
-                                    System.Diagnostics.FileVersionInfo fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetExecutingAssembly().Location);
-
-                                    sw.WriteLine("\"PCAB Debugger Ver," + fvi.ProductVersion + "\"");
-                                    sw.WriteLine(fvi.LegalCopyright);
-                                    sw.WriteLine();
-                                    string strBF1 = "";
-                                    string strBF2 = "";
-                                    string strBF3 = "";
-                                    int cnt = 0;
-                                    foreach (ChartDAT chart in dat)
-                                    {
-                                        strBF1 += chart.WindowNumber + ",,";
-                                        for (int i = 0; i < chart.Trace.Length - 1; i++)
-                                        {
-                                            strBF1 += "," + ",";
-                                        }
-                                        foreach (TraceDAT trace in chart.Trace)
-                                        {
-                                            strBF2 += trace.ChannelNumber + ",,";
-                                            strBF3 += trace.AxisX + "," + trace.AxisY + ",";
-                                            if (cnt < trace.ValueX.Length) { cnt = trace.ValueX.Length; }
-                                            if (cnt < trace.ValueY.Length) { cnt = trace.ValueY.Length; }
-                                        }
-                                    }
-                                    sw.WriteLine(strBF1.Trim(','));
-                                    sw.WriteLine(strBF2.Trim(','));
-                                    sw.WriteLine(strBF3.Trim(','));
-
-                                    for (int i = 0; i < cnt; i++)
-                                    {
-                                        strBF1 = "";
-                                        foreach (ChartDAT chart in dat)
-                                        {
-                                            foreach (TraceDAT trace in chart.Trace)
-                                            {
-                                                if (trace.ValueX.Length > i) { strBF1 += trace.ValueX[i]; }
-                                                strBF1 += ",";
-                                                if (trace.ValueY.Length > i) { strBF1 += trace.ValueY[i]; }
-                                                strBF1 += ",";
-                                            }
-                                        }
-                                        sw.WriteLine(strBF1.Trim(','));
-                                    }
-                                    sw.Close();
-                                }
-                            }
-                        }
-                        //Trigger ReSET
-                        if (SING_CHECKBOX.IsChecked == true)
-                        {
-                            for (int i = 0; i < channels.Length; i++)
-                            {
-                                pna.setTriggerMode(channels[i], trigMODE[i]);
-                            }
-                        }
-                    }
-
-                    //Write Phase State0
-                    if (_mod.PCAB_CMD("SetPS" + ps.ToString("0") + " 0", 1) != "DONE\n")
-                    {
-                        MessageBox.Show("Write phase config error.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                        return;
-                    }
-                    if (_mod.PCAB_CMD("WrtPS", 1) != "DONE\n")
-                    {
-                        MessageBox.Show("Write phase config error.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                    }
-
-                    MessageBox.Show("Data acquisition completed.", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
-                }
-                catch (Exception err)
-                {
-                    MessageBox.Show(err.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-            }
-        }
-
-        #endregion
-
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {

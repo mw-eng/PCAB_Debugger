@@ -55,9 +55,10 @@
                 </Viewbox>
             </Grid>
         </Grid>
-        <TabControl Grid.Row="1" x:Name="CONTL_GRID" FontSize="18" Margin="5" IsEnabled="False">
+        <!--<TabControl Grid.Row="1" x:Name="CONTL_GRID" FontSize="18" Margin="5" IsEnabled="False">
             <TabItem Header="CONTROL">
-                <Grid Background="#FFE5E5E5">
+                <Grid Background="#FFE5E5E5">-->
+                <Grid Grid.Row="1" x:Name="CONTL_GRID" Background="#FFE5E5E5">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="10*"/>
                         <ColumnDefinition Width="2*"/>
@@ -401,7 +402,7 @@
                         </Grid>
                     </Grid>
                 </Grid>
-            </TabItem>
+            <!--</TabItem>
             <TabItem Header="VNA" IsEnabled="True">
                 <Grid Background="#FFE5E5E5">
                     <Grid.RowDefinitions>
@@ -503,6 +504,6 @@
 
                 </Grid>
             </TabItem>
-        </TabControl>
+        </TabControl>-->
     </Grid>
 </Window>
