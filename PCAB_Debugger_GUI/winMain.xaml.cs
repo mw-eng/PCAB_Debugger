@@ -523,9 +523,14 @@ namespace PCAB_Debugger_GUI
                     }
 
 
+#if !DEBUG
                     for (int pss_num = 0; pss_num < 64; pss_num++)
+#else
+                    for (int pss_num = 0; pss_num < 5; pss_num++)
+#endif
                     {
                         //Write Phase State
+#if !DEBUG
                         if (_mod.PCAB_CMD("SetPS" + ps.ToString("0") + " " + pss_num.ToString("0"), 1) != "DONE\n")
                         {
                             MessageBox.Show("Write phase config error.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -535,6 +540,7 @@ namespace PCAB_Debugger_GUI
                         {
                             MessageBox.Show("Write phase config error.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                         }
+#endif
                         //Trigger SET
                         if (SING_CHECKBOX.IsChecked == true)
                         {
@@ -558,7 +564,7 @@ namespace PCAB_Debugger_GUI
                                     {
                                         for (int i = 0; i < channels.Length; i++)
                                         {
-                                            pna.SettriggerMode(channels[i], trigMODE[i]);
+                                            pna.setTriggerMode(channels[i], trigMODE[i]);
                                         }
                                     }
                                     MessageBox.Show(message, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -650,7 +656,16 @@ namespace PCAB_Debugger_GUI
                                 }
                             }
                         }
+                        //Trigger ReSET
+                        if (SING_CHECKBOX.IsChecked == true)
+                        {
+                                for (int i = 0; i < channels.Length; i++)
+                                {
+                                    pna.setTriggerMode(channels[i], trigMODE[i]);
+                                }
+                        }
                     }
+                    MessageBox.Show("Data acquisition completed.", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 catch (Exception err)
                 {

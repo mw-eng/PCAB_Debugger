@@ -52,19 +52,19 @@ namespace PCAB_Debugger_GUI
         /// <summary>Set Trigger Mode</summary>
         /// <param name="ch">Channel</param>
         /// <param name="trig">Trigger Mode</param>
-        public void SettriggerMode(uint ch, SweepMode trig)
+        public void setTriggerMode(uint ch, SweepMode trig)
         {
-            getASCII("SENS" + ch.ToString() + ":SWE:MODE " + trig.ToString());
-            setSCPIcommand("*OPC?");
+            setSCPIcommand("SENS" + ch.ToString() + ":SWE:MODE " + trig.ToString());
+            string strBF = getASCII("*OPC?");
         }
 
         /// <summary>Set Single Trigger</summary>
         /// <param name="ch"></param>
-        public void trigSingle(uint ch) { SettriggerMode(ch, SweepMode.SING); }
+        public void trigSingle(uint ch) { setTriggerMode(ch, SweepMode.SING); }
         /// <summary>Set HOLD Trigger</summary>
-        public void trigHold(uint ch) { SettriggerMode(ch, SweepMode.HOLD); }
+        public void trigHold(uint ch) { setTriggerMode(ch, SweepMode.HOLD); }
         /// <summary>Set Trigger Continuous</summary>
-        public void trigContinuous(uint ch) { SettriggerMode(ch, SweepMode.CONT); }
+        public void trigContinuous(uint ch) { setTriggerMode(ch, SweepMode.CONT); }
 
         /// <summary>Select Sheet</summary>
         /// <param name="sheetID">Sheet ID</param>

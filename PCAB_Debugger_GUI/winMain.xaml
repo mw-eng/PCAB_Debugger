@@ -25,9 +25,15 @@
                     <ColumnDefinition Width="5*"/>
                     <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
-                <Viewbox Grid.Column="0" Margin="5"><Label Content="Serial Port"/></Viewbox>
+                <Viewbox Grid.Column="0" Margin="5">
+                    <Label Content="Serial Port"/>
+                </Viewbox>
                 <ComboBox Grid.Column="1" x:Name="SERIAL_PORTS_COMBOBOX" Margin="5" FontSize="16" VerticalContentAlignment="Center" DropDownOpened="SERIAL_PORTS_COMBOBOX_DropDownOpened" DropDownClosed="SERIAL_PORTS_COMBOBOX_DropDownClosed"/>
-                <Button Grid.Column="2" x:Name="CONNECT_BUTTON" Margin="5" Click="CONNECT_BUTTON_Click" IsEnabled="False"><Viewbox><TextBlock>Connect</TextBlock></Viewbox></Button>
+                <Button Grid.Column="2" x:Name="CONNECT_BUTTON" Margin="5" Click="CONNECT_BUTTON_Click" IsEnabled="False">
+                    <Viewbox>
+                        <TextBlock>Connect</TextBlock>
+                    </Viewbox>
+                </Button>
             </Grid>
             <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
@@ -37,13 +43,19 @@
                     <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="10*"/>
                 </Grid.ColumnDefinitions>
-                <Viewbox Grid.Column="0" Margin="5"><Label Content="Waite Time"/></Viewbox>
+                <Viewbox Grid.Column="0" Margin="5">
+                    <Label Content="Waite Time"/>
+                </Viewbox>
                 <TextBox Grid.Column="1" x:Name="WAITE_TIME_TEXTBOX" Style="{StaticResource EDIT_TEXT_LINE}" TextWrapping="Wrap" Text="100" Margin="5" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" PreviewTextInput="DEC_TextBox_PreviewTextInput" CommandManager.PreviewExecuted="DEC_TextBox_PreviewExecuted" PreviewLostKeyboardFocus="DEC_TextBox_PreviewLostKeyboardForcus" FontSize="16"/>
-                <Viewbox Grid.Column="2" Margin="5"><Label Content="[mS]"/></Viewbox>
-                <Viewbox Grid.Column="4" Margin="10" HorizontalAlignment="Right"><CheckBox x:Name="INIT_CHECKBOX" Content="PCAB Initialization" /></Viewbox>
+                <Viewbox Grid.Column="2" Margin="5">
+                    <Label Content="[mS]"/>
+                </Viewbox>
+                <Viewbox Grid.Column="4" Margin="10" HorizontalAlignment="Right">
+                    <CheckBox x:Name="INIT_CHECKBOX" Content="PCAB Initialization" />
+                </Viewbox>
             </Grid>
         </Grid>
-        <TabControl Grid.Row="1" x:Name="CONTL_GRID" FontSize="18" Margin="5" IsEnabled="False">
+        <TabControl Grid.Row="1" x:Name="CONTL_GRID" FontSize="18" Margin="5" IsEnabled="True">
             <TabItem Header="CONTROL">
                 <Grid Background="#FFE5E5E5">
                     <Grid.ColumnDefinitions>
@@ -65,17 +77,27 @@
                                 <ColumnDefinition Width="1*"/>
                                 <ColumnDefinition Width="1*"/>
                             </Grid.ColumnDefinitions>
-                            <Viewbox Grid.Row="0" Grid.Column="0" Margin="5" HorizontalAlignment="Left"><CheckBox x:Name="STBAMP_CHECKBOX" VerticalContentAlignment="Center" Content="Standby AMP" Checked="CHECKBOX_Checked" Unchecked="CHECKBOX_Unchecked" /></Viewbox>
-                            <Viewbox Grid.Row="0" Grid.Column="1" Margin="5" HorizontalAlignment="Left"><CheckBox x:Name="STBDRA_CHECKBOX" VerticalContentAlignment="Center" Content="Standby DRA" Checked="CHECKBOX_Checked" Unchecked="CHECKBOX_Unchecked" /></Viewbox>
-                            <Viewbox Grid.Row="1" Grid.Column="0" Margin="5" HorizontalAlignment="Left"><CheckBox x:Name="SETLPM_CHECKBOX" VerticalContentAlignment="Center" Content="Low Power Mode" Checked="CHECKBOX_Checked" Unchecked="CHECKBOX_Unchecked" /></Viewbox>
-                            <Viewbox Grid.Row="1" Grid.Column="1" Margin="5" HorizontalAlignment="Left"><CheckBox x:Name="SETALD_CHECKBOX" VerticalContentAlignment="Center" Content="Auto Load Mode" Checked="CHECKBOX_Checked" Unchecked="CHECKBOX_Unchecked" /></Viewbox>
+                            <Viewbox Grid.Row="0" Grid.Column="0" Margin="5" HorizontalAlignment="Left">
+                                <CheckBox x:Name="STBAMP_CHECKBOX" VerticalContentAlignment="Center" Content="Standby AMP" Checked="CHECKBOX_Checked" Unchecked="CHECKBOX_Unchecked" />
+                            </Viewbox>
+                            <Viewbox Grid.Row="0" Grid.Column="1" Margin="5" HorizontalAlignment="Left">
+                                <CheckBox x:Name="STBDRA_CHECKBOX" VerticalContentAlignment="Center" Content="Standby DRA" Checked="CHECKBOX_Checked" Unchecked="CHECKBOX_Unchecked" />
+                            </Viewbox>
+                            <Viewbox Grid.Row="1" Grid.Column="0" Margin="5" HorizontalAlignment="Left">
+                                <CheckBox x:Name="SETLPM_CHECKBOX" VerticalContentAlignment="Center" Content="Low Power Mode" Checked="CHECKBOX_Checked" Unchecked="CHECKBOX_Unchecked" />
+                            </Viewbox>
+                            <Viewbox Grid.Row="1" Grid.Column="1" Margin="5" HorizontalAlignment="Left">
+                                <CheckBox x:Name="SETALD_CHECKBOX" VerticalContentAlignment="Center" Content="Auto Load Mode" Checked="CHECKBOX_Checked" Unchecked="CHECKBOX_Unchecked" />
+                            </Viewbox>
                         </Grid>
                         <Grid Grid.Row="1" Margin="5">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="1*"/>
                                 <RowDefinition Height="4*"/>
                             </Grid.RowDefinitions>
-                            <Viewbox Grid.Row="0" Margin="5" HorizontalAlignment="Left"><Label Content="Phase Config" /></Viewbox>
+                            <Viewbox Grid.Row="0" Margin="5" HorizontalAlignment="Left">
+                                <Label Content="Phase Config" />
+                            </Viewbox>
                             <Grid x:Name="PS_GRID" Grid.Row="1" Margin="5" ShowGridLines="True">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="1*"/>
@@ -94,7 +116,9 @@
                                         <RowDefinition Height="1*"/>
                                         <RowDefinition Height="1*"/>
                                     </Grid.RowDefinitions>
-                                    <Viewbox Grid.Row="0"><Label Content="Port 1" /></Viewbox>
+                                    <Viewbox Grid.Row="0">
+                                        <Label Content="Port 1" />
+                                    </Viewbox>
                                     <ComboBox Grid.Row="1" SelectedIndex="0" x:Name="PS01_COMBOBOX" ItemsSource="{StaticResource PS_List}" VerticalContentAlignment="Center"/>
                                 </Grid>
                                 <Grid x:Name="PS02_GRID" Grid.Row="2" Grid.Column="3" Margin="5">
@@ -102,7 +126,9 @@
                                         <RowDefinition Height="1*"/>
                                         <RowDefinition Height="1*"/>
                                     </Grid.RowDefinitions>
-                                    <Viewbox Grid.Row="0"><Label Content="Port 2" /></Viewbox>
+                                    <Viewbox Grid.Row="0">
+                                        <Label Content="Port 2" />
+                                    </Viewbox>
                                     <ComboBox Grid.Row="1" SelectedIndex="0" x:Name="PS02_COMBOBOX" ItemsSource="{StaticResource PS_List}" VerticalContentAlignment="Center"/>
                                 </Grid>
                                 <Grid x:Name="PS03_GRID" Grid.Row="1" Grid.Column="3" Margin="5">
@@ -110,7 +136,9 @@
                                         <RowDefinition Height="1*"/>
                                         <RowDefinition Height="1*"/>
                                     </Grid.RowDefinitions>
-                                    <Viewbox Grid.Row="0"><Label Content="Port 3" /></Viewbox>
+                                    <Viewbox Grid.Row="0">
+                                        <Label Content="Port 3" />
+                                    </Viewbox>
                                     <ComboBox Grid.Row="1" SelectedIndex="0" x:Name="PS03_COMBOBOX" ItemsSource="{StaticResource PS_List}" VerticalContentAlignment="Center"/>
                                 </Grid>
                                 <Grid x:Name="PS04_GRID" Grid.Row="0" Grid.Column="3" Margin="5">
@@ -118,7 +146,9 @@
                                         <RowDefinition Height="1*"/>
                                         <RowDefinition Height="1*"/>
                                     </Grid.RowDefinitions>
-                                    <Viewbox Grid.Row="0"><Label Content="Port 4" /></Viewbox>
+                                    <Viewbox Grid.Row="0">
+                                        <Label Content="Port 4" />
+                                    </Viewbox>
                                     <ComboBox Grid.Row="1" SelectedIndex="0" x:Name="PS04_COMBOBOX" ItemsSource="{StaticResource PS_List}" VerticalContentAlignment="Center"/>
                                 </Grid>
                                 <Grid x:Name="PS05_GRID" Grid.Row="0" Grid.Column="2" Margin="5">
@@ -126,7 +156,9 @@
                                         <RowDefinition Height="1*"/>
                                         <RowDefinition Height="1*"/>
                                     </Grid.RowDefinitions>
-                                    <Viewbox Grid.Row="0"><Label Content="Port 5" /></Viewbox>
+                                    <Viewbox Grid.Row="0">
+                                        <Label Content="Port 5" />
+                                    </Viewbox>
                                     <ComboBox Grid.Row="1" SelectedIndex="0" x:Name="PS05_COMBOBOX" ItemsSource="{StaticResource PS_List}" VerticalContentAlignment="Center"/>
                                 </Grid>
                                 <Grid x:Name="PS06_GRID" Grid.Row="1" Grid.Column="2" Margin="5">
@@ -134,7 +166,9 @@
                                         <RowDefinition Height="1*"/>
                                         <RowDefinition Height="1*"/>
                                     </Grid.RowDefinitions>
-                                    <Viewbox Grid.Row="0"><Label Content="Port 6" /></Viewbox>
+                                    <Viewbox Grid.Row="0">
+                                        <Label Content="Port 6" />
+                                    </Viewbox>
                                     <ComboBox Grid.Row="1" SelectedIndex="0" x:Name="PS06_COMBOBOX" ItemsSource="{StaticResource PS_List}" VerticalContentAlignment="Center"/>
                                 </Grid>
                                 <Grid x:Name="PS07_GRID" Grid.Row="2" Grid.Column="2" Margin="5">
@@ -142,7 +176,9 @@
                                         <RowDefinition Height="1*"/>
                                         <RowDefinition Height="1*"/>
                                     </Grid.RowDefinitions>
-                                    <Viewbox Grid.Row="0"><Label Content="Port 7" /></Viewbox>
+                                    <Viewbox Grid.Row="0">
+                                        <Label Content="Port 7" />
+                                    </Viewbox>
                                     <ComboBox Grid.Row="1" SelectedIndex="0" x:Name="PS07_COMBOBOX" ItemsSource="{StaticResource PS_List}" VerticalContentAlignment="Center"/>
                                 </Grid>
                                 <Grid x:Name="PS08_GRID" Grid.Row="3" Grid.Column="2" Margin="5">
@@ -150,7 +186,9 @@
                                         <RowDefinition Height="1*"/>
                                         <RowDefinition Height="1*"/>
                                     </Grid.RowDefinitions>
-                                    <Viewbox Grid.Row="0"><Label Content="Port 8" /></Viewbox>
+                                    <Viewbox Grid.Row="0">
+                                        <Label Content="Port 8" />
+                                    </Viewbox>
                                     <ComboBox Grid.Row="1" SelectedIndex="0" x:Name="PS08_COMBOBOX" ItemsSource="{StaticResource PS_List}" VerticalContentAlignment="Center"/>
                                 </Grid>
                                 <Grid x:Name="PS09_GRID" Grid.Row="3" Grid.Column="1" Margin="5">
@@ -158,7 +196,9 @@
                                         <RowDefinition Height="1*"/>
                                         <RowDefinition Height="1*"/>
                                     </Grid.RowDefinitions>
-                                    <Viewbox Grid.Row="0"><Label Content="Port 9" /></Viewbox>
+                                    <Viewbox Grid.Row="0">
+                                        <Label Content="Port 9" />
+                                    </Viewbox>
                                     <ComboBox Grid.Row="1" SelectedIndex="0" x:Name="PS09_COMBOBOX" ItemsSource="{StaticResource PS_List}" VerticalContentAlignment="Center"/>
                                 </Grid>
                                 <Grid x:Name="PS10_GRID" Grid.Row="2" Grid.Column="1" Margin="5">
@@ -166,7 +206,9 @@
                                         <RowDefinition Height="1*"/>
                                         <RowDefinition Height="1*"/>
                                     </Grid.RowDefinitions>
-                                    <Viewbox Grid.Row="0"><Label Content="Port 10" /></Viewbox>
+                                    <Viewbox Grid.Row="0">
+                                        <Label Content="Port 10" />
+                                    </Viewbox>
                                     <ComboBox Grid.Row="1" SelectedIndex="0" x:Name="PS10_COMBOBOX" ItemsSource="{StaticResource PS_List}" VerticalContentAlignment="Center"/>
                                 </Grid>
                                 <Grid x:Name="PS11_GRID" Grid.Row="1" Grid.Column="1" Margin="5">
@@ -174,7 +216,9 @@
                                         <RowDefinition Height="1*"/>
                                         <RowDefinition Height="1*"/>
                                     </Grid.RowDefinitions>
-                                    <Viewbox Grid.Row="0"><Label Content="Port 11" /></Viewbox>
+                                    <Viewbox Grid.Row="0">
+                                        <Label Content="Port 11" />
+                                    </Viewbox>
                                     <ComboBox Grid.Row="1" SelectedIndex="0" x:Name="PS11_COMBOBOX" ItemsSource="{StaticResource PS_List}" VerticalContentAlignment="Center"/>
                                 </Grid>
                                 <Grid x:Name="PS12_GRID" Grid.Row="0" Grid.Column="1" Margin="5">
@@ -182,7 +226,9 @@
                                         <RowDefinition Height="1*"/>
                                         <RowDefinition Height="1*"/>
                                     </Grid.RowDefinitions>
-                                    <Viewbox Grid.Row="0"><Label Content="Port 12" /></Viewbox>
+                                    <Viewbox Grid.Row="0">
+                                        <Label Content="Port 12" />
+                                    </Viewbox>
                                     <ComboBox Grid.Row="1" SelectedIndex="0" x:Name="PS12_COMBOBOX" ItemsSource="{StaticResource PS_List}" VerticalContentAlignment="Center"/>
                                 </Grid>
                                 <Grid x:Name="PS13_GRID" Grid.Row="0" Grid.Column="0" Margin="5">
@@ -190,7 +236,9 @@
                                         <RowDefinition Height="1*"/>
                                         <RowDefinition Height="1*"/>
                                     </Grid.RowDefinitions>
-                                    <Viewbox Grid.Row="0"><Label Content="Port 13" /></Viewbox>
+                                    <Viewbox Grid.Row="0">
+                                        <Label Content="Port 13" />
+                                    </Viewbox>
                                     <ComboBox Grid.Row="1" SelectedIndex="0" x:Name="PS13_COMBOBOX" ItemsSource="{StaticResource PS_List}" VerticalContentAlignment="Center"/>
                                 </Grid>
                                 <Grid x:Name="PS14_GRID" Grid.Row="1" Grid.Column="0" Margin="5">
@@ -198,7 +246,9 @@
                                         <RowDefinition Height="1*"/>
                                         <RowDefinition Height="1*"/>
                                     </Grid.RowDefinitions>
-                                    <Viewbox Grid.Row="0"><Label Content="Port 14" /></Viewbox>
+                                    <Viewbox Grid.Row="0">
+                                        <Label Content="Port 14" />
+                                    </Viewbox>
                                     <ComboBox Grid.Row="1" SelectedIndex="0" x:Name="PS14_COMBOBOX" ItemsSource="{StaticResource PS_List}" VerticalContentAlignment="Center"/>
                                 </Grid>
                                 <Grid x:Name="PS15_GRID" Grid.Row="2" Grid.Column="0" Margin="5">
@@ -206,10 +256,14 @@
                                         <RowDefinition Height="1*"/>
                                         <RowDefinition Height="1*"/>
                                     </Grid.RowDefinitions>
-                                    <Viewbox Grid.Row="0"><Label Content="Port 15" /></Viewbox>
+                                    <Viewbox Grid.Row="0">
+                                        <Label Content="Port 15" />
+                                    </Viewbox>
                                     <ComboBox Grid.Row="1" SelectedIndex="0" x:Name="PS15_COMBOBOX" ItemsSource="{StaticResource PS_List}" VerticalContentAlignment="Center"/>
                                 </Grid>
-                                <Viewbox Grid.Row="3" Grid.Column="0" Margin="5"><CheckBox x:Name="STBLNA_CHECKBOX" VerticalContentAlignment="Center" Content="Standby LNA" Checked="CHECKBOX_Checked" Unchecked="CHECKBOX_Unchecked" /></Viewbox>
+                                <Viewbox Grid.Row="3" Grid.Column="0" Margin="5">
+                                    <CheckBox x:Name="STBLNA_CHECKBOX" VerticalContentAlignment="Center" Content="Standby LNA" Checked="CHECKBOX_Checked" Unchecked="CHECKBOX_Unchecked" />
+                                </Viewbox>
                             </Grid>
                         </Grid>
                         <Grid Grid.Row="2" Margin="5">
@@ -219,10 +273,26 @@
                                 <ColumnDefinition Width="1*"/>
                                 <ColumnDefinition Width="1*"/>
                             </Grid.ColumnDefinitions>
-                            <Button Grid.Column="0" x:Name="LOADDMEM" Margin="5" Click="LOADMEM_Click"><Viewbox Margin="5"><TextBlock>Load Memeory</TextBlock></Viewbox></Button>
-                            <Button Grid.Column="1" x:Name="RESET" Margin="5" Click="RESET_Click"><Viewbox Margin="5"><TextBlock>Preset Config</TextBlock></Viewbox></Button>
-                            <Button Grid.Column="2" x:Name="SAVEMEM" Margin="5" Click="SAVEMEM_Click"><Viewbox Margin="5"><TextBlock>Save Memory</TextBlock></Viewbox></Button>
-                            <Button Grid.Column="3" x:Name="WRITEPS" Margin="5" Click="WRITEPS_Click"><Viewbox Margin="5"><TextBlock>Set Phase Config</TextBlock></Viewbox></Button>
+                            <Button Grid.Column="0" x:Name="LOADDMEM" Margin="5" Click="LOADMEM_Click">
+                                <Viewbox Margin="5">
+                                    <TextBlock>Load Memeory</TextBlock>
+                                </Viewbox>
+                            </Button>
+                            <Button Grid.Column="1" x:Name="RESET" Margin="5" Click="RESET_Click">
+                                <Viewbox Margin="5">
+                                    <TextBlock>Preset Config</TextBlock>
+                                </Viewbox>
+                            </Button>
+                            <Button Grid.Column="2" x:Name="SAVEMEM" Margin="5" Click="SAVEMEM_Click">
+                                <Viewbox Margin="5">
+                                    <TextBlock>Save Memory</TextBlock>
+                                </Viewbox>
+                            </Button>
+                            <Button Grid.Column="3" x:Name="WRITEPS" Margin="5" Click="WRITEPS_Click">
+                                <Viewbox Margin="5">
+                                    <TextBlock>Set Phase Config</TextBlock>
+                                </Viewbox>
+                            </Button>
                         </Grid>
                     </Grid>
                     <Grid Grid.Column="1" Background="#FFFFB2EE">
@@ -241,16 +311,24 @@
                                     <ColumnDefinition Width="1*"/>
                                     <ColumnDefinition Width="1*"/>
                                 </Grid.ColumnDefinitions>
-                                <Viewbox Grid.Column="0" ><Label Content="SNS Id"/></Viewbox>
-                                <Viewbox Grid.Column="1" ><Label Name="SNS_ID_LABEL" Content="ND"/></Viewbox>
+                                <Viewbox Grid.Column="0" >
+                                    <Label Content="SNS Id"/>
+                                </Viewbox>
+                                <Viewbox Grid.Column="1" >
+                                    <Label Name="SNS_ID_LABEL" Content="ND"/>
+                                </Viewbox>
                             </Grid>
                             <Grid Grid.Column="2" Margin="5" Background="#FFE389FF">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="1*"/>
                                     <ColumnDefinition Width="1*"/>
                                 </Grid.ColumnDefinitions>
-                                <Viewbox Grid.Column="0" ><Label Content="SNS Vd"/></Viewbox>
-                                <Viewbox Grid.Column="1" ><Label Name="SNS_VD_LABEL" Content="ND"/></Viewbox>
+                                <Viewbox Grid.Column="0" >
+                                    <Label Content="SNS Vd"/>
+                                </Viewbox>
+                                <Viewbox Grid.Column="1" >
+                                    <Label Name="SNS_VD_LABEL" Content="ND"/>
+                                </Viewbox>
                             </Grid>
                         </Grid>
                         <Grid Grid.Row="1">
@@ -258,7 +336,9 @@
                                 <RowDefinition Height="1*"/>
                                 <RowDefinition Height="5*"/>
                             </Grid.RowDefinitions>
-                            <Viewbox Grid.Row="0" Margin="5" HorizontalAlignment="Left"><Label Content="TEMPRATURE [degreeC]" /></Viewbox>
+                            <Viewbox Grid.Row="0" Margin="5" HorizontalAlignment="Left">
+                                <Label Content="TEMPERATURE [degreeC]" />
+                            </Viewbox>
                             <Grid Grid.Row="1" Margin="5" Background="#FFE389FF" ShowGridLines="True">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="1*"/>
@@ -272,21 +352,51 @@
                                     <ColumnDefinition Width="1*"/>
                                     <ColumnDefinition Width="1*"/>
                                 </Grid.ColumnDefinitions>
-                                <Viewbox Grid.Row="0" Grid.Column="0"><Label Name="TEMP01" Content="ND" /></Viewbox>
-                                <Viewbox Grid.Row="1" Grid.Column="0"><Label Name="TEMP02" Content="ND" /></Viewbox>
-                                <Viewbox Grid.Row="2" Grid.Column="0"><Label Name="TEMP03" Content="ND" /></Viewbox>
-                                <Viewbox Grid.Row="3" Grid.Column="0"><Label Name="TEMP04" Content="ND" /></Viewbox>
-                                <Viewbox Grid.Row="4" Grid.Column="0"><Label Name="TEMP05" Content="ND" /></Viewbox>
-                                <Viewbox Grid.Row="0" Grid.Column="1"><Label Name="TEMP06" Content="ND" /></Viewbox>
-                                <Viewbox Grid.Row="1" Grid.Column="1"><Label Name="TEMP07" Content="ND" /></Viewbox>
-                                <Viewbox Grid.Row="2" Grid.Column="1"><Label Name="TEMP08" Content="ND" /></Viewbox>
-                                <Viewbox Grid.Row="3" Grid.Column="1"><Label Name="TEMP09" Content="ND" /></Viewbox>
-                                <Viewbox Grid.Row="4" Grid.Column="1"><Label Name="TEMP10" Content="ND" /></Viewbox>
-                                <Viewbox Grid.Row="0" Grid.Column="2"><Label Name="TEMP11" Content="ND" /></Viewbox>
-                                <Viewbox Grid.Row="1" Grid.Column="2"><Label Name="TEMP12" Content="ND" /></Viewbox>
-                                <Viewbox Grid.Row="2" Grid.Column="2"><Label Name="TEMP13" Content="ND" /></Viewbox>
-                                <Viewbox Grid.Row="3" Grid.Column="2"><Label Name="TEMP14" Content="ND" /></Viewbox>
-                                <Viewbox Grid.Row="4" Grid.Column="2"><Label Name="TEMP15" Content="ND" /></Viewbox>
+                                <Viewbox Grid.Row="0" Grid.Column="0">
+                                    <Label Name="TEMP01" Content="ND" />
+                                </Viewbox>
+                                <Viewbox Grid.Row="1" Grid.Column="0">
+                                    <Label Name="TEMP02" Content="ND" />
+                                </Viewbox>
+                                <Viewbox Grid.Row="2" Grid.Column="0">
+                                    <Label Name="TEMP03" Content="ND" />
+                                </Viewbox>
+                                <Viewbox Grid.Row="3" Grid.Column="0">
+                                    <Label Name="TEMP04" Content="ND" />
+                                </Viewbox>
+                                <Viewbox Grid.Row="4" Grid.Column="0">
+                                    <Label Name="TEMP05" Content="ND" />
+                                </Viewbox>
+                                <Viewbox Grid.Row="0" Grid.Column="1">
+                                    <Label Name="TEMP06" Content="ND" />
+                                </Viewbox>
+                                <Viewbox Grid.Row="1" Grid.Column="1">
+                                    <Label Name="TEMP07" Content="ND" />
+                                </Viewbox>
+                                <Viewbox Grid.Row="2" Grid.Column="1">
+                                    <Label Name="TEMP08" Content="ND" />
+                                </Viewbox>
+                                <Viewbox Grid.Row="3" Grid.Column="1">
+                                    <Label Name="TEMP09" Content="ND" />
+                                </Viewbox>
+                                <Viewbox Grid.Row="4" Grid.Column="1">
+                                    <Label Name="TEMP10" Content="ND" />
+                                </Viewbox>
+                                <Viewbox Grid.Row="0" Grid.Column="2">
+                                    <Label Name="TEMP11" Content="ND" />
+                                </Viewbox>
+                                <Viewbox Grid.Row="1" Grid.Column="2">
+                                    <Label Name="TEMP12" Content="ND" />
+                                </Viewbox>
+                                <Viewbox Grid.Row="2" Grid.Column="2">
+                                    <Label Name="TEMP13" Content="ND" />
+                                </Viewbox>
+                                <Viewbox Grid.Row="3" Grid.Column="2">
+                                    <Label Name="TEMP14" Content="ND" />
+                                </Viewbox>
+                                <Viewbox Grid.Row="4" Grid.Column="2">
+                                    <Label Name="TEMP15" Content="ND" />
+                                </Viewbox>
                             </Grid>
                         </Grid>
                     </Grid>
@@ -304,17 +414,27 @@
                             <ColumnDefinition Width="6*"/>
                             <ColumnDefinition Width="1*"/>
                         </Grid.ColumnDefinitions>
-                        <Viewbox Grid.Column="0" Margin="5"><Label Content="VISA Address"/></Viewbox>
-                        <TextBox Grid.Column="1" x:Name="VISAADDR_TEXTBOX" Style="{StaticResource EDIT_TEXT_LINE}" TextWrapping="Wrap" Text="TCPIP0::OMCY200::hislip0::INSTR" Margin="5" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" FontSize="16"/>
-                        <Button Grid.Column="2" x:Name="VISA_CONNECT_CHECK_BUTTON" Margin="5" IsEnabled="True" Click="VISA_CONNECT_CHECK_BUTTON_Click"><Viewbox><TextBlock>Check</TextBlock></Viewbox></Button>
+                        <Viewbox Grid.Column="0" Margin="5">
+                            <Label Content="VISA Address"/>
+                        </Viewbox>
+                        <TextBox Grid.Column="1" x:Name="VISAADDR_TEXTBOX" Style="{StaticResource EDIT_TEXT_LINE}" TextWrapping="Wrap" Text="TCPIP0::localhost::hislip0::INSTR" Margin="5" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" FontSize="16"/>
+                        <Button Grid.Column="2" x:Name="VISA_CONNECT_CHECK_BUTTON" Margin="5" IsEnabled="True" Click="VISA_CONNECT_CHECK_BUTTON_Click">
+                            <Viewbox>
+                                <TextBlock>Check</TextBlock>
+                            </Viewbox>
+                        </Button>
                     </Grid>
                     <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="3*"/>
+                            <ColumnDefinition Width="52*"/>
+                        </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="6*"/>
                             <RowDefinition Height="1*"/>
                             <RowDefinition Height="1*"/>
                         </Grid.RowDefinitions>
-                        <GroupBox Grid.Row="0" Header="Channel" Margin="0,-17,1047,248">
+                        <GroupBox Grid.Row="0" Header="Channel" Margin="0,1,1046,230" Grid.ColumnSpan="2">
                             <StackPanel Orientation="Vertical" Margin="5">
                                 <RadioButton x:Name="CH_ALL" Content="All" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" IsChecked="True" Click="CH_Click"/>
                                 <StackPanel Orientation="Horizontal">
@@ -323,22 +443,17 @@
                                 </StackPanel>
                             </StackPanel>
                         </GroupBox>
-                        <GroupBox Grid.Row="0" Header="Mode Settings" Margin="222,0,830,282">
+                        <GroupBox Grid.Row="0" Header="Mode Settings" Margin="154,0,830,282" Grid.Column="1">
                             <CheckBox x:Name="SING_CHECKBOX" Content="Auto Single Trigger" IsChecked="True"/>
                         </GroupBox>
-                        <GroupBox Grid.Row="0" Header="Save target" Margin="439,0,694,248">
+                        <GroupBox Grid.Row="0" Header="Save target" Margin="370,0,694,248" Grid.Column="1">
                             <StackPanel Orientation="Vertical" Margin="5">
                                 <CheckBox x:Name="SCRE_CHECKBOX" Content="Screen" IsChecked="True"/>
                                 <CheckBox x:Name="TRA_CHECKBOX" Content="Trace" IsChecked="True"/>
                             </StackPanel>
                         </GroupBox>
-
-                        <Viewbox Grid.Column="0" Margin="573,10,565,329"><Label Content="VISA TIMEOUT"/></Viewbox>
-                        <TextBox Grid.Column="0" x:Name="TIMEOUT_TEXTBOX" Style="{StaticResource EDIT_TEXT_LINE}" TextWrapping="Wrap" Text="2000" Margin="703,14,445,333" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" PreviewTextInput="DEC_TextBox_PreviewTextInput" CommandManager.PreviewExecuted="DEC_TextBox_PreviewExecuted" PreviewLostKeyboardFocus="DEC_TextBox_PreviewLostKeyboardForcus" FontSize="16"/>
-                        <Viewbox Grid.Column="0" Margin="823,11,393,329">
-                            <Label Content="[mS]"/>
-                        </Viewbox>
-                        <Grid x:Name="LOOP_GRID" Grid.Row="0" Margin="10,161,10,10">
+                        <TextBox Grid.Column="1" x:Name="TIMEOUT_TEXTBOX" Style="{StaticResource EDIT_TEXT_LINE}" TextWrapping="Wrap" Text="2000" Margin="660,20,383,312" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" PreviewTextInput="DEC_TextBox_PreviewTextInput" CommandManager.PreviewExecuted="DEC_TextBox_PreviewExecuted" PreviewLostKeyboardFocus="DEC_TextBox_PreviewLostKeyboardForcus" FontSize="16"/>
+                        <Grid x:Name="LOOP_GRID" Grid.Row="0" Margin="10,161,10,10" Grid.ColumnSpan="2">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="1*"/>
                                 <RowDefinition Height="1*"/>
@@ -346,7 +461,7 @@
                                 <RowDefinition Height="1*"/>
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="1*"/>  
+                                <ColumnDefinition Width="1*"/>
                                 <ColumnDefinition Width="1*"/>
                                 <ColumnDefinition Width="1*"/>
                                 <ColumnDefinition Width="1*"/>
@@ -367,15 +482,23 @@
                             <RadioButton Grid.Row="1" Grid.Column="0" Content="PS14" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" IsChecked="False"/>
                             <RadioButton Grid.Row="2" Grid.Column="0" Content="PS15" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" IsChecked="False"/>
                         </Grid>
-                        <Grid Grid.Row="1">
+                        <Grid Grid.ColumnSpan="2" Margin="0,372,0,0" Grid.RowSpan="2">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="1*"/>
                                 <ColumnDefinition Width="6*"/>
                             </Grid.ColumnDefinitions>
-                            <Viewbox Grid.Column="0" Margin="5"><Label Content="VISA Address"/></Viewbox>
-                        <TextBox Grid.Column="1" x:Name="FILEHEADER_TEXTBOX" Style="{StaticResource EDIT_TEXT_LINE}" TextWrapping="Wrap" Text="DAT" Margin="5" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" FontSize="16"/>
-                    </Grid>
-                        <Button Grid.Row="2" x:Name="GETDAT_BUTTON" Margin="5" IsEnabled="True" Click="GETDAT_BUTTON_Click"><Viewbox><TextBlock>RUN</TextBlock></Viewbox></Button>
+                            <Viewbox Grid.Column="0" Margin="5">
+                                <Label Content="VISA Address"/>
+                            </Viewbox>
+                            <TextBox Grid.Column="1" x:Name="FILEHEADER_TEXTBOX" Style="{StaticResource EDIT_TEXT_LINE}" TextWrapping="Wrap" Text="DAT" Margin="5" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" FontSize="16"/>
+                        </Grid>
+                        <Button Grid.Row="2" x:Name="GETDAT_BUTTON" Margin="5,5,5,5" IsEnabled="True" Click="GETDAT_BUTTON_Click" Grid.ColumnSpan="2">
+                            <Viewbox>
+                                <TextBlock>RUN</TextBlock>
+                            </Viewbox>
+                        </Button>
+                        <Label Content="VISA TIMEOUT" Margin="506,17,540,310" Grid.Column="1"/>
+                        <Label Content="[mS]" Margin="817,11,310,310" Grid.Column="1"/>
                     </Grid>
 
                 </Grid>
