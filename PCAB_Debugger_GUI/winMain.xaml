@@ -55,7 +55,7 @@
                 </Viewbox>
             </Grid>
         </Grid>
-        <TabControl Grid.Row="1" x:Name="CONTL_GRID" FontSize="18" Margin="5" IsEnabled="True">
+        <TabControl Grid.Row="1" x:Name="CONTL_GRID" FontSize="18" Margin="5" IsEnabled="False">
             <TabItem Header="CONTROL">
                 <Grid Background="#FFE5E5E5">
                     <Grid.ColumnDefinitions>

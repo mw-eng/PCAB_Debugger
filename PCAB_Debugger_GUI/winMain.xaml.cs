@@ -42,6 +42,8 @@ namespace PCAB_Debugger_GUI
             sesn = VisaControlNI.NewResourceManager();
         }
 
+        #region Serial EVENT
+
         private void SERIAL_PORTS_COMBOBOX_RELOAD()
         {
             SERIAL_PORTS_COMBOBOX.Items.Clear();
@@ -302,71 +304,9 @@ namespace PCAB_Debugger_GUI
             }
         }
 
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            if (_state)
-            {
-                if (MessageBox.Show("Communication with PCAB\nDo you want to disconnect and exit?", "Worning", MessageBoxButton.OKCancel, MessageBoxImage.Warning) == MessageBoxResult.OK)
-                {
-                    _mod.PCAB_AutoTaskStop(); _mod = null; _state = false;
-                }
-                else { e.Cancel = true; }
-            }
-        }
+        #endregion
 
-        private void OnError(object sender, PCABEventArgs e)
-        {
-            _mod.PCAB_AutoTaskStop();
-            _mod.Close();
-            MessageBox.Show(e.Message.ToString(), "Error",MessageBoxButton.OK,MessageBoxImage.Error);
-            _state = false;
-            _mod = null;
-            Dispatcher.BeginInvoke(new Action(() =>
-            {
-                SERIAL_PORTS_COMBOBOX.IsEnabled = true;
-            CONTL_GRID.IsEnabled = false;
-            ((TextBlock)((Viewbox)CONNECT_BUTTON.Content).Child).Text = "Connect";
-            }));
-        }
-
-        private void OnUpdateDAT(object sender, PCABEventArgs e)
-        {
-            if(e.ReceiveDAT.Length != 3) { return; }
-            if (_mod != null)
-            {
-                _mod.Id_now = e.ReceiveDAT[0];
-                _mod.Vd_now = e.ReceiveDAT[1];
-                _mod.TEMP_now = e.ReceiveDAT[2];
-            }
-            string[] arrBf = e.ReceiveDAT[2].Trim(',').Split(',');
-            List<string> list = new List<string>();
-            int cnt = 0;
-            foreach(string strBf in arrBf)
-            {
-                string[] bf = strBf.Split(':');
-                list.Add(bf[1]);
-            }
-            Dispatcher.BeginInvoke(new Action(() =>
-            {
-                SNS_ID_LABEL.Content = ((double.Parse(e.ReceiveDAT[0]) - 1.65) / 0.09).ToString("0.00");
-                SNS_VD_LABEL.Content = (double.Parse(e.ReceiveDAT[1]) * 10.091).ToString("0.00");
-                TEMP01.Content = (double.Parse(list[0])).ToString("0.00");
-                TEMP02.Content = (double.Parse(list[1])).ToString("0.00");
-                TEMP03.Content = (double.Parse(list[2])).ToString("0.00");
-                TEMP04.Content = (double.Parse(list[3])).ToString("0.00");
-                TEMP05.Content = (double.Parse(list[4])).ToString("0.00");
-                TEMP06.Content = (double.Parse(list[5])).ToString("0.00");
-                TEMP07.Content = (double.Parse(list[6])).ToString("0.00");
-                TEMP08.Content = (double.Parse(list[7])).ToString("0.00");
-                TEMP09.Content = (double.Parse(list[8])).ToString("0.00");
-                TEMP10.Content = (double.Parse(list[9])).ToString("0.00");
-                TEMP11.Content = (double.Parse(list[10])).ToString("0.00");
-                TEMP12.Content = (double.Parse(list[11])).ToString("0.00");
-                TEMP13.Content = (double.Parse(list[12])).ToString("0.00");
-                TEMP14.Content = (double.Parse(list[13])).ToString("0.00");
-                TEMP15.Content = (double.Parse(list[14])).ToString("0.00");
-            }));
-        }
+        #region VISA EVENT
 
         private void DEC_TextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
@@ -421,15 +361,15 @@ namespace PCAB_Debugger_GUI
                               "\nRevision Code\t: " + idn.RevisionCode +
                               "\nSerial Number\t: " + idn.SerialNumber, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
             }
-            catch(Exception err)
+            catch (Exception err)
             {
-                MessageBox.Show(err.Message,"Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(err.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
         private void CH_Click(object sender, RoutedEventArgs e)
         {
-            if(((RadioButton)sender).Name == "CH_ALL")
+            if (((RadioButton)sender).Name == "CH_ALL")
             {
                 CHANNEL_COMBOBOX.IsEnabled = false;
                 CH_SEL.IsChecked = false;
@@ -471,9 +411,9 @@ namespace PCAB_Debugger_GUI
                 string message;
                 foreach (object objBF in LOOP_GRID.Children)
                 {
-                    if(typeof(RadioButton) == objBF.GetType())
+                    if (typeof(RadioButton) == objBF.GetType())
                     {
-                        if(((RadioButton)objBF).IsChecked == true)
+                        if (((RadioButton)objBF).IsChecked == true)
                         {
                             ps = int.Parse(((RadioButton)objBF).Content.ToString().Substring(2));
                             break;
@@ -522,15 +462,9 @@ namespace PCAB_Debugger_GUI
                             "Warning", MessageBoxButton.OKCancel, MessageBoxImage.Warning) == MessageBoxResult.Cancel) { return; }
                     }
 
-
-#if !DEBUG
                     for (int pss_num = 0; pss_num < 64; pss_num++)
-#else
-                    for (int pss_num = 0; pss_num < 5; pss_num++)
-#endif
                     {
                         //Write Phase State
-#if !DEBUG
                         if (_mod.PCAB_CMD("SetPS" + ps.ToString("0") + " " + pss_num.ToString("0"), 1) != "DONE\n")
                         {
                             MessageBox.Show("Write phase config error.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -540,7 +474,6 @@ namespace PCAB_Debugger_GUI
                         {
                             MessageBox.Show("Write phase config error.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                         }
-#endif
                         //Trigger SET
                         if (SING_CHECKBOX.IsChecked == true)
                         {
@@ -591,17 +524,19 @@ namespace PCAB_Debugger_GUI
                                         pna.selectTrace(win, tra);
                                         uint ch = pna.getSelectChannel();
                                         uint num = pna.getSelectMeasurementNumber();
-                                        string x = pna.getASCII("CALC" + ch.ToString() + ":MEAS" + num.ToString() + ":X:AXIS:UNIT?");
+                                        //string x = pna.getASCII("CALC" + ch.ToString() + ":MEAS" + num.ToString() + ":X:AXIS:UNIT?");
+                                        string x = "X";
                                         string y = pna.getASCII("CALC" + ch.ToString() + ":MEAS" + num.ToString() + ":PAR?");
                                         y += "_" + pna.getASCII("CALC" + ch.ToString() + ":MEAS" + num.ToString() + ":FORM?");
-                                        y += "_" + pna.getASCII("CALC" + ch.ToString() + ":MEAS" + num.ToString() + ":X:AXIS:UNIT?");
+                                        //y += "_" + pna.getASCII("CALC" + ch.ToString() + ":MEAS" + num.ToString() + ":X:AXIS:UNIT?");
                                         string mem = pna.getASCII("CALC" + ch.ToString() + ":MEAS" + num.ToString() + ":MATH:FUNC?");
                                         if (mem.ToUpper() != "NORM")
                                         {
                                             y += "@" + mem + "[MEM]";
                                         }
                                         string[] valx = pna.getASCII("CALC" + ch.ToString() + ":MEAS" + num.ToString() + ":X?").Trim().Split(',');
-                                        string[] valy = pna.getASCII("CALC" + ch.ToString() + ":MEAS" + num.ToString() + ":Y?").Trim().Split(',');
+                                        //string[] valy = pna.getASCII("CALC" + ch.ToString() + ":MEAS" + num.ToString() + ":Y?").Trim().Split(',');
+                                        string[] valy = pna.getASCII("CALC" + ch.ToString() + ":MEAS" + num.ToString() + ":DATA:FDAT?").Trim().Split(',');
                                         trace.Add(new TraceDAT("CH" + ch.ToString(), x, y, valx, valy));
                                     }
                                     dat.Add(new ChartDAT("Win" + win.ToString(), trace.ToArray()));
@@ -611,7 +546,7 @@ namespace PCAB_Debugger_GUI
                                 {
                                     System.Diagnostics.FileVersionInfo fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetExecutingAssembly().Location);
 
-                                    sw.WriteLine("\"SaveMultiple Ver," + fvi.ProductVersion + "\"");
+                                    sw.WriteLine("\"PCAB Debugger Ver," + fvi.ProductVersion + "\"");
                                     sw.WriteLine(fvi.LegalCopyright);
                                     sw.WriteLine();
                                     string strBF1 = "";
@@ -659,12 +594,24 @@ namespace PCAB_Debugger_GUI
                         //Trigger ReSET
                         if (SING_CHECKBOX.IsChecked == true)
                         {
-                                for (int i = 0; i < channels.Length; i++)
-                                {
-                                    pna.setTriggerMode(channels[i], trigMODE[i]);
-                                }
+                            for (int i = 0; i < channels.Length; i++)
+                            {
+                                pna.setTriggerMode(channels[i], trigMODE[i]);
+                            }
                         }
                     }
+
+                    //Write Phase State0
+                    if (_mod.PCAB_CMD("SetPS" + ps.ToString("0") + " 0", 1) != "DONE\n")
+                    {
+                        MessageBox.Show("Write phase config error.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        return;
+                    }
+                    if (_mod.PCAB_CMD("WrtPS", 1) != "DONE\n")
+                    {
+                        MessageBox.Show("Write phase config error.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+
                     MessageBox.Show("Data acquisition completed.", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 catch (Exception err)
@@ -672,6 +619,74 @@ namespace PCAB_Debugger_GUI
                     MessageBox.Show(err.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
+        }
+
+        #endregion
+
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (_state)
+            {
+                if (MessageBox.Show("Communication with PCAB\nDo you want to disconnect and exit?", "Worning", MessageBoxButton.OKCancel, MessageBoxImage.Warning) == MessageBoxResult.OK)
+                {
+                    _mod.PCAB_AutoTaskStop(); _mod = null; _state = false;
+                }
+                else { e.Cancel = true; }
+            }
+        }
+
+        private void OnError(object sender, PCABEventArgs e)
+        {
+            _mod.PCAB_AutoTaskStop();
+            _mod.Close();
+            MessageBox.Show(e.Message.ToString(), "Error",MessageBoxButton.OK,MessageBoxImage.Error);
+            _state = false;
+            _mod = null;
+            Dispatcher.BeginInvoke(new Action(() =>
+            {
+                SERIAL_PORTS_COMBOBOX.IsEnabled = true;
+            CONTL_GRID.IsEnabled = false;
+            ((TextBlock)((Viewbox)CONNECT_BUTTON.Content).Child).Text = "Connect";
+            }));
+        }
+
+        private void OnUpdateDAT(object sender, PCABEventArgs e)
+        {
+            if(e.ReceiveDAT.Length != 3) { return; }
+            if (_mod != null)
+            {
+                _mod.Id_now = e.ReceiveDAT[0];
+                _mod.Vd_now = e.ReceiveDAT[1];
+                _mod.TEMP_now = e.ReceiveDAT[2];
+            }
+            string[] arrBf = e.ReceiveDAT[2].Trim(',').Split(',');
+            List<string> list = new List<string>();
+            foreach(string strBf in arrBf)
+            {
+                string[] bf = strBf.Split(':');
+                list.Add(bf[1]);
+            }
+            Dispatcher.BeginInvoke(new Action(() =>
+            {
+                SNS_ID_LABEL.Content = ((double.Parse(e.ReceiveDAT[0]) - 1.65) / 0.09).ToString("0.00");
+                SNS_VD_LABEL.Content = (double.Parse(e.ReceiveDAT[1]) * 10.091).ToString("0.00");
+                TEMP01.Content = (double.Parse(list[0])).ToString("0.00");
+                TEMP02.Content = (double.Parse(list[1])).ToString("0.00");
+                TEMP03.Content = (double.Parse(list[2])).ToString("0.00");
+                TEMP04.Content = (double.Parse(list[3])).ToString("0.00");
+                TEMP05.Content = (double.Parse(list[4])).ToString("0.00");
+                TEMP06.Content = (double.Parse(list[5])).ToString("0.00");
+                TEMP07.Content = (double.Parse(list[6])).ToString("0.00");
+                TEMP08.Content = (double.Parse(list[7])).ToString("0.00");
+                TEMP09.Content = (double.Parse(list[8])).ToString("0.00");
+                TEMP10.Content = (double.Parse(list[9])).ToString("0.00");
+                TEMP11.Content = (double.Parse(list[10])).ToString("0.00");
+                TEMP12.Content = (double.Parse(list[11])).ToString("0.00");
+                TEMP13.Content = (double.Parse(list[12])).ToString("0.00");
+                TEMP14.Content = (double.Parse(list[13])).ToString("0.00");
+                TEMP15.Content = (double.Parse(list[14])).ToString("0.00");
+            }));
         }
 
         #region Structure
