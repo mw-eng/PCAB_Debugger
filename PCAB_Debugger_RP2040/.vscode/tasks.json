@@ -4,7 +4,7 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "opencdc run",
+            "label": "openocd run",
             "type": "shell",
             "command": "openocd.exe -f interface/cmsis-dap.cfg -f target/rp2040.cfg -s tcl",
             "runOptions": {
