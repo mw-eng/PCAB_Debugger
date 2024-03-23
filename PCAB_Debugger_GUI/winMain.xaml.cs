@@ -369,18 +369,23 @@ namespace PCAB_Debugger_GUI
                 string dirPath = fbd.SelectedPath;
                 bool fileFLG = false;
                 string filePath;
-                int ps = -1;
+                List<int> ps = new List<int>();
                 string message;
+                ps.Clear();
                 foreach (object objBF in LOOP_GRID.Children)
                 {
-                    if (typeof(RadioButton) == objBF.GetType())
+                    if (typeof(CheckBox) == objBF.GetType())
                     {
-                        if (((RadioButton)objBF).IsChecked == true)
+                        if (((CheckBox)objBF).IsChecked == true)
                         {
-                            ps = int.Parse(((RadioButton)objBF).Content.ToString().Substring(2));
-                            break;
+                            ps.Add(int.Parse(((CheckBox)objBF).Content.ToString().Substring(2)));
                         }
                     }
+                }
+                if(ps.Count <= 0)
+                {
+                    MessageBox.Show("Please select one or more PS.", "Warning",MessageBoxButton.OK,MessageBoxImage.Warning);
+                    return;
                 }
                 try
                 {
@@ -426,11 +431,14 @@ namespace PCAB_Debugger_GUI
 
                     for (int pss_num = 0; pss_num < 64; pss_num++)
                     {
-                        //Write Phase State
-                        if (_mod.PCAB_CMD("SetPS" + ps.ToString("0") + " " + pss_num.ToString("0"), 1) != "DONE\n")
+                        foreach (int p in ps)
                         {
-                            MessageBox.Show("Write phase config error.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                            return;
+                            //Write Phase State
+                            if (_mod.PCAB_CMD("SetPS" + p.ToString("0") + " " + pss_num.ToString("0"), 1) != "DONE\n")
+                            {
+                                MessageBox.Show("Write phase config error.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                                return;
+                            }
                         }
                         if (_mod.PCAB_CMD("WrtPS", 1) != "DONE\n")
                         {
@@ -564,10 +572,14 @@ namespace PCAB_Debugger_GUI
                     }
 
                     //Write Phase State0
-                    if (_mod.PCAB_CMD("SetPS" + ps.ToString("0") + " 0", 1) != "DONE\n")
+                    foreach (int p in ps)
                     {
-                        MessageBox.Show("Write phase config error.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                        return;
+                        //Write Phase State
+                        if (_mod.PCAB_CMD("SetPS" + p.ToString("0") + " 0", 1) != "DONE\n")
+                        {
+                            MessageBox.Show("Write phase config error.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                            return;
+                        }
                     }
                     if (_mod.PCAB_CMD("WrtPS", 1) != "DONE\n")
                     {
