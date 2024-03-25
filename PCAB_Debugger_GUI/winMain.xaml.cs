@@ -136,7 +136,7 @@ namespace PCAB_Debugger_GUI
 
         private void LOADMEM_Click(object sender, RoutedEventArgs e)
         {
-            if (MessageBox.Show(""
+            if (MessageBox.Show("Load configuration from memory."
                 , "Warning",MessageBoxButton.OKCancel,MessageBoxImage.Warning) != MessageBoxResult.OK) { return; }
             string strBf = _mod.PCAB_CMD("LMEM", 1);
             if (strBf != "ERR\n")
@@ -152,8 +152,25 @@ namespace PCAB_Debugger_GUI
             }
         }
 
+        private void RESET_Click(object sender, RoutedEventArgs e)
+        {
+            if (MessageBox.Show("Restore default settins."
+                , "Warning", MessageBoxButton.OKCancel, MessageBoxImage.Warning) != MessageBoxResult.OK) { return; }
+            if (_mod.PCAB_PRESET())
+            {
+                read_conf();
+                MessageBox.Show("Preset done.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            else
+            {
+                MessageBox.Show("Reset error.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
         private void SAVEMEM_Click(object sender, RoutedEventArgs e)
         {
+            if (MessageBox.Show("Save settings to memory."
+                , "Warning", MessageBoxButton.OKCancel, MessageBoxImage.Warning) != MessageBoxResult.OK) { return; }
             if (_mod.PCAB_CMD("SMEM", 1) == "DONE\n")
             {
                 MessageBox.Show("Save memory done.","Success",MessageBoxButton.OK,MessageBoxImage.Information);
@@ -194,19 +211,6 @@ namespace PCAB_Debugger_GUI
             else
             {
                 MessageBox.Show("Write phase config error.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
-
-        private void RESET_Click(object sender, RoutedEventArgs e)
-        {
-            if (_mod.PCAB_PRESET())
-            {
-                read_conf();
-                MessageBox.Show("Preset done.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-            }
-            else
-            {
-                MessageBox.Show("Reset error.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
