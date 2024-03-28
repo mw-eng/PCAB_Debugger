@@ -1,6 +1,4 @@
-#include <string>
-#include <cstring>
-
+#include "MWComLibRaspico_library.h"
 
 /// <summary>Trimming the specified string from the beginning(Left).</summary>
 /// <param name="str">String to be trimmed.</param>
@@ -48,4 +46,4 @@ bool strCompare(const std::string &a, const std::string &b, const bool &ignoreCa
     else{ return a == b ? true : false; }
 }
 
-bool strCompare(const std::string a, const std::string b) { return strCompare(a, b, false); }
+bool strCompare(const std::string &a, const std::string &b) { return strCompare(a, b, false); }

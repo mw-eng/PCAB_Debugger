@@ -31,5 +31,5 @@ if (CMAKE_C_COMPILER_ID STREQUAL "GNU")
 endif()
 
 # Hardware-specific examples in subdirectories:
-add_subdirectory(PCAB_Debugger)
+#add_subdirectory(PCAB_Debugger)
 add_subdirectory(PCAB_Debugger_FW)
