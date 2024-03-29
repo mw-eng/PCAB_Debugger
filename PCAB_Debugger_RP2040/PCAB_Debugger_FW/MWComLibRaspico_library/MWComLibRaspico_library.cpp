@@ -37,3 +37,21 @@ bool strCompare(const std::string &a, const std::string &b, const bool &ignoreCa
 }
 
 bool strCompare(const std::string &a, const std::string &b) { return strCompare(a, b, false); }
+
+std::vector<std::string> split(const std::string &str, char delim) {
+    std::vector<std::string> elems;
+    std::string item;
+    for (char ch: str) {
+        if (ch == delim) {
+            if (!item.empty())
+                elems.push_back(item);
+            item.clear();
+        }
+        else {
+            item += ch;
+        }
+    }
+    if (!item.empty())
+        elems.push_back(item);
+    return elems;
+}

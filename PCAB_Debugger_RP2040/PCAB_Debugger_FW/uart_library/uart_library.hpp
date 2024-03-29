@@ -1,5 +1,5 @@
 #include <string>
-#include <list>
+#include <vector>
 #include "pico/stdlib.h"
 
 class uartSYNC
@@ -10,12 +10,39 @@ class uartSYNC
     
     public:
 
+    /// @brief Command cord. 
+    enum cmdCode{
+        WrtPS,
+        GetPS,
+        SetPS,
+        GetTMP,
+        GetId,
+        GetVd,
+        GetSTB_AMP,
+        SetSTB_AMP,
+        GetSTB_DRA,
+        SetSTB_DRA,
+        GetSTB_LNA,
+        SetSTB_LNA,
+        GetLPM,
+        SetLPM,
+        SetALD,
+        GetALD,
+        SaveMEM,
+        LoadMEM,
+        GetIDN,
+        SetIDN,
+        RST,
+        CUI,
+        NONE
+    };
+
     /// @brief Command line structure.
     struct CommandLine
     {
-        std::string command;
-        std::list<std::string> argments;
-        CommandLine(std::string cmd,std::string args[],uint numArgs)
+        cmdCode command;
+        std::vector<std::string> argments;
+        CommandLine(cmdCode cmd, std::string args[], uint numArgs)
         {
             command = cmd;
             argments.clear();
@@ -63,9 +90,20 @@ class uartSYNC
     /// @brief Destructor
     ~uartSYNC();
 
+    /// @brief Read one line of string.
+    /// @param echo Return echo during communication.
     std::string readLine(bool echo);
+
+    /// @brief Read string line as command.
+    /// @param echo Return echo during communication.
     CommandLine readCMD(bool echo);
+    
+    /// @brief Send string.
+    /// @param str string to send.
     void write(std::string str);
+
+    /// @brief Send string as one line. (Add new line string automatically string to send.)
+    /// @param str string to send.
     void writeLine(std::string str);
 };
 
