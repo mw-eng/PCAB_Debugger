@@ -49,7 +49,12 @@
         "sstream": "cpp",
         "cstring": "cpp",
         "charconv": "cpp",
-        "ctime": "cpp"
+        "ctime": "cpp",
+        "xmemory": "cpp",
+        "xstring": "cpp",
+        "xtr1common": "cpp",
+        "xutility": "cpp",
+        "list": "cpp"
     },
     "cmake.statusbar.advanced": {
         "debug": {
