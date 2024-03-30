@@ -38,6 +38,13 @@ bool strCompare(const std::string &a, const std::string &b, const bool &ignoreCa
 
 bool strCompare(const std::string &a, const std::string &b) { return strCompare(a, b, false); }
 
+int conv_uint(const std::string &str)
+{
+    if(str.length() <= 0){return -1;}
+    if (std::all_of(str.cbegin(), str.cend(), isdigit)) { return stoi(str); }
+    return -1;
+}
+
 std::vector<std::string> split(const std::string &str, char delim) {
     std::vector<std::string> elems;
     std::string item;

@@ -56,9 +56,11 @@ uartSYNC::CommandLine uartSYNC::readCMD(bool echo)
     if (strCompare(trim(strBf), "GetSTB.AMP", true)) { return uartSYNC::CommandLine(cmdCode::GetSTB_AMP, strArr, strVect.size()); }
     if (strCompare(trim(strBf), "GetSTB.DRA", true)) { return uartSYNC::CommandLine(cmdCode::GetSTB_DRA, strArr, strVect.size()); }
     if (strCompare(trim(strBf), "GetSTB.LNA", true)) { return uartSYNC::CommandLine(cmdCode::GetSTB_LNA, strArr, strVect.size()); }
+
     if (strCompare(trim(strBf), "SetSTB.AMP", true)) { return uartSYNC::CommandLine(cmdCode::SetSTB_AMP, strArr, strVect.size()); }
     if (strCompare(trim(strBf), "SetSTB.DRA", true)) { return uartSYNC::CommandLine(cmdCode::SetSTB_DRA, strArr, strVect.size()); }
     if (strCompare(trim(strBf), "SetSTB.LNA", true)) { return uartSYNC::CommandLine(cmdCode::SetSTB_LNA, strArr, strVect.size()); }
+
     if (strCompare(trim(strBf), "GetLPM", true)) { return uartSYNC::CommandLine(cmdCode::GetLPM, strArr, strVect.size()); }
     if (strCompare(trim(strBf), "SetLPM", true)) { return uartSYNC::CommandLine(cmdCode::SetLPM, strArr, strVect.size()); }
     if (strCompare(trim(strBf), "SetALD", true)) { return uartSYNC::CommandLine(cmdCode::SetALD, strArr, strVect.size()); }
@@ -66,6 +68,7 @@ uartSYNC::CommandLine uartSYNC::readCMD(bool echo)
     if (strCompare(trim(strBf), "SetIDN", true)) { return uartSYNC::CommandLine(cmdCode::SetIDN, strArr, strVect.size()); }
     if (strCompare(trim(strBf), "GetIDN", true)) { return uartSYNC::CommandLine(cmdCode::GetIDN, strArr, strVect.size()); }
     if (strCompare(trim(strBf), "GetTMP", true)) { return uartSYNC::CommandLine(cmdCode::GetTMP, strArr, strVect.size()); }
+    
     if (strCompare(trim(strBf), "WrtPS", true)) { return uartSYNC::CommandLine(cmdCode::WrtPS, strArr, strVect.size()); }
     if (strCompare(trim(strBf), "GetPS", true)) { return uartSYNC::CommandLine(cmdCode::GetPS, strArr, strVect.size()); }
     if (strCompare(trim(strBf), "GetId", true)) { return uartSYNC::CommandLine(cmdCode::GetId, strArr, strVect.size()); }

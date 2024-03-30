@@ -1,6 +1,7 @@
 #include <string>
 #include <cstring>
 #include <vector>
+#include <algorithm>
 
 /// @brief Trimming the specified std::string from the beginning(Left).
 /// @param str std::string to be trimmed.
@@ -53,6 +54,12 @@ bool strCompare(const std::string &a, const std::string &b, const bool &ignoreCa
 /// @param b Target std::string B.
 /// @return Compare result.
 bool strCompare(const std::string &a, const std::string &b);
+
+
+/// @brief Convert string to uint
+/// @param str convert string
+/// @return uint
+int conv_uint(const std::string &str);
 
 /// @brief String split.
 /// @param str Target string.
