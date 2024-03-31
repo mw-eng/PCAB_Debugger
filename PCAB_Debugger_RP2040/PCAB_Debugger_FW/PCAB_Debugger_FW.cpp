@@ -60,5 +60,6 @@ int main()
         }
     };
     delete uart;
+    delete sens;
     return 0;
 }
