@@ -10,39 +10,12 @@ class uartSYNC
     
     public:
 
-    /// @brief Command cord. 
-    enum cmdCode{
-        WrtPS,
-        GetPS,
-        SetPS,
-        GetTMP,
-        GetId,
-        GetVd,
-        GetSTB_AMP,
-        SetSTB_AMP,
-        GetSTB_DRA,
-        SetSTB_DRA,
-        GetSTB_LNA,
-        SetSTB_LNA,
-        GetLPM,
-        SetLPM,
-        SetALD,
-        GetALD,
-        SaveMEM,
-        LoadMEM,
-        GetIDN,
-        SetIDN,
-        RST,
-        CUI,
-        NONE
-    };
-
     /// @brief Command line structure.
     struct CommandLine
     {
-        cmdCode command;
+        std::string command;
         std::vector<std::string> argments;
-        CommandLine(cmdCode cmd, std::string args[], uint numArgs)
+        CommandLine(std::string cmd, std::string args[], uint numArgs)
         {
             command = cmd;
             argments.clear();
