@@ -1,5 +1,6 @@
 #include "MWComLibCPP_library.hpp"
 #include "PCAB_Debugger_library.hpp"
+#include "ds18b20_library.hpp"
 #include "flash_library.hpp"
 #include "Configure.hpp"
 
@@ -9,9 +10,12 @@ int main()
     readMEMORYblock(31 * (UINT16_MAX + 1), dat);
     eraseMEMORYblock(31 * (UINT16_MAX + 1));
     saveMEMORYblock(31 * (UINT16_MAX + 1), dat);
-    pcabCMD *uart = new pcabCMD(UART_TX_PIN, UART_RX_PIN, UART_BAUD_RATE);
-    //uartSYNC *uart = new uartSYNC();
 
+    ds18b20 *sens = new ds18b20(pio0, SNS_TEMP_PIN);
+    std::vector<uint64_t> romCODE = sens->getSENS_ROMCODE();
+    std::vector<std::string> temp = sens->readTEMP();
+
+    pcabCMD *uart = new pcabCMD(UART_TX_PIN, UART_RX_PIN, UART_BAUD_RATE);
     uart->uart.writeLine("test");
     while(1){
         pcabCMD::CommandLine cmd = uart->readCMD(true);
