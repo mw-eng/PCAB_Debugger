@@ -10,50 +10,56 @@ class ds18b20
 
     public:
 
-    /// @brief 
-    /// @param pioID 
-    /// @param gpioNumber 
+    /// @brief Constructor
+    /// @param pioID Pio id to use.
+    /// @param gpioNumber gpio number to use.
+    /// @param senser_count_max  Specifies the maximum number of sensors to communicate with.
+    ds18b20(PIO pioID, uint gpioNumber, uint8_t senser_count_max);
+
+    /// @brief Constructor ( senser_count_max = 255 )
+    /// @param pioID Pio id to use.
+    /// @param gpioNumber gpio number to use.
     ds18b20(PIO pioID, uint gpioNumber);
 
-    /// @brief 
-    /// @param gipoNumber 
+    /// @brief Constructor ( senser_count_max = 255 / pioID = pio0)
+    /// @param gpioNumber gpio number to use.
     ds18b20(uint gipoNumber);
 
-    /// @brief 
+    /// @brief Constructor ( senser_count_max = 255 / pioID = pio0 / gpioNumber = 0)
     ds18b20();
 
-    /// @brief 
+    /// @brief Destructor
     ~ds18b20();
     
-    /// @brief 
-    /// @return 
+    /// @brief Get all sensor readings.
+    /// @return Senser reading data.
     std::vector<int16_t> readSENS();
 
-    /// @brief 
-    /// @param sensNUM 
-    /// @return 
+    /// @brief Get the measurement value of the specified sensor.
+    /// @param sensNUM Senser number.
+    /// @return Senser reading data.
     int16_t readSENS(uint sensNUM);
 
-    /// @brief 
-    /// @return 
+    /// @brief Get temperature of all sensors.
+    /// @return Temperature.
     std::vector<std::string> readTEMP();
 
-    /// @brief 
-    /// @param sensNUM 
-    /// @return 
+    /// @brief Get the temperature of the specified sensor.
+    /// @param sensNUM Senser number
+    /// @return Temperature.
     double readTEMP(uint sensNUM);
 
-    /// @brief 
-    /// @return 
+    /// @brief Get number of sensors.
+    /// @return Sensors number.
     int16_t getNumberOfSenser();
 
-    /// @brief 
-    /// @return 
+    /// @brief Get all sensor IDs.
+    /// @return Senser IDs.
     std::vector<uint64_t> getSENS_ROMCODE();
 
-    /// @brief 
-    /// @param sensNUM 
-    /// @return 
+    /// @brief Get specified sensor ID.
+    /// @param sensNUM Senser number.
+    /// @return Senser ID.
     uint64_t getSENS_ROMCODE(uint sensNUM);
     
 };

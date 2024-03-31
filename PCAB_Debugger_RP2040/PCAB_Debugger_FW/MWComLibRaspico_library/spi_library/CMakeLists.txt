@@ -1,14 +1,10 @@
-set(ProjectName "onewire_library")
+set(ProjectName "spi_library")
 add_library(${ProjectName} INTERFACE)
 target_sources(${ProjectName} INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/${ProjectName}.cpp)
 
-# invoke pio_asm to assemble the state machine programs
-#
-pico_generate_pio_header(${ProjectName} ${CMAKE_CURRENT_LIST_DIR}/${ProjectName}.pio)
-
 target_link_libraries(${ProjectName} INTERFACE
-        pico_stdlib
-        hardware_pio
+	pico_stdlib
+    hardware_spi
 )
 
 # add the `binary` directory so that the generated headers are included in the project

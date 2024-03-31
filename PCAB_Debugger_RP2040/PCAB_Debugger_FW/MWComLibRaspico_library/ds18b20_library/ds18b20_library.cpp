@@ -21,21 +21,25 @@
 
 
 
-ds18b20::ds18b20(PIO pioID, uint gpioNumber)
+ds18b20::ds18b20(PIO pioID, uint gpioNumber, uint8_t senser_count_max)
 {
     if (pio_can_add_program (pioID, &onewire_program)) {
         uint offset = pio_add_program (pioID, &onewire_program);
         // claim a state machine and initialise a driver instance
         if (ow_init (&ow, pioID, offset, gpioNumber)) {
-            uint64_t romcode[INT16_MAX];
+            uint64_t romcode[UINT8_MAX];
             // find and display 64-bit device addresses
-            //int num_devs = ow_romsearch (&ow, romcode, INT16_MAX, OW_SEARCH_ROM);
-            ow_romsearch (&ow, romcode, INT16_MAX, OW_SEARCH_ROM);
+            int num_devs = ow_romsearch (&ow, romcode, senser_count_max, OW_SEARCH_ROM);
             SENS_TMP.clear();
-            SENS_TMP.insert(SENS_TMP.begin(), std::begin(romcode), std::end(romcode));
+            for(uint8_t i = 0; i < num_devs; i++)
+            {
+                SENS_TMP.push_back(romcode[i]);
+            }
         }
     }
 }
+
+ds18b20::ds18b20(PIO pioID, uint gpioNumber) : ds18b20(pioID, gpioNumber, UINT8_MAX) {}
 
 ds18b20::ds18b20(uint gpioNumber) : ds18b20(pio0, gpioNumber) {}
 

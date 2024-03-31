@@ -2,6 +2,7 @@
 #include "PCAB_Debugger_library.hpp"
 #include "ds18b20_library.hpp"
 #include "flash_library.hpp"
+#include "spi_library.hpp"
 #include "Configure.hpp"
 
 int main()
@@ -16,6 +17,17 @@ int main()
     std::vector<std::string> temp = sens->readTEMP();
 
     pcabCMD *uart = new pcabCMD(UART_TX_PIN, UART_RX_PIN, UART_BAUD_RATE);
+
+    for (uint64_t &x:romCODE)
+    {
+        uart->uart.writeLine(std::to_string(x));
+    }
+    for (std::string &x:temp)
+    {
+        uart->uart.writeLine(x);
+    }
+
+
     uart->uart.writeLine("test");
     while(1){
         pcabCMD::CommandLine cmd = uart->readCMD(true);
