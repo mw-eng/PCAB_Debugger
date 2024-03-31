@@ -1,12 +1,34 @@
-#include "MWComLibCPP_library.hpp"
-#include "PCAB_Debugger_library.hpp"
-#include "ds18b20_library.hpp"
-#include "flash_library.hpp"
-#include "spi_library.hpp"
-#include "Configure.hpp"
+#include "PCAB_Debugger_FW.hpp"
+
+void setup()
+{
+    stdio_init_all();
+    //GPIO Setup
+    gpio_init(LPW_MOD_PIN);
+    gpio_init(STB_DRA_PIN);
+    gpio_init(STB_AMP_PIN);
+    gpio_init(STB_LNA_PIN);
+    gpio_init(SW_1_PIN);
+    gpio_init(SW_2_PIN);
+    gpio_init(SW_3_PIN);
+    gpio_init(SW_4_PIN);
+    gpio_init(SW_5_PIN);
+    gpio_init(SW_6_PIN);
+    gpio_set_dir(LPW_MOD_PIN , GPIO_OUT);
+    gpio_set_dir(STB_DRA_PIN , GPIO_OUT);
+    gpio_set_dir(STB_AMP_PIN , GPIO_OUT);
+    gpio_set_dir(STB_LNA_PIN , GPIO_OUT);
+    gpio_set_dir(SW_1_PIN , GPIO_IN);
+    gpio_set_dir(SW_2_PIN , GPIO_IN);
+    gpio_set_dir(SW_3_PIN , GPIO_IN);
+    gpio_set_dir(SW_4_PIN , GPIO_IN);
+    gpio_set_dir(SW_5_PIN , GPIO_IN);
+    gpio_set_dir(SW_6_PIN , GPIO_IN);
+}
 
 int main()
 {
+    setup();
     uint8_t dat[FLASH_PAGE_SIZE];
     readMEMORYblock(31 * (UINT16_MAX + 1), dat);
     eraseMEMORYblock(31 * (UINT16_MAX + 1));

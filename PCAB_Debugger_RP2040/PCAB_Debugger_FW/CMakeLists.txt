@@ -5,6 +5,7 @@ add_subdirectory(PCAB_Debugger_library)
 add_subdirectory(MWComLibRaspico_library/flash_library)
 add_subdirectory(MWComLibRaspico_library/uart_library)
 add_subdirectory(MWComLibRaspico_library/spi_library)
+add_subdirectory(MWComLibRaspico_library/adc_library)
 add_subdirectory(MWComLibRaspico_library/ds18b20_library)
 add_subdirectory(MWComLibRaspico_library/onewire_library)
 
@@ -23,6 +24,7 @@ target_link_libraries(${ProjectName}
     hardware_adc
     flash_library
     spi_library
+    adc_library
     MWComLibCPP_library
     PCAB_Debugger_library
     ds18b20_library
