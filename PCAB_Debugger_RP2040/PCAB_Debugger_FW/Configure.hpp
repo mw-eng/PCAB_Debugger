@@ -26,7 +26,6 @@
 #define SW_5_PIN 12
 #define SW_6_PIN 13
 
-
 // UART Configure
 #define UART_BAUD_RATE 9600
 //#define UART_BAUD_RATE 115200
@@ -36,3 +35,10 @@
 #define SPI_CLK 1000000
 #define SPI_BITS 6
 #define SPI_ORDER false // 0:LSB / 1:MSB
+
+// ROM MAX Block Number
+#define ROM_BLOCK_MAX 31    //16M (Raspberry Pi Pico)
+//#define ROM_BLOCK_MAX 63    //32M
+//#define ROM_BLOCK_MAX 127   //64M
+//#define ROM_BLOCK_MAX 255   //128M (PCAB)
+//#define ROM_BLOCK_MAX 511   //256M

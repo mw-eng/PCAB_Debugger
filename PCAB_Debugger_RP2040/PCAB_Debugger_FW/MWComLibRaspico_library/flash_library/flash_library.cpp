@@ -1,5 +1,6 @@
 #include "flash_library.hpp"
 
+uint32_t blockAddress(const uint16_t &blockNum) { return blockNum * (UINT16_MAX + 1); }
 
 void saveROMblock(uint32_t address, const uint8_t blockDAT[FLASH_PAGE_SIZE])
 {

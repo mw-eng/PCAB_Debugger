@@ -8,3 +8,4 @@
 #include "Configure.hpp"
 
 void setup();
+void close();
