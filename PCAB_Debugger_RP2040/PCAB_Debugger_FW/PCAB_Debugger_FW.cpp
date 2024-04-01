@@ -2,7 +2,7 @@
 
 const static std::string FW_VENDOR = "Orient Microwave Corp.";
 const static std::string FW_MODEL = "PCAB_Debugger";
-const static std::string FW_REV = "1.0.2";
+const static std::string FW_REV = "1.1.0";
 
 ds18b20 *sens;
 adc *analog;
