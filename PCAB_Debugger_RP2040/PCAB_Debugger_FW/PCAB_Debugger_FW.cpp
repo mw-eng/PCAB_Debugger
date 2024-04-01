@@ -151,7 +151,7 @@ int main()
             else
             {
                 bool mode;
-                if(Convert::TryToBool(cmd.argments[0], mode)) { uart->uart.writeLine("ERR > Argument error."); }
+                if(!Convert::TryToBool(cmd.argments[0], mode)) { uart->uart.writeLine("ERR > Argument error."); }
                 else { modeECHO = mode; }
             }
             break;
@@ -160,7 +160,7 @@ int main()
             else
             {
                 bool mode;
-                if(Convert::TryToBool(cmd.argments[0], mode)) { uart->uart.writeLine("ERR > Argument error."); }
+                if(!Convert::TryToBool(cmd.argments[0], mode)) { uart->uart.writeLine("ERR > Argument error."); }
                 else { modeCUI = mode; }
             }
             break;
