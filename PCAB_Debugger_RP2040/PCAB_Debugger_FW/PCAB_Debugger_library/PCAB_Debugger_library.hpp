@@ -7,6 +7,12 @@ class pcabCMD : uartSYNC
 
     /// @brief Command cord. 
     enum cmdCode{
+        WrtDPS,
+        GetDSP,
+        SetDSP,
+        WrtDSA,
+        GetDSA,
+        SetDSA,
         WrtPS,
         GetPS,
         SetPS,
