@@ -1,5 +1,6 @@
 #include "PCAB_Debugger_FW.hpp"
-
+#include <string>
+#include <stdexcept>
 ds18b20 *sens;
 adc *analog;
 spi *spi_ps;
@@ -52,6 +53,12 @@ int main()
     uint16_t adc0ui = analog->readADC0();
 
     uart->uart.writeLine(Convert::ToString(25834, 16, 5));
+    int iBF;
+    if(Convert::TryToInt("+13355", iBF))
+    {
+        uart->uart.writeLine(std::to_string(iBF));
+    }
+
     uint64_t uiBF;
     if(Convert::TryToUInt64("64EfFc", 16, uiBF))
     {
