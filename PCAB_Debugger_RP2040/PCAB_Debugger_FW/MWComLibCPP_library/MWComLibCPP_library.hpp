@@ -3,6 +3,25 @@
 #include <vector>
 #include <algorithm>
 
+class Convert
+{
+    public:
+    static std::string ToString(bool val, bool formatString);
+    static std::string ToString(bool val);
+    static std::string ToString(int64_t val, uint BaseNumber, uint digit);
+    static std::string ToString(int64_t val, uint BaseNumber);
+
+//    static bool TryToBool(std::string str, bool out);
+//    static bool TryToInt(std::string str, int out);
+//    static bool TryToDouble(std::string str, double out);
+//    static bool TryToFloat(std::string str, float out);
+//    static bool TryToUInt(std::string str, uint out);
+//    static bool TryToUInt8(std::string str, uint8_t out);
+//    static bool TryToUInt16(std::string str, uint16_t out);
+//    static bool TryToUInt32(std::string str, uint32_t out);
+    static bool TryToUInt64(std::string str, uint8_t BaseNumber, uint64_t& out);
+};
+
 /// @brief Trimming the specified std::string from the beginning(Left).
 /// @param str std::string to be trimmed.
 /// @param targ Specified std::string.

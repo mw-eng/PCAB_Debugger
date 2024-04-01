@@ -47,11 +47,10 @@ pcabCMD::CommandLine pcabCMD::readCMD(bool echo)
     if (strCompare(trim(cmdBF.command), "SMEM", true)) { return pcabCMD::CommandLine(cmdCode::SaveMEM, strArr, cmdBF.argments.size()); }
     if (strCompare(trim(cmdBF.command), "LMEM", true)) { return pcabCMD::CommandLine(cmdCode::LoadMEM, strArr, cmdBF.argments.size()); }
     if (strCompare(trim(cmdBF.command), "RST", true)) { return pcabCMD::CommandLine(cmdCode::RST, strArr, cmdBF.argments.size()); }
-    if (strCompare(trim(cmdBF.command), "CUI", true)) { return pcabCMD::CommandLine(cmdCode::CUI, strArr, cmdBF.argments.size()); }
+    if (strCompare(trim(cmdBF.command), "*RST", true)) { return pcabCMD::CommandLine(cmdCode::RST, strArr, cmdBF.argments.size()); }
+    if (strCompare(trim(cmdBF.command), "ECHO", true)) { return pcabCMD::CommandLine(cmdCode::CUI, strArr, cmdBF.argments.size()); }
     if (strCompare(trim(cmdBF.command), "*IDN?", true)) { return pcabCMD::CommandLine(cmdCode::CUI, strArr, cmdBF.argments.size()); }
     return pcabCMD::CommandLine(cmdCode::NONE, strArr, cmdBF.argments.size());
 }
 
 #pragma endregion pcabCMD Class
-
-

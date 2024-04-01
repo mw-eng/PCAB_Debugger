@@ -1,38 +1,86 @@
 #include "spi_library.hpp"
+#include "pico/stdlib.h"
+
+#define SPI0_TX_PIN 7
+#define SPI0_RX_PIN 4
+#define SPI0_LE_PIN 5
+#define SPI0_CLK_PIN 6
+
+spi::spi(spi_inst_t *spiID, uint spiCLK, uint clk_gpio, uint tx_gpio, uint rx_gpio, uint le_gpio, uint data_bits, bool cpol, bool cpha, bool order) : spiID(spiID), gpioLE(le_gpio)
+{
+    spi_init(spiID, spiCLK);
+    gpio_set_function(clk_gpio, GPIO_FUNC_SPI);
+    gpio_set_function(tx_gpio, GPIO_FUNC_SPI);
+    gpio_set_function(rx_gpio, GPIO_FUNC_SPI);
+    gpio_set_function(le_gpio, GPIO_FUNC_SPI);
+    gpio_init(le_gpio);
+    gpio_set_dir(le_gpio , GPIO_OUT);
+    gpio_put(le_gpio, 1);
+    spi_cpol_t cpolt;
+    spi_cpha_t cphat;
+    spi_order_t ordert;
+    uint bits;
+    if( 4 <= data_bits && data_bits <= 16 ){ bits = data_bits; }
+    else { bits = 8; }
+    if(cpol) { cpolt = SPI_CPOL_1; }
+    else { cpolt = SPI_CPOL_0; }
+    if(cpha) { cphat = SPI_CPHA_1; }
+    else { cphat = SPI_CPHA_0; }
+    if(order) { ordert = SPI_MSB_FIRST; }
+    else { ordert = SPI_LSB_FIRST; }
+    spi_set_format(spiID, bits, cpolt, cphat, ordert);
+}
 
 
-//    //SPI0 Setup
-//    spi_init(spi0, SPI0_CLK);
-//    gpio_set_function(SPI0_RX_PIN, GPIO_FUNC_SPI);
-//    gpio_set_function(SPI0_CLK_PIN, GPIO_FUNC_SPI);
-//    gpio_set_function(SPI0_TX_PIN, GPIO_FUNC_SPI);
-//    //gpio_set_function(SPI0_LE_PIN, GPIO_FUNC_SPI);
-//    gpio_init(SPI0_LE_PIN);
-//    gpio_set_dir(SPI0_LE_PIN , GPIO_OUT);
-//    gpio_put(SPI0_LE_PIN, 1);
-//    if(SPI0_MODE == 0 && SPI0_ORDER == 0){spi_set_format(spi0, SPI0_BITS, SPI_CPOL_0, SPI_CPHA_0, SPI_LSB_FIRST);}
-//    else if(SPI0_MODE == 1 && SPI0_ORDER == 0){spi_set_format(spi0, SPI0_BITS, SPI_CPOL_0, SPI_CPHA_1, SPI_LSB_FIRST);}
-//    else if(SPI0_MODE == 1 && SPI0_ORDER == 1){spi_set_format(spi0, SPI0_BITS, SPI_CPOL_0, SPI_CPHA_1, SPI_MSB_FIRST);}
-//    else if(SPI0_MODE == 2 && SPI0_ORDER == 0){spi_set_format(spi0, SPI0_BITS, SPI_CPOL_1, SPI_CPHA_0, SPI_LSB_FIRST);}
-//    else if(SPI0_MODE == 2 && SPI0_ORDER == 1){spi_set_format(spi0, SPI0_BITS, SPI_CPOL_1, SPI_CPHA_0, SPI_MSB_FIRST);}
-//    else if(SPI0_MODE == 3 && SPI0_ORDER == 0){spi_set_format(spi0, SPI0_BITS, SPI_CPOL_1, SPI_CPHA_1, SPI_LSB_FIRST);}
-//    else if(SPI0_MODE == 3 && SPI0_ORDER == 1){spi_set_format(spi0, SPI0_BITS, SPI_CPOL_1, SPI_CPHA_1, SPI_MSB_FIRST);}
-//    else{spi_set_format(spi0, SPI0_BITS, SPI_CPOL_0, SPI_CPHA_0, SPI_MSB_FIRST);}
-//
-//    void writePHASE(uint8_t count)
-//{
-//    uint8_t buffer[count];
-//    uint8_t writeDAT[count];
-//    int cnt = 0;
-//    for(int i = count; i > 0 ; i--)
-//    {
-//        //writeDAT[cnt] = uint8_bitLeftShift(DAT[i], 2);
-//        writeDAT[cnt] = DAT[i];
-//        cnt++;
-//    }
-//    gpio_put(SPI0_LE_PIN, 0);
-//    sleep_ms(1);
-//    spi_write_read_blocking(spi0, writeDAT, buffer, count);
-//    sleep_ms(1);
-//    gpio_put(SPI0_LE_PIN, 1);
-//}
+spi::spi(spi_inst_t *spiID, uint spiCLK, uint clk_gpio, uint tx_gpio, uint rx_gpio, uint le_gpio, uint data_bits, uint8_t mode, bool order)
+{
+    switch (mode)
+    {
+    case 1:
+        spi(spiID, spiCLK, clk_gpio, tx_gpio, rx_gpio, le_gpio, data_bits, false, true, order);
+        break;
+    case 2:
+        spi(spiID, spiCLK, clk_gpio, tx_gpio, rx_gpio, le_gpio, data_bits, true, false, order);
+        break;
+    case 3:
+        spi(spiID, spiCLK, clk_gpio, tx_gpio, rx_gpio, le_gpio, data_bits, true, true, order);
+        break;
+    default:
+        spi(spiID, spiCLK, clk_gpio, tx_gpio, rx_gpio, le_gpio, data_bits, false, false, order);
+        break;
+    }
+}
+
+spi::spi() : spi(spi0, 8000000, SPI0_CLK_PIN, SPI0_TX_PIN, SPI0_RX_PIN, SPI0_LE_PIN, 8, 0, true) {}
+
+
+void spi::setLE(bool mode)
+{
+    if(mode) { setLE_enable(); }
+    else { setLE_disable(); }
+}
+
+void spi::setLE_enable() { gpio_put(gpioLE, 0); }
+
+void spi::setLE_disable(){ gpio_put(gpioLE, 1); }
+
+std::vector<uint16_t> spi::write_read(std::vector<uint16_t> wdat)
+{
+    if(wdat.size() <= 0) { return std::vector<uint16_t>(); }
+    uint16_t writeDAT[wdat.size()];
+    uint16_t buffer[wdat.size()];
+    spi_write16_read16_blocking(spi0, writeDAT, buffer, wdat.size());
+    return std::vector<uint16_t>(buffer, buffer + wdat.size());
+}
+
+std::vector<uint16_t> spi::spi_write_read(std::vector<uint16_t> wdat)
+{
+    if(wdat.size() <= 0) { return std::vector<uint16_t>(); }
+    uint16_t writeDAT[wdat.size()];
+    uint16_t buffer[wdat.size()];
+    std::copy(wdat.begin(), wdat.end(), writeDAT);
+    setLE_enable();
+    spi_write16_read16_blocking(spi0, writeDAT, buffer, wdat.size());
+    setLE_disable();
+    return std::vector<uint16_t>(buffer, buffer + wdat.size());
+}

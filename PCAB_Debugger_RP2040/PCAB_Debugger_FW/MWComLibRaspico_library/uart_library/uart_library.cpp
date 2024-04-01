@@ -52,5 +52,4 @@ uartSYNC::CommandLine uartSYNC::readCMD(bool echo)
     std::string strArr[strVect.size()];
     std::copy(strVect.begin(), strVect.end(), strArr);
     return uartSYNC::CommandLine(strBf, strArr, strVect.size());
-
 }

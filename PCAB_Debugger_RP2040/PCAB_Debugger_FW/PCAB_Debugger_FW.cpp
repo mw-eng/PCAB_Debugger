@@ -1,8 +1,17 @@
 #include "PCAB_Debugger_FW.hpp"
 
+ds18b20 *sens;
+adc *analog;
+spi *spi_ps;
+pcabCMD *uart;
+
 void setup()
 {
     stdio_init_all();
+    sens = new ds18b20(pio0, SNS_TEMP_PIN);
+    analog = new adc();
+    spi_ps = new spi(spi0, SPI_CLK, SPI0_CLK_PIN, SPI0_TX_PIN, SPI0_RX_PIN, SPI0_LE_PIN, SPI_BITS, SPI_MODE, SPI_ORDER);
+    uart = new pcabCMD(UART_TX_PIN, UART_RX_PIN, UART_BAUD_RATE);
     //GPIO Setup
     gpio_init(LPW_MOD_PIN);
     gpio_init(STB_DRA_PIN);
@@ -34,18 +43,20 @@ int main()
     eraseROMblock(31 * (UINT16_MAX + 1));
     saveROMblock(31 * (UINT16_MAX + 1), dat);
 
-    ds18b20 *sens = new ds18b20(pio0, SNS_TEMP_PIN);
     std::vector<uint64_t> romCODE = sens->getSENS_ROMCODE();
     std::vector<std::string> temp = sens->readTEMP();
 
-    adc *analog = new adc();
     float adc0 = analog->readVoltageADC0();
     float vsys = analog->readVsys();
     float cpuT = analog->readTempCPU();
     uint16_t adc0ui = analog->readADC0();
 
-
-    pcabCMD *uart = new pcabCMD(UART_TX_PIN, UART_RX_PIN, UART_BAUD_RATE);
+    uart->uart.writeLine(Convert::ToString(25834, 16, 5));
+    uint64_t uiBF;
+    if(Convert::TryToUInt64("64EFFc", 16, uiBF))
+    {
+        uart->uart.writeLine(Convert::ToString(uiBF, 16, 0));
+    }
 
     for (uint64_t &x:romCODE)
     {
@@ -73,5 +84,6 @@ int main()
     delete uart;
     delete sens;
     delete analog;
+    delete spi_ps;
     return 0;
 }

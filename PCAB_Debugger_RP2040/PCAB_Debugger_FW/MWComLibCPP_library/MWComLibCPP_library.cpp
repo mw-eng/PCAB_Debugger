@@ -1,5 +1,64 @@
 #include "MWComLibCPP_library.hpp"
 
+uint64_t pow64(uint8_t x, uint y)
+{
+    uint64_t ret = 1;
+    for(uint i = 0 ; i < y ; i++ ){ ret *= x;}
+    return ret;
+}
+
+std::string Convert::ToString(bool val, bool formatString)
+{
+    if(formatString && val){ return "true"; }
+    if(formatString && !val){ return "false"; }
+    if(!formatString && val){ return "1"; }
+    return "0";
+}
+std::string Convert::ToString(bool val) { return ToString(val, false); }
+std::string Convert::ToString(int64_t val, uint BaseNumber, uint digit)
+{
+    int64_t ulngBF = val;
+    std::string strBf = "";
+    std::string str = "";
+    while(ulngBF)
+    {
+        if(ulngBF % BaseNumber < 10) { strBf.push_back('0' + ulngBF % BaseNumber); }
+        else { strBf.push_back('0' + ulngBF % BaseNumber + 7); }
+        ulngBF /= BaseNumber;
+    }
+    if(strBf.length() < digit)
+    {
+        for(int i = 0 ; i < digit - strBf.length() ; i++ ) { str.push_back('0'); }
+    }
+    for(int i = strBf.length() ; 0 < i ; i-- ){ str.push_back(strBf[i - 1]); }
+    return str;
+}
+std::string Convert::ToString(int64_t val, uint BaseNumber){ return ToString(val, BaseNumber, 0);}
+
+//bool Convert::TryToBool(std::string str, bool out){}
+//bool Convert::TryToInt(std::string str, int out){}
+//bool Convert::TryToDouble(std::string str, double out){}
+//bool Convert::TryToFloat(std::string str, float out){}
+//bool Convert::TryToUInt(std::string str, uint out){}
+//bool Convert::TryToUInt8(std::string str, uint8_t out){}
+//bool Convert::TryToUInt16(std::string str, uint16_t out){}
+//bool Convert::TryToUInt32(std::string str, uint32_t out){}
+bool Convert::TryToUInt64(std::string str, uint8_t BaseNumber, uint64_t& out)
+{
+    out = 0;
+    if(BaseNumber > 36){ return false; }
+    for(uint i = 0 ; i < str.length() ; i++ )
+    {
+        uint8_t uiBF = str[i];
+        if(48 <= uiBF && uiBF <= 57) { out += (uiBF - 48) * pow64(BaseNumber, str.length() - i - 1); }
+        else if(15 <= uiBF && uiBF <= 90) { out += (uiBF - 54) * pow64(BaseNumber, str.length() - i - 1); }
+        else if(97 <= uiBF && uiBF <= 122) { out += (uiBF - 86) * pow64(BaseNumber, str.length() - i - 1); }
+        else { return false; }
+    }
+    return true;
+}
+
+
 std::string ltrim(const std::string &str, const std::string &targ)
 {
     size_t start = str.find_first_not_of(targ);

@@ -9,6 +9,7 @@ class adc
     float vref;
 
     public:
+    
     /// @brief Constructor
     /// @param adc0 Use adc0.
     /// @param adc1 Use adc1.

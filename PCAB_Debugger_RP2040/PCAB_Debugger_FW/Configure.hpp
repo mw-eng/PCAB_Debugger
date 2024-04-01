@@ -35,4 +35,4 @@
 #define SPI_MODE 3
 #define SPI_CLK 1000000
 #define SPI_BITS 6
-#define SPI_ORDER 0 // 0:LSB / 1:MSB
+#define SPI_ORDER false // 0:LSB / 1:MSB
