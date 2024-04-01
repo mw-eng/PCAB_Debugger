@@ -64,7 +64,7 @@ void spi::setLE_enable() { gpio_put(gpioLE, 0); }
 
 void spi::setLE_disable(){ gpio_put(gpioLE, 1); }
 
-std::vector<uint16_t> spi::write_read(std::vector<uint16_t> wdat)
+std::vector<uint16_t> spi::write16_read16(std::vector<uint16_t> wdat)
 {
     if(wdat.size() <= 0) { return std::vector<uint16_t>(); }
     uint16_t writeDAT[wdat.size()];
@@ -73,7 +73,7 @@ std::vector<uint16_t> spi::write_read(std::vector<uint16_t> wdat)
     return std::vector<uint16_t>(buffer, buffer + wdat.size());
 }
 
-std::vector<uint16_t> spi::spi_write_read(std::vector<uint16_t> wdat)
+std::vector<uint16_t> spi::spi_write16_read16(std::vector<uint16_t> wdat)
 {
     if(wdat.size() <= 0) { return std::vector<uint16_t>(); }
     uint16_t writeDAT[wdat.size()];
@@ -83,4 +83,25 @@ std::vector<uint16_t> spi::spi_write_read(std::vector<uint16_t> wdat)
     spi_write16_read16_blocking(spi0, writeDAT, buffer, wdat.size());
     setLE_disable();
     return std::vector<uint16_t>(buffer, buffer + wdat.size());
+}
+
+std::vector<uint8_t> spi::write_read(std::vector<uint8_t> wdat)
+{
+    if(wdat.size() <= 0) { return std::vector<uint8_t>(); }
+    uint8_t writeDAT[wdat.size()];
+    uint8_t buffer[wdat.size()];
+    spi_write_read_blocking(spi0, writeDAT, buffer, wdat.size());
+    return std::vector<uint8_t>(buffer, buffer + wdat.size());
+}
+
+std::vector<uint8_t> spi::spi_write_read(std::vector<uint8_t> wdat)
+{
+    if(wdat.size() <= 0) { return std::vector<uint8_t>(); }
+    uint8_t writeDAT[wdat.size()];
+    uint8_t buffer[wdat.size()];
+    std::copy(wdat.begin(), wdat.end(), writeDAT);
+    setLE_enable();
+    spi_write_read_blocking(spi0, writeDAT, buffer, wdat.size());
+    setLE_disable();
+    return std::vector<uint8_t>(buffer, buffer + wdat.size());
 }
