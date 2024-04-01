@@ -21,20 +21,32 @@ adc::adc() : adc(true, true, true, 3.3f) {}
 
 uint16_t adc::readADC0()
 {
-    adc_select_input(ADC0);
-    return adc_read();
+    if(adc0)
+    {
+        adc_select_input(ADC0);
+        return adc_read();
+    }
+    else { return 0xff; }
 }
 
 uint16_t adc::readADC1()
 {
-    adc_select_input(ADC1);
-    return adc_read();
+    if(adc1)
+    {
+        adc_select_input(ADC1);
+        return adc_read();
+    }
+    else { return 0xff; }
 }
 
 uint16_t adc::readADC2()
 {
-    adc_select_input(ADC2);
-    return adc_read();
+    if(adc2)
+    {
+        adc_select_input(ADC2);
+        return adc_read();
+    }
+    else { return 0xff; }
 }
 
 uint16_t adc::readADC3()
