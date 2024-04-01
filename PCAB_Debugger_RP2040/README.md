@@ -3,6 +3,8 @@ Raspberry Pi Pico
 
 
 ## Command Lists
+RS485 serial communication command list  
+  
 Command | Description
 :--|:--
 WrtDPS | Write binary data to the digital phase sifter.
