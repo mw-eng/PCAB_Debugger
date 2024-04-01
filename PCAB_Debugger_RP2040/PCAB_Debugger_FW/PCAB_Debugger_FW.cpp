@@ -1,10 +1,16 @@
 #include "PCAB_Debugger_FW.hpp"
 
+const static std::string FW_VENDOR = "Orient Microwave Corp.";
+const static std::string FW_MODEL = "PCAB_Debugger";
+const static std::string FW_REV = "1.0.2";
+
 ds18b20 *sens;
 adc *analog;
 spi *spi_ps;
 pcabCMD *uart;
-bool cuiMODE = true;
+bool modeCUI = true;
+bool modeECHO = true;
+uint serialNum = 0;
 
 void setup()
 {
@@ -41,7 +47,7 @@ int main()
     setup();
     while (1)
     {
-        pcabCMD::CommandLine cmd = uart->readCMD(true);
+        pcabCMD::CommandLine cmd = uart->readCMD(modeECHO);
         switch (cmd.command)
         {
         case pcabCMD::cmdCode::WrtPS:
@@ -93,7 +99,7 @@ int main()
                     {
                         uint8_t romDAT[FLASH_PAGE_SIZE];
                         readROMblock(blockAddress(block), romDAT);
-                        if(cuiMODE)
+                        if(modeCUI)
                         {
                             for(int i = 0 ; i < 16 * (int)(FLASH_PAGE_SIZE / 16) ; i += 16 )
                             {
@@ -131,11 +137,23 @@ int main()
         case pcabCMD::cmdCode::ECHO:
             break;
         case pcabCMD::cmdCode::GetIDN:
+            if(cmd.argments.size() != 0) { uart->uart.writeLine("ERR > Argument Error."); }
+            else
+            {
+                if(modeCUI)
+                {
+                    uart->uart.writeLine("Vendor   > " + FW_VENDOR);
+                    uart->uart.writeLine("Model    > " + FW_MODEL);
+                    uart->uart.writeLine("SerialNo > " + Convert::ToString(serialNum, 10, 3));
+                    uart->uart.writeLine("Revision > " + FW_REV);
+                } else { uart->uart.writeLine(FW_VENDOR + "," + FW_MODEL + "," + Convert::ToString(serialNum, 10, 3) + "," + FW_REV); }
+            }
             break;
         case pcabCMD::cmdCode::NONE:
             uart->uart.writeLine("ERR > Command Not Found.");
             break;
         default:
+            uart->uart.writeLine("");
             break;
         }
     }
