@@ -104,12 +104,15 @@ int main()
                                 uart->uart.write(Convert::ToString(romDAT[i + 15], 16, 2));
                                 uart->uart.writeLine("");
                             }
-                            for(int i = FLASH_PAGE_SIZE - FLASH_PAGE_SIZE % 16 ; i < FLASH_PAGE_SIZE - 1 ; i++ )
+                            if(FLASH_PAGE_SIZE % 16 != 0)
                             {
-                                uart->uart.write(Convert::ToString(romDAT[i], 16, 2) + " ");
+                                for(int i = FLASH_PAGE_SIZE - FLASH_PAGE_SIZE % 16 ; i < FLASH_PAGE_SIZE - 1 ; i++ )
+                                {
+                                    uart->uart.write(Convert::ToString(romDAT[i], 16, 2) + " ");
+                                }
+                                uart->uart.write(Convert::ToString(romDAT[FLASH_PAGE_SIZE - 1], 16, 2));
+                                uart->uart.writeLine("");
                             }
-                            uart->uart.write(Convert::ToString(romDAT[FLASH_PAGE_SIZE - 1], 16, 2));
-                            uart->uart.writeLine("");
                         } else { for(uint8_t byteBF : romDAT) { uart->uart.write(Convert::ToString(byteBF, 16, 2)); } uart->uart.writeLine(""); }
                     }
                 }
