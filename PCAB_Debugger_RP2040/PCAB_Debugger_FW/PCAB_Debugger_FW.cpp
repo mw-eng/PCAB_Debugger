@@ -48,6 +48,7 @@ int main()
     while (1)
     {
         pcabCMD::CommandLine cmd = uart->readCMD(modeECHO);
+        if(modeECHO && modeCUI){uart->uart.writeLine("");}
         switch (cmd.command)
         {
         case pcabCMD::cmdCode::WrtPS:

@@ -32,6 +32,7 @@ class pcabCMD : uartSYNC
         SetID,
         RST,
         ECHO,
+        CUI,
         GetIDN,
         NONE,
         NUL

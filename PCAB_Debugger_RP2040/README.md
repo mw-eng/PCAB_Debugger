@@ -23,7 +23,9 @@ SetALD {0/1} | Set auto load date<br>1 : Auto LOAD MODE<br>0 : Non-Auto LOAD MOD
 GetALD | Get auto load date<br>1 : Auto LOAD MODE<br>0 : Non-Auto LOAD MODE<br>Non-Auto LOAD MODE if disabled by hardware.
 GetID | Get Board ID
 SetID {x} | Set Bord ID<br>{x}:DEC
-SMEM | Save Memory
-LMEM | ReLoad Memory
-CUI {0/1} | CUI Control Use<br>0 : CUI MODE<br>1 : GUI MODE
+SMEM | Save state to memory(ROM).
+LMEM | Load state to memory(ROM).
+ECHO {0/1/false/true} | Set echo mode.<br>1/true : With echo.<br>0/false : Without echo.
+CUI | Get cui mode.
+CUI {0/1/false/true} | CUI Control Use<br>1/true : CUI MODE<br>0/false : GUI MODE
 RST | Preset Config.<br>PS all 0<br>STB all 0(RUN MODE)<br>LPM 0(Full Power MODE)<br>ALD 1(Auto LOAD MODE)
