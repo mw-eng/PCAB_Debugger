@@ -30,13 +30,20 @@ int main()
 {
     setup();
     uint8_t dat[FLASH_PAGE_SIZE];
-    readMEMORYblock(31 * (UINT16_MAX + 1), dat);
-    eraseMEMORYblock(31 * (UINT16_MAX + 1));
-    saveMEMORYblock(31 * (UINT16_MAX + 1), dat);
+    readROMblock(31 * (UINT16_MAX + 1), dat);
+    eraseROMblock(31 * (UINT16_MAX + 1));
+    saveROMblock(31 * (UINT16_MAX + 1), dat);
 
     ds18b20 *sens = new ds18b20(pio0, SNS_TEMP_PIN);
     std::vector<uint64_t> romCODE = sens->getSENS_ROMCODE();
     std::vector<std::string> temp = sens->readTEMP();
+
+    adc *analog = new adc();
+    float adc0 = analog->readVoltageADC0();
+    float vsys = analog->readVsys();
+    float cpuT = analog->readTempCPU();
+    uint16_t adc0ui = analog->readADC0();
+
 
     pcabCMD *uart = new pcabCMD(UART_TX_PIN, UART_RX_PIN, UART_BAUD_RATE);
 
@@ -48,6 +55,10 @@ int main()
     {
         uart->uart.writeLine(x);
     }
+    uart->uart.writeLine(std::to_string(adc0));
+    uart->uart.writeLine(std::to_string(vsys));
+    uart->uart.writeLine(std::to_string(cpuT));
+    uart->uart.writeLine(std::to_string(adc0ui));
 
 
     uart->uart.writeLine("test");
@@ -61,5 +72,6 @@ int main()
     };
     delete uart;
     delete sens;
+    delete analog;
     return 0;
 }

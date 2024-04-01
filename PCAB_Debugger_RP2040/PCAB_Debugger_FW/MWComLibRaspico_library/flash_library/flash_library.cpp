@@ -1,7 +1,7 @@
 #include "flash_library.hpp"
 
 
-void saveMEMORYblock(uint32_t address, const uint8_t blockDAT[FLASH_PAGE_SIZE])
+void saveROMblock(uint32_t address, const uint8_t blockDAT[FLASH_PAGE_SIZE])
 {
     const uint32_t FLASH_TARGET_OFFSET = address;
     uint32_t ints = save_and_disable_interrupts();
@@ -10,7 +10,7 @@ void saveMEMORYblock(uint32_t address, const uint8_t blockDAT[FLASH_PAGE_SIZE])
     restore_interrupts(ints);
 }
 
-void readMEMORYblock(uint32_t address, uint8_t blockDAT[FLASH_PAGE_SIZE])
+void readROMblock(uint32_t address, uint8_t blockDAT[FLASH_PAGE_SIZE])
 {
     const uint32_t FLASH_TARGET_OFFSET = address;
     const uint8_t *flash_target_contents = (const uint8_t *) (XIP_BASE + FLASH_TARGET_OFFSET);
@@ -19,7 +19,7 @@ void readMEMORYblock(uint32_t address, uint8_t blockDAT[FLASH_PAGE_SIZE])
     }
 }
 
-void eraseMEMORYblock(uint32_t address)
+void eraseROMblock(uint32_t address)
 {
     const uint32_t FLASH_TARGET_OFFSET = address;
     uint32_t ints = save_and_disable_interrupts();
