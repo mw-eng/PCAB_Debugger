@@ -53,7 +53,7 @@ int main()
 
     uart->uart.writeLine(Convert::ToString(25834, 16, 5));
     uint64_t uiBF;
-    if(Convert::TryToUInt64("64EFFc", 16, uiBF))
+    if(Convert::TryToUInt64("64EfFc", 16, uiBF))
     {
         uart->uart.writeLine(Convert::ToString(uiBF, 16, 0));
     }

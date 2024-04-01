@@ -51,8 +51,8 @@ bool Convert::TryToUInt64(std::string str, uint8_t BaseNumber, uint64_t& out)
     {
         uint8_t uiBF = str[i];
         if(48 <= uiBF && uiBF <= 57) { out += (uiBF - 48) * pow64(BaseNumber, str.length() - i - 1); }
-        else if(15 <= uiBF && uiBF <= 90) { out += (uiBF - 54) * pow64(BaseNumber, str.length() - i - 1); }
-        else if(97 <= uiBF && uiBF <= 122) { out += (uiBF - 86) * pow64(BaseNumber, str.length() - i - 1); }
+        else if(65 <= uiBF && uiBF <= 90) { out += (uiBF - 55) * pow64(BaseNumber, str.length() - i - 1); }
+        else if(97 <= uiBF && uiBF <= 122) { out += (uiBF - 87) * pow64(BaseNumber, str.length() - i - 1); }
         else { return false; }
     }
     return true;
