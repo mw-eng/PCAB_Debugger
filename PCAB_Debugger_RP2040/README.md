@@ -43,6 +43,8 @@ GetIDN | Get device identification character.
 *IDN? | Same as GetIDN.
 
 ## Hardware Switch Configuration
+List of settings by onboard hardware switch (SW1) status.  
+<img src="https://github.com/mw-eng/PCAB_Debugger/tree/master/assets/SW1.png?raw=true" width="100px">
 
 Number | SW6 | SW5 | SW4 | SW3 | SW2 | SW1 | HEX | Stateus | Description
 :--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--
