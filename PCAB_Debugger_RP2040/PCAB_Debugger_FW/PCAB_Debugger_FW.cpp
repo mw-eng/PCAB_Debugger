@@ -1,11 +1,10 @@
 #include "PCAB_Debugger_FW.hpp"
-#include <string>
-#include <stdexcept>
 
 ds18b20 *sens;
 adc *analog;
 spi *spi_ps;
 pcabCMD *uart;
+bool cuiMODE = true;
 
 void setup()
 {
@@ -40,6 +39,105 @@ void setup()
 int main()
 {
     setup();
+    while (1)
+    {
+        pcabCMD::CommandLine cmd = uart->readCMD(true);
+        switch (cmd.command)
+        {
+        case pcabCMD::cmdCode::WrtPS:
+            break;
+        case pcabCMD::cmdCode::GetPS:
+            break;
+        case pcabCMD::cmdCode::SetPS:
+            break;
+        case pcabCMD::cmdCode::GetTMP:
+            break;
+        case pcabCMD::cmdCode::GetId:
+            break;
+        case pcabCMD::cmdCode::GetVd:
+            break;
+        case pcabCMD::cmdCode::GetSTB_AMP:
+            break;
+        case pcabCMD::cmdCode::GetSTB_DRA:
+            break;
+        case pcabCMD::cmdCode::GetSTB_LNA:
+            break;
+        case pcabCMD::cmdCode::GetLPM:
+            break;
+        case pcabCMD::cmdCode::SetSTB_AMP:
+            break;
+        case pcabCMD::cmdCode::SetSTB_DRA:
+            break;
+        case pcabCMD::cmdCode::SetSTB_LNA:
+            break;
+        case pcabCMD::cmdCode::SetLPM:
+            break;
+        case pcabCMD::cmdCode::SetALD:
+            break;
+        case pcabCMD::cmdCode::GetALD:
+            break;
+        case pcabCMD::cmdCode::SaveMEM:
+            break;
+        case pcabCMD::cmdCode::LoadMEM:
+            break;
+        case pcabCMD::cmdCode::ReadROM:
+            if(cmd.argments.size() != 1) { uart->uart.writeLine("ERR > Argument Error."); }
+            else
+            {
+                uint16_t block;
+                if(!Convert::TryToUInt16(cmd.argments[0], 10, block)) { uart->uart.writeLine("ERR > Argument Error."); }
+                else
+                {
+                    if(block > ROM_BLOCK_MAX) { uart->uart.writeLine("ERR > Specified block is out of range."); }
+                    else
+                    {
+                        uint8_t romDAT[FLASH_PAGE_SIZE];
+                        readROMblock(blockAddress(block), romDAT);
+                        if(cuiMODE)
+                        {
+                            for(int i = 0 ; i < 16 * (int)(FLASH_PAGE_SIZE / 16) ; i += 16 )
+                            {
+                                for(int j = 0 ; j < 15 ; j++)
+                                {
+                                    uart->uart.write(Convert::ToString(romDAT[i + j], 16, 2) + " ");
+                                }
+                                uart->uart.write(Convert::ToString(romDAT[i + 15], 16, 2));
+                                uart->uart.writeLine("");
+                            }
+                            for(int i = FLASH_PAGE_SIZE - FLASH_PAGE_SIZE % 16 ; i < FLASH_PAGE_SIZE - 1 ; i++ )
+                            {
+                                uart->uart.write(Convert::ToString(romDAT[i], 16, 2) + " ");
+                            }
+                            uart->uart.write(Convert::ToString(romDAT[FLASH_PAGE_SIZE - 1], 16, 2));
+                            uart->uart.writeLine("");
+                        } else { for(uint8_t byteBF : romDAT) { uart->uart.write(Convert::ToString(byteBF, 16, 2)); } uart->uart.writeLine(""); }
+                    }
+                }
+            }
+            break;
+        case pcabCMD::cmdCode::WriteROM:
+            break;
+        case pcabCMD::cmdCode::EraseROM:
+            break;
+        case pcabCMD::cmdCode::GetID:
+            break;
+        case pcabCMD::cmdCode::SetID:
+            break;
+        case pcabCMD::cmdCode::RST:
+            break;
+        case pcabCMD::cmdCode::ECHO:
+            break;
+        case pcabCMD::cmdCode::GetIDN:
+            break;
+        case pcabCMD::cmdCode::NONE:
+            uart->uart.writeLine("ERR > Command Not Found.");
+            break;
+        default:
+            break;
+        }
+    }
+
+    
 //    uint8_t dat[FLASH_PAGE_SIZE];
 //    readROMblock(31 * (UINT16_MAX + 1), dat);
 //    eraseROMblock(31 * (UINT16_MAX + 1));

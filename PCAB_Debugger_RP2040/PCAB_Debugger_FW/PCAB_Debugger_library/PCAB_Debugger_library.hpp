@@ -25,11 +25,16 @@ class pcabCMD : uartSYNC
         GetALD,
         SaveMEM,
         LoadMEM,
-        GetIDN,
-        SetIDN,
+        ReadROM,
+        WriteROM,
+        EraseROM,
+        GetID,
+        SetID,
         RST,
-        CUI,
-        NONE
+        ECHO,
+        GetIDN,
+        NONE,
+        NUL
     };
 
     /// @brief Command line structure.

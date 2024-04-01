@@ -31,7 +31,8 @@ std::string uartSYNC::readLine(bool echo)
     do
     {
         chBF = uart_getc(uart);
-        if(echo){uart_puts(uart, (std::string() + chBF).c_str());}
+        char chRET[] = {chBF, '\0'};
+        if(echo){uart_puts(uart, chRET);}
         strBf += chBF;
         if(strBf.find_last_not_of(nlc) == std::string::npos){return "";}
     } while (strBf.find_last_not_of(nlc) == strBf.length() - 1 );
