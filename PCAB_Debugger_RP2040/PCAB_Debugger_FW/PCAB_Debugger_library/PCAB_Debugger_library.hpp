@@ -8,8 +8,8 @@ class pcabCMD : uartSYNC
     /// @brief Command cord. 
     enum cmdCode{
         WrtDPS,
-        GetDSP,
-        SetDSP,
+        GetDPS,
+        SetDPS,
         WrtDSA,
         GetDSA,
         SetDSA,
@@ -32,8 +32,8 @@ class pcabCMD : uartSYNC
         ReadROM,
         WriteROM,
         EraseROM,
-        GetID,
-        SetID,
+        GetSN,
+        SetSN,
         RST,
         ECHO,
         CUI,

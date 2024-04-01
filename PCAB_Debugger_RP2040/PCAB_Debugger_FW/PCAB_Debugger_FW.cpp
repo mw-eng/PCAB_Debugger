@@ -51,13 +51,21 @@ int main()
         if(modeECHO && modeCUI){uart->uart.writeLine("");}
         switch (cmd.command)
         {
-        case pcabCMD::cmdCode::WrtPS:
+        case pcabCMD::cmdCode::WrtDPS:
             break;
-        case pcabCMD::cmdCode::GetPS:
+        case pcabCMD::cmdCode::GetDPS:
             break;
-        case pcabCMD::cmdCode::SetPS:
+        case pcabCMD::cmdCode::SetDPS:
             break;
-        case pcabCMD::cmdCode::GetTMP:
+        case pcabCMD::cmdCode::WrtDSA:
+            break;
+        case pcabCMD::cmdCode::GetDSA:
+            break;
+        case pcabCMD::cmdCode::SetDSA:
+            break;
+        case pcabCMD::cmdCode::GetTMP_ID:
+            break;
+        case pcabCMD::cmdCode::GetTMP_VAL:
             break;
         case pcabCMD::cmdCode::GetId:
             break;
@@ -79,9 +87,9 @@ int main()
             break;
         case pcabCMD::cmdCode::SetLPM:
             break;
-        case pcabCMD::cmdCode::SetALD:
-            break;
         case pcabCMD::cmdCode::GetALD:
+            break;
+        case pcabCMD::cmdCode::SetALD:
             break;
         case pcabCMD::cmdCode::SaveMEM:
             break;
@@ -129,13 +137,15 @@ int main()
             break;
         case pcabCMD::cmdCode::EraseROM:
             break;
-        case pcabCMD::cmdCode::GetID:
+        case pcabCMD::cmdCode::GetSN:
             break;
-        case pcabCMD::cmdCode::SetID:
+        case pcabCMD::cmdCode::SetSN:
             break;
         case pcabCMD::cmdCode::RST:
             break;
         case pcabCMD::cmdCode::ECHO:
+            break;
+        case pcabCMD::cmdCode::CUI:
             break;
         case pcabCMD::cmdCode::GetIDN:
             if(cmd.argments.size() != 0) { uart->uart.writeLine("ERR > Argument Error."); }

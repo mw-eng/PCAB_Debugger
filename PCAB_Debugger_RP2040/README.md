@@ -6,7 +6,7 @@ Raspberry Pi Pico
 Command | Description
 :--|:--
 WrtDPS | Write binary data to the digital phase sifter.
-GetDSP {0/1/false/true/bf/now} {x} | Get digital phase sifter settings.<br>{1/true/now} : Get the currently written binary data.<br>{0/false/bf} : Get the buffer binary data.(Get the binary data written with the WrtDPS command.)<br>{x} : Phase Shifter No.
+GetDPS {0/1/false/true/bf/now} {x} | Get digital phase sifter settings.<br>{1/true/now} : Get the currently written binary data.<br>{0/false/bf} : Get the buffer binary data.(Get the binary data written with the WrtDPS command.)<br>{x} : Phase Shifter No.
 SetDPS {x} {DEC}| Set binary data in the buffer.<br>{x} : Phase Shifter No.<br>{DEC} : Decimal binary value.
 WrtDSA | Write binary data to the digital step attenuator.<bf>*Support with v1.2.0 or later*
 GetDSA {0/1/false/true/bf/now} {x} | Get digital step attenuator settings.<br>{1/true/now} : Get the currently written binary data.<br>{0/false/bf} : Get the buffer binary data.(Get the binary data written with the WrtDSA command.)<br>{x} : Digital Step attenuator No.<bf>*Support with v1.2.0 or later*
@@ -30,9 +30,10 @@ LMEM | Load state to memory(ROM).
 RROM {x} | Read data block from ROM.<br>{x} : Decimal ROM block number.
 WROM {x} {HEX} | Write data block to ROM.<br>{x} : Decimal ROM block number.<br>{HEX} : HEX data to write.
 EROM {x} | Erase data block from ROM.<br>{x} : Decimal ROM block number.
-GetID | Get Board ID.
-SetID {x} | Set Bord ID.<br>{x}:DEC
+GetSN | Get Board SN.
+SetSN {x} | Set Bord SN.<br>{x}:DEC
 RST | Preset Config.<br>PS all 0<br>STB all 0(RUN MODE)<br>LPM 0(Full Power MODE)<br>ALD 1(Auto LOAD MODE)
+*RST | Same as RST.
 ECHO {0/1/false/true} | Set echo mode.<br>{1/true} : With echo.<br>{0/false} : Without echo.
 CUI | Get cui mode.
 CUI {0/1/false/true} | CUI Control Use<br>{1/true} : CUI MODE<br>{0/false} : GUI MODE
