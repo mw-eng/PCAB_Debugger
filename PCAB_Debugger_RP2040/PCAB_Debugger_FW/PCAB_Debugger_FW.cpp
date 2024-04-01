@@ -58,10 +58,13 @@ int main()
         case pcabCMD::cmdCode::SetDPS:
             break;
         case pcabCMD::cmdCode::WrtDSA:
+            uart->uart.writeLine("ERR > Not supported in current version."); 
             break;
         case pcabCMD::cmdCode::GetDSA:
+            uart->uart.writeLine("ERR > Not supported in current version."); 
             break;
         case pcabCMD::cmdCode::SetDSA:
+            uart->uart.writeLine("ERR > Not supported in current version."); 
             break;
         case pcabCMD::cmdCode::GetTMP_ID:
             break;
@@ -96,11 +99,11 @@ int main()
         case pcabCMD::cmdCode::LoadMEM:
             break;
         case pcabCMD::cmdCode::ReadROM:
-            if(cmd.argments.size() != 1) { uart->uart.writeLine("ERR > Argument Error."); }
+            if(cmd.argments.size() != 1) { uart->uart.writeLine("ERR > Number of arguments does not match."); }
             else
             {
                 uint16_t block;
-                if(!Convert::TryToUInt16(cmd.argments[0], 10, block)) { uart->uart.writeLine("ERR > Argument Error."); }
+                if(!Convert::TryToUInt16(cmd.argments[0], 10, block)) { uart->uart.writeLine("ERR > Argument error."); }
                 else
                 {
                     if(block > ROM_BLOCK_MAX) { uart->uart.writeLine("ERR > Specified block is out of range."); }
@@ -144,11 +147,25 @@ int main()
         case pcabCMD::cmdCode::RST:
             break;
         case pcabCMD::cmdCode::ECHO:
+            if(cmd.argments.size() != 1) { uart->uart.writeLine("ERR > Number of arguments does not match."); }
+            else
+            {
+                bool mode;
+                if(Convert::TryToBool(cmd.argments[0], mode)) { uart->uart.writeLine("ERR > Argument error."); }
+                else { modeECHO = mode; }
+            }
             break;
         case pcabCMD::cmdCode::CUI:
+            if(cmd.argments.size() != 1) { uart->uart.writeLine("ERR > Number of arguments does not match."); }
+            else
+            {
+                bool mode;
+                if(Convert::TryToBool(cmd.argments[0], mode)) { uart->uart.writeLine("ERR > Argument error."); }
+                else { modeCUI = mode; }
+            }
             break;
         case pcabCMD::cmdCode::GetIDN:
-            if(cmd.argments.size() != 0) { uart->uart.writeLine("ERR > Argument Error."); }
+            if(cmd.argments.size() != 0) { uart->uart.writeLine("ERR > Number of arguments does not match."); }
             else
             {
                 if(modeCUI)
