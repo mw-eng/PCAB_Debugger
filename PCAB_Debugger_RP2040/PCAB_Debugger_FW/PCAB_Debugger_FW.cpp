@@ -1,6 +1,7 @@
 #include "PCAB_Debugger_FW.hpp"
 #include <string>
 #include <stdexcept>
+
 ds18b20 *sens;
 adc *analog;
 spi *spi_ps;
@@ -34,14 +35,6 @@ void setup()
     gpio_set_dir(SW_4_PIN ,GPIO_IN);
     gpio_set_dir(SW_5_PIN ,GPIO_IN);
     gpio_set_dir(SW_6_PIN ,GPIO_IN);
-}
-
-void close()
-{
-    delete uart;
-    delete spi_ps;
-    delete analog;
-    delete sens;
 }
 
 int main()
@@ -98,4 +91,12 @@ int main()
 //    };
     close();
     return 0;
+}
+
+void close()
+{
+    delete uart;
+    delete spi_ps;
+    delete analog;
+    delete sens;
 }
