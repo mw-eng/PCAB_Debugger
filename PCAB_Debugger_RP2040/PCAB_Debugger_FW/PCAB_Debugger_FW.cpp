@@ -17,7 +17,7 @@ adc *analog;
 spi *spi_ps;
 pcabCMD *uart;
 bool modeCUI = true;
-bool modeECHO = true;
+bool modeECHO = false;
 uint serialNum = 0;
 uint8_t bootMode = 0;
 uint8_t dps[DPS_MAX];
