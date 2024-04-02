@@ -11,6 +11,7 @@ pcabCMD *uart;
 bool modeCUI = true;
 bool modeECHO = true;
 uint serialNum = 0;
+uint8_t bootMode = 0;
 
 void setup()
 {
@@ -40,6 +41,14 @@ void setup()
     gpio_set_dir(SW_4_PIN ,GPIO_IN);
     gpio_set_dir(SW_5_PIN ,GPIO_IN);
     gpio_set_dir(SW_6_PIN ,GPIO_IN);
+
+    //Get Boot Mode
+    bootMode = gpio_get(SW_1_PIN);
+    bootMode += 2 * gpio_get(SW_2_PIN);
+    bootMode += 4 * gpio_get(SW_3_PIN);
+    bootMode += 8 * gpio_get(SW_4_PIN);
+    bootMode += 16 * gpio_get(SW_5_PIN);
+    bootMode += 32 * gpio_get(SW_6_PIN);
 }
 
 int main()
@@ -102,7 +111,7 @@ int main()
                 if(!Convert::TryToUInt16(cmd.argments[0], 10, block)) { uart->uart.writeLine("ERR > Argument error."); }
                 else
                 {
-                    if(block > ROM_BLOCK_MAX) { uart->uart.writeLine("ERR > Specified block is out of range."); }
+                    if(block > ROM_BLOCK_MAX - 1) { uart->uart.writeLine("ERR > Specified block is out of range."); }
                     else
                     {
                         uint8_t romDAT[FLASH_PAGE_SIZE];
