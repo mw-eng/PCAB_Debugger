@@ -212,7 +212,7 @@ int main()
                             }
                             if(flgCONV)
                             {
-                                writeROMblock(blockNum, blockDAT);
+                                writeROMblock(blockAddress(blockNum), blockDAT);
                                 uart->uart.writeLine("DONE > Erase ROM block " + Convert::ToString(blockNum, 16, 0) + ".");
                             }else{uart->uart.writeLine("ERR > Argument error.");}
                         }
@@ -237,7 +237,7 @@ int main()
                             { uart->uart.writeLine("ERR > Specified block is out of range."); }
                             else
                             {
-                                eraseROMblock(blockNum);
+                                eraseROMblock(blockAddress(blockNum));
                                 uart->uart.writeLine("DONE > Erase ROM block " + Convert::ToString(blockNum, 16, 0) + ".");
                             }
                         }
