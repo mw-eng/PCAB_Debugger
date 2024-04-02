@@ -6,6 +6,7 @@ class adc
     bool adc0;
     bool adc1;
     bool adc2;
+    bool adc3;
     float vref;
 
     public:
@@ -14,8 +15,9 @@ class adc
     /// @param adc0 Use adc0.
     /// @param adc1 Use adc1.
     /// @param adc2 Use adc2.
+    /// @param adc3 Use adc2.
     /// @param vref Vref value.
-    adc(bool adc0, bool adc1, bool adc2, float vref);
+    adc(bool adc0, bool adc1, bool adc2, bool adc3, float vref);
 
     /// @brief Constructor ( ADCs all used and vref = 3.3v )
     adc();

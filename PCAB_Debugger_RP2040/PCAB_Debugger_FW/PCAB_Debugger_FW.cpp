@@ -1,8 +1,16 @@
+#define DEBUG_ADMIN
+//#define DEBUG_FRB
+
 #include "PCAB_Debugger_FW.hpp"
+#define DPS_MAX 15
+#define DSA_MAX 15
+#define SNPRINTF_BUFFER_LEN 50
+#define SERIAL_LEN 4
 
 const static std::string FW_VENDOR = "Orient Microwave Corp.";
 const static std::string FW_MODEL = "PCAB_Debugger";
 const static std::string FW_REV = "1.1.0";
+
 
 ds18b20 *sens;
 adc *analog;
@@ -12,6 +20,8 @@ bool modeCUI = true;
 bool modeECHO = true;
 uint serialNum = 0;
 uint8_t bootMode = 0;
+uint8_t dps[DPS_MAX];
+uint8_t dsa[DSA_MAX];
 
 void setup()
 {
@@ -43,12 +53,18 @@ void setup()
     gpio_set_dir(SW_6_PIN ,GPIO_IN);
 
     //Get Boot Mode
-    bootMode = gpio_get(SW_1_PIN);
-    bootMode += 2 * gpio_get(SW_2_PIN);
-    bootMode += 4 * gpio_get(SW_3_PIN);
-    bootMode += 8 * gpio_get(SW_4_PIN);
-    bootMode += 16 * gpio_get(SW_5_PIN);
-    bootMode += 32 * gpio_get(SW_6_PIN);
+    bootMode = !gpio_get(SW_1_PIN);
+    bootMode += 2 * !gpio_get(SW_2_PIN);
+    bootMode += 4 * !gpio_get(SW_3_PIN);
+    bootMode += 8 * !gpio_get(SW_4_PIN);
+    bootMode += 16 * !gpio_get(SW_5_PIN);
+    bootMode += 32 * !gpio_get(SW_6_PIN);
+#ifdef DEBUG_ADMIN
+    bootMode = 0x2A;
+#endif
+#ifdef DEBUG_FRB
+    bootMode = 0x20;
+#endif
 }
 
 int main()
@@ -79,9 +95,41 @@ int main()
             break;
         case pcabCMD::cmdCode::GetTMP_VAL:
             break;
-        case pcabCMD::cmdCode::GetId:
+        case pcabCMD::cmdCode::GetTMP_CPU:
+            if(cmd.argments.size() != 0) { uart->uart.writeLine("ERR > Number of arguments does not match."); }
+            else
+            {
+                if(modeCUI)
+                {
+                    char ch[SNPRINTF_BUFFER_LEN];
+                    int len = snprintf(ch, sizeof(ch), "CPU TEMP > %.2f [degC]", analog->readTempCPU());
+                    uart->uart.writeLine(std::string(ch, len));
+                } else { uart->uart.writeLine(std::to_string(analog->readADC4())); }
+            }
             break;
         case pcabCMD::cmdCode::GetVd:
+            if(cmd.argments.size() != 0) { uart->uart.writeLine("ERR > Number of arguments does not match."); }
+            else
+            {
+                if(modeCUI)
+                {
+                    char ch[SNPRINTF_BUFFER_LEN];
+                    int len = snprintf(ch, sizeof(ch), "Vd > %.3f [V]", analog->readVoltageADC0());
+                    uart->uart.writeLine(std::string(ch, len));
+                } else { uart->uart.writeLine(std::to_string(analog->readADC0())); }
+            }
+            break;
+        case pcabCMD::cmdCode::GetId:
+            if(cmd.argments.size() != 0) { uart->uart.writeLine("ERR > Number of arguments does not match."); }
+            else
+            {
+                if(modeCUI)
+                {
+                    char ch[SNPRINTF_BUFFER_LEN];
+                    int len = snprintf(ch, sizeof(ch), "Id > %.3f [A]", ( analog->readVoltageADC1() - 1.65) / 0.09);
+                    uart->uart.writeLine(std::string(ch, len));
+                } else { uart->uart.writeLine(std::to_string(analog->readADC1())); }
+            }
             break;
         case pcabCMD::cmdCode::GetSTB_AMP:
             break;
@@ -107,15 +155,15 @@ int main()
             if(cmd.argments.size() != 1) { uart->uart.writeLine("ERR > Number of arguments does not match."); }
             else
             {
-                uint16_t block;
-                if(!Convert::TryToUInt16(cmd.argments[0], 10, block)) { uart->uart.writeLine("ERR > Argument error."); }
+                uint16_t blockNum;
+                if(!Convert::TryToUInt16(cmd.argments[0], 10, blockNum)) { uart->uart.writeLine("ERR > Argument error."); }
                 else
                 {
-                    if(block > ROM_BLOCK_MAX - 1) { uart->uart.writeLine("ERR > Specified block is out of range."); }
+                    if(blockNum > ROM_BLOCK_MAX - 1) { uart->uart.writeLine("ERR > Specified block is out of range."); }
                     else
                     {
                         uint8_t romDAT[FLASH_PAGE_SIZE];
-                        readROMblock(blockAddress(block), romDAT);
+                        readROMblock(blockAddress(blockNum), romDAT);
                         if(modeCUI)
                         {
                             for(int i = 0 ; i < 16 * (int)(FLASH_PAGE_SIZE / 16) ; i += 16 )
@@ -142,8 +190,60 @@ int main()
             }
             break;
         case pcabCMD::cmdCode::WriteROM:
+            if(cmd.argments.size() != 2) { uart->uart.writeLine("ERR > Number of arguments does not match."); }
+            else
+            {
+                uint16_t blockNum;
+                if(!Convert::TryToUInt16(cmd.argments[0], 10, blockNum) && cmd.argments[1].length() != 2 * FLASH_PAGE_SIZE)
+                { uart->uart.writeLine("ERR > Argument error."); }
+                else
+                {
+                    if(bootMode == 0x2A || (gpio_get(SW_6_PIN) && gpio_get(SW_5_PIN) && gpio_get(SW_4_PIN) && !gpio_get(SW_3_PIN)))
+                    {
+                        if(blockNum > ROM_BLOCK_MAX - 1 && ( bootMode == 0x2A || (ROM_BLOCK_USER <= blockNum && blockNum < ROM_BLOCK_MAX - 2)))
+                        { uart->uart.writeLine("ERR > Specified block is out of range."); }
+                        else
+                        {
+                            uint8_t blockDAT[FLASH_PAGE_SIZE];
+                            bool flgCONV = true;
+                            for( int i = 0 ; i < FLASH_PAGE_SIZE ; i++ )
+                            {
+                                if(Convert::TryToUInt8(cmd.argments[1].substr(2 * i, 2) , 16, blockDAT[i])) { flgCONV = false; break; }
+                            }
+                            if(flgCONV)
+                            {
+                                writeROMblock(blockNum, blockDAT);
+                                uart->uart.writeLine("DONE > Erase ROM block " + Convert::ToString(blockNum, 16, 0) + ".");
+                            }else{uart->uart.writeLine("ERR > Argument error.");}
+                        }
+                    } else { uart->uart.writeLine("ERR > It is in an unusable state."); }
+                }
+            }
             break;
         case pcabCMD::cmdCode::EraseROM:
+            if(cmd.argments.size() != 1) { uart->uart.writeLine("ERR > Number of arguments does not match."); }
+            else
+            {
+                uint16_t blockNum;
+                if(!Convert::TryToUInt16(cmd.argments[0], 10, blockNum)) { uart->uart.writeLine("ERR > Argument error."); }
+                else
+                {
+                    if(bootMode == 0x2A || (gpio_get(SW_6_PIN) && gpio_get(SW_5_PIN) && gpio_get(SW_4_PIN) && !gpio_get(SW_3_PIN)))
+                    {
+                        if(blockNum > ROM_BLOCK_MAX - 1) { uart->uart.writeLine("ERR > Specified block is out of range."); }
+                        else
+                        {
+                            if(blockNum > ROM_BLOCK_MAX - 1 && ( bootMode == 0x2A || (ROM_BLOCK_USER <= blockNum && blockNum < ROM_BLOCK_MAX - 2)))
+                            { uart->uart.writeLine("ERR > Specified block is out of range."); }
+                            else
+                            {
+                                eraseROMblock(blockNum);
+                                uart->uart.writeLine("DONE > Erase ROM block " + Convert::ToString(blockNum, 16, 0) + ".");
+                            }
+                        }
+                    } else { uart->uart.writeLine("ERR > It is in an unusable state."); }
+                }
+            }
             break;
         case pcabCMD::cmdCode::GetSN:
             break;
@@ -157,7 +257,12 @@ int main()
             {
                 bool mode;
                 if(!Convert::TryToBool(cmd.argments[0], mode)) { uart->uart.writeLine("ERR > Argument error."); }
-                else { modeECHO = mode; }
+                else 
+                {
+                    modeECHO = mode;
+                    if(modeECHO) { uart->uart.writeLine("DONE > WITH ECHO."); }
+                    else { uart->uart.writeLine("DONE > WITHOUT ECHO."); }
+                }
             }
             break;
         case pcabCMD::cmdCode::CUI:
@@ -166,7 +271,12 @@ int main()
             {
                 bool mode;
                 if(!Convert::TryToBool(cmd.argments[0], mode)) { uart->uart.writeLine("ERR > Argument error."); }
-                else { modeCUI = mode; }
+                else
+                {
+                    modeCUI = mode;
+                    if(modeCUI) { uart->uart.writeLine("DONE > CUI MODE."); }
+                    else { uart->uart.writeLine("DONE > GUI MODE."); }
+                }
             }
             break;
         case pcabCMD::cmdCode::GetIDN:
@@ -177,16 +287,16 @@ int main()
                 {
                     uart->uart.writeLine("Vendor   > " + FW_VENDOR);
                     uart->uart.writeLine("Model    > " + FW_MODEL);
-                    uart->uart.writeLine("SerialNo > " + Convert::ToString(serialNum, 10, 3));
+                    uart->uart.writeLine("SerialNo > " + Convert::ToString(serialNum, 10, SERIAL_LEN));
                     uart->uart.writeLine("Revision > " + FW_REV);
-                } else { uart->uart.writeLine(FW_VENDOR + "," + FW_MODEL + "," + Convert::ToString(serialNum, 10, 3) + "," + FW_REV); }
+                } else { uart->uart.writeLine(FW_VENDOR + "," + FW_MODEL + "," + Convert::ToString(serialNum, 10, SERIAL_LEN) + "," + FW_REV); }
             }
             break;
         case pcabCMD::cmdCode::NONE:
             uart->uart.writeLine("ERR > Command Not Found.");
             break;
         default:
-            uart->uart.writeLine("");
+            //uart->uart.writeLine("");
             break;
         }
     }

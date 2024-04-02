@@ -15,8 +15,9 @@ GetDSA {0/1/false/true/bf/now} {x} | Get digital step attenuator settings.<br>{1
 SetDSA {x} {DEC}| Set binary data in the buffer.<br>{x} : Digital Step attenuator No.<br>{DEC} : Decimal binary value.<bf>*Support with v1.2.0 or later*
 GetTMP.ID {x} | Get Temperature sensor ID.<br>{x} : Temp IC No.<br>{0} gets all temperature data.
 GetTMP.Val {x} | Get Temperature.<br>{x} : Temp IC No.<br>{0} gets all temperature data.
-GetId | Get Id Value.
+GetTMP.CPU | Get CPU Temperature.
 GetVd | Get Vd Value.
+GetId | Get Id Value.
 GetSTB.AMP | Get AMP STBY.
 SetSTB.AMP {0/1/false/true}| Set AMP STBY<br>{1/true} : Standby MODE<br>{0/false} : Run MODE
 GetSTB.DRA | Get DRA STBY.
@@ -43,7 +44,7 @@ GetIDN | Get device identification character.
 ## Hardware Switch Configuration
 List of settings by onboard hardware switch (SW1) status.  
   
-<img src="https://github.com/mw-eng/PCAB_Debugger/blob/master/PCAB_Debugger_RP2040/assets/SW1.png?raw=true" width="100px">0 = OFF / 1 = ON  
+<img src="https://github.com/mw-eng/PCAB_Debugger/blob/master/PCAB_Debugger_RP2040/assets/SW1.png?raw=true" width="100px"> 0 = OFF(H) / 1 = ON(L)  
   
 Number | SW6 | SW5 | SW4 | SW3 | SW2 | SW1 | HEX | Stateus | Description
 :--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--

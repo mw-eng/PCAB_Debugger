@@ -7,7 +7,7 @@
 #define ADC_TEMP_SENSOR 4
 
 
-adc::adc(bool adc0, bool adc1, bool adc2, float vref) : adc0(adc0), adc1(adc1), adc2(adc2), vref(vref)
+adc::adc(bool adc0, bool adc1, bool adc2, bool adc3, float vref) : adc0(adc0), adc1(adc1), adc2(adc2), vref(vref)
 {
     adc_init();
     if(adc0) { adc_gpio_init(ADC0); }
@@ -17,7 +17,7 @@ adc::adc(bool adc0, bool adc1, bool adc2, float vref) : adc0(adc0), adc1(adc1), 
     adc_set_temp_sensor_enabled(true);
 }
 
-adc::adc() : adc(true, true, true, 3.3f) {}
+adc::adc() : adc(true, true, true, true, 3.3f) {}
 
 uint16_t adc::readADC0()
 {
@@ -51,8 +51,12 @@ uint16_t adc::readADC2()
 
 uint16_t adc::readADC3()
 {
-    adc_select_input(ADC3);
-    return adc_read();
+    if(adc3)
+    {
+        adc_select_input(ADC3);
+        return adc_read();
+    }
+    else { return 0xff; }
 }
 
 uint16_t adc::readADC4()
@@ -66,5 +70,4 @@ float adc::readVoltageADC1() { return readADC1() * vref / (1 << 12); }
 float adc::readVoltageADC2() { return readADC2() * vref / (1 << 12); }
 float adc::readVoltageADC3() { return readADC3() * vref / (1 << 12); }
 float adc::readVoltageADC4() { return readADC4() * vref / (1 << 12); }
-float adc::readVsys() { return readVoltageADC3(); }
 float adc::readTempCPU() { return 27.0f - ( readVoltageADC4() - 0.706f ) / 0.001721f; }

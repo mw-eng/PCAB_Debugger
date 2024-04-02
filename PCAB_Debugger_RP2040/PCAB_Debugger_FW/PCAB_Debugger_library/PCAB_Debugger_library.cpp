@@ -36,8 +36,9 @@ pcabCMD::CommandLine pcabCMD::readCMD(bool echo)
     if (strCompare(cmd, "SetDSA", true)) { return pcabCMD::CommandLine(cmdCode::SetDSA, strArr, cmdBF.argments.size()); }
     if (strCompare(cmd, "GetTMP.ID", true)) { return pcabCMD::CommandLine(cmdCode::GetTMP_ID, strArr, cmdBF.argments.size()); }
     if (strCompare(cmd, "GetTMP.Val", true)) { return pcabCMD::CommandLine(cmdCode::GetTMP_VAL, strArr, cmdBF.argments.size()); }
-    if (strCompare(cmd, "GetId", true)) { return pcabCMD::CommandLine(cmdCode::GetId, strArr, cmdBF.argments.size()); }
+    if (strCompare(cmd, "GetTMP.CPU", true)) { return pcabCMD::CommandLine(cmdCode::GetTMP_CPU, strArr, cmdBF.argments.size()); }
     if (strCompare(cmd, "GetVd", true)) { return pcabCMD::CommandLine(cmdCode::GetVd, strArr, cmdBF.argments.size()); }
+    if (strCompare(cmd, "GetId", true)) { return pcabCMD::CommandLine(cmdCode::GetId, strArr, cmdBF.argments.size()); }
     if (strCompare(cmd, "GetSTB.AMP", true)) { return pcabCMD::CommandLine(cmdCode::GetSTB_AMP, strArr, cmdBF.argments.size()); }
     if (strCompare(cmd, "GetSTB.DRA", true)) { return pcabCMD::CommandLine(cmdCode::GetSTB_DRA, strArr, cmdBF.argments.size()); }
     if (strCompare(cmd, "GetSTB.LNA", true)) { return pcabCMD::CommandLine(cmdCode::GetSTB_LNA, strArr, cmdBF.argments.size()); }
