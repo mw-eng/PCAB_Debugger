@@ -69,10 +69,10 @@ std::string Convert::ToString(const int64_t &val, const uint &BaseNumber){ retur
 
 bool Convert::TryToBool(const std::string &str, bool &out)
 {
-    if(strCompare(trim(str), "true", true)){ out = true; return true; }
-    if(strCompare(trim(str), "false", true)){ out = false; return true; }
-    if(strCompare(trim(str), "1", true)){ out = true; return true; }
-    if(strCompare(trim(str), "0", true)){ out = false; return true; }
+    if(String::strCompare(String::trim(str), "true", true)){ out = true; return true; }
+    if(String::strCompare(String::trim(str), "false", true)){ out = false; return true; }
+    if(String::strCompare(String::trim(str), "1", true)){ out = true; return true; }
+    if(String::strCompare(String::trim(str), "0", true)){ out = false; return true; }
     return false;
 }
 bool Convert::TryToInt(const std::string &str, int &out)
@@ -159,33 +159,33 @@ bool Convert::TryToUInt64(const std::string &str, const uint8_t &BaseNumber, uin
     return true;
 }
 
-std::string ltrim(const std::string &str, const std::string &targ)
+std::string String::ltrim(const std::string &str, const std::string &targ)
 {
     size_t start = str.find_first_not_of(targ);
     return (start == std::string::npos) ? "" : str.substr(start);
 }
 
-std::string rtrim(const std::string  &str, const std::string &targ)
+std::string String::rtrim(const std::string  &str, const std::string &targ)
 {
     size_t end = str.find_last_not_of(targ);
     return (end == std::string::npos) ? "" : str.substr(0, end + 1);
 }
 
-std::string trim(const std::string  &str, const std::string &targ) { return rtrim(ltrim(str, targ), targ); }
+std::string String::trim(const std::string  &str, const std::string &targ) { return rtrim(ltrim(str, targ), targ); }
 
-std::string ltrim(const std::string &str) { return ltrim(str, " \n\r\t\f\v"); }
+std::string String::ltrim(const std::string &str) { return ltrim(str, " \n\r\t\f\v"); }
 
-std::string rtrim(const std::string &str) { return rtrim(str, " \n\r\t\f\v"); }
+std::string String::rtrim(const std::string &str) { return rtrim(str, " \n\r\t\f\v"); }
 
-std::string trim(const std::string &str) { return trim(str, " \n\r\t\f\v"); }
+std::string String::trim(const std::string &str) { return trim(str, " \n\r\t\f\v"); }
 
-uint8_t uint8_bitShiftLeft(const uint8_t &bit, const uint8_t &shift)
+uint8_t String::uint8_bitShiftLeft(const uint8_t &bit, const uint8_t &shift)
 {
     unsigned char chBF = bit;
     return (uint8_t)(chBF << shift);
 }
 
-bool strCompare(const std::string &a, const std::string &b, const bool &ignoreCase)
+bool String::strCompare(const std::string &a, const std::string &b, const bool &ignoreCase)
 {
     if(a.length() <= 0 && b.length() <= 0){return true;}
     if (ignoreCase)
@@ -195,16 +195,16 @@ bool strCompare(const std::string &a, const std::string &b, const bool &ignoreCa
     else{ return a == b ? true : false; }
 }
 
-bool strCompare(const std::string &a, const std::string &b) { return strCompare(a, b, false); }
+bool String::strCompare(const std::string &a, const std::string &b) { return strCompare(a, b, false); }
 
-int conv_uint(const std::string &str)
+int String::conv_uint(const std::string &str)
 {
     if(str.length() <= 0){return -1;}
     if (std::all_of(str.cbegin(), str.cend(), isdigit)) { return stoi(str); }
     return -1;
 }
 
-std::vector<std::string> split(const std::string &str, const char &delim) {
+std::vector<std::string> String::split(const std::string &str, const char &delim) {
     std::vector<std::string> elems;
     std::string item;
     for (char ch: str) {
