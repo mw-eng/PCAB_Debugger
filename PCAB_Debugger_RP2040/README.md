@@ -1,10 +1,20 @@
 # PCAB_Debugger
 Raspberry Pi Pico
 
+## RS485 Serial Communication
+Send commands in the order of *(#{SERIAL NUMBER})*, *{COMMAND}*, *{ARGUMENTS}*, and *{EXIT CODE}*, separated by space.  
+Specify the serial number of the communication partner in *{SERIAL NUMBER}*. However, if *#{SERIAL NUMBER}* is not specified, communication will be performed for all serial numbers.
+*{COMMAND}* and *{ARGUMENTS}* refer to *Command Lists*.  
+*{EXIT CODE}* is *\r(Carriage Return)* or *\n(Line Feed)* or *\r\n*.  
+We recommend *\r(CR)* when CUI and echo are enable, and *\n(LF)* when CUI and local echo are enabled or GUI is enabled.  
+### example
+- #0010 WrtDPS
+- #0001 SetSTB.AMP true
+- SetSN
 
 ## Command Lists
 RS485 serial communication command list  
-  
+
 Command | Description
 :--|:--
 WrtDPS | Write binary data to the digital phase sifter.
@@ -35,7 +45,7 @@ GetSN | Get Board SN.
 SetSN {x} | Set Bord SN.<br>{x}:DEC
 RST | Preset Config.<br>PS all 0<br>STB all 0(RUN MODE)<br>LPM 0(Full Power MODE)<br>ALD 1(Auto LOAD MODE)
 *RST | Same as RST.
-ECHO {0/1/false/true} | Set echo mode.<br>{1/true} : With echo.<br>{0/false} : Without echo.
+ECHO {0/1/false/true} | Set echo mode.<br>*Do not enable it if you are connected to multiple devices.*<br>{1/true} : With echo.<br>{0/false} : Without echo.
 CUI | Get cui mode.
 CUI {0/1/false/true} | CUI Control Use<br>{1/true} : CUI MODE<br>{0/false} : GUI MODE
 GetIDN | Get device identification character.

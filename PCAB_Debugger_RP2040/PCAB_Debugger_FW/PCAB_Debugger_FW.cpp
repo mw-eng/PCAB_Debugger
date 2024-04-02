@@ -23,6 +23,49 @@ uint8_t bootMode = 0;
 uint8_t dps[DPS_MAX];
 uint8_t dsa[DSA_MAX];
 
+#pragma region Private Function
+
+bool editRangeCheck(const uint16_t &blockNum)
+{
+    if(blockNum < ROM_BLOCK_USER || ROM_BLOCK_MAX - 1 < blockNum) { return false; }
+    if(bootMode == 0x2A || (ROM_BLOCK_USER <= blockNum && blockNum < ROM_BLOCK_MAX - 2)) { return true; }
+    return false;
+}
+
+void writeROM(const uint16_t &blockNum, const uint8_t blockDAT[FLASH_PAGE_SIZE])
+{
+    if(bootMode == 0x2A || (gpio_get(SW_6_PIN) && gpio_get(SW_5_PIN) && gpio_get(SW_4_PIN) && !gpio_get(SW_3_PIN)))
+    {
+        if(editRangeCheck(blockNum))
+        {
+            writeROMblock(blockAddress(blockNum), blockDAT);
+            uart->uart.writeLine("DONE > Write ROM block " + Convert::ToString(blockNum, 10, 0) + ".");
+        } else { uart->uart.writeLine("ERR > Specified block is out of range."); }
+    } else { uart->uart.writeLine("ERR > It is in an unusable state."); }
+}
+
+void writeROM(const std::string &num, const std::string &data)
+{
+    uint16_t blockNum;
+    if(!Convert::TryToUInt16(num, 10, blockNum) || data.size() != 2 * FLASH_PAGE_SIZE)
+    { uart->uart.writeLine("ERR > Argument error."); }
+    else
+    {
+        uint8_t blockDAT[FLASH_PAGE_SIZE];
+        for( int i = 0 ; i < FLASH_PAGE_SIZE ; i++ )
+        {
+            if(!Convert::TryToUInt8(data.substr(2 * i, 2) , 16, blockDAT[i]))
+            {
+                uart->uart.writeLine("ERR > Argument error.");
+                return;
+            }
+        }
+        writeROM(blockNum, blockDAT);
+    }
+}
+
+#pragma endregion
+
 void setup()
 {
     stdio_init_all();
@@ -191,34 +234,7 @@ int main()
             break;
         case pcabCMD::cmdCode::WriteROM:
             if(cmd.argments.size() != 2) { uart->uart.writeLine("ERR > Number of arguments does not match."); }
-            else
-            {
-                uint16_t blockNum;
-                if(!Convert::TryToUInt16(cmd.argments[0], 10, blockNum) && cmd.argments[1].length() != 2 * FLASH_PAGE_SIZE)
-                { uart->uart.writeLine("ERR > Argument error."); }
-                else
-                {
-                    if(bootMode == 0x2A || (gpio_get(SW_6_PIN) && gpio_get(SW_5_PIN) && gpio_get(SW_4_PIN) && !gpio_get(SW_3_PIN)))
-                    {
-                        if(blockNum > ROM_BLOCK_MAX - 1 && ( bootMode == 0x2A || (ROM_BLOCK_USER <= blockNum && blockNum < ROM_BLOCK_MAX - 2)))
-                        { uart->uart.writeLine("ERR > Specified block is out of range."); }
-                        else
-                        {
-                            uint8_t blockDAT[FLASH_PAGE_SIZE];
-                            bool flgCONV = true;
-                            for( int i = 0 ; i < FLASH_PAGE_SIZE ; i++ )
-                            {
-                                if(Convert::TryToUInt8(cmd.argments[1].substr(2 * i, 2) , 16, blockDAT[i])) { flgCONV = false; break; }
-                            }
-                            if(flgCONV)
-                            {
-                                writeROMblock(blockAddress(blockNum), blockDAT);
-                                uart->uart.writeLine("DONE > Erase ROM block " + Convert::ToString(blockNum, 16, 0) + ".");
-                            }else{uart->uart.writeLine("ERR > Argument error.");}
-                        }
-                    } else { uart->uart.writeLine("ERR > It is in an unusable state."); }
-                }
-            }
+            else { writeROM(cmd.argments[0], cmd.argments[1]); }
             break;
         case pcabCMD::cmdCode::EraseROM:
             if(cmd.argments.size() != 1) { uart->uart.writeLine("ERR > Number of arguments does not match."); }
@@ -230,17 +246,11 @@ int main()
                 {
                     if(bootMode == 0x2A || (gpio_get(SW_6_PIN) && gpio_get(SW_5_PIN) && gpio_get(SW_4_PIN) && !gpio_get(SW_3_PIN)))
                     {
-                        if(blockNum > ROM_BLOCK_MAX - 1) { uart->uart.writeLine("ERR > Specified block is out of range."); }
-                        else
+                        if(editRangeCheck(blockNum))
                         {
-                            if(blockNum > ROM_BLOCK_MAX - 1 && ( bootMode == 0x2A || (ROM_BLOCK_USER <= blockNum && blockNum < ROM_BLOCK_MAX - 2)))
-                            { uart->uart.writeLine("ERR > Specified block is out of range."); }
-                            else
-                            {
-                                eraseROMblock(blockAddress(blockNum));
-                                uart->uart.writeLine("DONE > Erase ROM block " + Convert::ToString(blockNum, 16, 0) + ".");
-                            }
-                        }
+                            eraseROMblock(blockAddress(blockNum));
+                            uart->uart.writeLine("DONE > Erase ROM block " + Convert::ToString(blockNum, 10, 0) + ".");
+                        } else { uart->uart.writeLine("ERR > Specified block is out of range."); }
                     } else { uart->uart.writeLine("ERR > It is in an unusable state."); }
                 }
             }
