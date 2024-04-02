@@ -47,7 +47,7 @@ uartSYNC::CommandLine uartSYNC::readCMD(bool echo)
 {
     std::string strBf = readLine(echo);
     std::vector<std::string> strVect = split(strBf, ' ');
-    if(strVect.size() <= 0){return uartSYNC::CommandLine("", NULL, 0);}
+    if(strVect.size() <= 0){return uartSYNC::CommandLine("", "", NULL, 0);}
     strBf = strVect[0];
     strVect.erase(std::cbegin(strVect));
     std::string strArr[strVect.size()];

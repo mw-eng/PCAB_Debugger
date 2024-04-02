@@ -46,10 +46,12 @@ class pcabCMD : uartSYNC
     /// @brief Command line structure.
     struct CommandLine
     {
+        std::string serialNum;
         cmdCode command;
         std::vector<std::string> argments;
-        CommandLine(cmdCode cmd, std::string args[], uint numArgs)
+        CommandLine(std::string serial, cmdCode cmd, std::string args[], uint numArgs)
         {
+            serialNum = serial;
             command = cmd;
             argments.clear();
             for(uint i = 0 ; i < numArgs ; i++){ argments.push_back(args[i]);}

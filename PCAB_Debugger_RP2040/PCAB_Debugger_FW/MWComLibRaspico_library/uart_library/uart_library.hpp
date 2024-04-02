@@ -13,10 +13,12 @@ class uartSYNC
     /// @brief Command line structure.
     struct CommandLine
     {
+        std::string serialNum;
         std::string command;
         std::vector<std::string> argments;
-        CommandLine(std::string cmd, std::string args[], uint numArgs)
+        CommandLine(std::string serial, std::string cmd, std::string args[], uint numArgs)
         {
+            serialNum = serial;
             command = cmd;
             argments.clear();
             for(uint i = 0 ; i < numArgs ; i++){ argments.push_back(args[i]);}

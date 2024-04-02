@@ -25,44 +25,44 @@ pcabCMD::CommandLine pcabCMD::readCMD(bool echo)
 {
     uartSYNC::CommandLine cmdBF = uart.readCMD(echo);
     std::string cmd = trim(cmdBF.command);
-    if(cmd == "" && cmdBF.argments.size() == 0) { return pcabCMD::CommandLine(cmdCode::NUL, NULL, 0); }
+    if(cmd == "" && cmdBF.argments.size() == 0) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdCode::NUL, NULL, 0); }
     std::string strArr[cmdBF.argments.size()];
     std::copy(cmdBF.argments.begin(), cmdBF.argments.end(), strArr);
-    if (strCompare(cmd, "WrtDPS", true)) { return pcabCMD::CommandLine(cmdCode::WrtDPS, strArr, cmdBF.argments.size()); }
-    if (strCompare(cmd, "GetDPS", true)) { return pcabCMD::CommandLine(cmdCode::GetDPS, strArr, cmdBF.argments.size()); }
-    if (strCompare(cmd, "SetDPS", true)) { return pcabCMD::CommandLine(cmdCode::SetDPS, strArr, cmdBF.argments.size()); }
-    if (strCompare(cmd, "WrtDSA", true)) { return pcabCMD::CommandLine(cmdCode::WrtDSA, strArr, cmdBF.argments.size()); }
-    if (strCompare(cmd, "GetDSA", true)) { return pcabCMD::CommandLine(cmdCode::GetDSA, strArr, cmdBF.argments.size()); }
-    if (strCompare(cmd, "SetDSA", true)) { return pcabCMD::CommandLine(cmdCode::SetDSA, strArr, cmdBF.argments.size()); }
-    if (strCompare(cmd, "GetTMP.ID", true)) { return pcabCMD::CommandLine(cmdCode::GetTMP_ID, strArr, cmdBF.argments.size()); }
-    if (strCompare(cmd, "GetTMP.Val", true)) { return pcabCMD::CommandLine(cmdCode::GetTMP_VAL, strArr, cmdBF.argments.size()); }
-    if (strCompare(cmd, "GetTMP.CPU", true)) { return pcabCMD::CommandLine(cmdCode::GetTMP_CPU, strArr, cmdBF.argments.size()); }
-    if (strCompare(cmd, "GetVd", true)) { return pcabCMD::CommandLine(cmdCode::GetVd, strArr, cmdBF.argments.size()); }
-    if (strCompare(cmd, "GetId", true)) { return pcabCMD::CommandLine(cmdCode::GetId, strArr, cmdBF.argments.size()); }
-    if (strCompare(cmd, "GetSTB.AMP", true)) { return pcabCMD::CommandLine(cmdCode::GetSTB_AMP, strArr, cmdBF.argments.size()); }
-    if (strCompare(cmd, "GetSTB.DRA", true)) { return pcabCMD::CommandLine(cmdCode::GetSTB_DRA, strArr, cmdBF.argments.size()); }
-    if (strCompare(cmd, "GetSTB.LNA", true)) { return pcabCMD::CommandLine(cmdCode::GetSTB_LNA, strArr, cmdBF.argments.size()); }
-    if (strCompare(cmd, "SetSTB.AMP", true)) { return pcabCMD::CommandLine(cmdCode::SetSTB_AMP, strArr, cmdBF.argments.size()); }
-    if (strCompare(cmd, "SetSTB.DRA", true)) { return pcabCMD::CommandLine(cmdCode::SetSTB_DRA, strArr, cmdBF.argments.size()); }
-    if (strCompare(cmd, "SetSTB.LNA", true)) { return pcabCMD::CommandLine(cmdCode::SetSTB_LNA, strArr, cmdBF.argments.size()); }
-    if (strCompare(cmd, "GetLPM", true)) { return pcabCMD::CommandLine(cmdCode::GetLPM, strArr, cmdBF.argments.size()); }
-    if (strCompare(cmd, "SetLPM", true)) { return pcabCMD::CommandLine(cmdCode::SetLPM, strArr, cmdBF.argments.size()); }
-    if (strCompare(cmd, "SetALD", true)) { return pcabCMD::CommandLine(cmdCode::SetALD, strArr, cmdBF.argments.size()); }
-    if (strCompare(cmd, "GetALD", true)) { return pcabCMD::CommandLine(cmdCode::GetALD, strArr, cmdBF.argments.size()); }
-    if (strCompare(cmd, "SMEM", true)) { return pcabCMD::CommandLine(cmdCode::SaveMEM, strArr, cmdBF.argments.size()); }
-    if (strCompare(cmd, "LMEM", true)) { return pcabCMD::CommandLine(cmdCode::LoadMEM, strArr, cmdBF.argments.size()); }
-    if (strCompare(cmd, "RROM", true)) { return pcabCMD::CommandLine(cmdCode::ReadROM, strArr, cmdBF.argments.size()); }
-    if (strCompare(cmd, "WROM", true)) { return pcabCMD::CommandLine(cmdCode::WriteROM, strArr, cmdBF.argments.size()); }
-    if (strCompare(cmd, "EROM", true)) { return pcabCMD::CommandLine(cmdCode::EraseROM, strArr, cmdBF.argments.size()); }
-    if (strCompare(cmd, "GetSN", true)) { return pcabCMD::CommandLine(cmdCode::GetSN, strArr, cmdBF.argments.size()); }
-    if (strCompare(cmd, "SetSN", true)) { return pcabCMD::CommandLine(cmdCode::SetSN, strArr, cmdBF.argments.size()); }
-    if (strCompare(cmd, "RST", true)) { return pcabCMD::CommandLine(cmdCode::RST, strArr, cmdBF.argments.size()); }
-    if (strCompare(cmd, "*RST", true)) { return pcabCMD::CommandLine(cmdCode::RST, strArr, cmdBF.argments.size()); }
-    if (strCompare(cmd, "ECHO", true)) { return pcabCMD::CommandLine(cmdCode::ECHO, strArr, cmdBF.argments.size()); }
-    if (strCompare(cmd, "CUI", true)) { return pcabCMD::CommandLine(cmdCode::CUI, strArr, cmdBF.argments.size()); }
-    if (strCompare(cmd, "GetIDN", true)) { return pcabCMD::CommandLine(cmdCode::GetIDN, strArr, cmdBF.argments.size()); }
-    if (strCompare(cmd, "*IDN?", true)) { return pcabCMD::CommandLine(cmdCode::GetIDN, strArr, cmdBF.argments.size()); }
-    else { return pcabCMD::CommandLine(cmdCode::NONE, strArr, cmdBF.argments.size()); }
+    if (strCompare(cmd, "WrtDPS", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdCode::WrtDPS, strArr, cmdBF.argments.size()); }
+    if (strCompare(cmd, "GetDPS", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdCode::GetDPS, strArr, cmdBF.argments.size()); }
+    if (strCompare(cmd, "SetDPS", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdCode::SetDPS, strArr, cmdBF.argments.size()); }
+    if (strCompare(cmd, "WrtDSA", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdCode::WrtDSA, strArr, cmdBF.argments.size()); }
+    if (strCompare(cmd, "GetDSA", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdCode::GetDSA, strArr, cmdBF.argments.size()); }
+    if (strCompare(cmd, "SetDSA", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdCode::SetDSA, strArr, cmdBF.argments.size()); }
+    if (strCompare(cmd, "GetTMP.ID", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdCode::GetTMP_ID, strArr, cmdBF.argments.size()); }
+    if (strCompare(cmd, "GetTMP.Val", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdCode::GetTMP_VAL, strArr, cmdBF.argments.size()); }
+    if (strCompare(cmd, "GetTMP.CPU", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdCode::GetTMP_CPU, strArr, cmdBF.argments.size()); }
+    if (strCompare(cmd, "GetVd", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdCode::GetVd, strArr, cmdBF.argments.size()); }
+    if (strCompare(cmd, "GetId", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdCode::GetId, strArr, cmdBF.argments.size()); }
+    if (strCompare(cmd, "GetSTB.AMP", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdCode::GetSTB_AMP, strArr, cmdBF.argments.size()); }
+    if (strCompare(cmd, "GetSTB.DRA", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdCode::GetSTB_DRA, strArr, cmdBF.argments.size()); }
+    if (strCompare(cmd, "GetSTB.LNA", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdCode::GetSTB_LNA, strArr, cmdBF.argments.size()); }
+    if (strCompare(cmd, "SetSTB.AMP", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdCode::SetSTB_AMP, strArr, cmdBF.argments.size()); }
+    if (strCompare(cmd, "SetSTB.DRA", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdCode::SetSTB_DRA, strArr, cmdBF.argments.size()); }
+    if (strCompare(cmd, "SetSTB.LNA", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdCode::SetSTB_LNA, strArr, cmdBF.argments.size()); }
+    if (strCompare(cmd, "GetLPM", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdCode::GetLPM, strArr, cmdBF.argments.size()); }
+    if (strCompare(cmd, "SetLPM", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdCode::SetLPM, strArr, cmdBF.argments.size()); }
+    if (strCompare(cmd, "SetALD", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdCode::SetALD, strArr, cmdBF.argments.size()); }
+    if (strCompare(cmd, "GetALD", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdCode::GetALD, strArr, cmdBF.argments.size()); }
+    if (strCompare(cmd, "SMEM", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdCode::SaveMEM, strArr, cmdBF.argments.size()); }
+    if (strCompare(cmd, "LMEM", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdCode::LoadMEM, strArr, cmdBF.argments.size()); }
+    if (strCompare(cmd, "RROM", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdCode::ReadROM, strArr, cmdBF.argments.size()); }
+    if (strCompare(cmd, "WROM", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdCode::WriteROM, strArr, cmdBF.argments.size()); }
+    if (strCompare(cmd, "EROM", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdCode::EraseROM, strArr, cmdBF.argments.size()); }
+    if (strCompare(cmd, "GetSN", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdCode::GetSN, strArr, cmdBF.argments.size()); }
+    if (strCompare(cmd, "SetSN", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdCode::SetSN, strArr, cmdBF.argments.size()); }
+    if (strCompare(cmd, "RST", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdCode::RST, strArr, cmdBF.argments.size()); }
+    if (strCompare(cmd, "*RST", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdCode::RST, strArr, cmdBF.argments.size()); }
+    if (strCompare(cmd, "ECHO", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdCode::ECHO, strArr, cmdBF.argments.size()); }
+    if (strCompare(cmd, "CUI", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdCode::CUI, strArr, cmdBF.argments.size()); }
+    if (strCompare(cmd, "GetIDN", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdCode::GetIDN, strArr, cmdBF.argments.size()); }
+    if (strCompare(cmd, "*IDN?", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdCode::GetIDN, strArr, cmdBF.argments.size()); }
+    else { return pcabCMD::CommandLine(cmdBF.serialNum, cmdCode::NONE, strArr, cmdBF.argments.size()); }
 }
 
 #pragma endregion pcabCMD Class
