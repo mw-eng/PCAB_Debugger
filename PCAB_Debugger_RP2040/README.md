@@ -7,6 +7,7 @@ Specify the serial number of the communication partner in *{SERIAL NUMBER}*. How
 *{COMMAND}* and *{ARGUMENTS}* refer to *Command Lists*.  
 *{EXIT CODE}* is *\r(Carriage Return)* or *\n(Line Feed)* or *\r\n*.  
 We recommend *\r(CR)* when CUI and echo are enable, and *\n(LF)* when CUI and local echo are enabled or GUI is enabled.  
+
 ### example
 - #0010 WrtDPS
 - #0001 SetSTB.AMP true
