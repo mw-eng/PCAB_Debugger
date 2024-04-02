@@ -90,10 +90,6 @@ int main()
             break;
         case pcabCMD::cmdCode::SetLPM:
             break;
-        case pcabCMD::cmdCode::GetALD:
-            break;
-        case pcabCMD::cmdCode::SetALD:
-            break;
         case pcabCMD::cmdCode::SaveMEM:
             break;
         case pcabCMD::cmdCode::LoadMEM:

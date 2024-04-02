@@ -25,8 +25,6 @@ GetSTB.LNA | Get LNA STBY.
 SetSTB.LNA {0/1/false/true}| Set LNA STBY<br>{1/true} : Standby MODE<br>{0/false} : Run MODE
 GetLPM | Get low power mode.
 SetLPM {0/1/false/true} | Get low power mode<br>{1/true} : Low Power MODE<br>{0/false} : Full Power MODE
-GetALD | Get auto load date<br>1 : Auto LOAD MODE<br>0 : Non-Auto LOAD MODE<br>Non-Auto LOAD MODE if disabled by hardware.
-SetALD {0/1/false/true} | Set auto load date<br>{1/true} : Auto LOAD MODE<br>{0/false} : Non-Auto LOAD MODE
 SMEM | Save state to memory(ROM).
 LMEM | Load state to memory(ROM).
 RROM {x} | Read data block from ROM.<br>{x} : Decimal ROM block number.
@@ -44,71 +42,72 @@ GetIDN | Get device identification character.
 
 ## Hardware Switch Configuration
 List of settings by onboard hardware switch (SW1) status.  
-<img src="https://github.com/mw-eng/PCAB_Debugger/blob/master/PCAB_Debugger_RP2040/assets/SW1.png?raw=true" width="100px">
-
+  
+<img src="https://github.com/mw-eng/PCAB_Debugger/blob/master/PCAB_Debugger_RP2040/assets/SW1.png?raw=true" width="100px">0 = OFF / 1 = ON  
+  
 Number | SW6 | SW5 | SW4 | SW3 | SW2 | SW1 | HEX | Stateus | Description
 :--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--
-0 | 0 | 0 | 0 | 0 | 0 | 0 | 0x00 | Default | Default Status
-1 | 0 | 0 | 0 | 0 | 0 | 1 | 0x01 | State1 | Picture Stateus
-2 | 0 | 0 | 0 | 0 | 1 | 0 | 0x02 | State1 | Picture Stateus
-3 | 0 | 0 | 0 | 0 | 1 | 1 | 0x03 | State1 | Picture Stateus
-4 | 0 | 0 | 0 | 1 | 0 | 0 | 0x04 | State1 | Picture Stateus
-5 | 0 | 0 | 0 | 1 | 0 | 1 | 0x05 | State1 | Picture Stateus
-6 | 0 | 0 | 0 | 1 | 1 | 0 | 0x06 | State1 | Picture Stateus
-7 | 0 | 0 | 0 | 1 | 1 | 1 | 0x07 | State1 | Picture Stateus
-8 | 0 | 0 | 1 | 0 | 0 | 0 | 0x08 | State1 | Picture Stateus
-9 | 0 | 0 | 1 | 0 | 0 | 1 | 0x09 | State1 | Picture Stateus
-10 | 0 | 0 | 1 | 0 | 1 | 0 | 0x1A | State1 | Picture Stateus
-11 | 0 | 0 | 1 | 0 | 1 | 1 | 0x1B | State1 | Picture Stateus
-12 | 0 | 0 | 1 | 1 | 0 | 0 | 0x1C | State1 | Picture Stateus
-13 | 0 | 0 | 1 | 1 | 0 | 1 | 0x1D | State1 | Picture Stateus
-14 | 0 | 0 | 1 | 1 | 1 | 0 | 0x1E | State1 | Picture Stateus
-15 | 0 | 0 | 1 | 1 | 1 | 1 | 0x1F | State1 | Picture Stateus
-16 | 0 | 1 | 0 | 0 | 0 | 0 | 0x10 | State1 | Picture Stateus
-17 | 0 | 1 | 0 | 0 | 0 | 1 | 0x11 | State1 | Picture Stateus
-18 | 0 | 1 | 0 | 0 | 1 | 0 | 0x12 | State1 | Picture Stateus
-19 | 0 | 1 | 0 | 0 | 1 | 1 | 0x13 | State1 | Picture Stateus
-20 | 0 | 1 | 0 | 1 | 0 | 0 | 0x14 | State1 | Picture Stateus
-21 | 0 | 1 | 0 | 1 | 0 | 1 | 0x15 | State1 | Picture Stateus
-22 | 0 | 1 | 0 | 1 | 1 | 0 | 0x16 | State1 | Picture Stateus
-23 | 0 | 1 | 0 | 1 | 1 | 1 | 0x17 | State1 | Picture Stateus
-24 | 0 | 1 | 1 | 0 | 0 | 0 | 0x18 | State1 | Picture Stateus
-25 | 0 | 1 | 1 | 0 | 0 | 1 | 0x19 | State1 | Picture Stateus
-26 | 0 | 1 | 1 | 0 | 1 | 0 | 0x1A | State1 | Picture Stateus
-27 | 0 | 1 | 1 | 0 | 1 | 1 | 0x1B | State1 | Picture Stateus
-28 | 0 | 1 | 1 | 1 | 0 | 0 | 0x1C | State1 | Picture Stateus
-29 | 0 | 1 | 1 | 1 | 0 | 1 | 0x1D | State1 | Picture Stateus
-30 | 0 | 1 | 1 | 1 | 1 | 0 | 0x1E | State1 | Picture Stateus
-31 | 0 | 1 | 1 | 1 | 1 | 1 | 0x1F | State1 | Picture Stateus
-32 | 1 | 0 | 0 | 0 | 0 | 0 | 0x20 | State1 | Picture Stateus
-33 | 1 | 0 | 0 | 0 | 0 | 1 | 0x21 | State1 | Picture Stateus
-34 | 1 | 0 | 0 | 0 | 1 | 0 | 0x22 | State1 | Picture Stateus
-35 | 1 | 0 | 0 | 0 | 1 | 1 | 0x23 | State1 | Picture Stateus
-36 | 1 | 0 | 0 | 1 | 0 | 0 | 0x24 | State1 | Picture Stateus
-37 | 1 | 0 | 0 | 1 | 0 | 1 | 0x25 | State1 | Picture Stateus
-38 | 1 | 0 | 0 | 1 | 1 | 0 | 0x26 | State1 | Picture Stateus
-39 | 1 | 0 | 0 | 1 | 1 | 1 | 0x27 | State1 | Picture Stateus
-40 | 1 | 0 | 1 | 0 | 0 | 0 | 0x28 | State1 | Picture Stateus
-41 | 1 | 0 | 1 | 0 | 0 | 1 | 0x29 | State1 | Picture Stateus
-42 | 1 | 0 | 1 | 0 | 1 | 0 | 0x2A | State1 | Picture Stateus
-43 | 1 | 0 | 1 | 0 | 1 | 1 | 0x2B | State1 | Picture Stateus
-44 | 1 | 0 | 1 | 1 | 0 | 0 | 0x2C | State1 | Picture Stateus
-45 | 1 | 0 | 1 | 1 | 0 | 1 | 0x2D | State1 | Picture Stateus
-46 | 1 | 0 | 1 | 1 | 1 | 0 | 0x2E | State1 | Picture Stateus
-47 | 1 | 0 | 1 | 1 | 1 | 1 | 0x2F | State1 | Picture Stateus
-48 | 1 | 1 | 0 | 0 | 0 | 0 | 0x30 | State1 | Picture Stateus
-49 | 1 | 1 | 0 | 0 | 0 | 1 | 0x31 | State1 | Picture Stateus
-50 | 1 | 1 | 0 | 0 | 1 | 0 | 0x32 | State1 | Picture Stateus
-51 | 1 | 1 | 0 | 0 | 1 | 1 | 0x33 | State1 | Picture Stateus
-52 | 1 | 1 | 0 | 1 | 0 | 0 | 0x34 | State1 | Picture Stateus
-53 | 1 | 1 | 0 | 1 | 0 | 1 | 0x35 | State1 | Picture Stateus
-54 | 1 | 1 | 0 | 1 | 1 | 0 | 0x36 | State1 | Picture Stateus
-55 | 1 | 1 | 0 | 1 | 1 | 1 | 0x37 | State1 | Picture Stateus
-56 | 1 | 1 | 1 | 0 | 0 | 0 | 0x38 | State1 | Picture Stateus
-57 | 1 | 1 | 1 | 0 | 0 | 1 | 0x39 | State1 | Picture Stateus
-58 | 1 | 1 | 1 | 0 | 1 | 0 | 0x3A | State1 | Picture Stateus
-59 | 1 | 1 | 1 | 0 | 1 | 1 | 0x3B | State1 | Picture Stateus
-60 | 1 | 1 | 1 | 1 | 0 | 0 | 0x3C | State1 | Picture Stateus
-61 | 1 | 1 | 1 | 1 | 0 | 1 | 0x3D | State1 | Picture Stateus
-62 | 1 | 1 | 1 | 1 | 1 | 0 | 0x3E | State1 | Picture Stateus
-63 | 1 | 1 | 1 | 1 | 1 | 1 | 0x3F | State1 | Picture Stateus
+0 | 0 | 0 | 0 | 0 | 0 | 0 | 0x00 | Default | Default Status Boot.<br>*DPS = ALL 0deg / DSA = ALL 2dB / ALL Active Mode*
+1 | 0 | 0 | 0 | 0 | 0 | 1 | 0x01 | Auto Load boot. | Load the state saved in ROM and boot.<br>*Picture Stateus*
+2 | 0 | 0 | 0 | 0 | 1 | 0 | 0x02 | Allow settings to be saved. | Settins can be write in ROM.
+3 | 0 | 0 | 0 | 0 | 1 | 1 | 0x03 | Auto Load boot.<br>and<br>Allow settings to be saved. | Allows to start autoload and save settings.<br>*Basic usage conditions 1*
+4 | 0 | 0 | 0 | 1 | 0 | 0 | 0x04 | Allow writing to ROM. | Allows writing to user-usable areas of ROM.
+5 | 0 | 0 | 0 | 1 | 0 | 1 | 0x05 | Allow writing to ROM<br>and<br>Auto Load boot. | 0x01 + 0x04
+6 | 0 | 0 | 0 | 1 | 1 | 0 | 0x06 | Allow writing to ROM<br>and<br>Allow settings to be saved. | 0x02 + 0x04
+7 | 0 | 0 | 0 | 1 | 1 | 1 | 0x07 | Allow writing to ROM<br>and<br>Allow settings to be saved<br>and<br>Auto Load boot. | 0x01 + 0x02 + 0x04<br>*Basic usage conditions 2*
+8 | 0 | 0 | 1 | 0 | 0 | 0 | 0x08 | State8 | Unused.
+9 | 0 | 0 | 1 | 0 | 0 | 1 | 0x09 | State9 | Unused.
+10 | 0 | 0 | 1 | 0 | 1 | 0 | 0x1A | State10 | Unused.
+11 | 0 | 0 | 1 | 0 | 1 | 1 | 0x1B | State11 | Unused.
+12 | 0 | 0 | 1 | 1 | 0 | 0 | 0x1C | State12 | Unused.
+13 | 0 | 0 | 1 | 1 | 0 | 1 | 0x1D | State13 | Unused.
+14 | 0 | 0 | 1 | 1 | 1 | 0 | 0x1E | State14 | Unused.
+15 | 0 | 0 | 1 | 1 | 1 | 1 | 0x1F | State15 | Unused.
+16 | 0 | 1 | 0 | 0 | 0 | 0 | 0x10 | State16 | Unused.
+17 | 0 | 1 | 0 | 0 | 0 | 1 | 0x11 | State17 | Unused.
+18 | 0 | 1 | 0 | 0 | 1 | 0 | 0x12 | State18 | Unused.
+19 | 0 | 1 | 0 | 0 | 1 | 1 | 0x13 | State19 | Unused.
+20 | 0 | 1 | 0 | 1 | 0 | 0 | 0x14 | State20 | Unused.
+21 | 0 | 1 | 0 | 1 | 0 | 1 | 0x15 | State21 | Unused.
+22 | 0 | 1 | 0 | 1 | 1 | 0 | 0x16 | State22 | Unused.
+23 | 0 | 1 | 0 | 1 | 1 | 1 | 0x17 | State23 | Unused.
+24 | 0 | 1 | 1 | 0 | 0 | 0 | 0x18 | State24 | Unused.
+25 | 0 | 1 | 1 | 0 | 0 | 1 | 0x19 | State25 | Unused.
+26 | 0 | 1 | 1 | 0 | 1 | 0 | 0x1A | State26 | Unused.
+27 | 0 | 1 | 1 | 0 | 1 | 1 | 0x1B | State27 | Unused.
+28 | 0 | 1 | 1 | 1 | 0 | 0 | 0x1C | State28 | Unused.
+29 | 0 | 1 | 1 | 1 | 0 | 1 | 0x1D | State29 | Unused.
+30 | 0 | 1 | 1 | 1 | 1 | 0 | 0x1E | State30 | Unused.
+31 | 0 | 1 | 1 | 1 | 1 | 1 | 0x1F | State31 | Unused.
+32 | 1 | 0 | 0 | 0 | 0 | 0 | 0x20 | Factory reset on boot. | If the switch is in this state at startup, the system boots to factory defaults and restore the autoload settings to their initial state.
+33 | 1 | 0 | 0 | 0 | 0 | 1 | 0x21 | State33 | Unused.
+34 | 1 | 0 | 0 | 0 | 1 | 0 | 0x22 | State34 | Unused.
+35 | 1 | 0 | 0 | 0 | 1 | 1 | 0x23 | State35 | Unused.
+36 | 1 | 0 | 0 | 1 | 0 | 0 | 0x24 | State36 | Unused.
+37 | 1 | 0 | 0 | 1 | 0 | 1 | 0x25 | State37 | Unused.
+38 | 1 | 0 | 0 | 1 | 1 | 0 | 0x26 | State38 | Unused.
+39 | 1 | 0 | 0 | 1 | 1 | 1 | 0x27 | State39 | Unused.
+40 | 1 | 0 | 1 | 0 | 0 | 0 | 0x28 | State40 | Unused.
+41 | 1 | 0 | 1 | 0 | 0 | 1 | 0x29 | State41 | Unused.
+42 | 1 | 0 | 1 | 0 | 1 | 0 | 0x2A | Boot in the maintenance mode. | If the switch is in this state at startup, it boots in the administrator mode.<br>As general rule, do not use it as it may overwrite the ROM area where factory settings and serial numbers are stored.
+43 | 1 | 0 | 1 | 0 | 1 | 1 | 0x2B | State43 | Unused.
+44 | 1 | 0 | 1 | 1 | 0 | 0 | 0x2C | State44 | Unused.
+45 | 1 | 0 | 1 | 1 | 0 | 1 | 0x2D | State45 | Unused.
+46 | 1 | 0 | 1 | 1 | 1 | 0 | 0x2E | State46 | Unused.
+47 | 1 | 0 | 1 | 1 | 1 | 1 | 0x2F | State47 | Unused.
+48 | 1 | 1 | 0 | 0 | 0 | 0 | 0x30 | State48 | Unused.
+49 | 1 | 1 | 0 | 0 | 0 | 1 | 0x31 | State49 | Unused.
+50 | 1 | 1 | 0 | 0 | 1 | 0 | 0x32 | State50 | Unused.
+51 | 1 | 1 | 0 | 0 | 1 | 1 | 0x33 | State51 | Unused.
+52 | 1 | 1 | 0 | 1 | 0 | 0 | 0x34 | State52 | Unused.
+53 | 1 | 1 | 0 | 1 | 0 | 1 | 0x35 | State53 | Unused.
+54 | 1 | 1 | 0 | 1 | 1 | 0 | 0x36 | State54 | Unused.
+55 | 1 | 1 | 0 | 1 | 1 | 1 | 0x37 | State55 | Unused.
+56 | 1 | 1 | 1 | 0 | 0 | 0 | 0x38 | State56 | Unused.
+57 | 1 | 1 | 1 | 0 | 0 | 1 | 0x39 | State57 | Unused.
+58 | 1 | 1 | 1 | 0 | 1 | 0 | 0x3A | State58 | Unused.
+59 | 1 | 1 | 1 | 0 | 1 | 1 | 0x3B | State59 | Unused.
+60 | 1 | 1 | 1 | 1 | 0 | 0 | 0x3C | State60 | Unused.
+61 | 1 | 1 | 1 | 1 | 0 | 1 | 0x3D | State61 | Unused.
+62 | 1 | 1 | 1 | 1 | 1 | 0 | 0x3E | State62 | Unused.
+63 | 1 | 1 | 1 | 1 | 1 | 1 | 0x3F | State63 | Unused.
