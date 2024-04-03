@@ -89,15 +89,15 @@ int16_t ds18b20::readSENS(uint sensNUM)
     return tempBf;
 }
 
-std::vector<double> ds18b20::readTEMP()
+std::vector<float> ds18b20::readTEMP()
 {
-    std::vector<double> temp;
+    std::vector<float> temp;
     temp.clear();
-    for (int16_t &x:readSENS()) { temp.push_back(x / 16.0); }
+    for (int16_t &x:readSENS()) { temp.push_back(x / 16.0f); }
     return temp;
 }
 
-double ds18b20::readTEMP(uint sensNUM) { return readSENS(sensNUM) / 16.0; }
+float ds18b20::readTEMP(uint sensNUM) { return readSENS(sensNUM) / 16.0f; }
 
 int16_t ds18b20::getNumberOfSenser() { return SENS_TMP.size(); }
 

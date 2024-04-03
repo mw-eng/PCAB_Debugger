@@ -27,7 +27,7 @@ bool checNUM(std::string &str)
     eraseCharNum(strBf);
     if(strBf == "") { return false; }
     if(strBf[0] == '.'){ flg = true; }
-    for(int i = 1; i < strBf.length() ; i++ )
+    for(uint i = 1; i < strBf.length() ; i++ )
     {
         if(!('0' <= strBf[i] && strBf[i] <= '9'))
         {
@@ -60,7 +60,7 @@ std::string Convert::ToString(const int64_t &val, const uint &BaseNumber, const 
     }
     if(strBf.length() < digit)
     {
-        for(int i = 0 ; i < digit - strBf.length() ; i++ ) { str.push_back('0'); }
+        for(uint i = 0 ; i < digit - strBf.length() ; i++ ) { str.push_back('0'); }
     }
     for(int i = strBf.length() ; 0 < i ; i-- ){ str.push_back(strBf[i - 1]); }
     return str;
@@ -83,7 +83,7 @@ bool Convert::TryToInt(const std::string &str, int &out)
     if(strBf == "") { return false; }
     if(strBf.length() > 11) { return false; }
     int sign = 1;
-    for(int i = 1; i < strBf.length() ; i++ )
+    for(uint i = 1; i < strBf.length() ; i++ )
     {
         if(!('0' <= strBf[i] && strBf[i] <= '9')) { return false; }
     }
