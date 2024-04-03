@@ -18,16 +18,23 @@ We recommend *\r(CR)* when CUI and echo are enable, and *\n(LF)* when CUI and lo
 ## Command Lists
 RS485 serial communication command list  
 
+<details>
+<summary>Digital Phase Shifter / Digital Phase Attenuator</summary>
+
 Command | Description
 :--|:--
 WrtDPS | Write binary data to the digital phase sifter.
 GetDPS {0/1/false/true/bf/now} {x} | Get digital phase sifter settings.<br>{1/true/now} : Get the currently written binary data.<br>{0/false/bf} : Get the buffer binary data.(Get the binary data written with the WrtDPS command.)<br>{x} : Phase Shifter No. ( {0} is gets all data.)
 SetDPS {x} {DEC}| Set binary data in the buffer.<br>{x} : Phase Shifter No.<br>{DEC} : Decimal binary value.
-
 WrtDSA | *Support with v1.2.0 or later*<br>Write binary data to the digital step attenuator.
 GetDSA {0/1/false/true/bf/now} {x} | *Support with v1.2.0 or later*<br>Get digital step attenuator settings.<br>{1/true/now} : Get the currently written binary data.<br>{0/false/bf} : Get the buffer binary data.(Get the binary data written with the WrtDSA command.)<br>{x} : Digital Step attenuator No. ( {0} is gets all data.)
 SetDSA {x} {DEC}| Set binary data in the buffer.<br>{x} : *Support with v1.2.0 or later*<br>Digital Step attenuator No.<br>{DEC} : Decimal binary value.
+</details>
+<details>
+<summary>Get and Set the MODE</summary>
 
+Command | Description
+:--|:--
 GetSTB.AMP | Get AMP STBY.
 SetSTB.AMP {0/1/false/true}| Set AMP STBY<br>{1/true} : Standby MODE<br>{0/false} : Run MODE
 GetSTB.DRA | Get DRA STBY.
@@ -37,33 +44,54 @@ SetSTB.LNA {0/1/false/true}| Set LNA STBY<br>{1/true} : Standby MODE<br>{0/false
 GetLPM | Get low power mode.
 SetLPM {0/1/false/true} | Get low power mode<br>{1/true} : Low Power MODE<br>{0/false} : Full Power MODE
 
+</details>
+<details>
+<summary>Get of each sensor information</summary>
+
+Command | Description
+:--|:--
 GetTMP.ID {x} | Get Temperature sensor ID.<br>{x} : Temp IC No.<br>{0} gets all temperature data.
 GetTMP.Val {x} | Get Temperature.<br>{x} : Temp IC No.<br>{0} gets all temperature data.
 GetTMP.CPU | Get CPU Temperature.
 GetVd | Get Vd Value.
 GetId | Get Id Value.
 
+</details>
+<details>
+<summary>Other commands</summary>
+
+Command | Description
+:--|:--
 SMEM ({x}) | Save state to memory(ROM).
 LMEM ({x}) | Load state to memory(ROM).
-
 GetIDN | Get device identification character.
 *IDN? | Same as GetIDN.
 ECHO {0/1/false/true} | Set echo mode.<br>*Do not enable it if you are connected to multiple devices.*<br>{1/true} : With echo.<br>{0/false} : Without echo.
 CUI {0/1/false/true} | CUI Control Use<br>{1/true} : CUI MODE<br>{0/false} : GUI MODE
-
 RST | Preset Config.<br>PS all 0<br>STB all 0(RUN MODE)<br>LPM 0(Full Power MODE)<br>ALD 1(Auto LOAD MODE)
 *RST | Same as RST.
 
+</details>
+<details>
+<summary>Maintenance command</summary>
+
+Command | Description
+:--|:--
 SetSN {x} | *Can only be changed in maintenance mode.*<br>Set Bord SN.<br>{x} : Serial Number strings.
 RROM ({x}) | Read data block from ROM.<br>{x} : Decimal ROM block number.
 WROM ({x}) {HEX} | Write data block to ROM.<br>{x} : Decimal ROM block number.<br>{HEX} : HEX data to write.
 EROM ({x}) | Erase data block from ROM.<br>{x} : Decimal ROM block number.
+
+</details>
 
 ## Hardware Switch Configuration
 List of settings by onboard hardware switch (SW1) status.  
   
 <img src="https://github.com/mw-eng/PCAB_Debugger/blob/master/PCAB_Debugger_RP2040/assets/SW1.png?raw=true" width="100px"> 0 = OFF(H) / 1 = ON(L)  
   
+<details open>
+<summary>Switch status 0x00 to 0x0A</summary>
+
 Number | SW6 | SW5 | SW4 | SW3 | SW2 | SW1 | HEX | Stateus | Description
 :--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--
 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0x00 | Default | Default Status Boot.<br>*DPS = ALL 0deg / DSA = ALL 2dB / ALL Active Mode*
@@ -76,12 +104,19 @@ Number | SW6 | SW5 | SW4 | SW3 | SW2 | SW1 | HEX | Stateus | Description
 7 | 0 | 0 | 0 | 1 | 1 | 1 | 0x07 | Allow writing to ROM<br>and<br>Allow settings to be saved<br>and<br>Auto Load boot. | 0x01 + 0x02 + 0x04<br>*Basic usage conditions 2*
 8 | 0 | 0 | 1 | 0 | 0 | 0 | 0x08 | State8 | Unused.
 9 | 0 | 0 | 1 | 0 | 0 | 1 | 0x09 | State9 | Unused.
-10 | 0 | 0 | 1 | 0 | 1 | 0 | 0x1A | State10 | Unused.
-11 | 0 | 0 | 1 | 0 | 1 | 1 | 0x1B | State11 | Unused.
-12 | 0 | 0 | 1 | 1 | 0 | 0 | 0x1C | State12 | Unused.
-13 | 0 | 0 | 1 | 1 | 0 | 1 | 0x1D | State13 | Unused.
-14 | 0 | 0 | 1 | 1 | 1 | 0 | 0x1E | State14 | Unused.
-15 | 0 | 0 | 1 | 1 | 1 | 1 | 0x1F | State15 | Unused.
+10 | 0 | 0 | 1 | 0 | 1 | 0 | 0x0A | State10 | Unused.
+11 | 0 | 0 | 1 | 0 | 1 | 1 | 0x0B | State11 | Unused.
+12 | 0 | 0 | 1 | 1 | 0 | 0 | 0x0C | State12 | Unused.
+13 | 0 | 0 | 1 | 1 | 0 | 1 | 0x0D | State13 | Unused.
+14 | 0 | 0 | 1 | 1 | 1 | 0 | 0x0E | State14 | Unused.
+15 | 0 | 0 | 1 | 1 | 1 | 1 | 0x0F | State15 | Unused.
+
+</details>
+<details>
+<summary>Switch status 0x10 to 0x1A</summary>
+
+Number | SW6 | SW5 | SW4 | SW3 | SW2 | SW1 | HEX | Stateus | Description
+:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--
 16 | 0 | 1 | 0 | 0 | 0 | 0 | 0x10 | State16 | Unused.
 17 | 0 | 1 | 0 | 0 | 0 | 1 | 0x11 | State17 | Unused.
 18 | 0 | 1 | 0 | 0 | 1 | 0 | 0x12 | State18 | Unused.
@@ -98,6 +133,13 @@ Number | SW6 | SW5 | SW4 | SW3 | SW2 | SW1 | HEX | Stateus | Description
 29 | 0 | 1 | 1 | 1 | 0 | 1 | 0x1D | State29 | Unused.
 30 | 0 | 1 | 1 | 1 | 1 | 0 | 0x1E | State30 | Unused.
 31 | 0 | 1 | 1 | 1 | 1 | 1 | 0x1F | State31 | Unused.
+
+</details>
+<details open>
+<summary>Switch status 0x20 to 0x2A</summary>
+
+Number | SW6 | SW5 | SW4 | SW3 | SW2 | SW1 | HEX | Stateus | Description
+:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--
 32 | 1 | 0 | 0 | 0 | 0 | 0 | 0x20 | Factory reset on boot. | If the switch is in this state at startup, the system boots to factory defaults and restore the autoload settings to their initial state.
 33 | 1 | 0 | 0 | 0 | 0 | 1 | 0x21 | State33 | Unused.
 34 | 1 | 0 | 0 | 0 | 1 | 0 | 0x22 | State34 | Unused.
@@ -114,6 +156,13 @@ Number | SW6 | SW5 | SW4 | SW3 | SW2 | SW1 | HEX | Stateus | Description
 45 | 1 | 0 | 1 | 1 | 0 | 1 | 0x2D | State45 | Unused.
 46 | 1 | 0 | 1 | 1 | 1 | 0 | 0x2E | State46 | Unused.
 47 | 1 | 0 | 1 | 1 | 1 | 1 | 0x2F | State47 | Unused.
+
+</details>
+<details>
+<summary>Switch status 0x00 to 0x0A</summary>
+
+Number | SW6 | SW5 | SW4 | SW3 | SW2 | SW1 | HEX | Stateus | Description
+:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--
 48 | 1 | 1 | 0 | 0 | 0 | 0 | 0x30 | State48 | Unused.
 49 | 1 | 1 | 0 | 0 | 0 | 1 | 0x31 | State49 | Unused.
 50 | 1 | 1 | 0 | 0 | 1 | 0 | 0x32 | State50 | Unused.
@@ -130,3 +179,5 @@ Number | SW6 | SW5 | SW4 | SW3 | SW2 | SW1 | HEX | Stateus | Description
 61 | 1 | 1 | 1 | 1 | 0 | 1 | 0x3D | State61 | Unused.
 62 | 1 | 1 | 1 | 1 | 1 | 0 | 0x3E | State62 | Unused.
 63 | 1 | 1 | 1 | 1 | 1 | 1 | 0x3F | State63 | Unused.
+
+</details>
