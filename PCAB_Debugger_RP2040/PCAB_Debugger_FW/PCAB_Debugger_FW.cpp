@@ -75,9 +75,6 @@ std::string readSerialNum()
     else { return ""; }
 }
 
-bool writeFACTORYdate(std:: string serialCode)
-{
-}
 
 #pragma endregion
 
@@ -123,7 +120,7 @@ void setup()
 #ifdef DEBUG_FRB
     bootMode = 0x20;
 #endif
-
+    readSerialNum();
 }
 
 int main()
