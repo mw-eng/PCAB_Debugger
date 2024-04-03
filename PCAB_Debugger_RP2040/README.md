@@ -3,15 +3,17 @@ Raspberry Pi Pico
 
 ## RS485 Serial Communication
 Send commands in the order of *(#{SERIAL NUMBER})*, *{COMMAND}*, *{ARGUMENTS}*, and *{EXIT CODE}*, separated by space.  
+<details>
+<summary>Description</summary>
 Specify the serial number of the communication partner in *{SERIAL NUMBER}*. However, if *"\*"* is specified, communication will be performed for all serial numbers.
 *{COMMAND}* and *{ARGUMENTS}* refer to *Command Lists*.  
 *{EXIT CODE}* is *\r(Carriage Return)* or *\n(Line Feed)* or *\r\n*.  
 We recommend *\r(CR)* when CUI and echo are enable, and *\n(LF)* when CUI and local echo are enabled or GUI is enabled.  
-
 ### example
 - #0010 WrtDPS
 - #0001 SetSTB.AMP true
 - #* SetSN
+</details>
 
 ## Command Lists
 RS485 serial communication command list  
