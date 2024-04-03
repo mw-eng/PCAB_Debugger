@@ -77,13 +77,6 @@ std::string readSerialNum()
 
 bool writeFACTORYdate(std:: string serialCode)
 {
-    if( serialCode.size() <= 0 || 16 < serialCode.size() ) { return false; }
-    uint8_t romBF[FLASH_PAGE_SIZE];
-    readROMblock(blockAddress(ROM_BLOCK_MAX - 1), romBF);
-    // write BF Serial Number
-    for(int i = FLASH_PAGE_SIZE - 16; i < FLASH_PAGE_SIZE ; i ++)
-    { if(isgraph(romBF[i])) { serial.push_back(romBF[i]); } }
-    return serial;
 }
 
 #pragma endregion
@@ -139,7 +132,7 @@ int main()
     while (1)
     {
         pcabCMD::CommandLine cmd = uart->readCMD(modeECHO);
-        if( cmd.serialNum.size() > 0 && serialNum.size() > 0 && (String::strCompare(cmd.serialNum, "*", true) || String::strCompare(cmd.serialNum, serialNum, true)))
+        if( cmd.serialNum.size() > 0 && (String::strCompare(cmd.serialNum, "*", true) || String::strCompare(cmd.serialNum, serialNum, true)))
         {
             if(modeECHO && modeCUI){uart->uart.writeLine("");}
             switch (cmd.command)
@@ -160,6 +153,46 @@ int main()
                 uart->uart.writeLine("ERR > Not supported in current version."); 
                 break;
             case pcabCMD::cmdCode::GetTMP_ID:
+                if(cmd.argments.size() != 1) { uart->uart.writeLine("ERR > Number of arguments does not match."); }
+                else
+                {
+                    uint8_t num;
+                    if(!Convert::TryToUInt8(cmd.argments[0], 10, num)) { uart->uart.writeLine("ERR > Argument error."); }
+                    if(sens->getNumberOfSenser() < num) { uart->uart.writeLine("ERR > Specified sensor does not exist."); }
+                    if(num == 0)
+                    {
+                        std::vector<uint64_t> code = sens->getSENS_ROMCODE();
+                        if(modeCUI)
+                        {
+                            char ch[SNPRINTF_BUFFER_LEN];
+                            for(uint8_t i = 0 ; i < code.size() ; i++)
+                            {
+                                int len = snprintf(ch, sizeof(ch), "%+3u > %s", i, Convert::ToString(code[i], 16, 16));
+                                uart->uart.writeLine(std::string(ch, len));
+                            }
+                        }
+                        else
+                        {
+                            uart->uart.writeLine(Convert::ToString(code[0], 16, 0));
+                            for(uint8_t i = 1 ; i < code.size() ; i++)
+                            { uart->uart.writeLine("," + Convert::ToString(code[i], 16, 0)); }
+                        }
+                    }
+                    else
+                    {
+                        uint64_t code = sens->getSENS_ROMCODE(num - 1);
+                        if(modeCUI)
+                        {
+                            char ch[SNPRINTF_BUFFER_LEN];
+                            int len = snprintf(ch, sizeof(ch), "%u > %s", num, Convert::ToString(code, 16, 16));
+                            uart->uart.writeLine(std::string(ch, len));
+                        }
+                        else
+                        {
+                            uart->uart.writeLine(Convert::ToString(code, 16, 0));
+                        }
+                    }
+                }
                 break;
             case pcabCMD::cmdCode::GetTMP_VAL:
                 break;

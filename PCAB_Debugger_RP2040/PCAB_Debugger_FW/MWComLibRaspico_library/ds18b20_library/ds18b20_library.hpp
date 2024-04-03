@@ -42,7 +42,7 @@ class ds18b20
 
     /// @brief Get temperature of all sensors.
     /// @return Temperature.
-    std::vector<std::string> readTEMP();
+    std::vector<double> readTEMP();
 
     /// @brief Get the temperature of the specified sensor.
     /// @param sensNUM Senser number

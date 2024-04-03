@@ -89,11 +89,11 @@ int16_t ds18b20::readSENS(uint sensNUM)
     return tempBf;
 }
 
-std::vector<std::string> ds18b20::readTEMP()
+std::vector<double> ds18b20::readTEMP()
 {
-    std::vector<std::string> temp;
+    std::vector<double> temp;
     temp.clear();
-    for (int16_t &x:readSENS()) { temp.push_back(std::to_string(x / 16.0)); }
+    for (int16_t &x:readSENS()) { temp.push_back(x / 16.0); }
     return temp;
 }
 
