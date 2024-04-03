@@ -3,22 +3,32 @@
 
 #include "PCAB_Debugger_FW.hpp"
 #define SNPRINTF_BUFFER_LEN 50
-
+#define NUMBER_OF_SYSTEM 15
 const static std::string FW_VENDOR = "Orient Microwave Corp.";
 const static std::string FW_MODEL = "LX00-0004-00";
 const static std::string FW_REV = "1.1.0";
+// ROM Block Number
+#define ROM_BLOCK_USER 16   // Range of user available space from this block number to ROM_BLOCK_MAX - 2
+#define ROM_BLOCK_MAX 32    // 16M (Raspberry Pi Pico)
+//#define ROM_BLOCK_MAX 64    // 32M
+//#define ROM_BLOCK_MAX 128   // 64M
+//#define ROM_BLOCK_MAX 256   // 128M (PCAB)
+//#define ROM_BLOCK_MAX 512   // 256M
 
 
 ds18b20 *sens;
 adc *analog;
 spi *spi_ps;
+spi *spi_sa;
 pcabCMD *uart;
 bool modeCUI = true;
 bool modeECHO = false;
 std::string serialNum = "";
 uint8_t bootMode = 0;
-uint8_t dps[15];
-uint8_t dsa[15];
+uint8_t dpsBF[NUMBER_OF_SYSTEM];
+uint8_t dpsNOW[NUMBER_OF_SYSTEM];
+uint8_t dsaBF[NUMBER_OF_SYSTEM];
+uint8_t dsaNOW[NUMBER_OF_SYSTEM];
 bool stbAMP = false;
 bool stbDRA = false;
 bool stbLNA = false;
@@ -35,7 +45,7 @@ bool editRangeCheck(const uint16_t &blockNum)
 
 void writeROM(const uint16_t &blockNum, const uint8_t blockDAT[FLASH_PAGE_SIZE])
 {
-    if(bootMode == 0x2A || (gpio_get(SW_6_PIN) && gpio_get(SW_5_PIN) && gpio_get(SW_4_PIN) && !gpio_get(SW_3_PIN)))
+    if(bootMode == 0x2A || bootMode == 0x04 || bootMode == 0x05 || bootMode == 0x06 || bootMode == 0x07)
     {
         if(editRangeCheck(blockNum))
         {
@@ -79,6 +89,27 @@ std::string readSerialNum()
     else { return ""; }
 }
 
+void writeDPS()
+{
+    std::vector<uint8_t> stBF;
+    for(int i = NUMBER_OF_SYSTEM ; i > 0 ; i-- )
+    {
+        stBF.push_back(dpsBF[i]);
+        dpsNOW[i] = dpsBF[i] & 0x3F;
+    }
+    spi_ps->spi_write_read(stBF);
+}
+
+void writeDSA()
+{
+    std::vector<uint8_t> stBF;
+    for(int i = NUMBER_OF_SYSTEM ; i > 0 ; i-- )
+    {
+        stBF.push_back(dsaBF[i]);
+        dsaNOW[i] = dsaBF[i] & 0x3F;
+    }
+    spi_sa->spi_write_read(stBF);
+}
 
 #pragma endregion
 
@@ -139,6 +170,12 @@ int main()
             switch (cmd.command)
             {
                 case pcabCMD::cmdCode::WrtDPS:
+                    if(cmd.argments.size() != 0) { uart->uart.writeLine("ERR > Number of arguments does not match."); }
+                    else
+                    {
+                        writeDPS();
+                        uart->uart.writeLine("DONE > Write Digital Phase Shifter Status.");
+                    }
                     break;
                 case pcabCMD::cmdCode::GetDPS:
                     break;
@@ -146,6 +183,13 @@ int main()
                     break;
                 case pcabCMD::cmdCode::WrtDSA:
                     uart->uart.writeLine("ERR > Not supported in current version."); 
+                    break;
+                    if(cmd.argments.size() != 0) { uart->uart.writeLine("ERR > Number of arguments does not match."); }
+                    else
+                    {
+                        writeDSA();
+                        uart->uart.writeLine("DONE > Write Digital Step Attenuator Status.");
+                    }
                     break;
                 case pcabCMD::cmdCode::GetDSA:
                     uart->uart.writeLine("ERR > Not supported in current version."); 
@@ -415,14 +459,13 @@ int main()
                     {
                         uint16_t blockNum;
                         if(!Convert::TryToUInt16(cmd.argments[0], 10, blockNum)) { uart->uart.writeLine("ERR > Argument error."); break; }
-                        if(bootMode == 0x2A || (gpio_get(SW_6_PIN) && gpio_get(SW_5_PIN) && gpio_get(SW_4_PIN) && !gpio_get(SW_3_PIN)))
+                        if(bootMode != 0x2A && bootMode != 0x04 && bootMode != 0x05 && bootMode != 0x06)
+                        { uart->uart.writeLine("ERR > It is in an unusable state."); break; }
+                        if(editRangeCheck(blockNum))
                         {
-                            if(editRangeCheck(blockNum))
-                            {
-                                eraseROMblock(blockAddress(blockNum));
-                                uart->uart.writeLine("DONE > Erase ROM block " + Convert::ToString(blockNum, 10, 0) + ".");
-                            } else { uart->uart.writeLine("ERR > Specified block is out of range."); }
-                        } else { uart->uart.writeLine("ERR > It is in an unusable state."); }
+                            eraseROMblock(blockAddress(blockNum));
+                            uart->uart.writeLine("DONE > Erase ROM block " + Convert::ToString(blockNum, 10, 0) + ".");
+                        } else { uart->uart.writeLine("ERR > Specified block is out of range."); }
                     }
                     break;
                 case pcabCMD::cmdCode::SetSN:
