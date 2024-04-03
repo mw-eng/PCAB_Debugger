@@ -37,13 +37,13 @@ GetSTB.LNA | Get LNA STBY.
 SetSTB.LNA {0/1/false/true}| Set LNA STBY<br>{1/true} : Standby MODE<br>{0/false} : Run MODE
 GetLPM | Get low power mode.
 SetLPM {0/1/false/true} | Get low power mode<br>{1/true} : Low Power MODE<br>{0/false} : Full Power MODE
-SMEM | Save state to memory(ROM).
-LMEM | Load state to memory(ROM).
-RROM {x} | Read data block from ROM.<br>{x} : Decimal ROM block number.
-WROM {x} {HEX} | Write data block to ROM.<br>{x} : Decimal ROM block number.<br>{HEX} : HEX data to write.
-EROM {x} | Erase data block from ROM.<br>{x} : Decimal ROM block number.
+SMEM ({x}) | Save state to memory(ROM).
+LMEM ({x}) | Load state to memory(ROM).
+RROM ({x}) | Read data block from ROM.<br>{x} : Decimal ROM block number.
+WROM ({x}) {HEX} | Write data block to ROM.<br>{x} : Decimal ROM block number.<br>{HEX} : HEX data to write.
+EROM ({x}) | Erase data block from ROM.<br>{x} : Decimal ROM block number.
 GetSN | Get Board SN.
-SetSN {x} | Set Bord SN.<br>{x}:DEC
+SetSN {x} | Set Bord SN.<br>{x} : Serial Number strings.<br>*Can only be changed in maintenance mode.*
 RST | Preset Config.<br>PS all 0<br>STB all 0(RUN MODE)<br>LPM 0(Full Power MODE)<br>ALD 1(Auto LOAD MODE)
 *RST | Same as RST.
 ECHO {0/1/false/true} | Set echo mode.<br>*Do not enable it if you are connected to multiple devices.*<br>{1/true} : With echo.<br>{0/false} : Without echo.

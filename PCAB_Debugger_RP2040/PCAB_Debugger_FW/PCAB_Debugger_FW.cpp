@@ -2,11 +2,10 @@
 //#define DEBUG_FRB
 
 #include "PCAB_Debugger_FW.hpp"
-#define DPS_MAX 15
-#define DSA_MAX 15
 #define SNPRINTF_BUFFER_LEN 50
 
 const static std::string FW_VENDOR = "Orient Microwave Corp.";
+const static std::string FW_MODEL = "LX00-0004-00";
 const static std::string FW_REV = "1.1.0";
 
 
@@ -17,10 +16,9 @@ pcabCMD *uart;
 bool modeCUI = true;
 bool modeECHO = false;
 std::string serialNum = "";
-std::string FW_MODEL = "";
 uint8_t bootMode = 0;
-uint8_t dps[DPS_MAX];
-uint8_t dsa[DSA_MAX];
+uint8_t dps[15];
+uint8_t dsa[15];
 
 #pragma region Private Function
 
@@ -61,6 +59,31 @@ void writeROM(const std::string &num, const std::string &data)
         }
         writeROM(blockNum, blockDAT);
     }
+}
+
+std::string readSerialNum()
+{
+    uint8_t romBF[FLASH_PAGE_SIZE];
+    std::string serial;
+    readROMblock(blockAddress(ROM_BLOCK_MAX - 1), romBF);
+    // Read SERIAL NUMBER
+    serial = "";
+    if(romBF[FLASH_PAGE_SIZE] > 16 || romBF[FLASH_PAGE_SIZE] == 0) { return ""; }
+    for(int i = FLASH_PAGE_SIZE - 16; i < FLASH_PAGE_SIZE - 16 + romBF[FLASH_PAGE_SIZE] ; i ++)
+    { if(isgraph(romBF[i])) { serial.push_back(romBF[i]); } }
+    if(serial.size() == romBF[FLASH_PAGE_SIZE]) { return serial; }
+    else { return ""; }
+}
+
+bool writeFACTORYdate(std:: string serialCode)
+{
+    if( serialCode.size() <= 0 || 16 < serialCode.size() ) { return false; }
+    uint8_t romBF[FLASH_PAGE_SIZE];
+    readROMblock(blockAddress(ROM_BLOCK_MAX - 1), romBF);
+    // write BF Serial Number
+    for(int i = FLASH_PAGE_SIZE - 16; i < FLASH_PAGE_SIZE ; i ++)
+    { if(isgraph(romBF[i])) { serial.push_back(romBF[i]); } }
+    return serial;
 }
 
 #pragma endregion
@@ -108,17 +131,6 @@ void setup()
     bootMode = 0x20;
 #endif
 
-    //Read MODEL and SERIAL NUMBER
-    uint8_t romBF[FLASH_PAGE_SIZE];
-    readROMblock(blockAddress(ROM_BLOCK_MAX - 1), romBF);
-    FW_MODEL = "";
-    serialNum = "";
-    for(int i = FLASH_PAGE_SIZE - 48; i < FLASH_PAGE_SIZE - 32 ; i++)
-    {  }
-    for(int i = FLASH_PAGE_SIZE - 32; i < FLASH_PAGE_SIZE - 16 ; i++)
-    { if(isgraph(romBF[i])) { FW_MODEL += romBF[i]; } }
-    for(int i = FLASH_PAGE_SIZE - 16; i < FLASH_PAGE_SIZE ; i ++)
-    { if(isgraph(romBF[i])) { serialNum.push_back(romBF[i]); } }
 }
 
 int main()
@@ -127,7 +139,7 @@ int main()
     while (1)
     {
         pcabCMD::CommandLine cmd = uart->readCMD(modeECHO);
-        if( cmd.serialNum.size() > 0 && (String::strCompare(cmd.serialNum, "*", true) || String::strCompare(cmd.serialNum, serialNum, true)))
+        if( cmd.serialNum.size() > 0 && serialNum.size() > 0 && (String::strCompare(cmd.serialNum, "*", true) || String::strCompare(cmd.serialNum, serialNum, true)))
         {
             if(modeECHO && modeCUI){uart->uart.writeLine("");}
             switch (cmd.command)
