@@ -21,14 +21,11 @@ Command | Description
 WrtDPS | Write binary data to the digital phase sifter.
 GetDPS {0/1/false/true/bf/now} {x} | Get digital phase sifter settings.<br>{1/true/now} : Get the currently written binary data.<br>{0/false/bf} : Get the buffer binary data.(Get the binary data written with the WrtDPS command.)<br>{x} : Phase Shifter No. ( {0} is gets all data.)
 SetDPS {x} {DEC}| Set binary data in the buffer.<br>{x} : Phase Shifter No.<br>{DEC} : Decimal binary value.
+
 WrtDSA | *Support with v1.2.0 or later*<br>Write binary data to the digital step attenuator.
 GetDSA {0/1/false/true/bf/now} {x} | *Support with v1.2.0 or later*<br>Get digital step attenuator settings.<br>{1/true/now} : Get the currently written binary data.<br>{0/false/bf} : Get the buffer binary data.(Get the binary data written with the WrtDSA command.)<br>{x} : Digital Step attenuator No. ( {0} is gets all data.)
 SetDSA {x} {DEC}| Set binary data in the buffer.<br>{x} : *Support with v1.2.0 or later*<br>Digital Step attenuator No.<br>{DEC} : Decimal binary value.
-GetTMP.ID {x} | Get Temperature sensor ID.<br>{x} : Temp IC No.<br>{0} gets all temperature data.
-GetTMP.Val {x} | Get Temperature.<br>{x} : Temp IC No.<br>{0} gets all temperature data.
-GetTMP.CPU | Get CPU Temperature.
-GetVd | Get Vd Value.
-GetId | Get Id Value.
+
 GetSTB.AMP | Get AMP STBY.
 SetSTB.AMP {0/1/false/true}| Set AMP STBY<br>{1/true} : Standby MODE<br>{0/false} : Run MODE
 GetSTB.DRA | Get DRA STBY.
@@ -37,19 +34,28 @@ GetSTB.LNA | Get LNA STBY.
 SetSTB.LNA {0/1/false/true}| Set LNA STBY<br>{1/true} : Standby MODE<br>{0/false} : Run MODE
 GetLPM | Get low power mode.
 SetLPM {0/1/false/true} | Get low power mode<br>{1/true} : Low Power MODE<br>{0/false} : Full Power MODE
+
+GetTMP.ID {x} | Get Temperature sensor ID.<br>{x} : Temp IC No.<br>{0} gets all temperature data.
+GetTMP.Val {x} | Get Temperature.<br>{x} : Temp IC No.<br>{0} gets all temperature data.
+GetTMP.CPU | Get CPU Temperature.
+GetVd | Get Vd Value.
+GetId | Get Id Value.
+
 SMEM ({x}) | Save state to memory(ROM).
 LMEM ({x}) | Load state to memory(ROM).
+
+GetIDN | Get device identification character.
+*IDN? | Same as GetIDN.
+ECHO {0/1/false/true} | Set echo mode.<br>*Do not enable it if you are connected to multiple devices.*<br>{1/true} : With echo.<br>{0/false} : Without echo.
+CUI {0/1/false/true} | CUI Control Use<br>{1/true} : CUI MODE<br>{0/false} : GUI MODE
+
+RST | Preset Config.<br>PS all 0<br>STB all 0(RUN MODE)<br>LPM 0(Full Power MODE)<br>ALD 1(Auto LOAD MODE)
+*RST | Same as RST.
+
+SetSN {x} | *Can only be changed in maintenance mode.*<br>Set Bord SN.<br>{x} : Serial Number strings.
 RROM ({x}) | Read data block from ROM.<br>{x} : Decimal ROM block number.
 WROM ({x}) {HEX} | Write data block to ROM.<br>{x} : Decimal ROM block number.<br>{HEX} : HEX data to write.
 EROM ({x}) | Erase data block from ROM.<br>{x} : Decimal ROM block number.
-SetSN {x} | Set Bord SN.<br>{x} : Serial Number strings.<br>*Can only be changed in maintenance mode.*
-RST | Preset Config.<br>PS all 0<br>STB all 0(RUN MODE)<br>LPM 0(Full Power MODE)<br>ALD 1(Auto LOAD MODE)
-*RST | Same as RST.
-ECHO {0/1/false/true} | Set echo mode.<br>*Do not enable it if you are connected to multiple devices.*<br>{1/true} : With echo.<br>{0/false} : Without echo.
-CUI | Get cui mode.
-CUI {0/1/false/true} | CUI Control Use<br>{1/true} : CUI MODE<br>{0/false} : GUI MODE
-GetIDN | Get device identification character.
-*IDN? | Same as GetIDN.
 
 ## Hardware Switch Configuration
 List of settings by onboard hardware switch (SW1) status.  
