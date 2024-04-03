@@ -54,7 +54,6 @@ pcabCMD::CommandLine pcabCMD::readCMD(bool echo)
     if (String::strCompare(cmd, "RROM", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdCode::ReadROM, strArr, cmdBF.argments.size()); }
     if (String::strCompare(cmd, "WROM", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdCode::WriteROM, strArr, cmdBF.argments.size()); }
     if (String::strCompare(cmd, "EROM", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdCode::EraseROM, strArr, cmdBF.argments.size()); }
-    if (String::strCompare(cmd, "GetSN", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdCode::GetSN, strArr, cmdBF.argments.size()); }
     if (String::strCompare(cmd, "SetSN", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdCode::SetSN, strArr, cmdBF.argments.size()); }
     if (String::strCompare(cmd, "RST", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdCode::RST, strArr, cmdBF.argments.size()); }
     if (String::strCompare(cmd, "*RST", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdCode::RST, strArr, cmdBF.argments.size()); }

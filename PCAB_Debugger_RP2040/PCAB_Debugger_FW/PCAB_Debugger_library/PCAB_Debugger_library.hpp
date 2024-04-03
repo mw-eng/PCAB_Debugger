@@ -33,7 +33,6 @@ class pcabCMD : uartSYNC
         ReadROM,
         WriteROM,
         EraseROM,
-        GetSN,
         SetSN,
         RST,
         ECHO,
