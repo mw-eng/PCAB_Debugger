@@ -105,7 +105,7 @@ void writeDSA()
     std::vector<uint8_t> stBF;
     for(uint16_t i = NUMBER_OF_SYSTEM ; i > 0 ; i-- )
     {
-        stBF.push_back(dsaBF[i]);
+        stBF.push_back(dsaBF[i] ^ 0x3F);
         dsaNOW[i] = dsaBF[i] & 0x3F;
     }
     spi_sa->spi_write_read(stBF);
@@ -555,6 +555,9 @@ int main()
                             uart->uart.writeLine(std::string(ch, len));
                         } else { uart->uart.writeLine(std::to_string(analog->readADC1())); }
                     }
+                    break;
+                case pcabCMD::cmdCode::GetVin:
+                    uart->uart.writeLine("ERR > Not supported in current version."); 
                     break;
                 case pcabCMD::cmdCode::SaveMEM:
                     if(cmd.argments.size() > 1) { uart->uart.writeLine("ERR > Number of arguments does not match."); }

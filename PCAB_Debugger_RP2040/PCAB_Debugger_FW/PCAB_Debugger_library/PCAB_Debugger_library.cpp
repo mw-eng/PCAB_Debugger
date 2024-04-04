@@ -39,6 +39,7 @@ pcabCMD::CommandLine pcabCMD::readCMD(bool echo)
     if (String::strCompare(cmd, "GetTMP.CPU", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdCode::GetTMP_CPU, strArr, cmdBF.argments.size()); }
     if (String::strCompare(cmd, "GetVd", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdCode::GetVd, strArr, cmdBF.argments.size()); }
     if (String::strCompare(cmd, "GetId", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdCode::GetId, strArr, cmdBF.argments.size()); }
+    if (String::strCompare(cmd, "GetVin", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdCode::GetVin, strArr, cmdBF.argments.size()); }
     if (String::strCompare(cmd, "GetSTB.AMP", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdCode::GetSTB_AMP, strArr, cmdBF.argments.size()); }
     if (String::strCompare(cmd, "GetSTB.DRA", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdCode::GetSTB_DRA, strArr, cmdBF.argments.size()); }
     if (String::strCompare(cmd, "GetSTB.LNA", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdCode::GetSTB_LNA, strArr, cmdBF.argments.size()); }
