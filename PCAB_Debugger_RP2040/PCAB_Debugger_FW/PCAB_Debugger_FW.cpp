@@ -111,6 +111,35 @@ void writeDSA()
     spi_sa->spi_write_read(stBF);
 }
 
+void saveSTATE(const uint16_t &blockNum, const uint8_t &num)
+{
+    uint8_t romBF[FLASH_PAGE_SIZE];
+    uint8_t ioBF;
+    ioBF = stbAMP;
+    ioBF += 2 * stbDRA;
+    ioBF += 4 * stbLNA;
+    ioBF += 8 * lowMODE;
+    readROMblock(blockAddress(blockNum), romBF);
+    for(uint i = 0; i < 15 ; i ++) { romBF[i + num * 0x40] = dpsNOW[i]; }
+    romBF[15 + num * 0x40] = ioBF;
+    for(uint i = 0; i < 16 ; i ++) { romBF[i + num * 0x40 + 16] = dsaNOW[i]; }
+    writeROMblock(blockAddress(ROM_BLOCK_NUM - 1), romBF);
+}
+
+void readSTATE(const uint16_t &blockNum, const uint8_t &num)
+{
+    uint8_t romBF[FLASH_PAGE_SIZE];
+    uint8_t ioBF;
+    readROMblock(blockAddress(blockNum), romBF);
+    for(uint i = 0; i < 15; i++) { dpsBF[i] = romBF[i + num * 0x40]; }
+    ioBF = romBF[15 + num * 0x40];
+    for(uint i = 0; i < 16; i++) { dsaNOW[i] = romBF[i + num * 0x40 + 16]; }
+    stbAMP = (ioBF >> 0) & 1;
+    stbDRA = (ioBF >> 1) & 1;
+    stbLNA = (ioBF >> 2) & 1;
+    lowMODE = (ioBF >> 3) & 1;
+}
+
 #pragma endregion
 
 void setup()
@@ -254,7 +283,7 @@ int main()
                         if(!Convert::TryToUInt16(cmd.argments[0], 10, num)) { uart->uart.writeLine("ERR > Argument1 error."); break; }
                         if(NUMBER_OF_SYSTEM < uint(num - 1)) { uart->uart.writeLine("ERR > The specified Argument1 is out of range."); break; }
                         if(!Convert::TryToUInt8(cmd.argments[1], 10, conf)) { uart->uart.writeLine("ERR > Argument2 error."); break; }
-                        if(conf > (1 << 6)) { uart->uart.writeLine("ERR > The specified Argument2 is out of range."); break; }
+                        if(conf > (1u << 6)) { uart->uart.writeLine("ERR > The specified Argument2 is out of range."); break; }
                         dpsBF[num - 1] = conf;
                         uart->uart.writeLine("DONE > Set to buffer.");
                     }
@@ -492,8 +521,24 @@ int main()
                     }
                     break;
                 case pcabCMD::cmdCode::SaveMEM:
+                    if(cmd.argments.size() < 2) { uart->uart.writeLine("ERR > Number of arguments does not match."); }
+                    else
+                    {
+                        saveSTATE();
+                    }
                     break;
                 case pcabCMD::cmdCode::LoadMEM:
+                    if(){}
+                    else
+                    {
+                        readSTATE();
+                        writeDPS();
+                        gpio_put(STB_AMP_PIN, !stbAMP);
+                        gpio_put(STB_DRA_PIN, !stbDRA);
+                        gpio_put(STB_LNA_PIN, !stbLNA);
+                        gpio_put(STB_AMP_PIN, !lowMODE);
+                        //writeDSA();
+                    }
                     break;
                 case pcabCMD::cmdCode::ReadROM:
                     if(cmd.argments.size() != 1) { uart->uart.writeLine("ERR > Number of arguments does not match."); }
@@ -559,6 +604,7 @@ int main()
                         for(uint i = 0; i < cmd.argments[0].size() ; i ++) { romBF[i + FLASH_PAGE_SIZE - 16] = cmd.argments[0][i]; }
                         romBF[FLASH_PAGE_SIZE - 1] = cmd.argments[0].size();
                         writeROMblock(blockAddress(ROM_BLOCK_NUM - 1), romBF);
+                        serialNum = cmd.argments[0];
                         uart->uart.writeLine("DONE > Write serial number.");
                     }
                     break;
