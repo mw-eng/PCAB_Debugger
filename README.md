@@ -6,6 +6,7 @@ For commands, see PCAB_Debugger_RP2040 [README.md](./PCAB_Debugger_RP2040/README
 
 ## PCAB_Debugger_GUI
 Control GUI program.
+[README.md](./PCAB_Debugger_GUI/README.md)
 
 ## PCAB_Debugger_RP2040
 The main unit firmware.
