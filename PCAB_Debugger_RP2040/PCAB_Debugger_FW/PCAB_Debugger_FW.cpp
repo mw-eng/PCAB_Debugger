@@ -1,4 +1,4 @@
-#define DEBUG_ADMIN
+//#define DEBUG_ADMIN
 //#define DEBUG_FRB
 
 #include "PCAB_Debugger_FW.hpp"
@@ -126,7 +126,7 @@ void saveSTATE(const uint16_t &blockNum, const uint8_t &num)
     writeROMblock(blockAddress(blockNum), romBF);
 }
 
-bool readSTATE(const uint16_t &blockNum, const uint8_t &num)
+bool loadSTATE(const uint16_t &blockNum, const uint8_t &num)
 {
     uint8_t romBF[FLASH_PAGE_SIZE];
     uint8_t ioBF;
@@ -197,8 +197,33 @@ void setup()
 #endif
     serialNum = readSerialNum();
 
-
+    // Resture Factory STATE
+    if((bootMode == 0x20 || bootMode == 0x00) && !loadSTATE(ROM_BLOCK_NUM - 1, 0)) { }
+    else if((bootMode == 0x01 || bootMode == 0x03 || bootMode == 0x05 || bootMode == 0x07) && !loadSTATE(ROM_BLOCK_NUM - 2, 0)) { }
+    else
+    {
+        for(int i = 0; i < NUMBER_OF_SYSTEM; i++ ) { dpsBF[i] = 0; dsaBF[i] = 8;}
+        dsaBF[NUMBER_OF_SYSTEM] = 0;
+        stbAMP = false;
+        stbDRA = false;
+        stbLNA = false;
+        lowMODE = false;
+    }
+    // save factory state
+    if(bootMode == 0x20)
+    {
+        saveSTATE(ROM_BLOCK_NUM - 2, 0);
+        saveSTATE(ROM_BLOCK_NUM - 2, 1);
+        saveSTATE(ROM_BLOCK_NUM - 2, 2);
+        saveSTATE(ROM_BLOCK_NUM - 2, 3);
+    }
     
+    // Write now state.
+    writeDPS();
+    gpio_put(STB_AMP_PIN, !stbAMP);
+    gpio_put(STB_DRA_PIN, !stbDRA);
+    gpio_put(STB_LNA_PIN, !stbLNA);
+    gpio_put(STB_AMP_PIN, !lowMODE);
 }
 
 int main()
@@ -550,6 +575,7 @@ int main()
                             if( blockNum != ROM_BLOCK_NUM - 2 && !editRangeCheck(blockNum)) { uart->uart.writeLine("ERR > Specified block is out of range."); }
                         }
                         saveSTATE(blockNum, num);
+                        uart->uart.writeLine("DONE > Save state.");
                     }
                     break;
                 case pcabCMD::cmdCode::LoadMEM:
@@ -570,12 +596,13 @@ int main()
                             if(num > 3) { uart->uart.writeLine("ERR > Specified number is out of range."); }
                             if( blockNum != ROM_BLOCK_NUM - 2 && !editRangeCheck(blockNum)) { uart->uart.writeLine("ERR > Specified block is out of range."); }
                         }
-                        if(!readSTATE(blockNum, num)) { uart->uart.writeLine("ERR > No valid settings were found for the specified address."); }
+                        if(!loadSTATE(blockNum, num)) { uart->uart.writeLine("ERR > No valid settings were found for the specified address."); }
                         writeDPS();
                         gpio_put(STB_AMP_PIN, !stbAMP);
                         gpio_put(STB_DRA_PIN, !stbDRA);
                         gpio_put(STB_LNA_PIN, !stbLNA);
                         gpio_put(STB_AMP_PIN, !lowMODE);
+                        uart->uart.writeLine("DONE > Load state.");
                         //writeDSA();
                     }
                     break;
@@ -648,6 +675,25 @@ int main()
                     }
                     break;
                 case pcabCMD::cmdCode::RST:
+                    if(cmd.argments.size() != 0) { uart->uart.writeLine("ERR > Number of arguments does not match."); }
+                    else
+                    {
+                        if(!loadSTATE(NUMBER_OF_SYSTEM - 1, 0))
+                        {
+                            for(int i = 0; i < NUMBER_OF_SYSTEM; i++ ) { dpsBF[i] = 0; dsaBF[i] = 0;}
+                            dsaBF[NUMBER_OF_SYSTEM] = 0;
+                            stbAMP = false;
+                            stbDRA = false;
+                            stbLNA = false;
+                            lowMODE = false;
+                        }
+                        writeDPS();
+                        gpio_put(STB_AMP_PIN, !stbAMP);
+                        gpio_put(STB_DRA_PIN, !stbDRA);
+                        gpio_put(STB_LNA_PIN, !stbLNA);
+                        gpio_put(STB_AMP_PIN, !lowMODE);
+                        uart->uart.writeLine("DONE > Reset state.");
+                    }
                     break;
                 case pcabCMD::cmdCode::ECHO:
                     if(cmd.argments.size() != 1) { uart->uart.writeLine("ERR > Number of arguments does not match."); }
