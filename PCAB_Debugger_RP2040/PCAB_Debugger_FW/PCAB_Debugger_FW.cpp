@@ -552,12 +552,12 @@ int main()
                     {
                         if(cmd.argments[0].size() == 0) { uart->uart.writeLine("ERR > Argument error."); break; }
                         if(cmd.argments[0].size() > 16) { uart->uart.writeLine("ERR > Serial code is too long. Limit to 15 characters."); break; }
-                        if(editRangeCheck(ROM_BLOCK_NUM - 1)) { uart->uart.writeLine("ERR > It is in an unusable state."); break; }
+                        if(!editRangeCheck(ROM_BLOCK_NUM - 1)) { uart->uart.writeLine("ERR > It is in an unusable state."); break; }
                         
                         uint8_t romBF[FLASH_PAGE_SIZE];
                         readROMblock(blockAddress(ROM_BLOCK_NUM - 1), romBF);
                         for(uint i = 0; i < cmd.argments[0].size() ; i ++) { romBF[i + FLASH_PAGE_SIZE - 16] = cmd.argments[0][i]; }
-                        romBF[FLASH_BLOCK_SIZE - 1] = cmd.argments[0].size();
+                        romBF[FLASH_PAGE_SIZE - 1] = cmd.argments[0].size();
                         writeROMblock(blockAddress(ROM_BLOCK_NUM - 1), romBF);
                         uart->uart.writeLine("DONE > Write serial number.");
                     }
