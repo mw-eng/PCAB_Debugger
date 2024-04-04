@@ -123,7 +123,7 @@ void saveSTATE(const uint16_t &blockNum, const uint8_t &num)
     for(uint i = 0; i < 15 ; i ++) { romBF[i + num * 0x40] = dpsNOW[i]; }
     romBF[15 + num * 0x40] = ioBF;
     for(uint i = 0; i < 16 ; i ++) { romBF[i + num * 0x40 + 16] = dsaNOW[i]; }
-    writeROMblock(blockAddress(ROM_BLOCK_NUM - 1), romBF);
+    writeROMblock(blockAddress(blockNum), romBF);
 }
 
 bool readSTATE(const uint16_t &blockNum, const uint8_t &num)
@@ -315,6 +315,102 @@ int main()
                 case pcabCMD::cmdCode::SetDSA:
                     uart->uart.writeLine("ERR > Not supported in current version."); 
                     break;
+                case pcabCMD::cmdCode::GetSTB_AMP:
+                    if(cmd.argments.size() != 0) { uart->uart.writeLine("ERR > Number of arguments does not match."); }
+                    else
+                    {
+                        if(modeCUI)
+                        {
+                            if(stbAMP) { uart->uart.writeLine("AMP > STANDBY MODE."); }
+                            else { uart->uart.writeLine("AMP > RUN MODE."); }
+                        }
+                        else { uart->uart.writeLine(Convert::ToString(stbAMP)); }
+                    }
+                    break;
+                case pcabCMD::cmdCode::GetSTB_DRA:
+                    if(cmd.argments.size() != 0) { uart->uart.writeLine("ERR > Number of arguments does not match."); }
+                    else
+                    {
+                        if(modeCUI)
+                        {
+                            if(stbDRA) { uart->uart.writeLine("DRA > STANDBY MODE."); }
+                            else { uart->uart.writeLine("DRA > RUN MODE."); }
+                        }
+                        else { uart->uart.writeLine(Convert::ToString(stbDRA)); }
+                    }
+                    break;
+                case pcabCMD::cmdCode::GetSTB_LNA:
+                    if(cmd.argments.size() != 0) { uart->uart.writeLine("ERR > Number of arguments does not match."); }
+                    else
+                    {
+                        if(modeCUI)
+                        {
+                            if(stbLNA) { uart->uart.writeLine("LNA > STANDBY MODE."); }
+                            else { uart->uart.writeLine("LNA > RUN MODE."); }
+                        }
+                        else { uart->uart.writeLine(Convert::ToString(stbLNA)); }
+                    }
+                    break;
+                case pcabCMD::cmdCode::GetLPM:
+                    if(cmd.argments.size() != 0) { uart->uart.writeLine("ERR > Number of arguments does not match."); }
+                    else
+                    {
+                        if(modeCUI)
+                        {
+                            if(lowMODE) { uart->uart.writeLine("HEA > LOW POWER MODE."); }
+                            else { uart->uart.writeLine("HEA > FULL POWER MODE."); }
+                        }
+                        else { uart->uart.writeLine(Convert::ToString(lowMODE)); }
+                    }
+                    break;
+                case pcabCMD::cmdCode::SetSTB_AMP:
+                    if(cmd.argments.size() != 1) { uart->uart.writeLine("ERR > Number of arguments does not match."); }
+                    else
+                    {
+                        bool bitBF;
+                        if(!Convert::TryToBool(cmd.argments[0], bitBF)) { uart->uart.writeLine("ERR > Argument error."); break; }
+                        stbAMP = bitBF;
+                        gpio_put(STB_AMP_PIN, !stbAMP);
+                        if(stbAMP) { uart->uart.writeLine("DONE > Setting AMP to standby mode."); }
+                        else { uart->uart.writeLine("DONE > Setting AMP to run mode."); }
+                    }
+                    break;
+                case pcabCMD::cmdCode::SetSTB_DRA:
+                    if(cmd.argments.size() != 1) { uart->uart.writeLine("ERR > Number of arguments does not match."); }
+                    else
+                    {
+                        bool bitBF;
+                        if(!Convert::TryToBool(cmd.argments[0], bitBF)) { uart->uart.writeLine("ERR > Argument error."); break; }
+                        stbDRA = bitBF;
+                        gpio_put(STB_DRA_PIN, !stbDRA);
+                        if(stbDRA) { uart->uart.writeLine("DONE > Setting DRA to standby mode."); }
+                        else { uart->uart.writeLine("DONE > Setting DRA to run mode."); }
+                    }
+                    break;
+                case pcabCMD::cmdCode::SetSTB_LNA:
+                    if(cmd.argments.size() != 1) { uart->uart.writeLine("ERR > Number of arguments does not match."); }
+                    else
+                    {
+                        bool bitBF;
+                        if(!Convert::TryToBool(cmd.argments[0], bitBF)) { uart->uart.writeLine("ERR > Argument error."); break; }
+                        stbLNA = bitBF;
+                        gpio_put(STB_LNA_PIN, !stbLNA);
+                        if(stbLNA) { uart->uart.writeLine("DONE > Setting LNA to standby mode."); }
+                        else { uart->uart.writeLine("DONE > Setting LNA to run mode."); }
+                    }
+                    break;
+                case pcabCMD::cmdCode::SetLPM:
+                    if(cmd.argments.size() != 1) { uart->uart.writeLine("ERR > Number of arguments does not match."); }
+                    else
+                    {
+                        bool bitBF;
+                        if(!Convert::TryToBool(cmd.argments[0], bitBF)) { uart->uart.writeLine("ERR > Argument error."); break; }
+                        lowMODE = bitBF;
+                        gpio_put(STB_AMP_PIN, !lowMODE);
+                        if(lowMODE) { uart->uart.writeLine("DONE > Setting HEA to low power mode."); }
+                        else { uart->uart.writeLine("DONE > Setting HEA to full power mode."); }
+                    }
+                    break;
                 case pcabCMD::cmdCode::GetTMP_ID:
                     if(cmd.argments.size() != 1) { uart->uart.writeLine("ERR > Number of arguments does not match."); }
                     else
@@ -435,104 +531,8 @@ int main()
                         } else { uart->uart.writeLine(std::to_string(analog->readADC1())); }
                     }
                     break;
-                case pcabCMD::cmdCode::GetSTB_AMP:
-                    if(cmd.argments.size() != 0) { uart->uart.writeLine("ERR > Number of arguments does not match."); }
-                    else
-                    {
-                        if(modeCUI)
-                        {
-                            if(stbAMP) { uart->uart.writeLine("AMP > STANDBY MODE."); }
-                            else { uart->uart.writeLine("AMP > RUN MODE."); }
-                        }
-                        else { uart->uart.writeLine(Convert::ToString(stbAMP)); }
-                    }
-                    break;
-                case pcabCMD::cmdCode::GetSTB_DRA:
-                    if(cmd.argments.size() != 0) { uart->uart.writeLine("ERR > Number of arguments does not match."); }
-                    else
-                    {
-                        if(modeCUI)
-                        {
-                            if(stbDRA) { uart->uart.writeLine("DRA > STANDBY MODE."); }
-                            else { uart->uart.writeLine("DRA > RUN MODE."); }
-                        }
-                        else { uart->uart.writeLine(Convert::ToString(stbDRA)); }
-                    }
-                    break;
-                case pcabCMD::cmdCode::GetSTB_LNA:
-                    if(cmd.argments.size() != 0) { uart->uart.writeLine("ERR > Number of arguments does not match."); }
-                    else
-                    {
-                        if(modeCUI)
-                        {
-                            if(stbLNA) { uart->uart.writeLine("LNA > STANDBY MODE."); }
-                            else { uart->uart.writeLine("LNA > RUN MODE."); }
-                        }
-                        else { uart->uart.writeLine(Convert::ToString(stbLNA)); }
-                    }
-                    break;
-                case pcabCMD::cmdCode::GetLPM:
-                    if(cmd.argments.size() != 0) { uart->uart.writeLine("ERR > Number of arguments does not match."); }
-                    else
-                    {
-                        if(modeCUI)
-                        {
-                            if(lowMODE) { uart->uart.writeLine("HEA > LOW POWER MODE."); }
-                            else { uart->uart.writeLine("HEA > FULL POWER MODE."); }
-                        }
-                        else { uart->uart.writeLine(Convert::ToString(lowMODE)); }
-                    }
-                    break;
-                case pcabCMD::cmdCode::SetSTB_AMP:
-                    if(cmd.argments.size() != 1) { uart->uart.writeLine("ERR > Number of arguments does not match."); }
-                    else
-                    {
-                        bool bitBF;
-                        if(!Convert::TryToBool(cmd.argments[0], bitBF)) { uart->uart.writeLine("ERR > Argument error."); break; }
-                        stbAMP = bitBF;
-                        gpio_put(STB_AMP_PIN, !stbAMP);
-                        if(stbAMP) { uart->uart.writeLine("DONE > Setting AMP to standby mode."); }
-                        else { uart->uart.writeLine("DONE > Setting AMP to run mode."); }
-                    }
-                    break;
-                case pcabCMD::cmdCode::SetSTB_DRA:
-                    if(cmd.argments.size() != 1) { uart->uart.writeLine("ERR > Number of arguments does not match."); }
-                    else
-                    {
-                        bool bitBF;
-                        if(!Convert::TryToBool(cmd.argments[0], bitBF)) { uart->uart.writeLine("ERR > Argument error."); break; }
-                        stbDRA = bitBF;
-                        gpio_put(STB_DRA_PIN, !stbDRA);
-                        if(stbDRA) { uart->uart.writeLine("DONE > Setting DRA to standby mode."); }
-                        else { uart->uart.writeLine("DONE > Setting DRA to run mode."); }
-                    }
-                    break;
-                case pcabCMD::cmdCode::SetSTB_LNA:
-                    if(cmd.argments.size() != 1) { uart->uart.writeLine("ERR > Number of arguments does not match."); }
-                    else
-                    {
-                        bool bitBF;
-                        if(!Convert::TryToBool(cmd.argments[0], bitBF)) { uart->uart.writeLine("ERR > Argument error."); break; }
-                        stbLNA = bitBF;
-                        gpio_put(STB_LNA_PIN, !stbLNA);
-                        if(stbLNA) { uart->uart.writeLine("DONE > Setting LNA to standby mode."); }
-                        else { uart->uart.writeLine("DONE > Setting LNA to run mode."); }
-                    }
-                    break;
-                case pcabCMD::cmdCode::SetLPM:
-                    if(cmd.argments.size() != 1) { uart->uart.writeLine("ERR > Number of arguments does not match."); }
-                    else
-                    {
-                        bool bitBF;
-                        if(!Convert::TryToBool(cmd.argments[0], bitBF)) { uart->uart.writeLine("ERR > Argument error."); break; }
-                        lowMODE = bitBF;
-                        gpio_put(STB_AMP_PIN, !lowMODE);
-                        if(lowMODE) { uart->uart.writeLine("DONE > Setting HEA to low power mode."); }
-                        else { uart->uart.writeLine("DONE > Setting HEA to full power mode."); }
-                    }
-                    break;
                 case pcabCMD::cmdCode::SaveMEM:
-                    if(cmd.argments.size() < 2) { uart->uart.writeLine("ERR > Number of arguments does not match."); }
+                    if(cmd.argments.size() > 1) { uart->uart.writeLine("ERR > Number of arguments does not match."); }
                     else
                     {
                         uint16_t blockNum = ROM_BLOCK_NUM - 2;
@@ -553,7 +553,7 @@ int main()
                     }
                     break;
                 case pcabCMD::cmdCode::LoadMEM:
-                    if(cmd.argments.size() < 2) { uart->uart.writeLine("ERR > Number of arguments does not match."); }
+                    if(cmd.argments.size() > 1) { uart->uart.writeLine("ERR > Number of arguments does not match."); }
                     else
                     {
                         uint16_t blockNum = ROM_BLOCK_NUM - 2;
