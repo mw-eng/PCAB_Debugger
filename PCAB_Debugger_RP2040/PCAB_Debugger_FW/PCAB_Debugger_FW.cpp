@@ -126,18 +126,29 @@ void saveSTATE(const uint16_t &blockNum, const uint8_t &num)
     writeROMblock(blockAddress(ROM_BLOCK_NUM - 1), romBF);
 }
 
-void readSTATE(const uint16_t &blockNum, const uint8_t &num)
+bool readSTATE(const uint16_t &blockNum, const uint8_t &num)
 {
     uint8_t romBF[FLASH_PAGE_SIZE];
     uint8_t ioBF;
     readROMblock(blockAddress(blockNum), romBF);
-    for(uint i = 0; i < 15; i++) { dpsBF[i] = romBF[i + num * 0x40]; }
     ioBF = romBF[15 + num * 0x40];
+    for(uint i = 0; i < 15; i++)
+    {
+        if((romBF[i + num * 0x40] & 0xC0) != 0) { return false; }
+    }
+    for(uint i = 0; i < 16; i++)
+    {
+        if((romBF[i + num * 0x40 + 16] & 0xC0) != 0) { return false; }
+    }
+    if((ioBF & 0xF0) != 0) { return false; }
+    if((romBF[15 + num * 0x40 + 16] & 0xE0) != 0) { return false; }
+    for(uint i = 0; i < 15; i++) { dpsBF[i] = romBF[i + num * 0x40]; }
     for(uint i = 0; i < 16; i++) { dsaNOW[i] = romBF[i + num * 0x40 + 16]; }
     stbAMP = (ioBF >> 0) & 1;
     stbDRA = (ioBF >> 1) & 1;
     stbLNA = (ioBF >> 2) & 1;
     lowMODE = (ioBF >> 3) & 1;
+    return true;
 }
 
 #pragma endregion
@@ -524,14 +535,42 @@ int main()
                     if(cmd.argments.size() < 2) { uart->uart.writeLine("ERR > Number of arguments does not match."); }
                     else
                     {
-                        saveSTATE();
+                        uint16_t blockNum = ROM_BLOCK_NUM - 2;
+                        uint8_t num = 0;
+                        if(cmd.argments.size() == 0) { blockNum = ROM_BLOCK_NUM - 2; num = 0; }
+                        if(cmd.argments.size() == 1)
+                        {
+                            std::vector<std::string> strVect = String::split(cmd.argments[0], '-');
+                            if(strVect.size() == 1)
+                            { if(!Convert::TryToUInt8(strVect[0], 10, num)) { uart->uart.writeLine("ERR > Argument error."); } }
+                            else if(strVect.size() == 2)
+                            { if(!Convert::TryToUInt16(strVect[0], 10, blockNum) || !Convert::TryToUInt8(strVect[1], 10, num)) { uart->uart.writeLine("ERR > Argument error."); } }
+                            else { uart->uart.writeLine("ERR > Argument error."); }
+                            if(num > 3) { uart->uart.writeLine("ERR > Specified number is out of range."); }
+                            if( blockNum != ROM_BLOCK_NUM - 2 && !editRangeCheck(blockNum)) { uart->uart.writeLine("ERR > Specified block is out of range."); }
+                        }
+                        saveSTATE(blockNum, num);
                     }
                     break;
                 case pcabCMD::cmdCode::LoadMEM:
-                    if(){}
+                    if(cmd.argments.size() < 2) { uart->uart.writeLine("ERR > Number of arguments does not match."); }
                     else
                     {
-                        readSTATE();
+                        uint16_t blockNum = ROM_BLOCK_NUM - 2;
+                        uint8_t num = 0;
+                        if(cmd.argments.size() == 0) { blockNum = ROM_BLOCK_NUM - 2; num = 0; }
+                        if(cmd.argments.size() == 1)
+                        {
+                            std::vector<std::string> strVect = String::split(cmd.argments[0], '-');
+                            if(strVect.size() == 1)
+                            { if(!Convert::TryToUInt8(strVect[0], 10, num)) { uart->uart.writeLine("ERR > Argument error."); } }
+                            else if(strVect.size() == 2)
+                            { if(!Convert::TryToUInt16(strVect[0], 10, blockNum) || !Convert::TryToUInt8(strVect[1], 10, num)) { uart->uart.writeLine("ERR > Argument error."); } }
+                            else { uart->uart.writeLine("ERR > Argument error."); }
+                            if(num > 3) { uart->uart.writeLine("ERR > Specified number is out of range."); }
+                            if( blockNum != ROM_BLOCK_NUM - 2 && !editRangeCheck(blockNum)) { uart->uart.writeLine("ERR > Specified block is out of range."); }
+                        }
+                        if(!readSTATE(blockNum, num)) { uart->uart.writeLine("ERR > No valid settings were found for the specified address."); }
                         writeDPS();
                         gpio_put(STB_AMP_PIN, !stbAMP);
                         gpio_put(STB_DRA_PIN, !stbDRA);
