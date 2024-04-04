@@ -5,6 +5,7 @@ Raspberry Pi Pico
 Send commands in the order of *#{SERIAL NUMBER}*, *{COMMAND}*, *{ARGUMENTS}*, and *{EXIT CODE}*, separated by space.  
 <details>
 <summary>Description</summary>
+
 Specify the serial number of the communication partner in *{SERIAL NUMBER}*. However, if *"\*"* is specified, communication will be performed for all serial numbers.<br>
 *{COMMAND}* and *{ARGUMENTS}* refer to *Command Lists*.<br>
 *{EXIT CODE}* is *\r(Carriage Return)* or *\n(Line Feed)* or *\r\n*.<br>
@@ -13,6 +14,7 @@ We recommend *\r(CR)* when CUI and echo are enable, and *\n(LF)* when CUI and lo
 - #0010 WrtDPS
 - #0001 SetSTB.AMP true
 - #* GetIDN
+
 </details>
 
 ## Command Lists
@@ -90,7 +92,7 @@ List of settings by onboard hardware switch (SW1) status.
 <img src="https://github.com/mw-eng/PCAB_Debugger/blob/master/PCAB_Debugger_RP2040/assets/SW1.png?raw=true" width="100px"> 0 = OFF(H) / 1 = ON(L)  
   
 <details open>
-<summary>Switch status 0x00 to 0x0A</summary>
+<summary>Switch status 0x00 to 0x0F</summary>
 
 Number | SW6 | SW5 | SW4 | SW3 | SW2 | SW1 | HEX | Stateus | Description
 :--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--
@@ -113,7 +115,7 @@ Number | SW6 | SW5 | SW4 | SW3 | SW2 | SW1 | HEX | Stateus | Description
 
 </details>
 <details>
-<summary>Switch status 0x10 to 0x1A</summary>
+<summary>Switch status 0x10 to 0x1F</summary>
 
 Number | SW6 | SW5 | SW4 | SW3 | SW2 | SW1 | HEX | Stateus | Description
 :--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--
@@ -136,7 +138,7 @@ Number | SW6 | SW5 | SW4 | SW3 | SW2 | SW1 | HEX | Stateus | Description
 
 </details>
 <details open>
-<summary>Switch status 0x20 to 0x2A</summary>
+<summary>Switch status 0x20 to 0x2F</summary>
 
 Number | SW6 | SW5 | SW4 | SW3 | SW2 | SW1 | HEX | Stateus | Description
 :--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--
@@ -159,7 +161,7 @@ Number | SW6 | SW5 | SW4 | SW3 | SW2 | SW1 | HEX | Stateus | Description
 
 </details>
 <details>
-<summary>Switch status 0x00 to 0x0A</summary>
+<summary>Switch status 0x30 to 0x3F</summary>
 
 Number | SW6 | SW5 | SW4 | SW3 | SW2 | SW1 | HEX | Stateus | Description
 :--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--
