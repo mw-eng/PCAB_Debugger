@@ -44,7 +44,7 @@
                     <ColumnDefinition Width="10*"/>
                 </Grid.ColumnDefinitions>
                 <Viewbox Grid.Column="0" Margin="5">
-                    <Label Content="Waite Time"/>
+                    <Label Content="Monitor loop interval"/>
                 </Viewbox>
                 <TextBox Grid.Column="1" x:Name="WAITE_TIME_TEXTBOX" Style="{StaticResource EDIT_TEXT_LINE}" TextWrapping="Wrap" Text="100" Margin="5" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" PreviewTextInput="DEC_TextBox_PreviewTextInput" CommandManager.PreviewExecuted="DEC_TextBox_PreviewExecuted" PreviewLostKeyboardFocus="DEC_TextBox_PreviewLostKeyboardForcus" FontSize="16"/>
                 <Viewbox Grid.Column="2" Margin="5">
