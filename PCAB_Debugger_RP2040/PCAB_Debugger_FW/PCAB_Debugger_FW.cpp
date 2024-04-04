@@ -50,7 +50,7 @@ void writeROM(const uint16_t &blockNum, const uint8_t blockDAT[FLASH_PAGE_SIZE])
         if(editRangeCheck(blockNum))
         {
             writeROMblock(blockAddress(blockNum), blockDAT);
-            uart->uart.writeLine("DONE > Write ROM block " + Convert::ToString(blockNum, 10, 0) + ".");
+            uart->uart.writeLine("DONE > Write ROM block " + Convert::ToString(blockNum, 10, 1) + ".");
         } else { uart->uart.writeLine("ERR > Specified block is out of range."); }
     } else { uart->uart.writeLine("ERR > It is in an unusable state."); }
 }
@@ -227,18 +227,18 @@ int main()
                         {
                             if(blNOW && num == 0)
                             {
-                                uart->uart.write(Convert::ToString(dpsNOW[0], 10, 0));
-                                for(int i = 1; i < NUMBER_OF_SYSTEM; i++ ) { uart->uart.write("," + Convert::ToString(dpsNOW[i], 10, 0)); }
+                                uart->uart.write(Convert::ToString(dpsNOW[0], 10, 1));
+                                for(int i = 1; i < NUMBER_OF_SYSTEM; i++ ) { uart->uart.write("," + Convert::ToString(dpsNOW[i], 10, 1)); }
                                 uart->uart.writeLine("");
                             }
                             else if(num == 0)
                             {
-                                uart->uart.write(Convert::ToString(dpsBF[0], 10, 0));
-                                for(int i = 1; i < NUMBER_OF_SYSTEM; i++ ) { uart->uart.write("," + Convert::ToString(dpsBF[i], 10, 0)); }
+                                uart->uart.write(Convert::ToString(dpsBF[0], 10, 1));
+                                for(int i = 1; i < NUMBER_OF_SYSTEM; i++ ) { uart->uart.write("," + Convert::ToString(dpsBF[i], 10, 1)); }
                                 uart->uart.writeLine("");
                             }
-                            else if(blNOW) { uart->uart.writeLine(Convert::ToString(dpsNOW[num - 1], 10, 0)); }
-                            else { uart->uart.writeLine(Convert::ToString(dpsBF[num - 1], 10, 0)); }
+                            else if(blNOW) { uart->uart.writeLine(Convert::ToString(dpsNOW[num - 1], 10, 1)); }
+                            else { uart->uart.writeLine(Convert::ToString(dpsBF[num - 1], 10, 1)); }
                         }
                     }
                     break;
@@ -293,9 +293,9 @@ int main()
                             }
                             else
                             {
-                                uart->uart.writeLine(Convert::ToString(code[0], 16, 0));
+                                uart->uart.writeLine(Convert::ToString(code[0], 16, 1));
                                 for(uint8_t i = 1 ; i < code.size() ; i++)
-                                { uart->uart.writeLine("," + Convert::ToString(code[i], 16, 0)); }
+                                { uart->uart.writeLine("," + Convert::ToString(code[i], 16, 1)); }
                             }
                         }
                         else
@@ -309,7 +309,7 @@ int main()
                             }
                             else
                             {
-                                uart->uart.writeLine(Convert::ToString(code, 16, 0));
+                                uart->uart.writeLine(Convert::ToString(code, 16, 1));
                             }
                         }
                     }
@@ -539,7 +539,7 @@ int main()
                         if(editRangeCheck(blockNum))
                         {
                             eraseROMblock(blockAddress(blockNum));
-                            uart->uart.writeLine("DONE > Erase ROM block " + Convert::ToString(blockNum, 10, 0) + ".");
+                            uart->uart.writeLine("DONE > Erase ROM block " + Convert::ToString(blockNum, 10, 1) + ".");
                         } else { uart->uart.writeLine("ERR > Specified block is out of range."); }
                     }
                     break;
