@@ -320,7 +320,7 @@ int main()
                     {
                         uint8_t num;
                         if(!Convert::TryToUInt8(cmd.argments[0], 10, num)) { uart->uart.writeLine("ERR > Argument error."); break; }
-                        if(sens->getNumberOfSenser() < num) { uart->uart.writeLine("ERR > Specified sensor does not exist."); break; }
+                        if(sens->getNumberOfSenser() < num || sens->getNumberOfSenser() == 0) { uart->uart.writeLine("ERR > Specified sensor does not exist."); break; }
                         if(num == 0)
                         {
                             std::vector<float> code = sens->readTEMP();
