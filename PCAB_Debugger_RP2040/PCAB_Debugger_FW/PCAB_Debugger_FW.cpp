@@ -8,12 +8,12 @@ const static std::string FW_VENDOR = "Orient Microwave Corp.";
 const static std::string FW_MODEL = "LX00-0004-00";
 const static std::string FW_REV = "1.1.0";
 // ROM Block Number
-#define ROM_BLOCK_USER 16   // Range of user available space from this block number to ROM_BLOCK_MAX - 2
-#define ROM_BLOCK_MAX 32    // 16M (Raspberry Pi Pico)
-//#define ROM_BLOCK_MAX 64    // 32M
-//#define ROM_BLOCK_MAX 128   // 64M
-//#define ROM_BLOCK_MAX 256   // 128M (PCAB)
-//#define ROM_BLOCK_MAX 512   // 256M
+#define ROM_BLOCK_USER 16   // Range of user available space from this block number to ROM_BLOCK_NUM - 2
+#define ROM_BLOCK_NUM 32    // 16M (Raspberry Pi Pico)
+//#define ROM_BLOCK_NUM 64    // 32M
+//#define ROM_BLOCK_NUM 128   // 64M
+//#define ROM_BLOCK_NUM 256   // 128M (PCAB)
+//#define ROM_BLOCK_NUM 512   // 256M
 
 
 ds18b20 *sens;
@@ -38,8 +38,8 @@ bool lowMODE = false;
 
 bool editRangeCheck(const uint16_t &blockNum)
 {
-    if(blockNum < ROM_BLOCK_USER || ROM_BLOCK_MAX - 1 < blockNum) { return false; }
-    if(bootMode == 0x2A || (ROM_BLOCK_USER <= blockNum && blockNum < ROM_BLOCK_MAX - 2)) { return true; }
+    if(blockNum < ROM_BLOCK_USER || ROM_BLOCK_NUM - 1 < blockNum) { return false; }
+    if(bootMode == 0x2A || (ROM_BLOCK_USER <= blockNum && blockNum < ROM_BLOCK_NUM - 2)) { return true; }
     return false;
 }
 
@@ -78,7 +78,7 @@ void writeROM(const std::string &num, const std::string &data)
 std::string readSerialNum()
 {
     uint8_t romBF[FLASH_PAGE_SIZE];
-    readROMblock(blockAddress(ROM_BLOCK_MAX - 1), romBF);
+    readROMblock(blockAddress(ROM_BLOCK_NUM - 1), romBF);
     // Read SERIAL NUMBER
     std::string serial = "";
     uint8_t len = romBF[FLASH_PAGE_SIZE - 1];
@@ -501,7 +501,7 @@ int main()
                     {
                         uint16_t blockNum;
                         if(!Convert::TryToUInt16(cmd.argments[0], 10, blockNum)) { uart->uart.writeLine("ERR > Argument error."); break; }
-                        if(blockNum > ROM_BLOCK_MAX - 1) { uart->uart.writeLine("ERR > Specified block is out of range."); break; }
+                        if(blockNum > ROM_BLOCK_NUM - 1) { uart->uart.writeLine("ERR > Specified block is out of range."); break; }
                         uint8_t romDAT[FLASH_PAGE_SIZE];
                         readROMblock(blockAddress(blockNum), romDAT);
                         if(modeCUI)
@@ -547,6 +547,20 @@ int main()
                     }
                     break;
                 case pcabCMD::cmdCode::SetSN:
+                    if(cmd.argments.size() != 1) { uart->uart.writeLine("ERR > Number of arguments does not match."); }
+                    else
+                    {
+                        if(cmd.argments[0].size() == 0) { uart->uart.writeLine("ERR > Argument error."); break; }
+                        if(cmd.argments[0].size() > 16) { uart->uart.writeLine("ERR > Serial code is too long. Limit to 15 characters."); break; }
+                        if(editRangeCheck(ROM_BLOCK_NUM - 1)) { uart->uart.writeLine("ERR > It is in an unusable state."); break; }
+                        
+                        uint8_t romBF[FLASH_PAGE_SIZE];
+                        readROMblock(blockAddress(ROM_BLOCK_NUM - 1), romBF);
+                        for(uint i = 0; i < cmd.argments[0].size() ; i ++) { romBF[i + FLASH_PAGE_SIZE - 16] = cmd.argments[0][i]; }
+                        romBF[FLASH_BLOCK_SIZE - 1] = cmd.argments[0].size();
+                        writeROMblock(blockAddress(ROM_BLOCK_NUM - 1), romBF);
+                        uart->uart.writeLine("DONE > Write serial number.");
+                    }
                     break;
                 case pcabCMD::cmdCode::RST:
                     break;
