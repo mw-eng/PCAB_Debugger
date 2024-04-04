@@ -10,6 +10,7 @@ class Convert
     static std::string ToString(const bool &val);
     static std::string ToString(const int64_t &val, const uint &BaseNumber, const uint &digit);
     static std::string ToString(const int64_t &val, const uint &BaseNumber);
+    static std::string ToString(const int64_t &val);
 
     static bool TryToBool(const std::string &str, bool &out);
     static bool TryToInt(const std::string &str, int &out);

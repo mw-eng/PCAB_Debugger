@@ -64,3 +64,4 @@ uartSYNC::CommandLine uartSYNC::readCMD(bool echo)
     std::copy(strVect.begin(), strVect.end(), strArr);
     return uartSYNC::CommandLine(serialNum, strBf, strArr, strVect.size());
 }
+

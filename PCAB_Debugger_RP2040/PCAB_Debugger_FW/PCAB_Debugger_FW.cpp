@@ -27,8 +27,8 @@ std::string serialNum = "";
 uint8_t bootMode = 0;
 uint8_t dpsBF[NUMBER_OF_SYSTEM];
 uint8_t dpsNOW[NUMBER_OF_SYSTEM];
-uint8_t dsaBF[NUMBER_OF_SYSTEM];
-uint8_t dsaNOW[NUMBER_OF_SYSTEM];
+uint8_t dsaBF[NUMBER_OF_SYSTEM + 1];
+uint8_t dsaNOW[NUMBER_OF_SYSTEM + 1];
 bool stbAMP = false;
 bool stbDRA = false;
 bool stbLNA = false;
@@ -59,7 +59,7 @@ void writeROM(const std::string &num, const std::string &data)
 {
     uint16_t blockNum;
     if(!Convert::TryToUInt16(num, 10, blockNum) || data.size() != 2 * FLASH_PAGE_SIZE)
-    { uart->uart.writeLine("ERR > Argument error."); }
+    { uart->uart.writeLine("ERR > Argument1 error."); }
     else
     {
         uint8_t blockDAT[FLASH_PAGE_SIZE];
@@ -67,7 +67,7 @@ void writeROM(const std::string &num, const std::string &data)
         {
             if(!Convert::TryToUInt8(data.substr(2 * i, 2) , 16, blockDAT[i]))
             {
-                uart->uart.writeLine("ERR > Argument error.");
+                uart->uart.writeLine("ERR > Argument2 error.");
                 return;
             }
         }
@@ -92,7 +92,7 @@ std::string readSerialNum()
 void writeDPS()
 {
     std::vector<uint8_t> stBF;
-    for(int i = NUMBER_OF_SYSTEM ; i > 0 ; i-- )
+    for(uint16_t i = NUMBER_OF_SYSTEM ; i > 0 ; i-- )
     {
         stBF.push_back(dpsBF[i]);
         dpsNOW[i] = dpsBF[i] & 0x3F;
@@ -103,7 +103,7 @@ void writeDPS()
 void writeDSA()
 {
     std::vector<uint8_t> stBF;
-    for(int i = NUMBER_OF_SYSTEM ; i > 0 ; i-- )
+    for(uint16_t i = NUMBER_OF_SYSTEM ; i > 0 ; i-- )
     {
         stBF.push_back(dsaBF[i]);
         dsaNOW[i] = dsaBF[i] & 0x3F;
@@ -178,8 +178,82 @@ int main()
                     }
                     break;
                 case pcabCMD::cmdCode::GetDPS:
+                    if(cmd.argments.size() != 2) { uart->uart.writeLine("ERR > Number of arguments does not match."); }
+                    else
+                    {
+                        bool blNOW;
+                        if(String::strCompare(cmd.argments[0], "now")) { blNOW = true; }
+                        else if(String::strCompare(cmd.argments[0], "bf")) { blNOW = false; }
+                        else
+                        {
+                            if(!Convert::TryToBool(cmd.argments[0], blNOW)) { uart->uart.writeLine("ERR > Argument1 error."); break; }
+                        }
+                        uint16_t num;
+                        if(!Convert::TryToUInt16(cmd.argments[1], 10, num)) { uart->uart.writeLine("ERR > Argument2 error."); break; }
+                        if(NUMBER_OF_SYSTEM < num - 1) { uart->uart.writeLine("ERR > The specified Argument1 is out of range."); break; }
+                        if(modeCUI)
+                        {
+                            char ch[SNPRINTF_BUFFER_LEN];
+                            int len;
+                            if(blNOW && num == 0)
+                            {
+                                for(int i = 0; i < NUMBER_OF_SYSTEM; i++ )
+                                {
+                                    len = snprintf(ch, sizeof(ch), "Now DPS[%02d] > %03.3f[deg] (0d%03d, 0b%s)", i + 1, dpsNOW[i] * 5.625f, dpsNOW[i], Convert::ToString(dpsNOW[i], 2, 8));
+                                    uart->uart.writeLine(std::string(ch, len));
+                                }
+                            }
+                            else if(num == 0)
+                            {
+                                for(int i = 0; i < NUMBER_OF_SYSTEM; i++ )
+                                {
+                                    len = snprintf(ch, sizeof(ch), "Buffer DPS[%02d] > %03.3f[deg] (0d%03d, 0b%s)", i + 1, dpsBF[i] * 5.625f, dpsBF[i], Convert::ToString(dpsBF[i], 2, 8));
+                                    uart->uart.writeLine(std::string(ch, len));
+                                }
+                            }
+                            else if(blNOW)
+                            {
+                                len = snprintf(ch, sizeof(ch), "Now DPS[%02d] > %03.3f[deg] (0d%03d, 0b%s)", num, dpsNOW[num - 1] * 5.625f, dpsNOW[num - 1], Convert::ToString(dpsNOW[num - 1], 2, 8));
+                                uart->uart.writeLine(std::string(ch, len));
+                            }
+                            else
+                            {
+                                len = snprintf(ch, sizeof(ch), "Buffer DPS[%02d] > %03.3f[deg] (0d%03d, 0b%s)", num, dpsBF[num - 1] * 5.625f, dpsBF[num - 1], Convert::ToString(dpsBF[num - 1], 2, 8));
+                                uart->uart.writeLine(std::string(ch, len));
+                            }
+                            
+                        }
+                        else
+                        {
+                            if(blNOW && num == 0)
+                            {
+                                uart->uart.write(Convert::ToString(dpsNOW[0], 10, 0));
+                                for(int i = 1; i < NUMBER_OF_SYSTEM; i++ ) { uart->uart.write("," + Convert::ToString(dpsNOW[i], 10, 0)); }
+                                uart->uart.writeLine("");
+                            }
+                            else if(num == 0)
+                            {
+                                uart->uart.write(Convert::ToString(dpsBF[0], 10, 0));
+                                for(int i = 1; i < NUMBER_OF_SYSTEM; i++ ) { uart->uart.write("," + Convert::ToString(dpsBF[i], 10, 0)); }
+                                uart->uart.writeLine("");
+                            }
+                            else if(blNOW) { uart->uart.writeLine(Convert::ToString(dpsNOW[num - 1], 10, 0)); }
+                            else { uart->uart.writeLine(Convert::ToString(dpsBF[num - 1], 10, 0)); }
+                        }
+                    }
                     break;
                 case pcabCMD::cmdCode::SetDPS:
+                    if(cmd.argments.size() != 2) { uart->uart.writeLine("ERR > Number of arguments does not match."); }
+                    else
+                    {
+                        uint16_t num;
+                        uint8_t conf;
+                        if(!Convert::TryToUInt16(cmd.argments[0], 10, num)) { uart->uart.writeLine("ERR > Argument1 error."); break; }
+                        if(NUMBER_OF_SYSTEM < num - 1) { uart->uart.writeLine("ERR > The specified Argument1 is out of range."); break; }
+                        if(!Convert::TryToUInt8(cmd.argments[1], 10, conf)) { uart->uart.writeLine("ERR > Argument2 error."); break; }
+                        if(conf > (1 << 6)) { uart->uart.writeLine("ERR > The specified Argument2 is out of range."); break; }
+                        dpsBF[num - 1] = conf;
+                    }
                     break;
                 case pcabCMD::cmdCode::WrtDSA:
                     uart->uart.writeLine("ERR > Not supported in current version."); 

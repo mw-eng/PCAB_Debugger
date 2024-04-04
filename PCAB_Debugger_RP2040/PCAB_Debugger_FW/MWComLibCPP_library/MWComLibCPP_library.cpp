@@ -66,6 +66,7 @@ std::string Convert::ToString(const int64_t &val, const uint &BaseNumber, const 
     return str;
 }
 std::string Convert::ToString(const int64_t &val, const uint &BaseNumber){ return ToString(val, BaseNumber, 0);}
+std::string Convert::ToString(const int64_t &val){ return ToString(val, 10, 0);}
 
 bool Convert::TryToBool(const std::string &str, bool &out)
 {
