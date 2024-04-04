@@ -190,7 +190,7 @@ int main()
                         }
                         uint16_t num;
                         if(!Convert::TryToUInt16(cmd.argments[1], 10, num)) { uart->uart.writeLine("ERR > Argument2 error."); break; }
-                        if(NUMBER_OF_SYSTEM < num - 1) { uart->uart.writeLine("ERR > The specified Argument1 is out of range."); break; }
+                        if(NUMBER_OF_SYSTEM + 1 < num) { uart->uart.writeLine("ERR > The specified Argument1 is out of range."); break; }
                         if(modeCUI)
                         {
                             char ch[SNPRINTF_BUFFER_LEN];
@@ -199,7 +199,7 @@ int main()
                             {
                                 for(int i = 0; i < NUMBER_OF_SYSTEM; i++ )
                                 {
-                                    len = snprintf(ch, sizeof(ch), "Now DPS[%02d] > %03.3f[deg] (0d%03d, 0b%s)", i + 1, dpsNOW[i] * 5.625f, dpsNOW[i], Convert::ToString(dpsNOW[i], 2, 8));
+                                    len = snprintf(ch, sizeof(ch), "Now DPS[%02d] > %7.3f[deg] (0d%03d, 0b%s)", i + 1, dpsNOW[i] * 5.625f, dpsNOW[i], Convert::ToString(dpsNOW[i], 2, 6).c_str());
                                     uart->uart.writeLine(std::string(ch, len));
                                 }
                             }
@@ -207,18 +207,18 @@ int main()
                             {
                                 for(int i = 0; i < NUMBER_OF_SYSTEM; i++ )
                                 {
-                                    len = snprintf(ch, sizeof(ch), "Buffer DPS[%02d] > %03.3f[deg] (0d%03d, 0b%s)", i + 1, dpsBF[i] * 5.625f, dpsBF[i], Convert::ToString(dpsBF[i], 2, 8));
+                                    len = snprintf(ch, sizeof(ch), "Buffer DPS[%02d] > %7.3f[deg] (0d%03d, 0b%s)", i + 1, dpsBF[i] * 5.625f, dpsBF[i], Convert::ToString(dpsBF[i], 2, 6).c_str());
                                     uart->uart.writeLine(std::string(ch, len));
                                 }
                             }
                             else if(blNOW)
                             {
-                                len = snprintf(ch, sizeof(ch), "Now DPS[%02d] > %03.3f[deg] (0d%03d, 0b%s)", num, dpsNOW[num - 1] * 5.625f, dpsNOW[num - 1], Convert::ToString(dpsNOW[num - 1], 2, 8));
+                                len = snprintf(ch, sizeof(ch), "Now DPS[%02d] > %7.3f[deg] (0d%03d, 0b%s)", num, dpsNOW[num - 1] * 5.625f, dpsNOW[num - 1], Convert::ToString(dpsNOW[num - 1], 2, 6).c_str());
                                 uart->uart.writeLine(std::string(ch, len));
                             }
                             else
                             {
-                                len = snprintf(ch, sizeof(ch), "Buffer DPS[%02d] > %03.3f[deg] (0d%03d, 0b%s)", num, dpsBF[num - 1] * 5.625f, dpsBF[num - 1], Convert::ToString(dpsBF[num - 1], 2, 8));
+                                len = snprintf(ch, sizeof(ch), "Buffer DPS[%02d] > %7.3f[deg] (0d%03d, 0b%s)", num, dpsBF[num - 1] * 5.625f, dpsBF[num - 1], Convert::ToString(dpsBF[num - 1], 2, 6).c_str());
                                 uart->uart.writeLine(std::string(ch, len));
                             }
                             
@@ -249,10 +249,11 @@ int main()
                         uint16_t num;
                         uint8_t conf;
                         if(!Convert::TryToUInt16(cmd.argments[0], 10, num)) { uart->uart.writeLine("ERR > Argument1 error."); break; }
-                        if(NUMBER_OF_SYSTEM < num - 1) { uart->uart.writeLine("ERR > The specified Argument1 is out of range."); break; }
+                        if(NUMBER_OF_SYSTEM < uint(num - 1)) { uart->uart.writeLine("ERR > The specified Argument1 is out of range."); break; }
                         if(!Convert::TryToUInt8(cmd.argments[1], 10, conf)) { uart->uart.writeLine("ERR > Argument2 error."); break; }
                         if(conf > (1 << 6)) { uart->uart.writeLine("ERR > The specified Argument2 is out of range."); break; }
                         dpsBF[num - 1] = conf;
+                        uart->uart.writeLine("DONE > Set to buffer.");
                     }
                     break;
                 case pcabCMD::cmdCode::WrtDSA:
@@ -286,7 +287,7 @@ int main()
                                 char ch[SNPRINTF_BUFFER_LEN];
                                 for(uint8_t i = 0 ; i < code.size() ; i++)
                                 {
-                                    int len = snprintf(ch, sizeof(ch), "%+3u > %s", i, Convert::ToString(code[i], 16, 16));
+                                    int len = snprintf(ch, sizeof(ch), "%+3u > %s", i, Convert::ToString(code[i], 16, 16).c_str());
                                     uart->uart.writeLine(std::string(ch, len));
                                 }
                             }
@@ -303,7 +304,7 @@ int main()
                             if(modeCUI)
                             {
                                 char ch[SNPRINTF_BUFFER_LEN];
-                                int len = snprintf(ch, sizeof(ch), "%u > %s", num, Convert::ToString(code, 16, 16));
+                                int len = snprintf(ch, sizeof(ch), "%u > %s", num, Convert::ToString(code, 16, 16).c_str());
                                 uart->uart.writeLine(std::string(ch, len));
                             }
                             else
