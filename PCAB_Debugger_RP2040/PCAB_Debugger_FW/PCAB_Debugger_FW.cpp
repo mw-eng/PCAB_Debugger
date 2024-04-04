@@ -156,6 +156,9 @@ void setup()
     bootMode = 0x20;
 #endif
     serialNum = readSerialNum();
+
+
+    
 }
 
 int main()
