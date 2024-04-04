@@ -64,13 +64,13 @@ GetId | Get Id Value.
 
 Command | Description
 :--|:--
-SMEM ({x}) | Save state to memory(ROM).
-LMEM ({x}) | Load state to memory(ROM).
+SMEM ({x}) | Save state to memory(ROM).<br>To save the default setting, set {x} to 0 or unspecified. ({x} can be specified from 0 to 3.)<br>If you specify {X} as {x-x}, write to the specified block number. However, whether or not it can be saved depends on the boot mode.<br> *Block number refers to WROM.
+LMEM ({x}) | Load state to memory(ROM).<br>To load the default settings, set {x} to 0 or unspecified. ({x} can be specified from 0 to 3.)<br>If you specify {X} as {x-x}, you can read from the specified block number.<br> *Block number refers to RROM.
 GetIDN | Get device identification character.
 *IDN? | Same as GetIDN.
 ECHO {0/1/false/true} | Set echo mode.<br>*Do not enable it if you are connected to multiple devices.*<br>{1/true} : With echo.<br>{0/false} : Without echo.
-CUI {0/1/false/true} | CUI Control Use<br>{1/true} : CUI MODE<br>{0/false} : GUI MODE
-RST | Preset Config.<br>PS all 0<br>STB all 0(RUN MODE)<br>LPM 0(Full Power MODE)<br>ALD 1(Auto LOAD MODE)
+CUI {0/1/false/true} | CUI Control Use<br>{1/true} : CUI MODE<br>{0/false} : GUI MODE<br>Default is CUI MODE.
+RST | Preset Config.<br>PS all 0<br>STB all 0(RUN MODE)<br>LPM 0(Full Power MODE)
 *RST | Same as RST.
 
 </details>
@@ -142,7 +142,7 @@ Number | SW6 | SW5 | SW4 | SW3 | SW2 | SW1 | HEX | Stateus | Description
 
 Number | SW6 | SW5 | SW4 | SW3 | SW2 | SW1 | HEX | Stateus | Description
 :--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--
-32 | 1 | 0 | 0 | 0 | 0 | 0 | 0x20 | Factory reset on boot. | If the switch is in this state at startup, the system boots to factory defaults and restore the autoload settings to their initial state.
+32 | 1 | 0 | 0 | 0 | 0 | 0 | 0x20 | Factory reset on boot. | If the switch is in this state at startup, the system boots to factory defaults and restore the autoload settings to their initial state.<br>*User available space remains unchanged.*
 33 | 1 | 0 | 0 | 0 | 0 | 1 | 0x21 | State33 | Unused.
 34 | 1 | 0 | 0 | 0 | 1 | 0 | 0x22 | State34 | Unused.
 35 | 1 | 0 | 0 | 0 | 1 | 1 | 0x23 | State35 | Unused.
