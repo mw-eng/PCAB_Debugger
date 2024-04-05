@@ -15,7 +15,7 @@ pcabCMD::pcabCMD(uint tx_gpio, uint rx_gpio, uint baud_ratio, std::string nlcode
 : pcabCMD(uart0, tx_gpio, rx_gpio, baud_ratio, nlcode){}
 
 pcabCMD::pcabCMD(uint tx_gpio, uint rx_gpio, uint baud_ratio)
-: pcabCMD(uart0, tx_gpio, rx_gpio, baud_ratio, "\r\n"){}
+: pcabCMD(uart0, tx_gpio, rx_gpio, baud_ratio, "\n"){}
 
 pcabCMD::pcabCMD() : pcabCMD(0, 1, 9600){}
 

@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Collections.Generic;
 
 namespace PCAB_Debugger_GUI
 {
@@ -14,22 +15,34 @@ namespace PCAB_Debugger_GUI
         private bool _state;
         public event EventHandler<PCABEventArgs> OnUpdateDAT;
         public event EventHandler<PCABEventArgs> OnError;
-        public string Vd_now { get; set; }
-        public string Id_now { get; set; }
-        public string TEMP_now { get; set; }
+        public struct condDAT
+        {
+            public string SN { get; set; }
+            public string Vin { get; set; }
+            public string Vd { get; set; }
+            public string Id { get; set; }
+            public string TEMPs { get; set; }
+            public string CPU_TEMP { get; set; }
+
+            public condDAT(string sn, string vin, string vd, string id, string tmp, string cpu)
+            { SN = sn; Vin = vin; Vd = vd; Id = id; TEMPs = tmp; CPU_TEMP = cpu; }
+
+        }
+        public List<condDAT> CondNOW;
 
         public PCAB(string PortName)
         {
             _mod = new SerialPort(PortName);
-            //_mod.BaudRate = 9600;
+            CondNOW = new List<condDAT>();
             _mod.BaudRate = 9600;
+            //_mod.BaudRate = 115200;
             _mod.DataBits = 8;
             _mod.Parity = Parity.None;
             _mod.StopBits = StopBits.One;
             _mod.Handshake = Handshake.None;
             _mod.DtrEnable = false;
             _mod.Encoding = Encoding.ASCII;
-            _mod.NewLine = "\n";
+            _mod.NewLine = "\r\n";
             _mod.ReadBufferSize = 2048;
             _mod.WriteTimeout = 5000;
             _mod.ReadTimeout = 5000;
@@ -37,27 +50,34 @@ namespace PCAB_Debugger_GUI
 
         ~PCAB() { this.Close();  }
 
-        public void Close() { if (_mod?.IsOpen == true) { try { _mod.Close(); } catch { } } _mod = null; }
+        public void Close() { if (_mod?.IsOpen == true) { try { _mod.Close(); } catch { } } _mod = null; CondNOW.Clear(); }
 
-        public bool PCAB_AutoTaskStart(UInt32 waiteTime, bool? initialize)
+        public bool PCAB_AutoTaskStart(UInt32 waiteTime, string[] serialNum)
         {
             if (!autoOpen()) { return false; }
             _mod.DiscardInBuffer();
             try
             {
-                _mod.WriteLine("");
-                if (initialize == true)
-                {
-                    _mod.WriteLine("RST");
+                _mod.WriteLine("\n");
+                foreach (string s in serialNum) { 
+                    _mod.WriteLine("#" + s + " CUI 0"); 
                 }
-                _mod.WriteLine("CUI 1");
-                Thread.Sleep(2000);
+                Thread.Sleep(500);
                 _mod.DiscardInBuffer();
-                _mod.WriteLine("GetIDN");
-                string[] arrBf = _mod.ReadLine().Split(',');
-                if (arrBf[0] != "PCAB") { _mod.Close(); return false; }
+                CondNOW.Clear();
+                foreach (string s in serialNum)
+                {
+                    _mod.WriteLine("#" + s + " GetIDN");
+                    string[] arrBf = _mod.ReadLine().Split(',');
+                    if (arrBf.Length != 4) { _mod.Close(); return false; }
+                    if (arrBf[0] == "Orient Microwave Corp." && arrBf[1] == "LX00-0004-00" && arrBf[2] == s && arrBf[3] == "1.1.0")
+                    {
+                        CondNOW.Add(new condDAT(s.Replace(" ", ""), "", "", "", "", ""));
+                    }
+                }
+                if(CondNOW.Count < 1) { _mod.Close(); return false; }
             }
-            catch { OnError?.Invoke(this, new PCABEventArgs(null, "Serial Connect Error.")); return false; }
+            catch(Exception e) { OnError?.Invoke(this, new PCABEventArgs(new condDAT(), "Serial Connect Error.")); return false; }
 
             _task = true;
             Task.Factory.StartNew(() => { PCAB_Task(waiteTime); });
@@ -75,7 +95,7 @@ namespace PCAB_Debugger_GUI
             try
             {
                 _mod.WriteLine("RST");
-                _mod.WriteLine("CUI 1");
+                _mod.WriteLine("CUI 0");
                 Thread.Sleep(2000);
                 _mod.DiscardInBuffer();
                 _mod.WriteLine("GetIDN");
@@ -87,12 +107,12 @@ namespace PCAB_Debugger_GUI
             }
             catch (Exception e)
             {
-                OnError?.Invoke(this, new PCABEventArgs(null, e.Message));
+                OnError?.Invoke(this, new PCABEventArgs(new condDAT(), e.Message));
                 return false;
             }
         }
 
-        public string PCAB_CMD(string cmd,int readLine)
+        public string PCAB_CMD(string serialNum, string cmd,int readLine)
         {
             if (!autoOpen()) { return "ERR"; }
             _task = null;
@@ -100,7 +120,7 @@ namespace PCAB_Debugger_GUI
             _state = true;
             try
             {
-                _mod.WriteLine(cmd);
+                _mod.WriteLine("#" + serialNum + " " + cmd);
                 string ret = "";
                 for (int i = 0; i < readLine; i++) { ret += _mod.ReadLine() + "\n"; }
                 _state = false;
@@ -109,7 +129,7 @@ namespace PCAB_Debugger_GUI
             }
             catch(Exception e)
             {
-                OnError?.Invoke(this, new PCABEventArgs(null, e.Message));
+                OnError?.Invoke(this, new PCABEventArgs(new condDAT(), e.Message));
                 return "ERR\n";
             }
         }
@@ -127,17 +147,24 @@ namespace PCAB_Debugger_GUI
                     {
                         while (_state) { Thread.Sleep(53); }
                         _state = true;
-                        _mod.DiscardInBuffer();
-                        _mod.WriteLine("GetId");
-                        string id = _mod.ReadLine();
-                        _mod.WriteLine("GetVd");
-                        string vd = _mod.ReadLine();
-                        _mod.WriteLine("GetTMP0");
-                        string temp = _mod.ReadLine();
-                        if (Id_now != id || Vd_now != vd || TEMP_now != temp)
+                        foreach (condDAT cdat in CondNOW)
                         {
-                            string[] dat = { id, vd, temp };
-                            OnUpdateDAT?.Invoke(this, new PCABEventArgs(dat, null));
+                            _mod.DiscardInBuffer();
+                            _mod.WriteLine("#" +  cdat.SN + "GetId");
+                            string id = _mod.ReadLine();
+                            _mod.WriteLine("#" + cdat.SN + " GetVd");
+                            string vd = _mod.ReadLine();
+                            _mod.WriteLine("#" + cdat.SN + " GetTMP.Val 0");
+                            string temp = _mod.ReadLine();
+                            _mod.WriteLine("#" + cdat.SN + " GetVin");
+                            string vin = _mod.ReadLine();
+                            _mod.WriteLine("#" + cdat.SN + " GetTMP.CPU");
+                            string cpu_tmp = _mod.ReadLine();
+                            if (cdat.Id != id || cdat.Vd != vd || cdat.TEMPs != temp)
+                            {
+                                condDAT dat = new condDAT(cdat.SN, vin, vd, id, temp, cpu_tmp);
+                                OnUpdateDAT?.Invoke(this, new PCABEventArgs(dat, null));
+                            }
                         }
                         _state = false;
                     }
@@ -145,7 +172,7 @@ namespace PCAB_Debugger_GUI
                 _mod?.Close();
             }catch (Exception e)
             {
-                OnError?.Invoke(this, new PCABEventArgs(null, e.Message));
+                OnError?.Invoke(this, new PCABEventArgs(new condDAT(), e.Message));
             }
         }
 
@@ -163,12 +190,12 @@ namespace PCAB_Debugger_GUI
         public class PCABEventArgs : EventArgs
         {
             private string msg;
-            private string[] dat;
-            public PCABEventArgs(string[] ReceiveDAT, string Message) { dat = ReceiveDAT; msg = Message; }
+            private condDAT dat;
+            public PCABEventArgs(condDAT ReceiveDAT, string Message) { dat = ReceiveDAT; msg = Message; }
 
             public string Message { get { return msg; } }
 
-            public string[] ReceiveDAT { get { return dat; } }
+            public condDAT ReceiveDAT { get { return dat; } }
 
         }
     }

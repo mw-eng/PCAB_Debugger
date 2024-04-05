@@ -73,25 +73,27 @@ namespace PCAB_Debugger_GUI
                 _mod = null;
                 _state = false;
                 SERIAL_PORTS_COMBOBOX.IsEnabled = true;
-                WAITE_TIME_TEXTBOX.IsEnabled = true;
-                INIT_CHECKBOX.IsEnabled = true;
+                SERIAL_CONFIG_GRID.IsEnabled = true;
                 CONTL_GRID.IsEnabled = false;
                 ((TextBlock)((Viewbox)CONNECT_BUTTON.Content).Child).Text = "Connect";
             }
             else
             {
                 _mod = new PCAB(ports[SERIAL_PORTS_COMBOBOX.SelectedIndex].Name);
+                string[] sn = SERIAL_NUMBERS_TEXTBOX.Text.Replace(" ", "").Split(',');
                 _mod.OnUpdateDAT += OnUpdateDAT;
                 _mod.OnError += OnError;
-                if (_mod.PCAB_AutoTaskStart(uint.Parse(WAITE_TIME_TEXTBOX.Text),INIT_CHECKBOX.IsChecked))
+                if (_mod.PCAB_AutoTaskStart(uint.Parse(WAITE_TIME_TEXTBOX.Text), sn))
                 {
+                    SERIAL_NUMBERS_COMBOBOX.Items.Clear();
+                    foreach (condDAT condDAT in _mod.CondNOW) { SERIAL_NUMBERS_COMBOBOX.Items.Add(condDAT.SN); }
+                    SERIAL_NUMBERS_COMBOBOX.SelectedIndex = 0;
                     SERIAL_PORTS_COMBOBOX.IsEnabled = false;
-                    WAITE_TIME_TEXTBOX.IsEnabled = false;
-                    INIT_CHECKBOX.IsEnabled = false;
+                    SERIAL_CONFIG_GRID.IsEnabled = false;
                     CONTL_GRID.IsEnabled = true;
                     _state = true;
                     ((TextBlock)((Viewbox)CONNECT_BUTTON.Content).Child).Text = "Disconnect";
-                    read_conf();
+                    read_conf(SERIAL_NUMBERS_COMBOBOX.Text);
                 }
                 else
                 {
@@ -101,17 +103,27 @@ namespace PCAB_Debugger_GUI
             }
         }
 
-        private void read_conf()
+
+        private void SERIAL_NUMBERS_COMBOBOX_DropDownOpened(object sender, EventArgs e)
+        {
+        }
+
+        private void SERIAL_NUMBERS_COMBOBOX_DropDownClosed(object sender, EventArgs e)
+        {
+            if (SERIAL_PORTS_COMBOBOX.SelectedIndex < 0) { SERIAL_PORTS_COMBOBOX.SelectedIndex = 1; }
+        }
+
+        private void read_conf(string serialNum)
         {
             string strBf;
-            if (_mod.PCAB_CMD("GetSTB.AMP", 1) == "STB\n") { CHECKBOX_Checked("STBAMP", null); } else { CHECKBOX_Unchecked("STBAMP", null); }
-            if (_mod.PCAB_CMD("GetSTB.DRA", 1) == "STB\n") { CHECKBOX_Checked("STBDRA", null); } else { CHECKBOX_Unchecked("STBDRA", null); }
-            if (_mod.PCAB_CMD("GetSTB.LNA", 1) == "STB\n") { CHECKBOX_Checked("STBLNA", null); } else { CHECKBOX_Unchecked("STBLNA", null); }
-            if (_mod.PCAB_CMD("GetLPM", 1) == "LOW\n") { CHECKBOX_Checked("LPM", null); } else { CHECKBOX_Unchecked("LPM", null); }
-            if (_mod.PCAB_CMD("GetALD", 1) == "ENB\n") { CHECKBOX_Checked("ALD", null); } else { CHECKBOX_Unchecked("ALD", null); }
+            if (_mod.PCAB_CMD(serialNum, "GetSTB.AMP", 1) == "STB\n") { CHECKBOX_Checked("STBAMP", null); } else { CHECKBOX_Unchecked("STBAMP", null); }
+            if (_mod.PCAB_CMD(serialNum, "GetSTB.DRA", 1) == "STB\n") { CHECKBOX_Checked("STBDRA", null); } else { CHECKBOX_Unchecked("STBDRA", null); }
+            if (_mod.PCAB_CMD(serialNum, "GetSTB.LNA", 1) == "STB\n") { CHECKBOX_Checked("STBLNA", null); } else { CHECKBOX_Unchecked("STBLNA", null); }
+            if (_mod.PCAB_CMD(serialNum, "GetLPM", 1) == "LOW\n") { CHECKBOX_Checked("LPM", null); } else { CHECKBOX_Unchecked("LPM", null); }
+            if (_mod.PCAB_CMD(serialNum, "GetALD", 1) == "ENB\n") { CHECKBOX_Checked("ALD", null); } else { CHECKBOX_Unchecked("ALD", null); }
             for(int i = 0; i < 15; i++)
             {
-                strBf = _mod.PCAB_CMD("GetPS" + (i + 1).ToString(), 1);
+                strBf = _mod.PCAB_CMD(serialNum, "GetDPS now " + (i + 1).ToString(), 1);
                 if(int.TryParse(strBf.Trim('\n').Trim(' '),out _))
                 {
                     foreach(object objBf in PS_GRID.Children)
@@ -138,12 +150,12 @@ namespace PCAB_Debugger_GUI
         {
             if (MessageBox.Show("Load configuration from memory."
                 , "Warning",MessageBoxButton.OKCancel,MessageBoxImage.Warning) != MessageBoxResult.OK) { return; }
-            string strBf = _mod.PCAB_CMD("LMEM", 1);
-            if (strBf != "ERR\n")
+            string strBf = _mod.PCAB_CMD(SERIAL_NUMBERS_COMBOBOX.Text , "LMEM", 1);
+            if (strBf.Substring(0, 3) != "ERR")
             {
-                _mod.PCAB_CMD("CUI 1", 1);
+                _mod.PCAB_CMD(SERIAL_NUMBERS_COMBOBOX.Text, "CUI 0", 1);
                 _mod.DiscardInBuffer();
-                read_conf();
+                read_conf(SERIAL_NUMBERS_COMBOBOX.Text);
                 MessageBox.Show("Load memory done.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             else
@@ -158,7 +170,7 @@ namespace PCAB_Debugger_GUI
                 , "Warning", MessageBoxButton.OKCancel, MessageBoxImage.Warning) != MessageBoxResult.OK) { return; }
             if (_mod.PCAB_PRESET())
             {
-                read_conf();
+                read_conf(SERIAL_NUMBERS_COMBOBOX.SelectedIndex.ToString());
                 MessageBox.Show("Preset done.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             else
@@ -171,7 +183,7 @@ namespace PCAB_Debugger_GUI
         {
             if (MessageBox.Show("Save settings to memory."
                 , "Warning", MessageBoxButton.OKCancel, MessageBoxImage.Warning) != MessageBoxResult.OK) { return; }
-            if (_mod.PCAB_CMD("SMEM", 1) == "DONE\n")
+            if (_mod.PCAB_CMD(SERIAL_NUMBERS_COMBOBOX.Text, "SMEM", 1).Substring(0, 4) == "DONE")
             {
                 MessageBox.Show("Save memory done.","Success",MessageBoxButton.OK,MessageBoxImage.Information);
             }
@@ -194,8 +206,8 @@ namespace PCAB_Debugger_GUI
                         {
                             if (typeof(ComboBox) == objChild.GetType())
                             {
-                                if (_mod.PCAB_CMD("SetPS" + int.Parse(((Grid)objBf).Name.Substring(2, 2)).ToString("0") +
-                                    " " + ((ComboBox)objChild).SelectedIndex.ToString("0"), 1) != "DONE\n")
+                                if (_mod.PCAB_CMD(SERIAL_NUMBERS_COMBOBOX.Text, "SetDPS " + int.Parse(((Grid)objBf).Name.Substring(2, 2)).ToString("0") +
+                                    " " + ((ComboBox)objChild).SelectedIndex.ToString("0"), 1).Substring(0, 4) != "DONE")
                                 {
                                     res = false;
                                 }
@@ -204,7 +216,7 @@ namespace PCAB_Debugger_GUI
                     }
                 }
             }
-            if (res && _mod.PCAB_CMD("WrtPS",1) == "DONE\n")
+            if (res && _mod.PCAB_CMD(SERIAL_NUMBERS_COMBOBOX.Text, "WrtDPS", 1).Substring(0, 4) == "DONE")
             {
                 MessageBox.Show("Write phase config done.","Success",MessageBoxButton.OK,MessageBoxImage.Information);
             }
@@ -221,19 +233,19 @@ namespace PCAB_Debugger_GUI
                 switch (((CheckBox)sender).Name)
                 {
                     case "STBAMP_CHECKBOX":
-                        if (_mod.PCAB_CMD("SetSTB.AMP 1", 1) != "DONE\n") { MessageBox.Show("SetSTB.AMP Command Error", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
+                        if (_mod.PCAB_CMD(SERIAL_NUMBERS_COMBOBOX.Text, "SetSTB.AMP 1", 1).Substring(0, 4) != "DONE") { MessageBox.Show("SetSTB.AMP Command Error", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
                         break;
                     case "STBDRA_CHECKBOX":
-                        if (_mod.PCAB_CMD("SetSTB.DRA 1", 1) != "DONE\n") { MessageBox.Show("SetSTB.DRA Command Error", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
+                        if (_mod.PCAB_CMD(SERIAL_NUMBERS_COMBOBOX.Text, "SetSTB.DRA 1", 1).Substring(0, 4) != "DONE") { MessageBox.Show("SetSTB.DRA Command Error", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
                         break;
                     case "STBLNA_CHECKBOX":
-                        if (_mod.PCAB_CMD("SetSTB.LNA 1", 1) != "DONE\n") { MessageBox.Show("SetSTB.LNA Command Error", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
+                        if (_mod.PCAB_CMD(SERIAL_NUMBERS_COMBOBOX.Text, "SetSTB.LNA 1", 1).Substring(0, 4) != "DONE") { MessageBox.Show("SetSTB.LNA Command Error", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
                         break;
                     case "SETLPM_CHECKBOX":
-                        if (_mod.PCAB_CMD("SetLPM 1", 1) != "DONE\n") { MessageBox.Show("SetLPM Command Error", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
+                        if (_mod.PCAB_CMD(SERIAL_NUMBERS_COMBOBOX.Text, "SetLPM 1", 1).Substring(0, 4) != "DONE") { MessageBox.Show("SetLPM Command Error", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
                         break;
                     case "SETALD_CHECKBOX":
-                        if (_mod.PCAB_CMD("SetALD 1", 1) != "DONE\n") { MessageBox.Show("SetALD Command Error", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
+                        if (_mod.PCAB_CMD(SERIAL_NUMBERS_COMBOBOX.Text, "SetALD 1", 1).Substring(0, 4) != "DONE") { MessageBox.Show("SetALD Command Error", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
                         break;
                     default: break;
                 }
@@ -269,19 +281,19 @@ namespace PCAB_Debugger_GUI
                 switch (((CheckBox)sender).Name)
                 {
                     case "STBAMP_CHECKBOX":
-                        if (_mod.PCAB_CMD("SetSTB.AMP 0", 1) != "DONE\n") { MessageBox.Show("SetSTB.AMP Command Error", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
+                        if (_mod.PCAB_CMD(SERIAL_NUMBERS_COMBOBOX.Text, "SetSTB.AMP 0", 1).Substring(0, 4) != "DONE") { MessageBox.Show("SetSTB.AMP Command Error", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
                         break;
                     case "STBDRA_CHECKBOX":
-                        if (_mod.PCAB_CMD("SetSTB.DRA 0", 1) != "DONE\n") { MessageBox.Show("SetSTB.DRA Command Error", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
+                        if (_mod.PCAB_CMD(SERIAL_NUMBERS_COMBOBOX.Text, "SetSTB.DRA 0", 1).Substring(0, 4) != "DONE") { MessageBox.Show("SetSTB.DRA Command Error", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
                         break;
                     case "STBLNA_CHECKBOX":
-                        if (_mod.PCAB_CMD("SetSTB.LNA 0", 1) != "DONE\n") { MessageBox.Show("SetSTB.LNA Command Error", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
+                        if (_mod.PCAB_CMD(SERIAL_NUMBERS_COMBOBOX.Text, "SetSTB.LNA 0", 1).Substring(0, 4) != "DONE") { MessageBox.Show("SetSTB.LNA Command Error", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
                         break;
                     case "SETLPM_CHECKBOX":
-                        if (_mod.PCAB_CMD("SetLPM 0", 1) != "DONE\n") { MessageBox.Show("SetLPM Command Error", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
+                        if (_mod.PCAB_CMD(SERIAL_NUMBERS_COMBOBOX.Text, "SetLPM 0", 1).Substring(0, 4) != "DONE") { MessageBox.Show("SetLPM Command Error", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
                         break;
                     case "SETALD_CHECKBOX":
-                        if (_mod.PCAB_CMD("SetALD 0", 1) != "DONE\n") { MessageBox.Show("SetALD Command Error", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
+                        if (_mod.PCAB_CMD(SERIAL_NUMBERS_COMBOBOX.Text, "SetALD 0", 1).Substring(0, 4) != "DONE") { MessageBox.Show("SetALD Command Error", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
                         break;
                     default: break;
                 }
@@ -438,13 +450,13 @@ namespace PCAB_Debugger_GUI
                         foreach (int p in ps)
                         {
                             //Write Phase State
-                            if (_mod.PCAB_CMD("SetPS" + p.ToString("0") + " " + pss_num.ToString("0"), 1) != "DONE\n")
+                            if (_mod.PCAB_CMD(SERIAL_NUMBERS_COMBOBOX.Text, "SetDPS " + p.ToString("0") + " " + pss_num.ToString("0"), 1).Substring(0, 4) != "DONE")
                             {
                                 MessageBox.Show("Write phase config error.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                                 return;
                             }
                         }
-                        if (_mod.PCAB_CMD("WrtPS", 1) != "DONE\n")
+                        if (_mod.PCAB_CMD(SERIAL_NUMBERS_COMBOBOX.Text, "WrtDPS", 1).Substring(0, 4) != "DONE")
                         {
                             MessageBox.Show("Write phase config error.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                         }
@@ -579,13 +591,13 @@ namespace PCAB_Debugger_GUI
                     foreach (int p in ps)
                     {
                         //Write Phase State
-                        if (_mod.PCAB_CMD("SetPS" + p.ToString("0") + " 0", 1) != "DONE\n")
+                        if (_mod.PCAB_CMD(SERIAL_NUMBERS_COMBOBOX.Text, "SetDPS " + p.ToString("0") + " 0", 1).Substring(0, 4) != "DONE")
                         {
                             MessageBox.Show("Write phase config error.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                             return;
                         }
                     }
-                    if (_mod.PCAB_CMD("WrtPS", 1) != "DONE\n")
+                    if (_mod.PCAB_CMD(SERIAL_NUMBERS_COMBOBOX.Text, "WrtDPS", 1).Substring(0, 4) != "DONE")
                     {
                         MessageBox.Show("Write phase config error.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                     }
@@ -600,10 +612,10 @@ namespace PCAB_Debugger_GUI
         }
 
         #endregion
-
+        
         private void DEC_TextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
-            // 0-9およびa-f/A-Fのみ
+            // 0-9のみ
             e.Handled = !new Regex("[0-9]").IsMatch(e.Text);
         }
 
@@ -641,6 +653,53 @@ namespace PCAB_Debugger_GUI
             }
         }
 
+
+        private void SN_TextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            // 0-9およびa-f/A-Fのみ
+            e.Handled = !new Regex("[0-9|a-z|A-Z|,| ]").IsMatch(e.Text);
+        }
+
+        private void SN_TextBox_PreviewExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            // 貼付け場合
+            if (e.Command == ApplicationCommands.Paste)
+            {
+                string strTXT = Clipboard.GetText();
+                for (int cnt = 0; cnt < strTXT.Length; cnt++)
+                {
+                    if (!new Regex("[0-9|a-z|A-Z|,]|[ ]").IsMatch(strTXT[cnt].ToString()))
+                    {
+                        // 処理済み
+                        e.Handled = true;
+                        break;
+                    }
+                }
+            }
+        }
+
+        private void SN_TextBox_PreviewLostKeyboardForcus(object sender, KeyboardFocusChangedEventArgs e)
+        {
+            try
+            {
+                string[] arrBF = ((TextBox)sender).Text.Split(',');
+                if (arrBF.Length > 0)
+                {
+                    foreach (string strBF in arrBF)
+                    {
+                        if ((strBF.Replace(" ", "")).Length < 0 || 15 < (strBF.Replace(" ", "")).Length) { throw new Exception(); }
+                    }
+                }
+                else { throw new Exception(); }
+                return;
+            }
+            catch
+            {
+                MessageBox.Show("空白文字を除き1文字以上、15文字以下で入力してください");
+                e.Handled = true;
+            }
+        }
+
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             if (_state)
@@ -663,47 +722,48 @@ namespace PCAB_Debugger_GUI
             Dispatcher.BeginInvoke(new Action(() =>
             {
                 SERIAL_PORTS_COMBOBOX.IsEnabled = true;
-            CONTL_GRID.IsEnabled = false;
-            ((TextBlock)((Viewbox)CONNECT_BUTTON.Content).Child).Text = "Connect";
+                SERIAL_CONFIG_GRID.IsEnabled = true;
+                CONTL_GRID.IsEnabled = false;
+                ((TextBlock)((Viewbox)CONNECT_BUTTON.Content).Child).Text = "Connect";
             }));
         }
 
         private void OnUpdateDAT(object sender, PCABEventArgs e)
         {
-            if(e.ReceiveDAT.Length != 3) { return; }
-            if (_mod != null)
-            {
-                _mod.Id_now = e.ReceiveDAT[0];
-                _mod.Vd_now = e.ReceiveDAT[1];
-                _mod.TEMP_now = e.ReceiveDAT[2];
-            }
-            string[] arrBf = e.ReceiveDAT[2].Trim(',').Split(',');
-            List<string> list = new List<string>();
-            foreach(string strBf in arrBf)
-            {
-                string[] bf = strBf.Split(':');
-                list.Add(bf[1]);
-            }
-            Dispatcher.BeginInvoke(new Action(() =>
-            {
-                SNS_ID_LABEL.Content = ((double.Parse(e.ReceiveDAT[0]) - 1.65) / 0.09).ToString("0.00");
-                SNS_VD_LABEL.Content = (double.Parse(e.ReceiveDAT[1]) * 10.091).ToString("0.00");
-                TEMP01.Content = (double.Parse(list[0])).ToString("0.00");
-                TEMP02.Content = (double.Parse(list[1])).ToString("0.00");
-                TEMP03.Content = (double.Parse(list[2])).ToString("0.00");
-                TEMP04.Content = (double.Parse(list[3])).ToString("0.00");
-                TEMP05.Content = (double.Parse(list[4])).ToString("0.00");
-                TEMP06.Content = (double.Parse(list[5])).ToString("0.00");
-                TEMP07.Content = (double.Parse(list[6])).ToString("0.00");
-                TEMP08.Content = (double.Parse(list[7])).ToString("0.00");
-                TEMP09.Content = (double.Parse(list[8])).ToString("0.00");
-                TEMP10.Content = (double.Parse(list[9])).ToString("0.00");
-                TEMP11.Content = (double.Parse(list[10])).ToString("0.00");
-                TEMP12.Content = (double.Parse(list[11])).ToString("0.00");
-                TEMP13.Content = (double.Parse(list[12])).ToString("0.00");
-                TEMP14.Content = (double.Parse(list[13])).ToString("0.00");
-                TEMP15.Content = (double.Parse(list[14])).ToString("0.00");
-            }));
+            //if(e.ReceiveDAT.Length != 3) { return; }
+            //if (_mod != null)
+            //{
+            //    _mod.Id_now = e.ReceiveDAT.Id;
+            //    _mod.Vd_now = e.ReceiveDAT.Vd;
+            //    _mod.TEMP_now = e.ReceiveDAT.TEMPs;
+            //}
+            //string[] arrBf = e.ReceiveDAT.Trim(',').Split(',');
+            //List<string> list = new List<string>();
+            //foreach(string strBf in arrBf)
+            //{
+            //    string[] bf = strBf.Split(':');
+            //    list.Add(bf[1]);
+            //}
+            //Dispatcher.BeginInvoke(new Action(() =>
+            //{
+            //    SNS_ID_LABEL.Content = ((double.Parse(e.ReceiveDAT[0]) - 1.65) / 0.09).ToString("0.00");
+            //    SNS_VD_LABEL.Content = (double.Parse(e.ReceiveDAT[1]) * 10.091).ToString("0.00");
+            //    TEMP01.Content = (double.Parse(list[0])).ToString("0.00");
+            //    TEMP02.Content = (double.Parse(list[1])).ToString("0.00");
+            //    TEMP03.Content = (double.Parse(list[2])).ToString("0.00");
+            //    TEMP04.Content = (double.Parse(list[3])).ToString("0.00");
+            //    TEMP05.Content = (double.Parse(list[4])).ToString("0.00");
+            //    TEMP06.Content = (double.Parse(list[5])).ToString("0.00");
+            //    TEMP07.Content = (double.Parse(list[6])).ToString("0.00");
+            //    TEMP08.Content = (double.Parse(list[7])).ToString("0.00");
+            //    TEMP09.Content = (double.Parse(list[8])).ToString("0.00");
+            //    TEMP10.Content = (double.Parse(list[9])).ToString("0.00");
+            //    TEMP11.Content = (double.Parse(list[10])).ToString("0.00");
+            //    TEMP12.Content = (double.Parse(list[11])).ToString("0.00");
+            //    TEMP13.Content = (double.Parse(list[12])).ToString("0.00");
+            //    TEMP14.Content = (double.Parse(list[13])).ToString("0.00");
+            //    TEMP15.Content = (double.Parse(list[14])).ToString("0.00");
+            //}));
         }
 
         #region Structure

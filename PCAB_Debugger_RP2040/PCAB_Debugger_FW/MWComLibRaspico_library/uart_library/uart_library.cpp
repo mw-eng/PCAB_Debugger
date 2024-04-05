@@ -18,7 +18,7 @@ uartSYNC::uartSYNC(uint tx_gpio, uint rx_gpio, uint baud_ratio, std::string nlco
 : uartSYNC(uart0, tx_gpio, rx_gpio, baud_ratio, nlcode){}
 
 uartSYNC::uartSYNC(uint tx_gpio, uint rx_gpio, uint baud_ratio)
-: uartSYNC(uart0, tx_gpio, rx_gpio, baud_ratio, "\r\n"){}
+: uartSYNC(uart0, tx_gpio, rx_gpio, baud_ratio, "\n"){}
 
 uartSYNC::uartSYNC() : uartSYNC(0, 1, 9600){}
 
