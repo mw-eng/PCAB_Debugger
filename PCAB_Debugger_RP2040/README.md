@@ -8,7 +8,7 @@ Send commands in the order of *#{SERIAL NUMBER}*, *{COMMAND}*, *{ARGUMENTS}*, an
 
 Specify the serial number of the communication partner in *{SERIAL NUMBER}*. However, if *"\*"* is specified, communication will be performed for all serial numbers.<br>
 *{COMMAND}* and *{ARGUMENTS}* refer to *Command Lists*.<br>
-*{EXIT CODE}* is *\r(Carriage Return)* or *\n(Line Feed)* or *\r\n*.<br>
+*{EXIT CODE}* is *\n(Line Feed Code)* .<br>
 We recommend *\r(CR)* when CUI and echo are enable, and *\n(LF)* when CUI and local echo are enabled or GUI is enabled.<br>
 ### example
 - #0010 WrtDPS
