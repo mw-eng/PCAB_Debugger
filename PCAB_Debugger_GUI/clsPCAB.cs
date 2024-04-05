@@ -77,7 +77,7 @@ namespace PCAB_Debugger_GUI
                 }
                 if(CondNOW.Count < 1) { _mod.Close(); return false; }
             }
-            catch(Exception e) { OnError?.Invoke(this, new PCABEventArgs(new condDAT(), "Serial Connect Error.")); return false; }
+            catch { OnError?.Invoke(this, new PCABEventArgs(new condDAT(), "Serial Connect Error.")); return false; }
 
             _task = true;
             Task.Factory.StartNew(() => { PCAB_Task(waiteTime); });
@@ -150,7 +150,7 @@ namespace PCAB_Debugger_GUI
                         foreach (condDAT cdat in CondNOW)
                         {
                             _mod.DiscardInBuffer();
-                            _mod.WriteLine("#" +  cdat.SN + "GetId");
+                            _mod.WriteLine("#" +  cdat.SN + " GetId");
                             string id = _mod.ReadLine();
                             _mod.WriteLine("#" + cdat.SN + " GetVd");
                             string vd = _mod.ReadLine();

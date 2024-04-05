@@ -92,7 +92,6 @@
                         <Viewbox Grid.Row="0" Grid.Column="0" Margin="5" HorizontalAlignment="Left"><CheckBox x:Name="STBAMP_CHECKBOX" VerticalContentAlignment="Center" Content="Standby AMP" Checked="CHECKBOX_Checked" Unchecked="CHECKBOX_Unchecked" /></Viewbox>
                         <Viewbox Grid.Row="0" Grid.Column="1" Margin="5" HorizontalAlignment="Left"><CheckBox x:Name="STBDRA_CHECKBOX" VerticalContentAlignment="Center" Content="Standby DRA" Checked="CHECKBOX_Checked" Unchecked="CHECKBOX_Unchecked" /></Viewbox>
                         <Viewbox Grid.Row="1" Grid.Column="0" Margin="5" HorizontalAlignment="Left"><CheckBox x:Name="SETLPM_CHECKBOX" VerticalContentAlignment="Center" Content="Low Power Mode" Checked="CHECKBOX_Checked" Unchecked="CHECKBOX_Unchecked" /></Viewbox>
-                        <Viewbox Grid.Row="1" Grid.Column="1" Margin="5" HorizontalAlignment="Left"><CheckBox x:Name="SETALD_CHECKBOX" VerticalContentAlignment="Center" Content="Auto Load Mode" Checked="CHECKBOX_Checked" Unchecked="CHECKBOX_Unchecked" /></Viewbox>
                     </Grid>
                     <Grid Grid.Row="1" Margin="5">
                         <Grid.RowDefinitions>

@@ -120,7 +120,6 @@ namespace PCAB_Debugger_GUI
             if (_mod.PCAB_CMD(serialNum, "GetSTB.DRA", 1) == "STB\n") { CHECKBOX_Checked("STBDRA", null); } else { CHECKBOX_Unchecked("STBDRA", null); }
             if (_mod.PCAB_CMD(serialNum, "GetSTB.LNA", 1) == "STB\n") { CHECKBOX_Checked("STBLNA", null); } else { CHECKBOX_Unchecked("STBLNA", null); }
             if (_mod.PCAB_CMD(serialNum, "GetLPM", 1) == "LOW\n") { CHECKBOX_Checked("LPM", null); } else { CHECKBOX_Unchecked("LPM", null); }
-            if (_mod.PCAB_CMD(serialNum, "GetALD", 1) == "ENB\n") { CHECKBOX_Checked("ALD", null); } else { CHECKBOX_Unchecked("ALD", null); }
             for(int i = 0; i < 15; i++)
             {
                 strBf = _mod.PCAB_CMD(serialNum, "GetDPS now " + (i + 1).ToString(), 1);
@@ -266,9 +265,6 @@ namespace PCAB_Debugger_GUI
                     case "LPM":
                         SETLPM_CHECKBOX.IsChecked = true;
                         break;
-                    case "ALD":
-                        SETALD_CHECKBOX.IsChecked = true;
-                        break;
                     default: break;
                 }
             }
@@ -313,9 +309,6 @@ namespace PCAB_Debugger_GUI
                         break;
                     case "LPM":
                         SETLPM_CHECKBOX.IsChecked = false;
-                        break;
-                    case "ALD":
-                        SETALD_CHECKBOX.IsChecked = false;
                         break;
                     default: break;
                 }
