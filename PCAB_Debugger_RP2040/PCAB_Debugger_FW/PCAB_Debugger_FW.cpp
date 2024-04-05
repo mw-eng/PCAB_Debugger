@@ -92,10 +92,10 @@ std::string readSerialNum()
 void writeDPS()
 {
     std::vector<uint8_t> stBF;
-    for(uint16_t i = NUMBER_OF_SYSTEM ; i >= 0 ; i-- )
+    for(uint16_t i = NUMBER_OF_SYSTEM ; i > 0 ; i-- )
     {
-        stBF.push_back(dpsBF[i]);
-        dpsNOW[i] = dpsBF[i] & 0x3F;
+        stBF.push_back(dpsBF[i - 1]);
+        dpsNOW[i - 1] = dpsBF[i - 1] & 0x3F;
     }
     spi_ps->spi_write_read(stBF);
 }
@@ -103,10 +103,10 @@ void writeDPS()
 void writeDSA()
 {
     std::vector<uint8_t> stBF;
-    for(uint16_t i = NUMBER_OF_SYSTEM ; i >= 0 ; i-- )
+    for(uint16_t i = NUMBER_OF_SYSTEM ; i > 0 ; i-- )
     {
-        stBF.push_back(dsaBF[i] ^ 0x3F);
-        dsaNOW[i] = dsaBF[i] & 0x3F;
+        stBF.push_back(dsaBF[i - 1] ^ 0x3F);
+        dsaNOW[i - 1] = dsaBF[i - 1] & 0x3F;
     }
     spi_sa->spi_write_read(stBF);
 }

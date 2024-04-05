@@ -28,12 +28,14 @@ namespace PCAB_Debugger_GUI
             { SN = sn; Vin = vin; Vd = vd; Id = id; TEMPs = tmp; CPU_TEMP = cpu; }
 
         }
-        public List<condDAT> CondNOW;
+        public condDAT CondNOW;
+        public List<condDAT> DAT;
 
         public PCAB(string PortName)
         {
             _mod = new SerialPort(PortName);
-            CondNOW = new List<condDAT>();
+            CondNOW = new condDAT();
+            DAT = new List<condDAT>();
             _mod.BaudRate = 9600;
             //_mod.BaudRate = 115200;
             _mod.DataBits = 8;
@@ -50,7 +52,7 @@ namespace PCAB_Debugger_GUI
 
         ~PCAB() { this.Close();  }
 
-        public void Close() { if (_mod?.IsOpen == true) { try { _mod.Close(); } catch { } } _mod = null; CondNOW.Clear(); }
+        public void Close() { if (_mod?.IsOpen == true) { try { _mod.Close(); } catch { } } _mod = null; DAT.Clear(); }
 
         public bool PCAB_AutoTaskStart(UInt32 waiteTime, string[] serialNum)
         {
@@ -64,7 +66,7 @@ namespace PCAB_Debugger_GUI
                 }
                 Thread.Sleep(500);
                 _mod.DiscardInBuffer();
-                CondNOW.Clear();
+                DAT.Clear();
                 foreach (string s in serialNum)
                 {
                     _mod.WriteLine("#" + s + " GetIDN");
@@ -72,10 +74,10 @@ namespace PCAB_Debugger_GUI
                     if (arrBf.Length != 4) { _mod.Close(); return false; }
                     if (arrBf[0] == "Orient Microwave Corp." && arrBf[1] == "LX00-0004-00" && arrBf[2] == s && arrBf[3] == "1.1.0")
                     {
-                        CondNOW.Add(new condDAT(s.Replace(" ", ""), "", "", "", "", ""));
+                        DAT.Add(new condDAT(s.Replace(" ", ""), "", "", "", "", ""));
                     }
                 }
-                if(CondNOW.Count < 1) { _mod.Close(); return false; }
+                if(DAT.Count < 1) { _mod.Close(); return false; }
             }
             catch { OnError?.Invoke(this, new PCABEventArgs(new condDAT(), "Serial Connect Error.")); return false; }
 
@@ -86,7 +88,7 @@ namespace PCAB_Debugger_GUI
 
         public void PCAB_AutoTaskStop() { _task = false; }
 
-        public bool PCAB_PRESET()
+        public bool PCAB_PRESET(string serialNum)
         {
             if (!autoOpen()) { return false; }
             _task = null;
@@ -94,16 +96,19 @@ namespace PCAB_Debugger_GUI
             _state = true;
             try
             {
-                _mod.WriteLine("RST");
-                _mod.WriteLine("CUI 0");
+                _mod.WriteLine("#" + serialNum + " RST");
+                _mod.WriteLine("#" + serialNum + " CUI 0");
                 Thread.Sleep(2000);
                 _mod.DiscardInBuffer();
-                _mod.WriteLine("GetIDN");
+                _mod.WriteLine("#" + serialNum + " GetIDN");
                 string[] arrBf = _mod.ReadLine().Split(',');
                 _state = false;
                 _task = true;
-                if (arrBf[0] != "PCAB") { return false; }
-                else { return true; }
+
+                if (arrBf.Length != 4) { return false; }
+                if (arrBf[0] == "Orient Microwave Corp." && arrBf[1] == "LX00-0004-00" && arrBf[2] == serialNum && arrBf[3] == "1.1.0")
+                { return true; }
+                else { return false; }
             }
             catch (Exception e)
             {
@@ -147,7 +152,7 @@ namespace PCAB_Debugger_GUI
                     {
                         while (_state) { Thread.Sleep(53); }
                         _state = true;
-                        foreach (condDAT cdat in CondNOW)
+                        foreach (condDAT cdat in DAT)
                         {
                             _mod.DiscardInBuffer();
                             _mod.WriteLine("#" +  cdat.SN + " GetId");
@@ -160,7 +165,7 @@ namespace PCAB_Debugger_GUI
                             string vin = _mod.ReadLine();
                             _mod.WriteLine("#" + cdat.SN + " GetTMP.CPU");
                             string cpu_tmp = _mod.ReadLine();
-                            if (cdat.Id != id || cdat.Vd != vd || cdat.TEMPs != temp)
+                            if (CondNOW.SN == cdat.SN && (CondNOW.Id != id || CondNOW.Vd != vd || CondNOW.TEMPs != temp || CondNOW.Vin != vin || CondNOW.CPU_TEMP != cpu_tmp))
                             {
                                 condDAT dat = new condDAT(cdat.SN, vin, vd, id, temp, cpu_tmp);
                                 OnUpdateDAT?.Invoke(this, new PCABEventArgs(dat, null));
@@ -191,6 +196,7 @@ namespace PCAB_Debugger_GUI
         {
             private string msg;
             private condDAT dat;
+
             public PCABEventArgs(condDAT ReceiveDAT, string Message) { dat = ReceiveDAT; msg = Message; }
 
             public string Message { get { return msg; } }

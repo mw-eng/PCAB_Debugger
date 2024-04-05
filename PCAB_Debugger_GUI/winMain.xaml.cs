@@ -40,6 +40,11 @@ namespace PCAB_Debugger_GUI
             SERIAL_PORTS_COMBOBOX_RELOAD();
             if(SERIAL_PORTS_COMBOBOX.Items.Count > 0) { SERIAL_PORTS_COMBOBOX.SelectedIndex = 0; CONNECT_BUTTON.IsEnabled = true; }
             sesn = VisaControlNI.NewResourceManager();
+            SAVEADDRESS_COMBOBOX.Items.Add("0");
+            SAVEADDRESS_COMBOBOX.Items.Add("1");
+            SAVEADDRESS_COMBOBOX.Items.Add("2");
+            SAVEADDRESS_COMBOBOX.Items.Add("3");
+            SAVEADDRESS_COMBOBOX.SelectedIndex = 0;
         }
 
         #region Serial EVENT
@@ -86,8 +91,9 @@ namespace PCAB_Debugger_GUI
                 if (_mod.PCAB_AutoTaskStart(uint.Parse(WAITE_TIME_TEXTBOX.Text), sn))
                 {
                     SERIAL_NUMBERS_COMBOBOX.Items.Clear();
-                    foreach (condDAT condDAT in _mod.CondNOW) { SERIAL_NUMBERS_COMBOBOX.Items.Add(condDAT.SN); }
+                    foreach (condDAT condDAT in _mod.DAT) { SERIAL_NUMBERS_COMBOBOX.Items.Add(condDAT.SN); }
                     SERIAL_NUMBERS_COMBOBOX.SelectedIndex = 0;
+                    SERIAL_NUMBERS_COMBOBOX_DropDownClosed(this, e);
                     SERIAL_PORTS_COMBOBOX.IsEnabled = false;
                     SERIAL_CONFIG_GRID.IsEnabled = false;
                     CONTL_GRID.IsEnabled = true;
@@ -103,23 +109,31 @@ namespace PCAB_Debugger_GUI
             }
         }
 
-
         private void SERIAL_NUMBERS_COMBOBOX_DropDownOpened(object sender, EventArgs e)
         {
         }
 
         private void SERIAL_NUMBERS_COMBOBOX_DropDownClosed(object sender, EventArgs e)
         {
-            if (SERIAL_PORTS_COMBOBOX.SelectedIndex < 0) { SERIAL_PORTS_COMBOBOX.SelectedIndex = 1; }
+            if (SERIAL_PORTS_COMBOBOX.SelectedIndex < 0) { SERIAL_PORTS_COMBOBOX.SelectedIndex = 0; }
+            if (_mod != null)
+            {
+                _mod.CondNOW.SN = SERIAL_PORTS_COMBOBOX.Text;
+            }
+        }
+
+        private void SAVEADDRESS_COMBOBOX_DropDownClosed(object sender, EventArgs e)
+        {
+            if (SAVEADDRESS_COMBOBOX.SelectedIndex < 0) { SAVEADDRESS_COMBOBOX.SelectedIndex = 0; }
         }
 
         private void read_conf(string serialNum)
         {
             string strBf;
-            if (_mod.PCAB_CMD(serialNum, "GetSTB.AMP", 1) == "STB\n") { CHECKBOX_Checked("STBAMP", null); } else { CHECKBOX_Unchecked("STBAMP", null); }
-            if (_mod.PCAB_CMD(serialNum, "GetSTB.DRA", 1) == "STB\n") { CHECKBOX_Checked("STBDRA", null); } else { CHECKBOX_Unchecked("STBDRA", null); }
-            if (_mod.PCAB_CMD(serialNum, "GetSTB.LNA", 1) == "STB\n") { CHECKBOX_Checked("STBLNA", null); } else { CHECKBOX_Unchecked("STBLNA", null); }
-            if (_mod.PCAB_CMD(serialNum, "GetLPM", 1) == "LOW\n") { CHECKBOX_Checked("LPM", null); } else { CHECKBOX_Unchecked("LPM", null); }
+            if (_mod.PCAB_CMD(serialNum, "GetSTB.AMP", 1) == "1\n") { CHECKBOX_Checked("STBAMP", null); } else { CHECKBOX_Unchecked("STBAMP", null); }
+            if (_mod.PCAB_CMD(serialNum, "GetSTB.DRA", 1) == "1\n") { CHECKBOX_Checked("STBDRA", null); } else { CHECKBOX_Unchecked("STBDRA", null); }
+            if (_mod.PCAB_CMD(serialNum, "GetSTB.LNA", 1) == "1\n") { CHECKBOX_Checked("STBLNA", null); } else { CHECKBOX_Unchecked("STBLNA", null); }
+            if (_mod.PCAB_CMD(serialNum, "GetLPM", 1) == "1\n") { CHECKBOX_Checked("LPM", null); } else { CHECKBOX_Unchecked("LPM", null); }
             for(int i = 0; i < 15; i++)
             {
                 strBf = _mod.PCAB_CMD(serialNum, "GetDPS now " + (i + 1).ToString(), 1);
@@ -149,7 +163,7 @@ namespace PCAB_Debugger_GUI
         {
             if (MessageBox.Show("Load configuration from memory."
                 , "Warning",MessageBoxButton.OKCancel,MessageBoxImage.Warning) != MessageBoxResult.OK) { return; }
-            string strBf = _mod.PCAB_CMD(SERIAL_NUMBERS_COMBOBOX.Text , "LMEM", 1);
+            string strBf = _mod.PCAB_CMD(SERIAL_NUMBERS_COMBOBOX.Text , "LMEM " + SAVEADDRESS_COMBOBOX.Text, 1);
             if (strBf.Substring(0, 3) != "ERR")
             {
                 _mod.PCAB_CMD(SERIAL_NUMBERS_COMBOBOX.Text, "CUI 0", 1);
@@ -167,7 +181,7 @@ namespace PCAB_Debugger_GUI
         {
             if (MessageBox.Show("Restore default settins."
                 , "Warning", MessageBoxButton.OKCancel, MessageBoxImage.Warning) != MessageBoxResult.OK) { return; }
-            if (_mod.PCAB_PRESET())
+            if (_mod.PCAB_PRESET(SERIAL_NUMBERS_COMBOBOX.Text))
             {
                 read_conf(SERIAL_NUMBERS_COMBOBOX.SelectedIndex.ToString());
                 MessageBox.Show("Preset done.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -182,7 +196,7 @@ namespace PCAB_Debugger_GUI
         {
             if (MessageBox.Show("Save settings to memory."
                 , "Warning", MessageBoxButton.OKCancel, MessageBoxImage.Warning) != MessageBoxResult.OK) { return; }
-            if (_mod.PCAB_CMD(SERIAL_NUMBERS_COMBOBOX.Text, "SMEM", 1).Substring(0, 4) == "DONE")
+            if (_mod.PCAB_CMD(SERIAL_NUMBERS_COMBOBOX.Text, "SMEM " + SAVEADDRESS_COMBOBOX.Text, 1).Substring(0, 4) == "DONE")
             {
                 MessageBox.Show("Save memory done.","Success",MessageBoxButton.OK,MessageBoxImage.Information);
             }
@@ -449,7 +463,7 @@ namespace PCAB_Debugger_GUI
                                 return;
                             }
                         }
-                        if (_mod.PCAB_CMD(SERIAL_NUMBERS_COMBOBOX.Text, "WrtDPS", 1).Substring(0, 4) != "DONE")
+                        if (_mod.PCAB_CMD(SERIAL_NUMBERS_COMBOBOX.Text, " WrtDPS", 1).Substring(0, 4) != "DONE")
                         {
                             MessageBox.Show("Write phase config error.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                         }
@@ -590,7 +604,7 @@ namespace PCAB_Debugger_GUI
                             return;
                         }
                     }
-                    if (_mod.PCAB_CMD(SERIAL_NUMBERS_COMBOBOX.Text, "WrtDPS", 1).Substring(0, 4) != "DONE")
+                    if (_mod.PCAB_CMD(SERIAL_NUMBERS_COMBOBOX.Text, " WrtDPS", 1).Substring(0, 4) != "DONE")
                     {
                         MessageBox.Show("Write phase config error.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                     }
@@ -645,7 +659,6 @@ namespace PCAB_Debugger_GUI
                 e.Handled = true;
             }
         }
-
 
         private void SN_TextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
@@ -723,20 +736,22 @@ namespace PCAB_Debugger_GUI
 
         private void OnUpdateDAT(object sender, PCABEventArgs e)
         {
-            //if(e.ReceiveDAT.Length != 3) { return; }
-            //if (_mod != null)
-            //{
-            //    _mod.Id_now = e.ReceiveDAT.Id;
-            //    _mod.Vd_now = e.ReceiveDAT.Vd;
-            //    _mod.TEMP_now = e.ReceiveDAT.TEMPs;
-            //}
-            //string[] arrBf = e.ReceiveDAT.Trim(',').Split(',');
-            //List<string> list = new List<string>();
-            //foreach(string strBf in arrBf)
-            //{
-            //    string[] bf = strBf.Split(':');
-            //    list.Add(bf[1]);
-            //}
+            if (e.ReceiveDAT.SN != SERIAL_NUMBERS_COMBOBOX.Text) { return; }
+            if (_mod != null)
+            {
+                _mod.CondNOW.Id = e.ReceiveDAT.Id;
+                _mod.CondNOW.Vd = e.ReceiveDAT.Vd;
+                _mod.CondNOW.TEMPs = e.ReceiveDAT.TEMPs;
+                _mod.CondNOW.Vin = e.ReceiveDAT.Vin;
+                _mod.CondNOW.CPU_TEMP = e.ReceiveDAT.CPU_TEMP;
+            }
+            string[] arrBf = e.ReceiveDAT.TEMPs.Split(',');
+            List<string> list = new List<string>();
+            foreach (string strBf in arrBf)
+            {
+                string[] bf = strBf.Split(':');
+                list.Add(bf[1]);
+            }
             //Dispatcher.BeginInvoke(new Action(() =>
             //{
             //    SNS_ID_LABEL.Content = ((double.Parse(e.ReceiveDAT[0]) - 1.65) / 0.09).ToString("0.00");
