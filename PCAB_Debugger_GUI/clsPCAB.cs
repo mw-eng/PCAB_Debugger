@@ -40,7 +40,7 @@ namespace PCAB_Debugger_GUI
             _mod.Parity = Parity.None;
             _mod.StopBits = StopBits.One;
             _mod.Handshake = Handshake.None;
-            _mod.DtrEnable = false;
+            _mod.DtrEnable = true;
             _mod.Encoding = Encoding.ASCII;
             _mod.NewLine = "\r\n";
             _mod.ReadBufferSize = 2048;
@@ -58,7 +58,7 @@ namespace PCAB_Debugger_GUI
             _mod.DiscardInBuffer();
             try
             {
-                _mod.WriteLine("\n");
+                _mod.WriteLine("");
                 foreach (string s in serialNum) { 
                     _mod.WriteLine("#" + s + " CUI 0"); 
                 }
