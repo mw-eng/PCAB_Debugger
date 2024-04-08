@@ -252,7 +252,7 @@
                                     <Viewbox Grid.Column="0" Margin="5" HorizontalAlignment="Left"><Label Content="Save Target"/></Viewbox>
                                     <ComboBox Grid.Column="1" x:Name="SAVEADDRESS_COMBOBOX" Margin="5" FontSize="16" VerticalContentAlignment="Center" DropDownClosed="SAVEADDRESS_COMBOBOX_DropDownClosed"/>
                                 </Grid>
-                                <Button Grid.Column="1" x:Name="LOADDMEM" Margin="5" Click="LOADMEM_Click"><Viewbox Margin="5"><TextBlock>Load Memeory</TextBlock></Viewbox></Button>
+                                <Button Grid.Column="1" x:Name="LOADDMEM" Margin="5" Click="LOADMEM_Click"><Viewbox Margin="5"><TextBlock>Load Memory</TextBlock></Viewbox></Button>
                                 <Button Grid.Column="2" x:Name="SAVEMEM" Margin="5" Click="SAVEMEM_Click"><Viewbox Margin="5"><TextBlock>Save Memory</TextBlock></Viewbox></Button>
                                 <Button Grid.Column="3" x:Name="RESET" Margin="5" Click="RESET_Click"><Viewbox Margin="5"><TextBlock>Preset Config</TextBlock></Viewbox></Button>
                                 <Button Grid.Column="4" x:Name="WRITEPS" Margin="5" Click="WRITEPS_Click"><Viewbox Margin="5"><TextBlock>Set Phase Config</TextBlock></Viewbox></Button>
