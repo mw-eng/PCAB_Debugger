@@ -1,3 +1,14 @@
+//#define DEBUG_ADMIN
+//#define DEBUG_FRB
+#define DEBUG_BOOT
+// ROM Block Number
+#define ROM_BLOCK_USER 16   // Range of user available space from this block number to ROM_BLOCK_NUM - 2
+#define ROM_BLOCK_NUM 32    // 16M (Raspberry Pi Pico)
+//#define ROM_BLOCK_NUM 64    // 32M
+//#define ROM_BLOCK_NUM 128   // 64M
+//#define ROM_BLOCK_NUM 256   // 128M (PCAB)
+//#define ROM_BLOCK_NUM 512   // 256M
+
 #include "PCAB_Debugger_FW.hpp"
 #define SNPRINTF_BUFFER_LEN 50
 #define NUMBER_OF_SYSTEM 15
@@ -29,7 +40,9 @@ bool lowMODE = false;
 bool editRangeCheck(const uint16_t &blockNum)
 {
     if(blockNum < ROM_BLOCK_USER || ROM_BLOCK_NUM - 1 < blockNum) { return false; }
-    if(bootMode == 0x2A || (ROM_BLOCK_USER <= blockNum && blockNum < ROM_BLOCK_NUM - 2)) { return true; }
+    if(bootMode == 0x2A) { return true; }
+    if((bootMode == 0x02 || bootMode == 0x03 || bootMode == 0x06 || bootMode == 0x07) && (blockNum == ROM_BLOCK_NUM - 2)) { return true; }
+    if((bootMode == 0x04 || bootMode == 0x05 || bootMode == 0x06 || bootMode == 0x07) && (ROM_BLOCK_USER <= blockNum && blockNum < ROM_BLOCK_NUM - 3)) { return true; }
     return false;
 }
 
@@ -185,12 +198,14 @@ void setup()
 #ifdef DEBUG_FRB
     bootMode = 0x20;
 #endif
+#ifdef DEBUG_BOOT
+    bootMode = 0x01;
+#endif
     serialNum = readSerialNum();
 
     // Resture Factory STATE
     if((bootMode == 0x20 || bootMode == 0x00) && !loadSTATE(ROM_BLOCK_NUM - 1, 0)) { }
-    else if((bootMode == 0x01 || bootMode == 0x03 || bootMode == 0x05 || bootMode == 0x07) && !loadSTATE(ROM_BLOCK_NUM - 2, 0)) { }
-    else
+    else if((bootMode != 0x01 && bootMode != 0x03 && bootMode != 0x05 && bootMode != 0x07) || !loadSTATE(ROM_BLOCK_NUM - 2, 0)) 
     {
         for(int i = 0; i < NUMBER_OF_SYSTEM; i++ ) { dpsBF[i] = 0; dsaBF[i] = 8;}
         dsaBF[NUMBER_OF_SYSTEM] = 0;
