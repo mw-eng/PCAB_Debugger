@@ -27,8 +27,8 @@
 #define SW_6_PIN 13
 
 // UART Configure
-#define UART_BAUD_RATE 9600
-//#define UART_BAUD_RATE 115200
+//#define UART_BAUD_RATE 9600
+#define UART_BAUD_RATE 115200
 
 // SPI Configure
 #define SPI_MODE 3
@@ -36,4 +36,13 @@
 #define SPI_BITS 6
 #define SPI_ORDER false // 0:LSB / 1:MSB
 
+// ROM Block Number
+#define ROM_BLOCK_USER 16   // Range of user available space from this block number to ROM_BLOCK_NUM - 2
+//#define ROM_BLOCK_NUM 32    // 16M (Raspberry Pi Pico)
+//#define ROM_BLOCK_NUM 64    // 32M
+//#define ROM_BLOCK_NUM 128   // 64M
+#define ROM_BLOCK_NUM 256   // 128M (PCAB)
+//#define ROM_BLOCK_NUM 512   // 256M
 
+//#define DEBUG_ADMIN
+//#define DEBUG_FRB

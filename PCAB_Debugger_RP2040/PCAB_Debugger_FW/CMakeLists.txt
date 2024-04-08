@@ -30,5 +30,7 @@ target_link_libraries(${ProjectName}
     ds18b20_library
 )
 
+add_compile_definitions(PICO_FLASH_SIZE_BYTES=16*1024*1024)
+
 # create map/bin/hex/uf2 file in addition to ELF.
 pico_add_extra_outputs(${ProjectName})

@@ -13,7 +13,7 @@ adc::adc(bool adc0, bool adc1, bool adc2, bool adc3, float vref) : adc0(adc0), a
     if(adc0) { adc_gpio_init(ADC0); }
     if(adc1) { adc_gpio_init(ADC1); }
     if(adc2) { adc_gpio_init(ADC2); }
-    adc_gpio_init(ADC3);
+    if(adc3) { adc_gpio_init(ADC3); }
     adc_set_temp_sensor_enabled(true);
 }
 

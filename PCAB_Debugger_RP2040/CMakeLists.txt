@@ -6,6 +6,7 @@ set(ProjectName "PCAB_Debugger_RP2040")
 include(pico_sdk_import.cmake)
 include(pico_extras_import_optional.cmake)
 
+
 project(${ProjectName} C CXX ASM)
 add_compile_options(-Wall -g3 -O2)
 set(CMAKE_C_STANDARD 11)

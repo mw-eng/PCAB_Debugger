@@ -761,8 +761,8 @@ namespace PCAB_Debugger_GUI
                 string[] arrBf = e.ReceiveDAT.TEMPs.Split(',');
                 for (int i = 0; i < arrBf.Length; i++)
                 {
-                    if (!float.TryParse(arrBf[i], out flBF)) { tmp[0] = "ND"; }
-                    else { tmp[0] = flBF.ToString("0.00"); }
+                    if (!float.TryParse(arrBf[i], out flBF)) { tmp[i] = "ND"; }
+                    else { tmp[i] = flBF.ToString("0.00"); }
                 }
             }
             Dispatcher.BeginInvoke(new Action(() =>

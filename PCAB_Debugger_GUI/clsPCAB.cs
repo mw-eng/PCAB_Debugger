@@ -36,8 +36,8 @@ namespace PCAB_Debugger_GUI
             _mod = new SerialPort(PortName);
             CondNOW = new condDAT();
             DAT = new List<condDAT>();
-            _mod.BaudRate = 9600;
-            //_mod.BaudRate = 115200;
+            //_mod.BaudRate = 9600;
+            _mod.BaudRate = 115200;
             _mod.DataBits = 8;
             _mod.Parity = Parity.None;
             _mod.StopBits = StopBits.One;
