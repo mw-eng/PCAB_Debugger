@@ -45,6 +45,7 @@ namespace PCAB_Debugger_GUI
             SAVEADDRESS_COMBOBOX.Items.Add("2");
             SAVEADDRESS_COMBOBOX.Items.Add("3");
             SAVEADDRESS_COMBOBOX.SelectedIndex = 0;
+            
         }
 
         #region Serial EVENT

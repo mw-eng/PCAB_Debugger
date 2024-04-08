@@ -9,10 +9,10 @@ const static std::string FW_MODEL = "LX00-0004-00";
 const static std::string FW_REV = "1.1.0";
 // ROM Block Number
 #define ROM_BLOCK_USER 16   // Range of user available space from this block number to ROM_BLOCK_NUM - 2
-#define ROM_BLOCK_NUM 32    // 16M (Raspberry Pi Pico)
+//#define ROM_BLOCK_NUM 32    // 16M (Raspberry Pi Pico)
 //#define ROM_BLOCK_NUM 64    // 32M
 //#define ROM_BLOCK_NUM 128   // 64M
-//#define ROM_BLOCK_NUM 256   // 128M (PCAB)
+#define ROM_BLOCK_NUM 256   // 128M (PCAB)
 //#define ROM_BLOCK_NUM 512   // 256M
 
 

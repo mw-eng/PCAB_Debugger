@@ -76,8 +76,8 @@
                     <TabItem Header="CONTROL">
                         <Grid Grid.Column="0" Background="#FFFFF587">
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="1*"/>
-                            <RowDefinition Height="4*"/>
+                            <RowDefinition Height="2*"/>
+                            <RowDefinition Height="6*"/>
                             <RowDefinition Height="1*"/>
                         </Grid.RowDefinitions>
                         <Grid Grid.Row="0" Margin="5" Background="#FFBCFF98" >
@@ -96,7 +96,7 @@
                         <Grid Grid.Row="1" Margin="5">
                             <Grid.RowDefinitions>
                             <RowDefinition Height="1*"/>
-                            <RowDefinition Height="4*"/>
+                            <RowDefinition Height="5*"/>
                         </Grid.RowDefinitions>
                             <Viewbox Grid.Row="0" Margin="5" HorizontalAlignment="Left"><Label Content="Phase Config" /></Viewbox>
                             <Grid x:Name="PS_GRID" Grid.Row="1" Margin="5" ShowGridLines="True">
