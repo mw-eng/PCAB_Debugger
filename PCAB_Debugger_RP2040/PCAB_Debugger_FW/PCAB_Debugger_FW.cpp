@@ -147,7 +147,7 @@ void setup()
 {
     stdio_init_all();
     sens = new ds18b20(pio0, SNS_TEMP_PIN);
-    analog = new adc(true, true, true, false, 3.3f);
+    analog = new adc(true, true, false, false, 3.3f);
     spi_ps = new spi(spi0, SPI_CLK, SPI0_CLK_PIN, SPI0_TX_PIN, SPI0_RX_PIN, SPI0_LE_PIN, SPI_BITS, SPI_MODE, SPI_ORDER);
     uart = new pcabCMD(UART_TX_PIN, UART_RX_PIN, UART_BAUD_RATE);
     //GPIO Setup
@@ -531,7 +531,7 @@ int main()
                         if(modeCUI)
                         {
                             char ch[SNPRINTF_BUFFER_LEN];
-                            int len = snprintf(ch, sizeof(ch), "Vd > %.3f [V]", analog->readVoltageADC0());
+                            int len = snprintf(ch, sizeof(ch), "Vd > %.3f [V]", analog->readVoltageADC0() * 10.091);
                             uart->uart.writeLine(std::string(ch, len));
                         } else { uart->uart.writeLine(std::to_string(analog->readADC0())); }
                     }

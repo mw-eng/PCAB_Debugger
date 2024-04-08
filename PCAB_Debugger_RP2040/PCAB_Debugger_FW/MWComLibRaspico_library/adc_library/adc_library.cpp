@@ -23,7 +23,7 @@ uint16_t adc::readADC0()
 {
     if(adc0)
     {
-        adc_select_input(ADC0);
+        adc_select_input(0);
         return adc_read();
     }
     else { return 0xff; }
@@ -33,7 +33,7 @@ uint16_t adc::readADC1()
 {
     if(adc1)
     {
-        adc_select_input(ADC1);
+        adc_select_input(1);
         return adc_read();
     }
     else { return 0xff; }
@@ -43,7 +43,7 @@ uint16_t adc::readADC2()
 {
     if(adc2)
     {
-        adc_select_input(ADC2);
+        adc_select_input(2);
         return adc_read();
     }
     else { return 0xff; }
@@ -53,7 +53,7 @@ uint16_t adc::readADC3()
 {
     if(adc3)
     {
-        adc_select_input(ADC3);
+        adc_select_input(3);
         return adc_read();
     }
     else { return 0xff; }
