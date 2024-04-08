@@ -1,12 +1,12 @@
 //#define DEBUG_ADMIN
 //#define DEBUG_FRB
-#define DEBUG_BOOT
+//#define DEBUG_BOOT
 // ROM Block Number
 #define ROM_BLOCK_USER 16   // Range of user available space from this block number to ROM_BLOCK_NUM - 2
-#define ROM_BLOCK_NUM 32    // 16M (Raspberry Pi Pico)
+//#define ROM_BLOCK_NUM 32    // 16M (Raspberry Pi Pico)
 //#define ROM_BLOCK_NUM 64    // 32M
 //#define ROM_BLOCK_NUM 128   // 64M
-//#define ROM_BLOCK_NUM 256   // 128M (PCAB)
+#define ROM_BLOCK_NUM 256   // 128M (PCAB)
 //#define ROM_BLOCK_NUM 512   // 256M
 
 #include "PCAB_Debugger_FW.hpp"
