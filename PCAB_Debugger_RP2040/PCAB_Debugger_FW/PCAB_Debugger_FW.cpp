@@ -213,7 +213,7 @@ void setup()
     gpio_put(STB_AMP_PIN, !stbAMP);
     gpio_put(STB_DRA_PIN, !stbDRA);
     gpio_put(STB_LNA_PIN, !stbLNA);
-    gpio_put(STB_AMP_PIN, !lowMODE);
+    gpio_put(LPW_MOD_PIN, !lowMODE);
 }
 
 int main()
@@ -596,7 +596,7 @@ int main()
                         gpio_put(STB_AMP_PIN, !stbAMP);
                         gpio_put(STB_DRA_PIN, !stbDRA);
                         gpio_put(STB_LNA_PIN, !stbLNA);
-                        gpio_put(STB_AMP_PIN, !lowMODE);
+                        gpio_put(LPW_MOD_PIN, !lowMODE);
                         uart->uart.writeLine("DONE > Load state.");
                         //writeDSA();
                     }
@@ -686,7 +686,7 @@ int main()
                         gpio_put(STB_AMP_PIN, !stbAMP);
                         gpio_put(STB_DRA_PIN, !stbDRA);
                         gpio_put(STB_LNA_PIN, !stbLNA);
-                        gpio_put(STB_AMP_PIN, !lowMODE);
+                        gpio_put(LPW_MOD_PIN, !lowMODE);
                         uart->uart.writeLine("DONE > Reset state.");
                     }
                     break;
