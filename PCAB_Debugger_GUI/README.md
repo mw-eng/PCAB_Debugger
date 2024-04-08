@@ -20,27 +20,26 @@ ${\color{Magenta} 2. \space Control \space and \space Receive}$<br>
 2.6.  Tempurature            : 1-wire sensor temperature value [degreeC].<br>
 
 ${\color{Gold} 3. \space Control \space TAB}$<br>
-3.1.  Standby AMP            :<br>
-3.2.  Standby DRA            :<br>
-3.3.  Low Power Mode         :<br>
-3.4.  Phase Config           :<br>
-3.5.  Standby LNA            :<br>
-3.6.  Save Target            :<br>
-3.7.  Load Memory            :<br>
-3.8.  Save Memory            :<br>
-3.9.  Preset Config          :<br>
-3.10. Load Memory            :<br>
-3.11. Set Phase Config       :<br>
+3.1.  Standby AMP            : If checked, it will go into standby mode.<br>
+3.2.  Standby DRA            : If checked, it will go into standby mode.<br>
+3.3.  Low Power Mode         : If checked, it will go into low power mode.<br>
+3.4.  Phase Config           : Setting the phase.<br>
+3.5.  Standby LNA            : If checked, it will go into standby mode.<br>
+3.6.  Save Target            : Memory number to save and load.<br>
+3.7.  Load Memory            : Load state to memory(ROM).<br>
+3.8.  Save Memory            : Save state to memory(ROM).<br>
+3.9.  Preset Config          : Preset config.<br>
+3.11. Set Phase Config       : Write phase config.<br>
 
 
 <br><img src="https://github.com/mw-eng/PCAB_Debugger/blob/master/PCAB_Debugger_GUI/assets/UI2.png?raw=true" width="600px"><br>
 <br>
 ${\color{LightSkyBlue} 4. \space VNA \space automatic \space measurement \space control}$<br>
-4.1.  VISA Address	         :<br>
-4.2.  Check Button	         :<br>
-4.3.  Channel		         :<br>
-4.4.  Mode Settings	         :<br>
-4.5.  Save target	         :<br>
-4.6.  PS{xx}		         :<br>
-4.7.  File Name Header       :<br>
-4.8.  RUN Button             :<br>
+4.1.  VISA Address	         : Instrument visa address.<br>
+4.2.  Check Button	         : Instrument communication check.<br>
+4.3.  Channel		         : Config collection channels.<br>
+4.4.  Mode Settings	         : Automatic trigger settings.<br>
+4.5.  Save target	         : What to save.<br>
+4.6.  PS{xx}		         : Check loop target.<br>
+4.7.  File Name Header       : Save file name header.<br>
+4.8.  RUN Button             : Automatic measurement execution button.<br>
