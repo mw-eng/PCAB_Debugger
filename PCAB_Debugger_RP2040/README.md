@@ -1,5 +1,5 @@
-# PCAB_Debugger
-Raspberry Pi Pico
+# PCAB Debugger FW
+The main unit firmware. @ RP2040
 
 ## RS485 Serial Communication
 Send commands in the order of *#{SERIAL NUMBER}*, *{COMMAND}*, *{ARGUMENTS}*, and *{EXIT CODE}*, separated by space.  
