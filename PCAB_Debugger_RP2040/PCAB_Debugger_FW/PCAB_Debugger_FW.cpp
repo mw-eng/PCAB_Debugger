@@ -421,7 +421,7 @@ int main()
                         bool bitBF;
                         if(!Convert::TryToBool(cmd.argments[0], bitBF)) { uart->uart.writeLine("ERR > Argument error."); break; }
                         lowMODE = bitBF;
-                        gpio_put(STB_AMP_PIN, !lowMODE);
+                        gpio_put(LPW_MOD_PIN, !lowMODE);
                         if(lowMODE) { uart->uart.writeLine("DONE > Setting HEA to low power mode."); }
                         else { uart->uart.writeLine("DONE > Setting HEA to full power mode."); }
                     }

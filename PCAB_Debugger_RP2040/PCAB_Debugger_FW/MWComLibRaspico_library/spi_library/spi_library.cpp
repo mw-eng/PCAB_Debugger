@@ -15,7 +15,7 @@ spi::spi(spi_inst_t *spiID, uint spiCLK, uint clk_gpio, uint tx_gpio, uint rx_gp
     gpio_set_function(le_gpio, GPIO_FUNC_SPI);
     gpio_init(le_gpio);
     gpio_set_dir(le_gpio , GPIO_OUT);
-    gpio_put(le_gpio, 1);
+    setLE_disable();
     spi_cpol_t cpolt;
     spi_cpha_t cphat;
     spi_order_t ordert;
