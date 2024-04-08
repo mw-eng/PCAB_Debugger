@@ -712,6 +712,10 @@ int main()
                         else { uart->uart.writeLine("DONE > GUI MODE."); }
                     }
                     break;
+                case pcabCMD::cmdCode::GetMODE:
+                    if(cmd.argments.size() != 0) { uart->uart.writeLine("ERR > Number of arguments does not match."); }
+                    else{ uart->uart.writeLine("0x" + Convert::ToString(bootMode, 16, 2));}
+                    break;
                 case pcabCMD::cmdCode::GetIDN:
                     if(cmd.argments.size() != 0) { uart->uart.writeLine("ERR > Number of arguments does not match."); }
                     else

@@ -39,6 +39,7 @@ class pcabCMD : uartSYNC
         ECHO,
         CUI,
         GetIDN,
+        GetMODE,
         NONE,
         NUL
     };

@@ -67,6 +67,7 @@ Command | Description
 :--|:--
 SMEM ({x}) | Save state to memory(ROM).<br>To save the default setting, set {x} to 0 or unspecified. ({x} can be specified from 0 to 3.)<br>If you specify {X} as {x-x}, write to the specified block number. However, whether or not it can be saved depends on the boot mode.<br> *Block number refers to WROM.
 LMEM ({x}) | Load state to memory(ROM).<br>To load the default settings, set {x} to 0 or unspecified. ({x} can be specified from 0 to 3.)<br>If you specify {X} as {x-x}, you can read from the specified block number.<br> *Block number refers to RROM.
+GetMODE | Get boot mode.
 GetIDN | Get device identification character.
 *IDN? | Same as GetIDN.
 ECHO {0/1/false/true} | Set echo mode.<br>*Do not enable it if you are connected to multiple devices.*<br>{1/true} : With echo.<br>{0/false} : Without echo.

@@ -60,6 +60,7 @@ pcabCMD::CommandLine pcabCMD::readCMD(bool echo)
     if (String::strCompare(cmd, "*RST", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdCode::RST, strArr, cmdBF.argments.size()); }
     if (String::strCompare(cmd, "ECHO", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdCode::ECHO, strArr, cmdBF.argments.size()); }
     if (String::strCompare(cmd, "CUI", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdCode::CUI, strArr, cmdBF.argments.size()); }
+    if (String::strCompare(cmd, "GetMODE", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdCode::GetMODE, strArr, cmdBF.argments.size()); }
     if (String::strCompare(cmd, "GetIDN", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdCode::GetIDN, strArr, cmdBF.argments.size()); }
     if (String::strCompare(cmd, "*IDN?", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdCode::GetIDN, strArr, cmdBF.argments.size()); }
     else { return pcabCMD::CommandLine(cmdBF.serialNum, cmdCode::NONE, strArr, cmdBF.argments.size()); }
