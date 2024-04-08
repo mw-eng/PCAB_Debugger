@@ -14,7 +14,7 @@
 #define NUMBER_OF_SYSTEM 15
 const static std::string FW_VENDOR = "Orient Microwave Corp.";
 const static std::string FW_MODEL = "LX00-0004-00";
-const static std::string FW_REV = "1.1.0";
+const static std::string FW_REV = "1.1.1";
 
 
 ds18b20 *sens;
@@ -577,12 +577,13 @@ int main()
                         {
                             std::vector<std::string> strVect = String::split(cmd.argments[0], '-');
                             if(strVect.size() == 1)
-                            { if(!Convert::TryToUInt8(strVect[0], 10, num)) { uart->uart.writeLine("ERR > Argument error."); } }
+                            { if(!Convert::TryToUInt8(strVect[0], 10, num)) { uart->uart.writeLine("ERR > Argument error."); } break; }
                             else if(strVect.size() == 2)
-                            { if(!Convert::TryToUInt16(strVect[0], 10, blockNum) || !Convert::TryToUInt8(strVect[1], 10, num)) { uart->uart.writeLine("ERR > Argument error."); } }
-                            else { uart->uart.writeLine("ERR > Argument error."); }
-                            if(num > 3) { uart->uart.writeLine("ERR > Specified number is out of range."); }
-                            if( blockNum != ROM_BLOCK_NUM - 2 && !editRangeCheck(blockNum)) { uart->uart.writeLine("ERR > Specified block is out of range."); }
+                            { if(!Convert::TryToUInt16(strVect[0], 10, blockNum) || !Convert::TryToUInt8(strVect[1], 10, num)) { uart->uart.writeLine("ERR > Argument error."); } break; }
+                            else { uart->uart.writeLine("ERR > Argument error."); break; }
+                            if(num > 3) { uart->uart.writeLine("ERR > Specified number is out of range."); break; }
+                            //if( blockNum != ROM_BLOCK_NUM - 2 && !editRangeCheck(blockNum)) { uart->uart.writeLine("ERR > Specified block is out of range."); }
+                            if(!editRangeCheck(blockNum)) { uart->uart.writeLine("ERR > Specified block is out of range."); break; }
                         }
                         saveSTATE(blockNum, num);
                         uart->uart.writeLine("DONE > Save state.");
@@ -599,14 +600,14 @@ int main()
                         {
                             std::vector<std::string> strVect = String::split(cmd.argments[0], '-');
                             if(strVect.size() == 1)
-                            { if(!Convert::TryToUInt8(strVect[0], 10, num)) { uart->uart.writeLine("ERR > Argument error."); } }
+                            { if(!Convert::TryToUInt8(strVect[0], 10, num)) { uart->uart.writeLine("ERR > Argument error."); break; } }
                             else if(strVect.size() == 2)
-                            { if(!Convert::TryToUInt16(strVect[0], 10, blockNum) || !Convert::TryToUInt8(strVect[1], 10, num)) { uart->uart.writeLine("ERR > Argument error."); } }
-                            else { uart->uart.writeLine("ERR > Argument error."); }
-                            if(num > 3) { uart->uart.writeLine("ERR > Specified number is out of range."); }
-                            if( blockNum != ROM_BLOCK_NUM - 2 && !editRangeCheck(blockNum)) { uart->uart.writeLine("ERR > Specified block is out of range."); }
+                            { if(!Convert::TryToUInt16(strVect[0], 10, blockNum) || !Convert::TryToUInt8(strVect[1], 10, num)) { uart->uart.writeLine("ERR > Argument error."); break; } }
+                            else { uart->uart.writeLine("ERR > Argument error."); break; }
+                            if(num > 3) { uart->uart.writeLine("ERR > Specified number is out of range."); break; }
+                            if( blockNum != ROM_BLOCK_NUM - 2 && !editRangeCheck(blockNum)) { uart->uart.writeLine("ERR > Specified block is out of range."); break; }
                         }
-                        if(!loadSTATE(blockNum, num)) { uart->uart.writeLine("ERR > No valid settings were found for the specified address."); }
+                        if(!loadSTATE(blockNum, num)) { uart->uart.writeLine("ERR > No valid settings were found for the specified address."); break; }
                         writeDPS();
                         gpio_put(STB_AMP_PIN, !stbAMP);
                         gpio_put(STB_DRA_PIN, !stbDRA);
