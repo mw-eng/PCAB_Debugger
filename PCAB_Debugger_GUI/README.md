@@ -25,7 +25,7 @@ ${\color{Gold} 3. \space Control \space TAB}$<br>
 3.3.  Low Power Mode         : If checked, it will go into low power mode.<br>
 3.4.  Phase Config           : Setting the phase.<br>
 3.5.  Standby LNA            : If checked, it will go into standby mode.<br>
-3.6.  Save Target            : Memory number to save and load.<br>
+3.6.  Save and Load Target   : Memory number to save and load.<br>
 3.7.  Load Memory            : Load state to memory(ROM).<br>
 3.8.  Save Memory            : Save state to memory(ROM).<br>
 3.9.  Preset Config          : Preset config.<br>
