@@ -131,10 +131,14 @@ namespace PCAB_Debugger_GUI
         private void read_conf(string serialNum)
         {
             string strBf;
-            if (_mod.PCAB_CMD(serialNum, "GetSTB.AMP", 1) == "1\n") { CHECKBOX_Checked("STBAMP", null); } else { CHECKBOX_Unchecked("STBAMP", null); }
-            if (_mod.PCAB_CMD(serialNum, "GetSTB.DRA", 1) == "1\n") { CHECKBOX_Checked("STBDRA", null); } else { CHECKBOX_Unchecked("STBDRA", null); }
-            if (_mod.PCAB_CMD(serialNum, "GetSTB.LNA", 1) == "1\n") { CHECKBOX_Checked("STBLNA", null); } else { CHECKBOX_Unchecked("STBLNA", null); }
-            if (_mod.PCAB_CMD(serialNum, "GetLPM", 1) == "1\n") { CHECKBOX_Checked("LPM", null); } else { CHECKBOX_Unchecked("LPM", null); }
+            strBf = _mod.PCAB_CMD(serialNum, "GetSTB.AMP", 1);
+            if (strBf == "1\n") { CHECKBOX_Checked("STBAMP", null); } else if (strBf == "0\n") { CHECKBOX_Unchecked("STBAMP", null); } else { CHECKBOX_Indeterminate("STBAMP", null); }
+            strBf = _mod.PCAB_CMD(serialNum, "GetSTB.DRA", 1);
+            if (strBf == "1\n") { CHECKBOX_Checked("STBDRA", null); } else if (strBf == "0\n") { CHECKBOX_Unchecked("STBDRA", null); } else { CHECKBOX_Indeterminate("STBDRA", null); }
+            strBf = _mod.PCAB_CMD(serialNum, "GetSTB.LNA", 1);
+            if (strBf == "1\n") { CHECKBOX_Checked("STBLNA", null); } else if (strBf == "0\n") { CHECKBOX_Unchecked("STBLNA", null); } else { CHECKBOX_Indeterminate("STBLNA", null); }
+            strBf = _mod.PCAB_CMD(serialNum, "GetLPM", 1);
+            if (strBf == "1\n") { CHECKBOX_Checked("LPM", null); } else if (strBf == "0\n") { CHECKBOX_Unchecked("LPM", null); } else { CHECKBOX_Indeterminate("LPM", null); }
             for(int i = 0; i < 15; i++)
             {
                 strBf = _mod.PCAB_CMD(serialNum, "GetDPS now " + (i + 1).ToString(), 1);
@@ -247,19 +251,20 @@ namespace PCAB_Debugger_GUI
                 switch (((CheckBox)sender).Name)
                 {
                     case "STBAMP_CHECKBOX":
-                        if (_mod.PCAB_CMD(SERIAL_NUMBERS_COMBOBOX.Text, "SetSTB.AMP 1", 1).Substring(0, 4) != "DONE") { MessageBox.Show("SetSTB.AMP Command Error", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
+                        if (_mod.PCAB_CMD(SERIAL_NUMBERS_COMBOBOX.Text, "SetSTB.AMP 1", 1).Substring(0, 4) != "DONE")
+                        { ((CheckBox)sender).IsChecked = null; MessageBox.Show("SetSTB.AMP Command Error", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
                         break;
                     case "STBDRA_CHECKBOX":
-                        if (_mod.PCAB_CMD(SERIAL_NUMBERS_COMBOBOX.Text, "SetSTB.DRA 1", 1).Substring(0, 4) != "DONE") { MessageBox.Show("SetSTB.DRA Command Error", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
+                        if (_mod.PCAB_CMD(SERIAL_NUMBERS_COMBOBOX.Text, "SetSTB.DRA 1", 1).Substring(0, 4) != "DONE")
+                        { ((CheckBox)sender).IsChecked = null; MessageBox.Show("SetSTB.DRA Command Error", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
                         break;
                     case "STBLNA_CHECKBOX":
-                        if (_mod.PCAB_CMD(SERIAL_NUMBERS_COMBOBOX.Text, "SetSTB.LNA 1", 1).Substring(0, 4) != "DONE") { MessageBox.Show("SetSTB.LNA Command Error", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
+                        if (_mod.PCAB_CMD(SERIAL_NUMBERS_COMBOBOX.Text, "SetSTB.LNA 1", 1).Substring(0, 4) != "DONE")
+                        { ((CheckBox)sender).IsChecked = null; MessageBox.Show("SetSTB.LNA Command Error", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
                         break;
                     case "SETLPM_CHECKBOX":
-                        if (_mod.PCAB_CMD(SERIAL_NUMBERS_COMBOBOX.Text, "SetLPM 1", 1).Substring(0, 4) != "DONE") { MessageBox.Show("SetLPM Command Error", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
-                        break;
-                    case "SETALD_CHECKBOX":
-                        if (_mod.PCAB_CMD(SERIAL_NUMBERS_COMBOBOX.Text, "SetALD 1", 1).Substring(0, 4) != "DONE") { MessageBox.Show("SetALD Command Error", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
+                        if (_mod.PCAB_CMD(SERIAL_NUMBERS_COMBOBOX.Text, "SetLPM 1", 1).Substring(0, 4) != "DONE")
+                        { ((CheckBox)sender).IsChecked = null; MessageBox.Show("SetLPM Command Error", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
                         break;
                     default: break;
                 }
@@ -292,19 +297,20 @@ namespace PCAB_Debugger_GUI
                 switch (((CheckBox)sender).Name)
                 {
                     case "STBAMP_CHECKBOX":
-                        if (_mod.PCAB_CMD(SERIAL_NUMBERS_COMBOBOX.Text, "SetSTB.AMP 0", 1).Substring(0, 4) != "DONE") { MessageBox.Show("SetSTB.AMP Command Error", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
+                        if (_mod.PCAB_CMD(SERIAL_NUMBERS_COMBOBOX.Text, "SetSTB.AMP 0", 1).Substring(0, 4) != "DONE")
+                        { ((CheckBox)sender).IsChecked = null; MessageBox.Show("SetSTB.AMP Command Error", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
                         break;
                     case "STBDRA_CHECKBOX":
-                        if (_mod.PCAB_CMD(SERIAL_NUMBERS_COMBOBOX.Text, "SetSTB.DRA 0", 1).Substring(0, 4) != "DONE") { MessageBox.Show("SetSTB.DRA Command Error", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
+                        if (_mod.PCAB_CMD(SERIAL_NUMBERS_COMBOBOX.Text, "SetSTB.DRA 0", 1).Substring(0, 4) != "DONE")
+                        { ((CheckBox)sender).IsChecked = null; MessageBox.Show("SetSTB.DRA Command Error", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
                         break;
                     case "STBLNA_CHECKBOX":
-                        if (_mod.PCAB_CMD(SERIAL_NUMBERS_COMBOBOX.Text, "SetSTB.LNA 0", 1).Substring(0, 4) != "DONE") { MessageBox.Show("SetSTB.LNA Command Error", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
+                        if (_mod.PCAB_CMD(SERIAL_NUMBERS_COMBOBOX.Text, "SetSTB.LNA 0", 1).Substring(0, 4) != "DONE")
+                        { ((CheckBox)sender).IsChecked = null; MessageBox.Show("SetSTB.LNA Command Error", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
                         break;
                     case "SETLPM_CHECKBOX":
-                        if (_mod.PCAB_CMD(SERIAL_NUMBERS_COMBOBOX.Text, "SetLPM 0", 1).Substring(0, 4) != "DONE") { MessageBox.Show("SetLPM Command Error", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
-                        break;
-                    case "SETALD_CHECKBOX":
-                        if (_mod.PCAB_CMD(SERIAL_NUMBERS_COMBOBOX.Text, "SetALD 0", 1).Substring(0, 4) != "DONE") { MessageBox.Show("SetALD Command Error", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
+                        if (_mod.PCAB_CMD(SERIAL_NUMBERS_COMBOBOX.Text, "SetLPM 0", 1).Substring(0, 4) != "DONE")
+                        { ((CheckBox)sender).IsChecked = null; MessageBox.Show("SetLPM Command Error", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
                         break;
                     default: break;
                 }
@@ -324,6 +330,28 @@ namespace PCAB_Debugger_GUI
                         break;
                     case "LPM":
                         SETLPM_CHECKBOX.IsChecked = false;
+                        break;
+                    default: break;
+                }
+            }
+        }
+        private void CHECKBOX_Indeterminate(object sender, RoutedEventArgs e)
+        {
+            if(typeof(CheckBox) != sender.GetType())
+            {
+                switch ((string)sender)
+                {
+                    case "STBAMP":
+                        STBAMP_CHECKBOX.IsChecked = null;
+                        break;
+                    case "STBDRA":
+                        STBDRA_CHECKBOX.IsChecked = null;
+                        break;
+                    case "STBLNA":
+                        STBLNA_CHECKBOX.IsChecked = null;
+                        break;
+                    case "LPM":
+                        SETLPM_CHECKBOX.IsChecked = null;
                         break;
                     default: break;
                 }
