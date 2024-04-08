@@ -50,21 +50,21 @@ class spi
     /// @brief SPI write and read. (LE no set.)
     /// @param wdat Write data.
     /// @return Read data.
-    std::vector<uint16_t> write16_read16(std::vector<uint16_t> wdat);
-
-    /// @brief SPI write and read.
-    /// @param wdat Write data.
-    /// @return Read data.
-    std::vector<uint16_t> spi_write16_read16(std::vector<uint16_t> wdat);
+    std::vector<uint8_t> write_read(std::vector<uint8_t> wdat);
 
     /// @brief SPI write and read. (LE no set.)
     /// @param wdat Write data.
     /// @return Read data.
-    std::vector<uint8_t> write_read(std::vector<uint8_t> wdat);
+    std::vector<uint16_t> write_read(std::vector<uint16_t> wdat);
 
     /// @brief SPI write and read.
     /// @param wdat Write data.
     /// @return Read data.
     std::vector<uint8_t> spi_write_read(std::vector<uint8_t> wdat);
+
+    /// @brief SPI write and read.
+    /// @param wdat Write data.
+    /// @return Read data.
+    std::vector<uint16_t> spi_write_read(std::vector<uint16_t> wdat);
 
 };
