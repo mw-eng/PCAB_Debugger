@@ -14,7 +14,7 @@
             <RowDefinition Height="100"/>
             <RowDefinition Height="8*"/>
         </Grid.RowDefinitions>
-        <Grid Grid.Row="0">
+        <Grid Grid.Row="0" Background="#FFB8FFFD" >
             <Grid.RowDefinitions>
                 <RowDefinition Height="1*"/>
                 <RowDefinition Height="1*"/>
@@ -54,7 +54,7 @@
                 </Grid>
             </Grid>
         </Grid>
-        <Grid Grid.Row="1" x:Name="CONTL_GRID" IsEnabled="False">
+        <Grid Grid.Row="1" x:Name="CONTL_GRID" IsEnabled="False" Background="#FFFFCBF4">
             <Grid.RowDefinitions>
                 <RowDefinition Height="50"/>
                 <RowDefinition Height="1*"/>
@@ -260,7 +260,7 @@
                         </Grid>
                     </TabItem>
                     <TabItem Header="VNA" IsEnabled="True">
-                        <Grid Background="#FFE5E5E5">
+                        <Grid Background="#FFBBC4F5">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="1*"/>
                                 <RowDefinition Height="8*"/>
