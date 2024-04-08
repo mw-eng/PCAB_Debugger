@@ -115,10 +115,10 @@ namespace PCAB_Debugger_GUI
 
         private void SERIAL_NUMBERS_COMBOBOX_DropDownClosed(object sender, EventArgs e)
         {
-            if (SERIAL_PORTS_COMBOBOX.SelectedIndex < 0) { SERIAL_PORTS_COMBOBOX.SelectedIndex = 0; }
+            if (SERIAL_NUMBERS_COMBOBOX.SelectedIndex < 0) { SERIAL_NUMBERS_COMBOBOX.SelectedIndex = 0; }
             if (_mod != null)
             {
-                _mod.CondNOW.SN = SERIAL_PORTS_COMBOBOX.Text;
+                _mod.CondNOW.SN = SERIAL_NUMBERS_COMBOBOX.Text;
             }
         }
 
@@ -736,42 +736,56 @@ namespace PCAB_Debugger_GUI
 
         private void OnUpdateDAT(object sender, PCABEventArgs e)
         {
-            if (e.ReceiveDAT.SN != SERIAL_NUMBERS_COMBOBOX.Text) { return; }
+            uint uiBF;
+            float flBF;
+            string id = "ND", vd = "ND", vin = "ND", cpu = "ND";
+            string[] tmp = { "ND", "ND", "ND", "ND", "ND", "ND", "ND", "ND", "ND", "ND", "ND", "ND", "ND", "ND", "ND" };
             if (_mod != null)
             {
+                _mod.CondNOW.SN = e.ReceiveDAT.SN;
                 _mod.CondNOW.Id = e.ReceiveDAT.Id;
                 _mod.CondNOW.Vd = e.ReceiveDAT.Vd;
                 _mod.CondNOW.TEMPs = e.ReceiveDAT.TEMPs;
                 _mod.CondNOW.Vin = e.ReceiveDAT.Vin;
                 _mod.CondNOW.CPU_TEMP = e.ReceiveDAT.CPU_TEMP;
+                if (!uint.TryParse(e.ReceiveDAT.Id, out uiBF)) { id = "ND"; }
+                else { id = ((uiBF * 3.3f / (1 << 12) - 1.65) / 0.09).ToString("0.00"); }
+                //else { id = ((uiBF * 3.3f / (1 << 12) - 0.08) / 0.737).ToString("0.00"); }
+                if (!uint.TryParse(e.ReceiveDAT.Vd, out uiBF)) { vd = "ND"; }
+                else { vd = (uiBF * 3.3f / (1 << 12) * 10.091f).ToString("0.00"); }
+                if (!uint.TryParse(e.ReceiveDAT.Vin, out uiBF)) { vin = "ND"; }
+                else { vin = (uiBF * 3.3f / (1 << 12) * 15).ToString("0.00"); }
+                if (!uint.TryParse(e.ReceiveDAT.CPU_TEMP, out uiBF)) { cpu = "ND"; }
+                else { cpu = (27.0f - (uiBF * 3.3f / (1 << 12) - 0.706f) / 0.001721f).ToString("0.00"); }
+                string[] arrBf = e.ReceiveDAT.TEMPs.Split(',');
+                for (int i = 0; i < arrBf.Length; i++)
+                {
+                    if (!float.TryParse(arrBf[i], out flBF)) { tmp[0] = "ND"; }
+                    else { tmp[0] = flBF.ToString("0.00"); }
+                }
             }
-            string[] arrBf = e.ReceiveDAT.TEMPs.Split(',');
-            List<string> list = new List<string>();
-            foreach (string strBf in arrBf)
+            Dispatcher.BeginInvoke(new Action(() =>
             {
-                string[] bf = strBf.Split(':');
-                list.Add(bf[1]);
-            }
-            //Dispatcher.BeginInvoke(new Action(() =>
-            //{
-            //    SNS_ID_LABEL.Content = ((double.Parse(e.ReceiveDAT[0]) - 1.65) / 0.09).ToString("0.00");
-            //    SNS_VD_LABEL.Content = (double.Parse(e.ReceiveDAT[1]) * 10.091).ToString("0.00");
-            //    TEMP01.Content = (double.Parse(list[0])).ToString("0.00");
-            //    TEMP02.Content = (double.Parse(list[1])).ToString("0.00");
-            //    TEMP03.Content = (double.Parse(list[2])).ToString("0.00");
-            //    TEMP04.Content = (double.Parse(list[3])).ToString("0.00");
-            //    TEMP05.Content = (double.Parse(list[4])).ToString("0.00");
-            //    TEMP06.Content = (double.Parse(list[5])).ToString("0.00");
-            //    TEMP07.Content = (double.Parse(list[6])).ToString("0.00");
-            //    TEMP08.Content = (double.Parse(list[7])).ToString("0.00");
-            //    TEMP09.Content = (double.Parse(list[8])).ToString("0.00");
-            //    TEMP10.Content = (double.Parse(list[9])).ToString("0.00");
-            //    TEMP11.Content = (double.Parse(list[10])).ToString("0.00");
-            //    TEMP12.Content = (double.Parse(list[11])).ToString("0.00");
-            //    TEMP13.Content = (double.Parse(list[12])).ToString("0.00");
-            //    TEMP14.Content = (double.Parse(list[13])).ToString("0.00");
-            //    TEMP15.Content = (double.Parse(list[14])).ToString("0.00");
-            //}));
+                SNS_ID_LABEL.Content = id;
+                SNS_VD_LABEL.Content = vd;
+                SNS_VIN_LABEL.Content = vin;
+                SNS_CPU_TEMP_LABEL.Content = cpu;
+                TEMP01.Content = tmp[0];
+                TEMP02.Content = tmp[1];
+                TEMP03.Content = tmp[2];
+                TEMP04.Content = tmp[3];
+                TEMP05.Content = tmp[4];
+                TEMP06.Content = tmp[5];
+                TEMP07.Content = tmp[6];
+                TEMP08.Content = tmp[7];
+                TEMP09.Content = tmp[8];
+                TEMP10.Content = tmp[9];
+                TEMP11.Content = tmp[10];
+                TEMP12.Content = tmp[11];
+                TEMP13.Content = tmp[12];
+                TEMP14.Content = tmp[13];
+                TEMP15.Content = tmp[14];
+            }));
         }
 
         #region Structure

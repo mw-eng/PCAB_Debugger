@@ -408,7 +408,7 @@
                             <ColumnDefinition Width="1*"/>
                         </Grid.ColumnDefinitions>
                         <Viewbox Grid.Column="0" ><Label Content="SNS Vin"/></Viewbox>
-                        <Viewbox Grid.Column="1" ><Label Name="SNS_VIN_TEMP_LABEL" Content="ND"/></Viewbox>
+                        <Viewbox Grid.Column="1" ><Label Name="SNS_VIN_LABEL" Content="ND"/></Viewbox>
                     </Grid>
                     <Grid Grid.Row="1" Grid.Column="1" Margin="5" Background="#FFE389FF">
                         <Grid.ColumnDefinitions>
