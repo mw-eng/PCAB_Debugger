@@ -12,9 +12,9 @@ spi::spi(spi_inst_t *spiID, uint spiCLK, uint clk_gpio, uint tx_gpio, uint rx_gp
     gpio_set_function(clk_gpio, GPIO_FUNC_SPI);
     gpio_set_function(tx_gpio, GPIO_FUNC_SPI);
     gpio_set_function(rx_gpio, GPIO_FUNC_SPI);
-    gpio_set_function(le_gpio, GPIO_FUNC_SPI);
-    gpio_init(le_gpio);
-    gpio_set_dir(le_gpio , GPIO_OUT);
+    gpio_set_function(gpioLE, GPIO_FUNC_SPI);
+    gpio_init(gpioLE);
+    gpio_set_dir(gpioLE , GPIO_OUT);
     setLE_disable();
     spi_cpol_t cpolt;
     spi_cpha_t cphat;
@@ -32,7 +32,7 @@ spi::spi(spi_inst_t *spiID, uint spiCLK, uint clk_gpio, uint tx_gpio, uint rx_gp
 }
 
 
-spi::spi(spi_inst_t *spiID, uint spiCLK, uint clk_gpio, uint tx_gpio, uint rx_gpio, uint le_gpio, uint data_bits, uint8_t mode, bool order)
+spi::spi(spi_inst_t *spiID, uint spiCLK, uint clk_gpio, uint tx_gpio, uint rx_gpio, uint le_gpio, uint data_bits, uint8_t mode, bool order) : spiID(spiID), gpioLE(le_gpio)
 {
     switch (mode)
     {
