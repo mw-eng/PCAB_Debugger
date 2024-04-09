@@ -577,14 +577,13 @@ int main()
                         {
                             std::vector<std::string> strVect = String::split(cmd.argments[0], '-');
                             if(strVect.size() == 1)
-                            { if(!Convert::TryToUInt8(strVect[0], 10, num)) { uart->uart.writeLine("ERR > Argument error."); } break; }
+                            { if(!Convert::TryToUInt8(strVect[0], 10, num)) { uart->uart.writeLine("ERR > Argument error."); break; } }
                             else if(strVect.size() == 2)
-                            { if(!Convert::TryToUInt16(strVect[0], 10, blockNum) || !Convert::TryToUInt8(strVect[1], 10, num)) { uart->uart.writeLine("ERR > Argument error."); } break; }
+                            { if(!Convert::TryToUInt16(strVect[0], 10, blockNum) || !Convert::TryToUInt8(strVect[1], 10, num)) { uart->uart.writeLine("ERR > Argument error."); break; } }
                             else { uart->uart.writeLine("ERR > Argument error."); break; }
                             if(num > 3) { uart->uart.writeLine("ERR > Specified number is out of range."); break; }
-                            //if( blockNum != ROM_BLOCK_NUM - 2 && !editRangeCheck(blockNum)) { uart->uart.writeLine("ERR > Specified block is out of range."); }
-                            if(!editRangeCheck(blockNum)) { uart->uart.writeLine("ERR > Specified block is out of range."); break; }
                         }
+                        if(!editRangeCheck(blockNum)) { uart->uart.writeLine("ERR > Specified block is out of range."); break; }
                         saveSTATE(blockNum, num);
                         uart->uart.writeLine("DONE > Save state.");
                     }
