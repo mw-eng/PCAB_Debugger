@@ -3,15 +3,11 @@
 //#define DEBUG_BOOT
 // ROM Block Number
 #define ROM_BLOCK_USER 16   // Range of user available space from this block number to ROM_BLOCK_NUM - 2
-//#define ROM_BLOCK_NUM 32    // 16M (Raspberry Pi Pico)
-//#define ROM_BLOCK_NUM 64    // 32M
-//#define ROM_BLOCK_NUM 128   // 64M
-#define ROM_BLOCK_NUM 256   // 128M (PCAB)
-//#define ROM_BLOCK_NUM 512   // 256M
 
 #include "PCAB_Debugger_FW.hpp"
 #define SNPRINTF_BUFFER_LEN 50
 #define NUMBER_OF_SYSTEM 15
+#define ROM_BLOCK_NUM PICO_FLASH_SIZE_BYTES / 65536
 const static std::string FW_VENDOR = "Orient Microwave Corp.";
 const static std::string FW_MODEL = "LX00-0004-00";
 const static std::string FW_REV = "1.1.1";

@@ -5,8 +5,29 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PCAB_Debugger_GUI"
         mc:Ignorable="d"
-        Title="PCAB Debugger ROM Editor" Height="450" Width="800">
+        Title="PCAB Debugger ROM Editor" Height="450" Width="800" Loaded="Window_Loaded">
     <Grid>
-        
+        <DataGrid x:Name="BINARY_DATAGRID" Margin="5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontFamily="Consolas" FontSize="20" AutoGenerateColumns="False" CanUserSortColumns="False" CanUserResizeColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ADDRESS" Binding="{Binding addr}" Width="SizeToCells" FontFamily="Consolas" FontSize="20" IsReadOnly="True"/>
+                <DataGridTextColumn Header="00" Binding="{Binding dat00}" Width="SizeToHeader" FontFamily="Consolas" FontSize="20"/>
+                <DataGridTextColumn Header="01" Binding="{Binding dat01}" Width="SizeToHeader" FontFamily="Consolas" FontSize="20"/>
+                <DataGridTextColumn Header="02" Binding="{Binding dat02}" Width="SizeToHeader" FontFamily="Consolas" FontSize="20"/>
+                <DataGridTextColumn Header="03" Binding="{Binding dat03}" Width="SizeToHeader" FontFamily="Consolas" FontSize="20"/>
+                <DataGridTextColumn Header="04" Binding="{Binding dat04}" Width="SizeToHeader" FontFamily="Consolas" FontSize="20"/>
+                <DataGridTextColumn Header="05" Binding="{Binding dat05}" Width="SizeToHeader" FontFamily="Consolas" FontSize="20"/>
+                <DataGridTextColumn Header="06" Binding="{Binding dat06}" Width="SizeToHeader" FontFamily="Consolas" FontSize="20"/>
+                <DataGridTextColumn Header="07" Binding="{Binding dat07}" Width="SizeToHeader" FontFamily="Consolas" FontSize="20"/>
+                <DataGridTextColumn Header="08" Binding="{Binding dat08}" Width="SizeToHeader" FontFamily="Consolas" FontSize="20"/>
+                <DataGridTextColumn Header="09" Binding="{Binding dat09}" Width="SizeToHeader" FontFamily="Consolas" FontSize="20"/>
+                <DataGridTextColumn Header="0A" Binding="{Binding dat0A}" Width="SizeToHeader" FontFamily="Consolas" FontSize="20"/>
+                <DataGridTextColumn Header="0B" Binding="{Binding dat0B}" Width="SizeToHeader" FontFamily="Consolas" FontSize="20"/>
+                <DataGridTextColumn Header="0C" Binding="{Binding dat0C}" Width="SizeToHeader" FontFamily="Consolas" FontSize="20"/>
+                <DataGridTextColumn Header="0D" Binding="{Binding dat0D}" Width="SizeToHeader" FontFamily="Consolas" FontSize="20"/>
+                <DataGridTextColumn Header="0E" Binding="{Binding dat0E}" Width="SizeToHeader" FontFamily="Consolas" FontSize="20"/>
+                <DataGridTextColumn Header="0F" Binding="{Binding dat00}" Width="SizeToHeader" FontFamily="Consolas" FontSize="20"/>
+                <DataGridTextColumn Header="0123456789ABCDEF" Binding="{Binding datSTR}" Width="Auto" FontFamily="Consolas" FontSize="20" IsReadOnly="True"/>
+            </DataGrid.Columns>
+        </DataGrid>
     </Grid>
 </Window>
