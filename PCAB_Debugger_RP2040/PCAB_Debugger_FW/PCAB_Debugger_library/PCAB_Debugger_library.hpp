@@ -40,6 +40,7 @@ class pcabCMD : uartSYNC
         CUI,
         GetIDN,
         GetMODE,
+        Reboot,
         NONE,
         NUL
     };

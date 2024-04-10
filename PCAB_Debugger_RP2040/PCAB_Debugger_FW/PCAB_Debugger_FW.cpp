@@ -1,6 +1,6 @@
-//#define DEBUG_ADMIN
-//#define DEBUG_FRB
-//#define DEBUG_BOOT
+//#define DEBUG_BOOT_MODE 0x01
+//#define DEBUG_BOOT_MODE 0x20
+#define DEBUG_BOOT_MODE 0x2A
 // ROM Block Number
 #define ROM_BLOCK_USER 16   // Range of user available space from this block number to ROM_BLOCK_NUM - 2
 
@@ -188,14 +188,8 @@ void setup()
     bootMode += 8 * !gpio_get(SW_4_PIN);
     bootMode += 16 * !gpio_get(SW_5_PIN);
     bootMode += 32 * !gpio_get(SW_6_PIN);
-#ifdef DEBUG_ADMIN
-    bootMode = 0x2A;
-#endif
-#ifdef DEBUG_FRB
-    bootMode = 0x20;
-#endif
-#ifdef DEBUG_BOOT
-    bootMode = 0x01;
+#ifdef DEBUG_BOOT_MODE
+    bootMode = DEBUG_BOOT_MODE;
 #endif
     serialNum = readSerialNum();
 
@@ -726,6 +720,10 @@ int main()
                 case pcabCMD::cmdCode::GetMODE:
                     if(cmd.argments.size() != 0) { uart->uart.writeLine("ERR > Number of arguments does not match."); }
                     else{ uart->uart.writeLine("0x" + Convert::ToString(bootMode, 16, 2));}
+                    break;
+                case pcabCMD::cmdCode::Reboot:
+                    if(cmd.argments.size() != 0) { uart->uart.writeLine("ERR > Number of arguments does not match."); }
+                    setup();
                     break;
                 case pcabCMD::cmdCode::GetIDN:
                     if(cmd.argments.size() != 0) { uart->uart.writeLine("ERR > Number of arguments does not match."); }

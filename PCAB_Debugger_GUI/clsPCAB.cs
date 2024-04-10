@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 namespace PCAB_Debugger_GUI
 {
-    internal class PCAB
+    public class PCAB
     {
         private bool? _task;    //true:run / false:stop / null:Interrupt
         private SerialPort _mod;
@@ -72,7 +72,7 @@ namespace PCAB_Debugger_GUI
                     _mod.WriteLine("#" + s + " GetIDN");
                     string[] arrBf = _mod.ReadLine().Split(',');
                     if (arrBf.Length != 4) { _mod.Close(); return false; }
-                    if (arrBf[0] == "Orient Microwave Corp." && arrBf[1] == "LX00-0004-00" && arrBf[2] == s && arrBf[3].Substring(0,4) == "1.1.")
+                    if (arrBf[0] == "Orient Microwave Corp." && arrBf[1] == "LX00-0004-00" && arrBf[3].Substring(0,4) == "1.1." && (arrBf[2] == s || "*" == s))
                     {
                         DAT.Add(new condDAT(s.Replace(" ", ""), "", "", "", "", ""));
                     }

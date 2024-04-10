@@ -20,7 +20,7 @@ namespace PCAB_Debugger_GUI
     public partial class winMain : Window
     {
         SerialPortTable[] ports;
-        PCAB _mod;
+        public PCAB _mod;
         bool _state;
         int sesn;
 
@@ -31,12 +31,6 @@ namespace PCAB_Debugger_GUI
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-#if DEBUG
-            Window win = new winEditor();
-            win.Show();
-            this.Close();
-#endif
-
             this.Title += " Ver," + System.Diagnostics.FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetExecutingAssembly().Location).ProductVersion;
 #if DEBUG
             Settings.Default.Reset();
@@ -107,6 +101,11 @@ namespace PCAB_Debugger_GUI
                     _state = true;
                     ((TextBlock)((Viewbox)CONNECT_BUTTON.Content).Child).Text = "Disconnect";
                     read_conf(SERIAL_NUMBERS_COMBOBOX.Text);
+                    if(SERIAL_NUMBERS_COMBOBOX.Text == "*" && _mod.PCAB_CMD("*", "GetMODE", 1) == "0x2A\n")
+                    {
+                        Window win = new winEditor(_mod);
+                        win.ShowDialog();
+                    }
                 }
                 else
                 {
@@ -685,12 +684,12 @@ namespace PCAB_Debugger_GUI
             {
                 uint uintVal = Convert.ToUInt32(((TextBox)sender).Text);
                 if (0 <= uintVal && uintVal <= 65535) { return; }
-                MessageBox.Show("0-65535の範囲で入力してください");
+                MessageBox.Show("Enter in the range 0 to 65535");
                 e.Handled = true;
             }
             catch
             {
-                MessageBox.Show("0-65535の範囲で入力してください");
+                MessageBox.Show("Enter in the range 0 to 65535");
                 e.Handled = true;
             }
         }
@@ -698,7 +697,7 @@ namespace PCAB_Debugger_GUI
         private void SN_TextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
             // 0-9およびa-f/A-Fのみ
-            e.Handled = !new Regex("[0-9|a-z|A-Z|,| ]").IsMatch(e.Text);
+            e.Handled = !new Regex("[0-9|a-z|A-Z|,| |*]").IsMatch(e.Text);
         }
 
         private void SN_TextBox_PreviewExecuted(object sender, ExecutedRoutedEventArgs e)
@@ -723,12 +722,19 @@ namespace PCAB_Debugger_GUI
         {
             try
             {
-                string[] arrBF = ((TextBox)sender).Text.Split(',');
+                string strBF = ((TextBox)sender).Text.Replace(" ", "");
+                if(0 <= strBF.IndexOf("*") && strBF.Length != 1)
+                {
+                    MessageBox.Show("Multiple \"*\" specifications cannot be specified.");
+                    e.Handled = true;
+                    return;
+                }
+                string[] arrBF = strBF.Split(',');
                 if (arrBF.Length > 0)
                 {
-                    foreach (string strBF in arrBF)
+                    foreach (string str in arrBF)
                     {
-                        if ((strBF.Replace(" ", "")).Length < 0 || 15 < (strBF.Replace(" ", "")).Length) { throw new Exception(); }
+                        if (str.Length < 0 || 15 < str.Length) { throw new Exception(); }
                     }
                 }
                 else { throw new Exception(); }
@@ -736,7 +742,7 @@ namespace PCAB_Debugger_GUI
             }
             catch
             {
-                MessageBox.Show("空白文字を除き1文字以上、15文字以下で入力してください");
+                MessageBox.Show("Enter the serial number between 1 and 15 characters, without spaces, separated by commas.");
                 e.Handled = true;
             }
         }

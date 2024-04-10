@@ -74,6 +74,7 @@ ECHO {0/1/false/true} | Set echo mode.<br>*Do not enable it if you are connected
 CUI {0/1/false/true} | CUI Control Use<br>{1/true} : CUI MODE<br>{0/false} : GUI MODE<br>Default is CUI MODE.
 RST | Restore factory default settings.<br>*PS all 0<br>DSA all 2dB(No,0 = 0dB)<br>STB all 0(RUN MODE)<br>LPM 0(Full Power MODE)*
 *RST | Same as RST.
+Reboot | Reload setup function.
 
 </details>
 <details>

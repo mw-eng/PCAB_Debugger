@@ -1,18 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using System.ComponentModel.Design;
-using System.Data;
+using static PCAB_Debugger_GUI.PCAB;
 
 namespace PCAB_Debugger_GUI
 {
@@ -80,48 +70,81 @@ namespace PCAB_Debugger_GUI
                 if (32 <= _dat0F && _dat0F <= 126) { datSTR += (char)_dat0F; } else { datSTR += "."; }
             }
         }
+        private List<binaryROW> dataTableNOW = new List<binaryROW>();
         private List<binaryROW> dataTable = new List<binaryROW>();
+        private PCAB _mod;
 
-        public winEditor()
+        public winEditor(PCAB mod)
         {
             InitializeComponent();
+            _mod = mod;
+            _mod.OnError += OnError;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            //dataTable.Columns.Clear();
-            //for(int i = 0;i< BINARY_DATAGRID.Columns.Count;i++)
-            //{
-            //    dataTable.Columns.Add(BINARY_DATAGRID.Columns[i].Header.ToString());
-            //}
-            //dataTable.Rows.Clear();
-            //DataRow row = dataTable.NewRow();
-            //for (int i = 0; i < BINARY_DATAGRID.Columns.Count; i++)
-            //{ row[i] = i.ToString(); }
-            //dataTable.Rows.Add(row);
-            //BINARY_DATAGRID.Items.Clear();
-            //BINARY_DATAGRID.Items.Add();
-            //for (int i = 0; i < BINARY_DATAGRID.Columns.Count; i++)
-            //{
-            //    dataTable.Columns.Add(BINARY_DATAGRID.Columns[i].Header.ToString());
-            //}
             dataTable.Clear();
-            dataTable.Add(new binaryROW(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0));
-            dataTable.Add(new binaryROW(0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0));
-            dataTable.Add(new binaryROW(0, 0, 16, 0, 0, 0, 0, 0, 58, 0, 0, 0, 0, 245, 0, 0, 0));
-            dataTable.Add(new binaryROW(0, 0, 16, 0, 0, 0, 0, 0, 58, 0, 0, 0, 0, 245, 0, 0, 0));
-            dataTable.Add(new binaryROW(0, 0, 16, 0, 0, 0, 0, 0, 58, 0, 0, 0, 0, 245, 0, 0, 0));
-            dataTable.Add(new binaryROW(0, 0, 16, 0, 0, 0, 0, 0, 58, 0, 0, 0, 0, 245, 0, 0, 0));
-            dataTable.Add(new binaryROW(0, 0, 16, 0, 0, 0, 0, 0, 58, 0, 0, 0, 0, 245, 0, 0, 0));
-            dataTable.Add(new binaryROW(0, 0, 16, 0, 0, 0, 0, 0, 58, 0, 0, 0, 0, 245, 0, 0, 0));
-            dataTable.Add(new binaryROW(0, 0, 16, 0, 0, 0, 0, 0, 58, 0, 0, 0, 0, 245, 0, 0, 0));
-            dataTable.Add(new binaryROW(0, 0, 16, 0, 0, 0, 0, 0, 58, 0, 0, 0, 0, 245, 0, 0, 0));
-            dataTable.Add(new binaryROW(0, 0, 16, 0, 0, 0, 0, 0, 58, 0, 0, 0, 0, 245, 0, 0, 0));
-            dataTable.Add(new binaryROW(0, 0, 16, 0, 0, 0, 0, 0, 58, 0, 0, 0, 0, 245, 0, 0, 0));
-            dataTable.Add(new binaryROW(0, 0, 16, 0, 0, 0, 0, 0, 58, 0, 0, 0, 0, 245, 0, 0, 0));
+            dataTableNOW.Clear();
+            int block = 0;
+            string strBF;
+            strBF = _mod.PCAB_CMD("*", "RROM " + block.ToString(), 1);
+            while (strBF.Substring(0, 3) != "ERR")
+            {
+                for (int i = 0; i < strBF.Length; i += 32)
+                {
+                    if (strBF.Length < i + 32) { break; }
+                    dataTable.Add(new binaryROW((UInt16)(16 * block + i / 32),
+                                    Convert.ToByte(strBF.Substring(i + 0, 2), 16),
+                                    Convert.ToByte(strBF.Substring(i + 2, 2), 16),
+                                    Convert.ToByte(strBF.Substring(i + 4, 2), 16),
+                                    Convert.ToByte(strBF.Substring(i + 6, 2), 16),
+                                    Convert.ToByte(strBF.Substring(i + 8, 2), 16),
+                                    Convert.ToByte(strBF.Substring(i + 10, 2), 16),
+                                    Convert.ToByte(strBF.Substring(i + 12, 2), 16),
+                                    Convert.ToByte(strBF.Substring(i + 14, 2), 16),
+                                    Convert.ToByte(strBF.Substring(i + 16, 2), 16),
+                                    Convert.ToByte(strBF.Substring(i + 18, 2), 16),
+                                    Convert.ToByte(strBF.Substring(i + 20, 2), 16),
+                                    Convert.ToByte(strBF.Substring(i + 22, 2), 16),
+                                    Convert.ToByte(strBF.Substring(i + 24, 2), 16),
+                                    Convert.ToByte(strBF.Substring(i + 26, 2), 16),
+                                    Convert.ToByte(strBF.Substring(i + 28, 2), 16),
+                                    Convert.ToByte(strBF.Substring(i + 30, 2), 16)));
+                }
+                block++;
+                strBF = _mod.PCAB_CMD("*", "RROM " + block.ToString(), 1);
+            }
+            dataTableNOW = dataTable;
             BINARY_DATAGRID.ItemsSource = dataTable;
-            foreach(DataGridColumn col in BINARY_DATAGRID.Columns) { col.MinWidth = col.ActualWidth; }
-            
+            foreach (DataGridColumn col in BINARY_DATAGRID.Columns) { col.MinWidth = col.ActualWidth; }
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+
+        }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            _mod.OnError -= OnError;
+        }
+
+        private void OnError(object sender, PCABEventArgs e)
+        {
+            Dispatcher.BeginInvoke(new Action(() =>
+            {
+                this.Close();
+            }));
+        }
+
+        private void RELOAD_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void WRITE_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
