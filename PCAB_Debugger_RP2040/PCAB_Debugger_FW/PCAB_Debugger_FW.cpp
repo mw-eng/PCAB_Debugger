@@ -514,7 +514,7 @@ int main()
                         uint16_t blockNum;
                         uint8_t sectorNum;
                         std::vector<std::string> strVect = String::split(cmd.argments[0], '-');
-                        if(strVect.size() != 3) { uart->uart.writeLine("ERR > Argument error."); break; }
+                        if(strVect.size() != 2) { uart->uart.writeLine("ERR > Argument error."); break; }
                         if(!Convert::TryToUInt16(strVect[0], 16, blockNum)) { uart->uart.writeLine("ERR > Block number error."); break; }
                         if(!Convert::TryToUInt8(strVect[1], 16, sectorNum)) { uart->uart.writeLine("ERR > Sector number error."); break; }
                         if(!romAddressRangeCheck(blockNum, sectorNum)) { uart->uart.writeLine("ERR > Address is outside the range specified in boot mode."); break; }
