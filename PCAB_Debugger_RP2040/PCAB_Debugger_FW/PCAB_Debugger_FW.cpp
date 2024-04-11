@@ -512,12 +512,12 @@ int main()
                     else
                     {
                         uint16_t blockNum;
-                        uint8_t sectorNum;
+                        uint8_t sectorpageNum;
                         std::vector<std::string> strVect = String::split(cmd.argments[0], '-');
                         if(strVect.size() != 2) { uart->uart.writeLine("ERR > Argument error."); break; }
                         if(!Convert::TryToUInt16(strVect[0], 16, blockNum)) { uart->uart.writeLine("ERR > Block number error."); break; }
-                        if(!Convert::TryToUInt8(strVect[1], 16, sectorNum)) { uart->uart.writeLine("ERR > Sector number error."); break; }
-                        if(!romAddressRangeCheck(blockNum, sectorNum)) { uart->uart.writeLine("ERR > Address is outside the range specified in boot mode."); break; }
+                        if(!Convert::TryToUInt8(strVect[1], 16, sectorpageNum)) { uart->uart.writeLine("ERR > Sector + Page number error."); break; }
+                        if(!romAddressRangeCheck(blockNum, sectorpageNum)) { uart->uart.writeLine("ERR > Address is outside the range specified in boot mode."); break; }
                         if(cmd.argments[1].length() != 2 * FLASH_PAGE_SIZE){ uart->uart.writeLine("ERR > Write data length mismatch"); break; }
                         uint8_t romDAT[FLASH_PAGE_SIZE];
                         for( uint i = 0 ; i < FLASH_PAGE_SIZE ; i++ )
@@ -525,8 +525,8 @@ int main()
                             if(!Convert::TryToUInt8(cmd.argments[1].substr(2 * i, 2) , 16, romDAT[i]))
                             { uart->uart.writeLine("ERR > Write data error."); break; }
                         }
-                        if(!flash::writeROM(blockNum, sectorNum, romDAT)) { uart->uart.writeLine("ERR > Address error."); break; }
-                        uart->uart.writeLine("DONE > Write ROM block " + Convert::ToString(blockNum, 10, 1) + " - sector " + Convert::ToString(sectorNum, 10, 1) + ".");
+                        if(!flash::writeROM(blockNum, sectorpageNum, romDAT)) { uart->uart.writeLine("ERR > Address error."); break; }
+                        uart->uart.writeLine("DONE > Write ROM block " + Convert::ToString(blockNum, 16, 1) + " - sector " + Convert::ToString(sectorpageNum / 0x100u, 16, 1) + " - page " + Convert::ToString(sectorpageNum % 0x100u, 16, 1) + ".");
                     }
                     break;
                 case pcabCMD::cmdCode::EraseROM:
@@ -541,7 +541,7 @@ int main()
                         if(!Convert::TryToUInt8(strVect[1], 16, sectorNum)) { uart->uart.writeLine("ERR > Sector number error."); break; }
                         if(!romAddressRangeCheck(blockNum, sectorNum)) { uart->uart.writeLine("ERR > Address is outside the range specified in boot mode."); break; }
                         if(!flash::eraseROM(blockNum, sectorNum)) { uart->uart.writeLine("ERR > Address error."); break; }
-                        uart->uart.writeLine("DONE > Erase ROM block " + Convert::ToString(blockNum, 10, 1) + " - sector " + Convert::ToString(sectorNum, 10, 1) + ".");
+                        uart->uart.writeLine("DONE > Erase ROM block " + Convert::ToString(blockNum, 16, 1) + " - sector " + Convert::ToString(sectorNum, 16, 1) + ".");
                     }
                     break;
                 case pcabCMD::cmdCode::OverwriteROM:
@@ -672,9 +672,9 @@ void writeDSA()
     spi_sa->spi_write_read(stBF);
 }
 
-bool romAddressRangeCheck(const uint16_t &blockNum, const uint8_t &sectorNum)
+bool romAddressRangeCheck(const uint16_t &blockNum, const uint8_t &sectorpageNum)
 {
-    uint32_t addr = blockNum * FLASH_BLOCK_SIZE + sectorNum * FLASH_SECTOR_SIZE;
+    uint32_t addr = blockNum * FLASH_BLOCK_SIZE + sectorpageNum * FLASH_SECTOR_SIZE;
     if(bootMode == 0x2A) { return true; }
     if(bootMode == 0x02 || bootMode == 0x03)
     {

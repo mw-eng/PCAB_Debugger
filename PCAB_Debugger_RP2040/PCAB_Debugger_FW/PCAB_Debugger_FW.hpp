@@ -47,4 +47,4 @@ void setup();
 void close();
 void writeDPS();
 void writeDSA();
-bool romAddressRangeCheck(const uint16_t &blockNum, const uint8_t &sectorNum);
+bool romAddressRangeCheck(const uint16_t &blockNum, const uint8_t &sectorpageNum);
