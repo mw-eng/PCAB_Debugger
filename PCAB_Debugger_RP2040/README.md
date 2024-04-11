@@ -87,10 +87,10 @@ Reboot | Reload setup function.
 Command | Description
 :--|:--
 SetSN {x} | *Can only be changed in maintenance mode.*<br>Set Bord SN.<br>{x} : Serial Number strings.
-RROM {x-yz} | Read data page from ROM.<br>{x-yz} : Specify the *block number(x), *sector number(y) + page number(z)* in decimal format, separated by "-".
-WROM {x-yz} {HEX} | Write data page to ROM.<br>{x-yz} : Specify the *block number(x), *sector number(y) + page number(z)* in decimal format, separated by "-".<br>{HEX} : HEX data to write.<br>*Data will not be erased.*
-EROM {x-y} | Erase data page from ROM.<br>{x} : Specify the *block number(x)* and *sector number(y)* as decimal format separated by "-".
-OROM {x-y} {HEX} | Overwrite data sector to ROM.<br>{x-y} : Specify the *block number(x)* and *sector number(y)* as decimal format separated by "-".<br>{HEX} : HEX data to write.<br>*Data is written after erasing.*
+RROM {x-yz} | Read data page from ROM.<br>{x-yz} : Specify the *block number(x), *sector number(y) + page number(z)* in hexadecimal format, separated by "-".
+WROM {x-yz} {HEX} | Write data page to ROM.<br>{x-yz} : Specify the *block number(x), *sector number(y) + page number(z)* in hexadecimal format, separated by "-".<br>{HEX} : HEX data to write.<br>*Data will not be erased.*
+EROM {x-y} | Erase data page from ROM.<br>{x} : Specify the *block number(x)* and *sector number(y)* as hexadecimal format separated by "-".
+OROM {x-y} {HEX} | Overwrite data sector to ROM.<br>{x-y} : Specify the *block number(x)* and *sector number(y)* as hexadecimal format separated by "-".<br>{HEX} : HEX data to write.<br>*Data is written after erasing.*
 
 </details>
 

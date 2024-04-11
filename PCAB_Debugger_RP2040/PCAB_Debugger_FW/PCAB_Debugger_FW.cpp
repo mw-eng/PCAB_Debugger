@@ -48,27 +48,7 @@ std::string readSerialNum()
     else { return ""; }
 }
 
-void writeDPS()
-{
-    std::vector<uint8_t> stBF;
-    for(uint16_t i = NUMBER_OF_SYSTEM ; i > 0 ; i-- )
-    {
-        stBF.push_back(dpsBF[i - 1]);
-        dpsNOW[i - 1] = dpsBF[i - 1] & 0x3F;
-    }
-    spi_ps->spi_write_read(stBF);
-}
 
-void writeDSA()
-{
-    std::vector<uint8_t> stBF;
-    for(uint16_t i = NUMBER_OF_SYSTEM ; i > 0 ; i-- )
-    {
-        stBF.push_back(dsaBF[i - 1] ^ 0x3F);
-        dsaNOW[i - 1] = dsaBF[i - 1] & 0x3F;
-    }
-    spi_sa->spi_write_read(stBF);
-}
 
 void saveSTATE(const uint16_t &blockNum, const uint8_t &num)
 {
@@ -79,6 +59,7 @@ bool loadSTATE(const uint16_t &blockNum, const uint8_t &num)
 {
     return false;
 }
+
 
 #pragma endregion
 
@@ -163,7 +144,7 @@ int main()
         pcabCMD::CommandLine cmd = uart->readCMD(modeECHO);
         if((cmd.serialNum.size() > 0 && (String::strCompare(cmd.serialNum, "*", true) || String::strCompare(cmd.serialNum, serialNum, true))) || (cmd.serialNum.size() == 0 && cmd.romID == romID))
         {
-            if(modeECHO && modeCUI){uart->uart.writeLine("");}
+            if(modeECHO || modeCUI){uart->uart.writeLine("");}
             switch (cmd.command)
             {
                 case pcabCMD::cmdCode::WrtDPS:
@@ -511,9 +492,9 @@ int main()
                         uint16_t blockNum;
                         uint8_t sectorpageNum;
                         std::vector<std::string> strVect = String::split(cmd.argments[0], '-');
-                        if(strVect.size() != 3) { uart->uart.writeLine("ERR > Argument error."); break; }
-                        if(!Convert::TryToUInt16(strVect[0], 10, blockNum)) { uart->uart.writeLine("ERR > Block number error."); break; }
-                        if(!Convert::TryToUInt8(strVect[1], 10, sectorpageNum)) { uart->uart.writeLine("ERR > Sector + Page number error."); break; }
+                        if(strVect.size() != 2) { uart->uart.writeLine("ERR > Argument error."); break; }
+                        if(!Convert::TryToUInt16(strVect[0], 16, blockNum)) { uart->uart.writeLine("ERR > Block number error."); break; }
+                        if(!Convert::TryToUInt8(strVect[1], 16, sectorpageNum)) { uart->uart.writeLine("ERR > Sector + Page number error."); break; }
                         uint8_t romDAT[FLASH_PAGE_SIZE];
                         if(!flash::readROM(blockNum, sectorpageNum, romDAT)) { uart->uart.writeLine("ERR > Address error."); break; }
                         if(modeCUI && FLASH_PAGE_SIZE % 16 == 0)
@@ -530,14 +511,37 @@ int main()
                     if(cmd.argments.size() != 2) { uart->uart.writeLine("ERR > Number of arguments does not match."); }
                     else
                     {
-                        uart->uart.writeLine("ERR > Unimplemented.");
+                        uint16_t blockNum;
+                        uint8_t sectorNum;
+                        std::vector<std::string> strVect = String::split(cmd.argments[0], '-');
+                        if(strVect.size() != 3) { uart->uart.writeLine("ERR > Argument error."); break; }
+                        if(!Convert::TryToUInt16(strVect[0], 16, blockNum)) { uart->uart.writeLine("ERR > Block number error."); break; }
+                        if(!Convert::TryToUInt8(strVect[1], 16, sectorNum)) { uart->uart.writeLine("ERR > Sector number error."); break; }
+                        if(!romAddressRangeCheck(blockNum, sectorNum)) { uart->uart.writeLine("ERR > Address is outside the range specified in boot mode."); break; }
+                        if(cmd.argments[1].length() != 2 * FLASH_PAGE_SIZE){ uart->uart.writeLine("ERR > Write data length mismatch"); break; }
+                        uint8_t romDAT[FLASH_PAGE_SIZE];
+                        for( uint i = 0 ; i < FLASH_PAGE_SIZE ; i++ )
+                        {
+                            if(!Convert::TryToUInt8(cmd.argments[1].substr(2 * i, 2) , 16, romDAT[i]))
+                            { uart->uart.writeLine("ERR > Write data error."); break; }
+                        }
+                        if(!flash::writeROM(blockNum, sectorNum, romDAT)) { uart->uart.writeLine("ERR > Address error."); break; }
+                        uart->uart.writeLine("DONE > Write ROM block " + Convert::ToString(blockNum, 10, 1) + " - sector " + Convert::ToString(sectorNum, 10, 1) + ".");
                     }
                     break;
                 case pcabCMD::cmdCode::EraseROM:
                     if(cmd.argments.size() != 1) { uart->uart.writeLine("ERR > Number of arguments does not match."); }
                     else
                     {
-                        uart->uart.writeLine("ERR > Unimplemented.");
+                        uint16_t blockNum;
+                        uint8_t sectorNum;
+                        std::vector<std::string> strVect = String::split(cmd.argments[0], '-');
+                        if(strVect.size() != 2) { uart->uart.writeLine("ERR > Argument error."); break; }
+                        if(!Convert::TryToUInt16(strVect[0], 16, blockNum)) { uart->uart.writeLine("ERR > Block number error."); break; }
+                        if(!Convert::TryToUInt8(strVect[1], 16, sectorNum)) { uart->uart.writeLine("ERR > Sector number error."); break; }
+                        if(!romAddressRangeCheck(blockNum, sectorNum)) { uart->uart.writeLine("ERR > Address is outside the range specified in boot mode."); break; }
+                        if(!flash::eraseROM(blockNum, sectorNum)) { uart->uart.writeLine("ERR > Address error."); break; }
+                        uart->uart.writeLine("DONE > Erase ROM block " + Convert::ToString(blockNum, 10, 1) + " - sector " + Convert::ToString(sectorNum, 10, 1) + ".");
                     }
                     break;
                 case pcabCMD::cmdCode::OverwriteROM:
@@ -645,3 +649,37 @@ void close()
     delete analog;
     delete sens;
 }
+
+void writeDPS()
+{
+    std::vector<uint8_t> stBF;
+    for(uint16_t i = NUMBER_OF_SYSTEM ; i > 0 ; i-- )
+    {
+        stBF.push_back(dpsBF[i - 1]);
+        dpsNOW[i - 1] = dpsBF[i - 1] & 0x3F;
+    }
+    spi_ps->spi_write_read(stBF);
+}
+
+void writeDSA()
+{
+    std::vector<uint8_t> stBF;
+    for(uint16_t i = NUMBER_OF_SYSTEM ; i > 0 ; i-- )
+    {
+        stBF.push_back(dsaBF[i - 1] ^ 0x3F);
+        dsaNOW[i - 1] = dsaBF[i - 1] & 0x3F;
+    }
+    spi_sa->spi_write_read(stBF);
+}
+
+bool romAddressRangeCheck(const uint16_t &blockNum, const uint8_t &sectorNum)
+{
+    uint32_t addr = blockNum * FLASH_BLOCK_SIZE + sectorNum * FLASH_SECTOR_SIZE;
+    if(bootMode == 0x2A) { return true; }
+    if(bootMode == 0x02 || bootMode == 0x03)
+    {
+        if( PICO_FLASH_SIZE_BYTES - FLASH_BLOCK_SIZE <= addr && addr < PICO_FLASH_SIZE_BYTES - FLASH_SECTOR_SIZE) { return true; }
+    }
+    return false;
+}
+
