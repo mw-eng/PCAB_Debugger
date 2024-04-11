@@ -42,7 +42,7 @@ class pcabCMD : uartSYNC
         ECHO,
         CUI,
         GetIDN,
-        GetRID,
+        GetIDR,
         GetMODE,
         Reboot,
         NONE,

@@ -621,7 +621,7 @@ int main()
                         } else { uart->uart.writeLine(FW_VENDOR + "," + FW_MODEL + "," + serialNum + "," + FW_REV); }
                     }
                     break;
-                case pcabCMD::cmdCode::GetRID:
+                case pcabCMD::cmdCode::GetIDR:
                     if(cmd.argments.size() != 0) { uart->uart.writeLine("ERR > Number of arguments does not match."); }
                     else
                     {

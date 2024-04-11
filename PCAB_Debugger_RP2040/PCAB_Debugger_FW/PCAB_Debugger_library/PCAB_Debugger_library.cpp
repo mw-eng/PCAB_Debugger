@@ -65,7 +65,7 @@ pcabCMD::CommandLine pcabCMD::readCMD(bool echo)
     if (String::strCompare(cmd, "ReBOOT", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdBF.romID, cmdCode::Reboot, strArr, cmdBF.argments.size()); }
     if (String::strCompare(cmd, "GetIDN", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdBF.romID, cmdCode::GetIDN, strArr, cmdBF.argments.size()); }
     if (String::strCompare(cmd, "*IDN?", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdBF.romID, cmdCode::GetIDN, strArr, cmdBF.argments.size()); }
-    if (String::strCompare(cmd, "GetRID", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdBF.romID, cmdCode::GetRID, strArr, cmdBF.argments.size()); }
+    if (String::strCompare(cmd, "GetIDR", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdBF.romID, cmdCode::GetIDR, strArr, cmdBF.argments.size()); }
     else { return pcabCMD::CommandLine(cmdBF.serialNum, cmdBF.romID, cmdCode::NONE, strArr, cmdBF.argments.size()); }
 }
 
