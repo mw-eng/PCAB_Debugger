@@ -14,11 +14,13 @@ class uartSYNC
     struct CommandLine
     {
         std::string serialNum;
+        std::string romID;
         std::string command;
         std::vector<std::string> argments;
-        CommandLine(std::string serial, std::string cmd, std::string args[], uint numArgs)
+        CommandLine(std::string serial, std::string rom, std::string cmd, std::string args[], uint numArgs)
         {
             serialNum = serial;
+            romID = rom;
             command = cmd;
             argments.clear();
             for(uint i = 0 ; i < numArgs ; i++){ argments.push_back(args[i]);}

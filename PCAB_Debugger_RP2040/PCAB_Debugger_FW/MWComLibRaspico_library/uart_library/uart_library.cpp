@@ -47,8 +47,9 @@ uartSYNC::CommandLine uartSYNC::readCMD(bool echo)
 {
     std::string strBf = readLine(echo);
     std::string serialNum = "";
+    std::string romID = "";
     std::vector<std::string> strVect = String::split(strBf, ' ');
-    if(strVect.size() <= 0){return uartSYNC::CommandLine("", "", NULL, 0);}
+    if(strVect.size() <= 0){return uartSYNC::CommandLine("", "", "", NULL, 0);}
     strBf = String::trim(strVect[0]);
     strVect.erase(std::cbegin(strVect));
     if(strBf.size() > 0)
@@ -58,10 +59,15 @@ uartSYNC::CommandLine uartSYNC::readCMD(bool echo)
             serialNum = strBf.substr(1);
             strBf = strVect[0];
             strVect.erase(std::cbegin(strVect));
+        }else if(String::strCompare(strBf.substr(0, 1), "$", true) && strVect.size() > 0)
+        {
+            romID = strBf.substr(1);
+            strBf = strVect[0];
+            strVect.erase(std::cbegin(strVect));
         }
     }
     std::string strArr[strVect.size()];
     std::copy(strVect.begin(), strVect.end(), strArr);
-    return uartSYNC::CommandLine(serialNum, strBf, strArr, strVect.size());
+    return uartSYNC::CommandLine(romID, serialNum, strBf, strArr, strVect.size());
 }
 

@@ -1,13 +1,11 @@
 //#define DEBUG_BOOT_MODE 0x01
 //#define DEBUG_BOOT_MODE 0x20
 #define DEBUG_BOOT_MODE 0x2A
-// ROM Block Number
-#define ROM_BLOCK_USER 16   // Range of user available space from this block number to ROM_BLOCK_NUM - 2
 
 #include "PCAB_Debugger_FW.hpp"
 #define SNPRINTF_BUFFER_LEN 50
 #define NUMBER_OF_SYSTEM 15
-#define ROM_BLOCK_NUM PICO_FLASH_SIZE_BYTES / 65536
+#define ROM_BLOCK_NUM PICO_FLASH_SIZE_BYTES / FLASH_BLOCK_SIZE
 const static std::string FW_VENDOR = "Orient Microwave Corp.";
 const static std::string FW_MODEL = "LX00-0004-00";
 const static std::string FW_REV = "1.1.2";
@@ -21,6 +19,7 @@ pcabCMD *uart;
 bool modeCUI = true;
 bool modeECHO = false;
 std::string serialNum = "";
+uint64_t romID = 0xFFFFFFFFu;
 uint8_t bootMode = 0;
 uint8_t dpsBF[NUMBER_OF_SYSTEM];
 uint8_t dpsNOW[NUMBER_OF_SYSTEM];
@@ -33,51 +32,12 @@ bool lowMODE = false;
 
 #pragma region Private Function
 
-bool editRangeCheck(const uint16_t &blockNum)
-{
-    if(blockNum < ROM_BLOCK_USER || ROM_BLOCK_NUM - 1 < blockNum) { return false; }
-    if(bootMode == 0x2A) { return true; }
-    if((bootMode == 0x02 || bootMode == 0x03 || bootMode == 0x06 || bootMode == 0x07) && (blockNum == ROM_BLOCK_NUM - 2)) { return true; }
-    if((bootMode == 0x04 || bootMode == 0x05 || bootMode == 0x06 || bootMode == 0x07) && (ROM_BLOCK_USER <= blockNum && blockNum < ROM_BLOCK_NUM - 3)) { return true; }
-    return false;
-}
-
-void writeROM(const uint16_t &blockNum, const uint8_t blockDAT[FLASH_PAGE_SIZE])
-{
-    if(bootMode == 0x2A || bootMode == 0x04 || bootMode == 0x05 || bootMode == 0x06 || bootMode == 0x07)
-    {
-        if(editRangeCheck(blockNum))
-        {
-            writeROMblock(blockAddress(blockNum), blockDAT);
-            uart->uart.writeLine("DONE > Write ROM block " + Convert::ToString(blockNum, 10, 1) + ".");
-        } else { uart->uart.writeLine("ERR > Specified block is out of range."); }
-    } else { uart->uart.writeLine("ERR > It is in an unusable state."); }
-}
-
-void writeROM(const std::string &num, const std::string &data)
-{
-    uint16_t blockNum;
-    if(!Convert::TryToUInt16(num, 10, blockNum) || data.size() != 2 * FLASH_PAGE_SIZE)
-    { uart->uart.writeLine("ERR > Argument1 error."); }
-    else
-    {
-        uint8_t blockDAT[FLASH_PAGE_SIZE];
-        for( uint i = 0 ; i < FLASH_PAGE_SIZE ; i++ )
-        {
-            if(!Convert::TryToUInt8(data.substr(2 * i, 2) , 16, blockDAT[i]))
-            {
-                uart->uart.writeLine("ERR > Argument2 error.");
-                return;
-            }
-        }
-        writeROM(blockNum, blockDAT);
-    }
-}
 
 std::string readSerialNum()
 {
+    return "";
     uint8_t romBF[FLASH_PAGE_SIZE];
-    readROMblock(blockAddress(ROM_BLOCK_NUM - 1), romBF);
+    //readROMblock(blockAddress(ROM_BLOCK_NUM - 1), romBF);
     // Read SERIAL NUMBER
     std::string serial = "";
     uint8_t len = romBF[FLASH_PAGE_SIZE - 1];
@@ -112,42 +72,12 @@ void writeDSA()
 
 void saveSTATE(const uint16_t &blockNum, const uint8_t &num)
 {
-    uint8_t romBF[FLASH_PAGE_SIZE];
-    uint8_t ioBF;
-    ioBF = stbAMP;
-    ioBF += 2 * stbDRA;
-    ioBF += 4 * stbLNA;
-    ioBF += 8 * lowMODE;
-    readROMblock(blockAddress(blockNum), romBF);
-    for(uint i = 0; i < 15 ; i ++) { romBF[i + num * 0x40] = dpsNOW[i]; }
-    romBF[15 + num * 0x40] = ioBF;
-    for(uint i = 0; i < 16 ; i ++) { romBF[i + num * 0x40 + 16] = dsaNOW[i]; }
-    writeROMblock(blockAddress(blockNum), romBF);
+
 }
 
 bool loadSTATE(const uint16_t &blockNum, const uint8_t &num)
 {
-    uint8_t romBF[FLASH_PAGE_SIZE];
-    uint8_t ioBF;
-    readROMblock(blockAddress(blockNum), romBF);
-    ioBF = romBF[15 + num * 0x40];
-    for(uint i = 0; i < 15; i++)
-    {
-        if((romBF[i + num * 0x40] & 0xC0) != 0) { return false; }
-    }
-    for(uint i = 0; i < 16; i++)
-    {
-        if((romBF[i + num * 0x40 + 16] & 0xC0) != 0) { return false; }
-    }
-    if((ioBF & 0xF0) != 0) { return false; }
-    if((romBF[15 + num * 0x40 + 16] & 0xE0) != 0) { return false; }
-    for(uint i = 0; i < 15; i++) { dpsBF[i] = romBF[i + num * 0x40]; }
-    for(uint i = 0; i < 16; i++) { dsaNOW[i] = romBF[i + num * 0x40 + 16]; }
-    stbAMP = (ioBF >> 0) & 1;
-    stbDRA = (ioBF >> 1) & 1;
-    stbLNA = (ioBF >> 2) & 1;
-    lowMODE = (ioBF >> 3) & 1;
-    return true;
+    return false;
 }
 
 #pragma endregion
@@ -192,6 +122,10 @@ void setup()
     bootMode = DEBUG_BOOT_MODE;
 #endif
     serialNum = readSerialNum();
+    romID = 0;
+    uint8_t idBF[FLASH_UNIQUE_ID_SIZE_BYTES];
+    flash::getID(idBF);
+    for(uint8_t i = 0; i < FLASH_UNIQUE_ID_SIZE_BYTES; i++) { romID += ((0x100u ^ i) * idBF[i]); }
 
     // Resture Factory STATE
     if((bootMode == 0x20 || bootMode == 0x00) && !loadSTATE(ROM_BLOCK_NUM - 1, 0)) { }
@@ -227,7 +161,7 @@ int main()
     while (1)
     {
         pcabCMD::CommandLine cmd = uart->readCMD(modeECHO);
-        if( cmd.serialNum.size() > 0 && (String::strCompare(cmd.serialNum, "*", true) || String::strCompare(cmd.serialNum, serialNum, true)))
+        if((cmd.serialNum.size() > 0 && (String::strCompare(cmd.serialNum, "*", true) || String::strCompare(cmd.serialNum, serialNum, true))) || (cmd.serialNum.size() == 0 && cmd.romID == romID))
         {
             if(modeECHO && modeCUI){uart->uart.writeLine("");}
             switch (cmd.command)
@@ -560,122 +494,48 @@ int main()
                     if(cmd.argments.size() > 1) { uart->uart.writeLine("ERR > Number of arguments does not match."); }
                     else
                     {
-                        uint16_t blockNum = ROM_BLOCK_NUM - 2;
-                        uint8_t num = 0;
-                        if(cmd.argments.size() == 0) { blockNum = ROM_BLOCK_NUM - 2; num = 0; }
-                        if(cmd.argments.size() == 1)
-                        {
-                            std::vector<std::string> strVect = String::split(cmd.argments[0], '-');
-                            if(strVect.size() == 1)
-                            { if(!Convert::TryToUInt8(strVect[0], 10, num)) { uart->uart.writeLine("ERR > Argument error."); break; } }
-                            else if(strVect.size() == 2)
-                            { if(!Convert::TryToUInt16(strVect[0], 10, blockNum) || !Convert::TryToUInt8(strVect[1], 10, num)) { uart->uart.writeLine("ERR > Argument error."); break; } }
-                            else { uart->uart.writeLine("ERR > Argument error."); break; }
-                            if(num > 3) { uart->uart.writeLine("ERR > Specified number is out of range."); break; }
-                        }
-                        if(!editRangeCheck(blockNum)) { uart->uart.writeLine("ERR > Specified block is out of range."); break; }
-                        saveSTATE(blockNum, num);
-                        uart->uart.writeLine("DONE > Save state.");
+                        uart->uart.writeLine("ERR > Unimplemented.");
                     }
                     break;
                 case pcabCMD::cmdCode::LoadMEM:
                     if(cmd.argments.size() > 1) { uart->uart.writeLine("ERR > Number of arguments does not match."); }
                     else
                     {
-                        uint16_t blockNum = ROM_BLOCK_NUM - 2;
-                        uint8_t num = 0;
-                        if(cmd.argments.size() == 0) { blockNum = ROM_BLOCK_NUM - 2; num = 0; }
-                        if(cmd.argments.size() == 1)
-                        {
-                            std::vector<std::string> strVect = String::split(cmd.argments[0], '-');
-                            if(strVect.size() == 1)
-                            { if(!Convert::TryToUInt8(strVect[0], 10, num)) { uart->uart.writeLine("ERR > Argument error."); break; } }
-                            else if(strVect.size() == 2)
-                            { if(!Convert::TryToUInt16(strVect[0], 10, blockNum) || !Convert::TryToUInt8(strVect[1], 10, num)) { uart->uart.writeLine("ERR > Argument error."); break; } }
-                            else { uart->uart.writeLine("ERR > Argument error."); break; }
-                            if(num > 3) { uart->uart.writeLine("ERR > Specified number is out of range."); break; }
-                            if( blockNum != ROM_BLOCK_NUM - 2 && !editRangeCheck(blockNum)) { uart->uart.writeLine("ERR > Specified block is out of range."); break; }
-                        }
-                        if(!loadSTATE(blockNum, num)) { uart->uart.writeLine("ERR > No valid settings were found for the specified address."); break; }
-                        writeDPS();
-                        gpio_put(STB_AMP_PIN, !stbAMP);
-                        gpio_put(STB_DRA_PIN, !stbDRA);
-                        gpio_put(STB_LNA_PIN, !stbLNA);
-                        gpio_put(LPW_MOD_PIN, !lowMODE);
-                        uart->uart.writeLine("DONE > Load state.");
-                        //writeDSA();
+                        uart->uart.writeLine("ERR > Unimplemented.");
                     }
                     break;
                 case pcabCMD::cmdCode::ReadROM:
                     if(cmd.argments.size() != 1) { uart->uart.writeLine("ERR > Number of arguments does not match."); }
                     else
                     {
-                        uint16_t blockNum;
-                        if(!Convert::TryToUInt16(cmd.argments[0], 10, blockNum)) { uart->uart.writeLine("ERR > Argument error."); break; }
-                        if(blockNum > ROM_BLOCK_NUM - 1) { uart->uart.writeLine("ERR > Specified block is out of range."); break; }
-                        uint8_t romDAT[FLASH_PAGE_SIZE];
-                        readROMblock(blockAddress(blockNum), romDAT);
-                        if(modeCUI)
-                        {
-                            for(int i = 0 ; i < 16 * (int)(FLASH_PAGE_SIZE / 16) ; i += 16 )
-                            {
-                                for(int j = 0 ; j < 15 ; j++)
-                                {
-                                    uart->uart.write(Convert::ToString(romDAT[i + j], 16, 2) + " ");
-                                }
-                                uart->uart.write(Convert::ToString(romDAT[i + 15], 16, 2));
-                                uart->uart.writeLine("");
-                            }
-                            if(FLASH_PAGE_SIZE % 16 != 0)
-                            {
-                                for(uint i = FLASH_PAGE_SIZE - FLASH_PAGE_SIZE % 16 ; i < FLASH_PAGE_SIZE - 1 ; i++ )
-                                {
-                                    uart->uart.write(Convert::ToString(romDAT[i], 16, 2) + " ");
-                                }
-                                uart->uart.write(Convert::ToString(romDAT[FLASH_PAGE_SIZE - 1], 16, 2));
-                                uart->uart.writeLine("");
-                            }
-                        } else { for(uint8_t byteBF : romDAT) { uart->uart.write(Convert::ToString(byteBF, 16, 2)); } uart->uart.writeLine(""); }
+                        uart->uart.writeLine("ERR > Unimplemented.");
                     }
                     break;
                 case pcabCMD::cmdCode::WriteROM:
                     if(cmd.argments.size() != 2) { uart->uart.writeLine("ERR > Number of arguments does not match."); }
-                    else { writeROM(cmd.argments[0], cmd.argments[1]); }
+                    else
+                    {
+                        uart->uart.writeLine("ERR > Unimplemented.");
+                    }
                     break;
                 case pcabCMD::cmdCode::EraseROM:
                     if(cmd.argments.size() != 1) { uart->uart.writeLine("ERR > Number of arguments does not match."); }
                     else
                     {
-                        uint16_t blockNum;
-                        if(!Convert::TryToUInt16(cmd.argments[0], 10, blockNum)) { uart->uart.writeLine("ERR > Argument error."); break; }
-                        if(bootMode != 0x2A && bootMode != 0x04 && bootMode != 0x05 && bootMode != 0x06)
-                        { uart->uart.writeLine("ERR > It is in an unusable state."); break; }
-                        if(editRangeCheck(blockNum))
-                        {
-                            eraseROMblock(blockAddress(blockNum));
-                            uart->uart.writeLine("DONE > Erase ROM block " + Convert::ToString(blockNum, 10, 1) + ".");
-                        } else { uart->uart.writeLine("ERR > Specified block is out of range."); }
+                        uart->uart.writeLine("ERR > Unimplemented.");
                     }
                     break;
                 case pcabCMD::cmdCode::OverwriteROM:
                     if(cmd.argments.size() != 2) { uart->uart.writeLine("ERR > Number of arguments does not match."); }
-                    else { }
+                    {
+                        uart->uart.writeLine("ERR > Unimplemented.");
+                    }
                     break;
                 case pcabCMD::cmdCode::SetSN:
                     if(cmd.argments.size() != 1) { uart->uart.writeLine("ERR > Number of arguments does not match."); }
                     else
                     {
-                        if(cmd.argments[0].size() == 0) { uart->uart.writeLine("ERR > Argument error."); break; }
-                        if(cmd.argments[0].size() > 16) { uart->uart.writeLine("ERR > Serial code is too long. Limit to 15 characters."); break; }
-                        if(!editRangeCheck(ROM_BLOCK_NUM - 1)) { uart->uart.writeLine("ERR > It is in an unusable state."); break; }
-                        
-                        uint8_t romBF[FLASH_PAGE_SIZE];
-                        readROMblock(blockAddress(ROM_BLOCK_NUM - 1), romBF);
-                        for(uint i = 0; i < cmd.argments[0].size() ; i ++) { romBF[i + FLASH_PAGE_SIZE - 16] = cmd.argments[0][i]; }
-                        romBF[FLASH_PAGE_SIZE - 1] = cmd.argments[0].size();
-                        writeROMblock(blockAddress(ROM_BLOCK_NUM - 1), romBF);
-                        serialNum = cmd.argments[0];
-                        uart->uart.writeLine("DONE > Write serial number.");
+                        uart->uart.writeLine("ERR > Unimplemented.");
                     }
                     break;
                 case pcabCMD::cmdCode::RST:

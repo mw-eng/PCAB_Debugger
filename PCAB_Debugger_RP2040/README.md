@@ -2,7 +2,10 @@
 The main unit firmware. @ RP2040
 
 ## RS485 Serial Communication
-Send commands in the order of *#{SERIAL NUMBER}*, *{COMMAND}*, *{ARGUMENTS}*, and *{EXIT CODE}*, separated by space.  
+Send commands in the order of *#{SERIAL NUMBER}*, *{COMMAND}*, *{ARGUMENTS}*, and *{EXIT CODE}*, separated by space.<br>
+or<br>
+Send commands in the order of *${ROM ID}*, *{COMMAND}*, *{ARGUMENTS}*, and *{EXIT CODE}*, separated by space.<br>
+
 <details>
 <summary>Description</summary>
 
