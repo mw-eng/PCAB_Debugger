@@ -1,3 +1,4 @@
+#pragma once
 #include "Configure.hpp"
 #include "MWComLibCPP_library.hpp"
 #include "PCAB_Debugger_library.hpp"

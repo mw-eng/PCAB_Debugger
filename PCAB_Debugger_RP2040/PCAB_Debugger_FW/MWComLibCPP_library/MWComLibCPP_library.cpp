@@ -1,6 +1,3 @@
-#include <iostream>
-#include <string>
-#include <algorithm>
 #include "MWComLibCPP_library.hpp"
 
 uint64_t pow64(const uint8_t &x, const uint &y)

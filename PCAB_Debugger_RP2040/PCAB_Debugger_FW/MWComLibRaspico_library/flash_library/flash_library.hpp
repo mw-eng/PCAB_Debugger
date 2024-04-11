@@ -1,3 +1,4 @@
+#pragma once
 #include "hardware/flash.h"
 #include "hardware/sync.h"
 

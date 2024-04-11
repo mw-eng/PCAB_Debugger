@@ -1,4 +1,6 @@
+#pragma once
 #include "uart_library.hpp"
+#include "MWComLibCPP_library.hpp"
 
 class pcabCMD : uartSYNC
 {

@@ -1,6 +1,8 @@
+#pragma once
 #include <string>
 #include <cstring>
 #include <vector>
+#include <iostream>
 #include <algorithm>
 
 class Convert
