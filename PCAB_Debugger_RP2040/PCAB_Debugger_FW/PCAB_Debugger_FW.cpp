@@ -657,6 +657,10 @@ int main()
                         } else { uart->uart.writeLine("ERR > Specified block is out of range."); }
                     }
                     break;
+                case pcabCMD::cmdCode::OverwriteROM:
+                    if(cmd.argments.size() != 2) { uart->uart.writeLine("ERR > Number of arguments does not match."); }
+                    else { }
+                    break;
                 case pcabCMD::cmdCode::SetSN:
                     if(cmd.argments.size() != 1) { uart->uart.writeLine("ERR > Number of arguments does not match."); }
                     else
@@ -736,6 +740,16 @@ int main()
                             uart->uart.writeLine("SerialNo > " + serialNum);
                             uart->uart.writeLine("Revision > " + FW_REV);
                         } else { uart->uart.writeLine(FW_VENDOR + "," + FW_MODEL + "," + serialNum + "," + FW_REV); }
+                    }
+                    break;
+                case pcabCMD::cmdCode::GetRID:
+                    if(cmd.argments.size() != 0) { uart->uart.writeLine("ERR > Number of arguments does not match."); }
+                    else
+                    {
+                        uint8_t id[FLASH_UNIQUE_ID_SIZE_BYTES];
+                        flash::getID(id);
+                        for(uint8_t idBF:id) { uart->uart.write(Convert::ToString(idBF,16,2)); }
+                        uart->uart.writeLine("");
                     }
                     break;
                 case pcabCMD::cmdCode::NONE:

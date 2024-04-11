@@ -1,33 +1,5 @@
 #include "flash_library.hpp"
 
-uint32_t blockAddress(const uint16_t &blockNum) { return blockNum * (UINT16_MAX + 1); }
-
-void writeROMblock(uint32_t address, const uint8_t blockDAT[FLASH_PAGE_SIZE])
-{
-    const uint32_t FLASH_TARGET_OFFSET = address;
-    uint32_t ints = save_and_disable_interrupts();
-    flash_range_erase(FLASH_TARGET_OFFSET, FLASH_SECTOR_SIZE);
-    flash_range_program(FLASH_TARGET_OFFSET, blockDAT, FLASH_PAGE_SIZE);
-    restore_interrupts(ints);
-}
-
-void readROMblock(uint32_t address, uint8_t blockDAT[FLASH_PAGE_SIZE])
-{
-    const uint32_t FLASH_TARGET_OFFSET = address;
-    const uint8_t *flash_target_contents = (const uint8_t *) (XIP_BASE + FLASH_TARGET_OFFSET);
-    for(int i = 0 ; i < (int)FLASH_PAGE_SIZE ; i++){
-        blockDAT[i] = flash_target_contents[i];
-    }
-}
-
-void eraseROMblock(uint32_t address)
-{
-    const uint32_t FLASH_TARGET_OFFSET = address;
-    uint32_t ints = save_and_disable_interrupts();
-    flash_range_erase(FLASH_TARGET_OFFSET, FLASH_SECTOR_SIZE);
-    restore_interrupts(ints);
-}
-
 void flash::getID(uint8_t id_out[FLASH_UNIQUE_ID_SIZE_BYTES]) { flash_get_unique_id(id_out); }
 
 bool flash::eraseROM(const uint32_t &address)
@@ -77,7 +49,6 @@ bool flash::ReadROM(const uint16_t &blockNum, const uint8_t &sectorNum, const ui
     if(0x10u < sectorNum || 0x10u < pageNum) { return false; }
     return flash::ReadROM(blockNum * FLASH_BLOCK_SIZE + sectorNum * FLASH_SECTOR_SIZE + pageNum * FLASH_PAGE_SIZE, pageDAT);
 }
-
 
 bool flash::overwriteROM(const uint32_t &address, const uint8_t sectorDAT[FLASH_SECTOR_SIZE])
 {

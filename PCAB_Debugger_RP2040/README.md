@@ -70,6 +70,7 @@ LMEM ({x}) | Load state to memory(ROM).<br>To load the default settings, set {x}
 GetMODE | Get boot mode.
 GetIDN | Get device identification character.
 *IDN? | Same as GetIDN.
+GetRID | Get ROM identification character.
 ECHO {0/1/false/true} | Set echo mode.<br>*Do not enable it if you are connected to multiple devices.*<br>{1/true} : With echo.<br>{0/false} : Without echo.
 CUI {0/1/false/true} | CUI Control Use<br>{1/true} : CUI MODE<br>{0/false} : GUI MODE<br>Default is CUI MODE.
 RST | Restore factory default settings.<br>*PS all 0<br>DSA all 2dB(No,0 = 0dB)<br>STB all 0(RUN MODE)<br>LPM 0(Full Power MODE)*
@@ -83,9 +84,10 @@ Reboot | Reload setup function.
 Command | Description
 :--|:--
 SetSN {x} | *Can only be changed in maintenance mode.*<br>Set Bord SN.<br>{x} : Serial Number strings.
-RROM ({x}) | Read data block from ROM.<br>{x} : Decimal ROM block number.
-WROM ({x}) {HEX} | Write data block to ROM.<br>{x} : Decimal ROM block number.<br>{HEX} : HEX data to write.
-EROM ({x}) | Erase data block from ROM.<br>{x} : Decimal ROM block number.
+RROM {x-y-z} | Read data page from ROM.<br>{x-y-z} : Specify the block number, sector number, and page number in decimal format, separated by "-".
+WROM {x-y-z} {HEX} | Write data page to ROM.<br>{x-y-z} : Specify the block number, sector number, and page number in decimal format, separated by "-".<br>{HEX} : HEX data to write.<br>*Data will not be erased.*
+EROM {x-y} | Erase data page from ROM.<br>{x} : Specify the block number and sector number as decimal format separated by "-".
+OROM {x-y} {HEX} | Overwrite data sector to ROM.<br>{x-y} : Specify the block number and sector number as decimal format separated by "-".<br>{HEX} : HEX data to write.<br>*Data is written after erasing.*
 
 </details>
 

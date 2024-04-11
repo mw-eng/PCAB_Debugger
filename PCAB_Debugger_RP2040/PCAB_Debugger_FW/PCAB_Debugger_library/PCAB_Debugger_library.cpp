@@ -54,6 +54,7 @@ pcabCMD::CommandLine pcabCMD::readCMD(bool echo)
     if (String::strCompare(cmd, "LMEM", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdCode::LoadMEM, strArr, cmdBF.argments.size()); }
     if (String::strCompare(cmd, "RROM", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdCode::ReadROM, strArr, cmdBF.argments.size()); }
     if (String::strCompare(cmd, "WROM", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdCode::WriteROM, strArr, cmdBF.argments.size()); }
+    if (String::strCompare(cmd, "OROM", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdCode::OverwriteROM, strArr, cmdBF.argments.size()); }
     if (String::strCompare(cmd, "EROM", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdCode::EraseROM, strArr, cmdBF.argments.size()); }
     if (String::strCompare(cmd, "SetSN", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdCode::SetSN, strArr, cmdBF.argments.size()); }
     if (String::strCompare(cmd, "RST", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdCode::RST, strArr, cmdBF.argments.size()); }
@@ -64,6 +65,7 @@ pcabCMD::CommandLine pcabCMD::readCMD(bool echo)
     if (String::strCompare(cmd, "ReBOOT", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdCode::Reboot, strArr, cmdBF.argments.size()); }
     if (String::strCompare(cmd, "GetIDN", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdCode::GetIDN, strArr, cmdBF.argments.size()); }
     if (String::strCompare(cmd, "*IDN?", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdCode::GetIDN, strArr, cmdBF.argments.size()); }
+    if (String::strCompare(cmd, "GetRID", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdCode::GetRID, strArr, cmdBF.argments.size()); }
     else { return pcabCMD::CommandLine(cmdBF.serialNum, cmdCode::NONE, strArr, cmdBF.argments.size()); }
 }
 
