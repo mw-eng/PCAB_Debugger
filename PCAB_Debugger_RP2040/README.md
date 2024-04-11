@@ -88,7 +88,9 @@ Command | Description
 :--|:--
 SetSN {x} | *Can only be changed in maintenance mode.*<br>Set Bord SN.<br>{x} : Serial Number strings.
 RROM {x-y-z} | Read data page from ROM.<br>{x-y-z} : Specify the block number, sector number, and page number in decimal format, separated by "-".
+RROM {x-yz} | Read data page from ROM.<br>{x-yz} : Specify the *block number, *sector number + page number* in decimal format, separated by "-".
 WROM {x-y-z} {HEX} | Write data page to ROM.<br>{x-y-z} : Specify the block number, sector number, and page number in decimal format, separated by "-".<br>{HEX} : HEX data to write.<br>*Data will not be erased.*
+WROM {x-yz} {HEX} | Write data page to ROM.<br>{x-yz} : Specify the *block number*, *sector number + page number* in decimal format, separated by "-".<br>{HEX} : HEX data to write.<br>*Data will not be erased.*
 EROM {x-y} | Erase data page from ROM.<br>{x} : Specify the block number and sector number as decimal format separated by "-".
 OROM {x-y} {HEX} | Overwrite data sector to ROM.<br>{x-y} : Specify the block number and sector number as decimal format separated by "-".<br>{HEX} : HEX data to write.<br>*Data is written after erasing.*
 

@@ -508,7 +508,23 @@ int main()
                     if(cmd.argments.size() != 1) { uart->uart.writeLine("ERR > Number of arguments does not match."); }
                     else
                     {
-                        uart->uart.writeLine("ERR > Unimplemented.");
+                        uint16_t blockNum;
+                        uint8_t sectorNum, pageNum;
+                        std::vector<std::string> strVect = String::split(cmd.argments[0], '-');
+                        if(strVect.size() != 3) { uart->uart.writeLine("ERR > Argument error."); break; }
+                        if(!Convert::TryToUInt16(strVect[0], 10, blockNum)) { uart->uart.writeLine("ERR > Block number error."); break; }
+                        if(!Convert::TryToUInt8(strVect[1], 10, sectorNum)) { uart->uart.writeLine("ERR > Sector number error."); break; }
+                        if(!Convert::TryToUInt8(strVect[2], 10, pageNum)) { uart->uart.writeLine("ERR > Page number error."); break; }
+                        uint8_t romDAT[FLASH_PAGE_SIZE];
+                        if(!flash::readROM(blockNum, sectorNum, pageNum, romDAT)) { uart->uart.writeLine("ERR > Address error."); break; }
+                        if(modeCUI && FLASH_PAGE_SIZE % 16 == 0)
+                        {
+                            for(uint16_t i = 0 ; i < FLASH_PAGE_SIZE ; i += 16 )
+                            {
+                                for(uint8_t j = 0 ; j < 15 ; j++) { uart->uart.write(Convert::ToString(romDAT[i + j], 16, 2) + " "); }
+                                uart->uart.writeLine(Convert::ToString(romDAT[i + 15], 16, 2));
+                            }
+                        } else { for(uint8_t byteBF : romDAT) { uart->uart.write(Convert::ToString(byteBF, 16, 2)); } uart->uart.writeLine(""); }
                     }
                     break;
                 case pcabCMD::cmdCode::WriteROM:
@@ -606,10 +622,8 @@ int main()
                     if(cmd.argments.size() != 0) { uart->uart.writeLine("ERR > Number of arguments does not match."); }
                     else
                     {
-                        uint8_t id[FLASH_UNIQUE_ID_SIZE_BYTES];
-                        flash::getID(id);
-                        for(uint8_t idBF:id) { uart->uart.write(Convert::ToString(idBF,16,2)); }
-                        uart->uart.writeLine("");
+                        if(modeCUI) { uart->uart.write("ROM ID > "); }
+                        uart->uart.writeLine(Convert::ToString(romID, 16, 16));
                     }
                     break;
                 case pcabCMD::cmdCode::NONE:

@@ -68,6 +68,6 @@ uartSYNC::CommandLine uartSYNC::readCMD(bool echo)
     }
     std::string strArr[strVect.size()];
     std::copy(strVect.begin(), strVect.end(), strArr);
-    return uartSYNC::CommandLine(romID, serialNum, strBf, strArr, strVect.size());
+    return uartSYNC::CommandLine(serialNum, romID, strBf, strArr, strVect.size());
 }
 
