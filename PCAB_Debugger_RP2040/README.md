@@ -107,11 +107,11 @@ Number | SW6 | SW5 | SW4 | SW3 | SW2 | SW1 | HEX | Stateus | Description
 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0x00 | Default | Default Status Boot.<br>*DPS = ALL 0deg / DSA = ALL 2dB / ALL Active Mode*
 1 | 0 | 0 | 0 | 0 | 0 | 1 | 0x01 | Auto Load boot. | Load the state (0) saved in ROM and boot.<br>*Picture Stateus*
 2 | 0 | 0 | 0 | 0 | 1 | 0 | 0x02 | Allow settings to be saved. | Settins can be write in ROM.
-3 | 0 | 0 | 0 | 0 | 1 | 1 | 0x03 | Auto Load boot.<br>and<br>Allow settings to be saved. | Allows to start autoload and save settings.<br>*Basic usage conditions 1*
-4 | 0 | 0 | 0 | 1 | 0 | 0 | 0x04 | Allow writing to ROM. | Allows writing to user-usable areas of ROM.
-5 | 0 | 0 | 0 | 1 | 0 | 1 | 0x05 | Allow writing to ROM<br>and<br>Auto Load boot. | 0x01 + 0x04
-6 | 0 | 0 | 0 | 1 | 1 | 0 | 0x06 | Allow writing to ROM<br>and<br>Allow settings to be saved. | 0x02 + 0x04
-7 | 0 | 0 | 0 | 1 | 1 | 1 | 0x07 | Allow writing to ROM<br>and<br>Allow settings to be saved<br>and<br>Auto Load boot. | 0x01 + 0x02 + 0x04<br>*Basic usage conditions 2*
+3 | 0 | 0 | 0 | 0 | 1 | 1 | 0x03 | Auto Load boot.<br>and<br>Allow settings to be saved. | Allows to start autoload and save settings.<br>*Basic usage conditions *
+4 | 0 | 0 | 0 | 1 | 0 | 0 | 0x04 | State4 | Unused.
+5 | 0 | 0 | 0 | 1 | 0 | 1 | 0x05 | State5 | Unused.
+6 | 0 | 0 | 0 | 1 | 1 | 0 | 0x06 | State6 | Unused.
+7 | 0 | 0 | 0 | 1 | 1 | 1 | 0x07 | State7 | Unused.
 8 | 0 | 0 | 1 | 0 | 0 | 0 | 0x08 | State8 | Unused.
 9 | 0 | 0 | 1 | 0 | 0 | 1 | 0x09 | State9 | Unused.
 10 | 0 | 0 | 1 | 0 | 1 | 0 | 0x0A | State10 | Unused.
