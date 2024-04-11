@@ -526,7 +526,7 @@ int main()
                             { uart->uart.writeLine("ERR > Write data error."); break; }
                         }
                         if(!flash::writeROM(blockNum, sectorpageNum, romDAT)) { uart->uart.writeLine("ERR > Address error."); break; }
-                        uart->uart.writeLine("DONE > Write ROM block " + Convert::ToString(blockNum, 16, 1) + " - sector " + Convert::ToString(sectorpageNum / 0x100u, 16, 1) + " - page " + Convert::ToString(sectorpageNum % 0x100u, 16, 1) + ".");
+                        uart->uart.writeLine("DONE > Write ROM block " + Convert::ToString(blockNum, 16, 2) + " - sector " + Convert::ToString(sectorpageNum / 0x10u, 16, 1) + " - page " + Convert::ToString(sectorpageNum % 0x10u, 16, 1) + ".");
                     }
                     break;
                 case pcabCMD::cmdCode::EraseROM:
@@ -541,7 +541,7 @@ int main()
                         if(!Convert::TryToUInt8(strVect[1], 16, sectorNum)) { uart->uart.writeLine("ERR > Sector number error."); break; }
                         if(!romAddressRangeCheck(blockNum, sectorNum)) { uart->uart.writeLine("ERR > Address is outside the range specified in boot mode."); break; }
                         if(!flash::eraseROM(blockNum, sectorNum)) { uart->uart.writeLine("ERR > Address error."); break; }
-                        uart->uart.writeLine("DONE > Erase ROM block " + Convert::ToString(blockNum, 16, 1) + " - sector " + Convert::ToString(sectorNum, 16, 1) + ".");
+                        uart->uart.writeLine("DONE > Erase ROM block " + Convert::ToString(blockNum, 16, 2) + " - sector " + Convert::ToString(sectorNum, 16, 1) + ".");
                     }
                     break;
                 case pcabCMD::cmdCode::OverwriteROM:
