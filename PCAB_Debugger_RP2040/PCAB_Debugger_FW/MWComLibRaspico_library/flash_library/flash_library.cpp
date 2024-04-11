@@ -34,7 +34,7 @@ bool flash::writeROM(const uint16_t &blockNum, const uint8_t &sectorNum, const u
     return flash::writeROM(blockNum * FLASH_BLOCK_SIZE + sectorNum * FLASH_SECTOR_SIZE + pageNum * FLASH_PAGE_SIZE, pageDAT);
 }
 
-bool flash::ReadROM(const uint32_t &address, uint8_t pageDAT[FLASH_PAGE_SIZE])
+bool flash::readROM(const uint32_t &address, uint8_t pageDAT[FLASH_PAGE_SIZE])
 {
     if((address & (FLASH_PAGE_SIZE - 1)) != 0) { return false; }
     if(PICO_FLASH_SIZE_BYTES < address) { return false; }
@@ -42,12 +42,12 @@ bool flash::ReadROM(const uint32_t &address, uint8_t pageDAT[FLASH_PAGE_SIZE])
     for(int i = 0 ; i < (int)FLASH_PAGE_SIZE ; i++){pageDAT[i] = flash_target_contents[i];}
     return true;
 }
-bool flash::ReadROM(const uint16_t &blockNum, const uint8_t &sectorpageNum, uint8_t pageDAT[FLASH_PAGE_SIZE])
-{return flash::ReadROM(blockNum * FLASH_BLOCK_SIZE + sectorpageNum * FLASH_PAGE_SIZE, pageDAT);}
-bool flash::ReadROM(const uint16_t &blockNum, const uint8_t &sectorNum, const uint8_t &pageNum, uint8_t pageDAT[FLASH_PAGE_SIZE])
+bool flash::readROM(const uint16_t &blockNum, const uint8_t &sectorpageNum, uint8_t pageDAT[FLASH_PAGE_SIZE])
+{return flash::readROM(blockNum * FLASH_BLOCK_SIZE + sectorpageNum * FLASH_PAGE_SIZE, pageDAT);}
+bool flash::readROM(const uint16_t &blockNum, const uint8_t &sectorNum, const uint8_t &pageNum, uint8_t pageDAT[FLASH_PAGE_SIZE])
 {
     if(0x10u < sectorNum || 0x10u < pageNum) { return false; }
-    return flash::ReadROM(blockNum * FLASH_BLOCK_SIZE + sectorNum * FLASH_SECTOR_SIZE + pageNum * FLASH_PAGE_SIZE, pageDAT);
+    return flash::readROM(blockNum * FLASH_BLOCK_SIZE + sectorNum * FLASH_SECTOR_SIZE + pageNum * FLASH_PAGE_SIZE, pageDAT);
 }
 
 bool flash::overwriteROM(const uint32_t &address, const uint8_t sectorDAT[FLASH_SECTOR_SIZE])

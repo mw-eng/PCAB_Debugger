@@ -10,15 +10,12 @@ class flash
     static bool writeROM(const uint32_t &address, const uint8_t pageDAT[FLASH_PAGE_SIZE]);
     static bool writeROM(const uint16_t &blockNum, const uint8_t &sectorpageNum, const uint8_t pageDAT[FLASH_PAGE_SIZE]);
     static bool writeROM(const uint16_t &blockNum, const uint8_t &sectorNum, const uint8_t &pageNum, const uint8_t pageDAT[FLASH_PAGE_SIZE]);
-    static bool ReadROM(const uint32_t &address, uint8_t pageDAT[FLASH_PAGE_SIZE]);
-    static bool ReadROM(const uint16_t &blockNum, const uint8_t &sectorpageNum, uint8_t pageDAT[FLASH_PAGE_SIZE]);
-    static bool ReadROM(const uint16_t &blockNum, const uint8_t &sectorNum, const uint8_t &pageNum, uint8_t pageDAT[FLASH_PAGE_SIZE]);
-    static bool overwriteROM(const uint32_t &address, const uint8_t sectorDAT[8 * FLASH_PAGE_SIZE]);
-
-    /// @brief 
-    /// @param blockNum 
-    /// @param sectorpageNum 
-    /// @param sectorDAT 
-    /// @return 
-    static bool overwriteROM(const uint16_t &blockNum, const uint8_t &sectorpageNum, const uint8_t sectorDAT[8 * FLASH_PAGE_SIZE]);
+    static bool readROM(const uint32_t &address, uint8_t pageDAT[FLASH_PAGE_SIZE]);
+    static bool readROM(const uint16_t &blockNum, const uint8_t &sectorpageNum, uint8_t pageDAT[FLASH_PAGE_SIZE]);
+    static bool readROM(const uint16_t &blockNum, const uint8_t &sectorNum, const uint8_t &pageNum, uint8_t pageDAT[FLASH_PAGE_SIZE]);
+    static bool overwriteROM(const uint32_t &address, const uint8_t sectorDAT[FLASH_SECTOR_SIZE]);
+    static bool overwriteROM(const uint16_t &blockNum, const uint8_t &sectorpageNum, const uint8_t sectorDAT[FLASH_SECTOR_SIZE]);
+    static bool overwriteROM(const uint32_t &address, const uint8_t sectorDAT[FLASH_SECTOR_SIZE]);
+    static bool overwriteROMblock(const uint16_t &blockNum, const uint8_t sectorDAT[FLASH_BLOCK_SIZE]);
+    static bool overwriteROMall(const uint8_t sectorDAT[PICO_FLASH_SIZE_BYTES]);
 };
