@@ -10,7 +10,7 @@
 #define ROM_BLOCK_NUM PICO_FLASH_SIZE_BYTES / 65536
 const static std::string FW_VENDOR = "Orient Microwave Corp.";
 const static std::string FW_MODEL = "LX00-0004-00";
-const static std::string FW_REV = "1.1.1";
+const static std::string FW_REV = "1.1.2";
 
 
 ds18b20 *sens;

@@ -29,7 +29,7 @@
                 <DataGridTextColumn Header="0C" Binding="{Binding dat0C}" Width="SizeToHeader" FontFamily="Consolas" FontSize="20"/>
                 <DataGridTextColumn Header="0D" Binding="{Binding dat0D}" Width="SizeToHeader" FontFamily="Consolas" FontSize="20"/>
                 <DataGridTextColumn Header="0E" Binding="{Binding dat0E}" Width="SizeToHeader" FontFamily="Consolas" FontSize="20"/>
-                <DataGridTextColumn Header="0F" Binding="{Binding dat00}" Width="SizeToHeader" FontFamily="Consolas" FontSize="20"/>
+                <DataGridTextColumn Header="0F" Binding="{Binding dat0F}" Width="SizeToHeader" FontFamily="Consolas" FontSize="20"/>
                 <DataGridTextColumn Header="0123456789ABCDEF" Binding="{Binding datSTR}" Width="Auto" FontFamily="Consolas" FontSize="20" IsReadOnly="True"/>
             </DataGrid.Columns>
         </DataGrid>
@@ -38,7 +38,7 @@
                 <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="0" x:Name="RELOAD" Margin="5" Click="RELOAD_Click"><Viewbox Margin="5"><TextBlock>RESET</TextBlock></Viewbox></Button>
+            <Button Grid.Column="0" x:Name="RELOAD" Margin="5" Click="RELOAD_Click"><Viewbox Margin="5"><TextBlock>RESET Data</TextBlock></Viewbox></Button>
             <Button Grid.Column="1" x:Name="WRITE" Margin="5" Click="WRITE_Click"><Viewbox Margin="5"><TextBlock>WRITE MEMORY</TextBlock></Viewbox></Button>
         </Grid>
     </Grid>
