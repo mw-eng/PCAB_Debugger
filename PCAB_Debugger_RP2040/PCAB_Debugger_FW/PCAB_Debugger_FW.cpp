@@ -511,10 +511,13 @@ int main()
                         uint16_t blockNum;
                         uint8_t sectorNum, pageNum;
                         std::vector<std::string> strVect = String::split(cmd.argments[0], '-');
+                        if(strVect.size() == 3)
+                        {
+                            if(!Convert::TryToUInt16(strVect[0], 10, blockNum)) { uart->uart.writeLine("ERR > Block number error."); break; }
+                            if(!Convert::TryToUInt8(strVect[1], 10, sectorNum)){ uart->uart.writeLine("ERR > Sector number error."); break; }
+                            if(!Convert::TryToUInt8(strVect[2], 10, pageNum)) { uart->uart.writeLine("ERR > Page number error."); break; }
+                        }
                         if(strVect.size() != 3) { uart->uart.writeLine("ERR > Argument error."); break; }
-                        if(!Convert::TryToUInt16(strVect[0], 10, blockNum)) { uart->uart.writeLine("ERR > Block number error."); break; }
-                        if(!Convert::TryToUInt8(strVect[1], 10, sectorNum)) { uart->uart.writeLine("ERR > Sector number error."); break; }
-                        if(!Convert::TryToUInt8(strVect[2], 10, pageNum)) { uart->uart.writeLine("ERR > Page number error."); break; }
                         uint8_t romDAT[FLASH_PAGE_SIZE];
                         if(!flash::readROM(blockNum, sectorNum, pageNum, romDAT)) { uart->uart.writeLine("ERR > Address error."); break; }
                         if(modeCUI && FLASH_PAGE_SIZE % 16 == 0)
