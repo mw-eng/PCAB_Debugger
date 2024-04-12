@@ -43,6 +43,7 @@
 #define SPI_BITS 6
 #define SPI_ORDER false // 0:LSB / 1:MSB
 
+void software_reset();
 void setup();
 void close();
 void writeDPS();

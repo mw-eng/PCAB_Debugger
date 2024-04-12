@@ -56,6 +56,7 @@ pcabCMD::CommandLine pcabCMD::readCMD(bool echo)
     if (String::strCompare(cmd, "WROM", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdBF.romID, cmdCode::WriteROM, strArr, cmdBF.argments.size()); }
     if (String::strCompare(cmd, "OROM", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdBF.romID, cmdCode::OverwriteROM, strArr, cmdBF.argments.size()); }
     if (String::strCompare(cmd, "EROM", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdBF.romID, cmdCode::EraseROM, strArr, cmdBF.argments.size()); }
+    if (String::strCompare(cmd, "UROM", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdBF.romID, cmdCode::UpdateROM, strArr, cmdBF.argments.size()); }
     if (String::strCompare(cmd, "SetSN", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdBF.romID, cmdCode::SetSN, strArr, cmdBF.argments.size()); }
     if (String::strCompare(cmd, "RST", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdBF.romID, cmdCode::RST, strArr, cmdBF.argments.size()); }
     if (String::strCompare(cmd, "*RST", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdBF.romID, cmdCode::RST, strArr, cmdBF.argments.size()); }

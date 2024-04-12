@@ -50,24 +50,6 @@ bool flash::readROM(const uint16_t &blockNum, const uint8_t &sectorNum, const ui
     return flash::readROM(blockNum * FLASH_BLOCK_SIZE + sectorNum * FLASH_SECTOR_SIZE + pageNum * FLASH_PAGE_SIZE, pageDAT);
 }
 
-
-bool flash::overwriteROM(const uint8_t sectorDAT[PICO_FLASH_SIZE_BYTES], const uint32_t &address, const size_t &count)
-{
-    if((address & (FLASH_SECTOR_SIZE - 1)) != 0) { return false; }
-    if(PICO_FLASH_SIZE_BYTES < address + count) { return false; }
-    if(count % FLASH_SECTOR_SIZE != 0) { return false; }
-    uint32_t ints = save_and_disable_interrupts();
-    flash_range_erase(address, count);
-    flash_range_program(address, sectorDAT, count);
-    restore_interrupts(ints);
-    return true;
-}
-bool flash::overwriteROM(const uint8_t sectorDAT[PICO_FLASH_SIZE_BYTES], const uint16_t &blockNum, const uint8_t &sectorNum, const size_t &count)
-{
-    if(0x0Fu < sectorNum) { return false; }
-    return flash::overwriteROM(sectorDAT, blockNum * FLASH_BLOCK_SIZE + sectorNum * FLASH_SECTOR_SIZE, count);
-}
-
 bool flash::overwriteROMsector(const uint32_t &address, const uint8_t sectorDAT[FLASH_SECTOR_SIZE])
 {
     if((address & (FLASH_SECTOR_SIZE - 1)) != 0) { return false; }
@@ -107,4 +89,10 @@ bool flash::overwriteROMpage(const uint16_t &blockNum, const uint8_t &sectorNum,
 {
     if(0x0Fu < sectorNum || 0x0Fu < pageNum) { return false; }
     return flash::overwriteROMpage(blockNum * FLASH_BLOCK_SIZE + sectorNum * FLASH_SECTOR_SIZE + pageNum * FLASH_PAGE_SIZE, pageDAT);
+}
+
+
+void flash::updateROM(const uint32_t &targetAddr, const uint32_t &sourceAddr, const size_t &count)
+{
+    
 }

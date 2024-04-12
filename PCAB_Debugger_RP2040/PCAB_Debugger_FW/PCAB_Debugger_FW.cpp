@@ -532,8 +532,32 @@ int main()
                     break;
                 case pcabCMD::cmdCode::OverwriteROM:
                     if(cmd.argments.size() != 2) { uart->uart.writeLine("ERR > Number of arguments does not match."); }
+                    else
                     {
-                        uart->uart.writeLine("ERR > Unimplemented.");
+                        uint16_t blockNum;
+                        uint8_t sectorpageNum;
+                        std::vector<std::string> strVect = String::split(cmd.argments[0], '-');
+                        if(strVect.size() != 2) { uart->uart.writeLine("ERR > Argument error."); break; }
+                        if(!Convert::TryToUInt16(strVect[0], 16, blockNum)) { uart->uart.writeLine("ERR > Block number error."); break; }
+                        if(!Convert::TryToUInt8(strVect[1], 16, sectorpageNum)) { uart->uart.writeLine("ERR > Sector + Page number error."); break; }
+                        if(!romAddressRangeCheck(blockNum, sectorpageNum)) { uart->uart.writeLine("ERR > Address is outside the range specified in boot mode."); break; }
+                        if(cmd.argments[1].length() != 2 * FLASH_PAGE_SIZE){ uart->uart.writeLine("ERR > Write data length mismatch"); break; }
+                        uint8_t romDAT[FLASH_PAGE_SIZE];
+                        for( uint i = 0 ; i < FLASH_PAGE_SIZE ; i++ )
+                        {
+                            if(!Convert::TryToUInt8(cmd.argments[1].substr(2 * i, 2) , 16, romDAT[i]))
+                            { uart->uart.writeLine("ERR > Write data error."); break; }
+                        }
+                        if(!flash::overwriteROMpage(blockNum, sectorpageNum, romDAT)) { uart->uart.writeLine("ERR > Address error."); break; }
+                        uart->uart.writeLine("DONE > Write ROM block " + Convert::ToString(blockNum, 16, 2) + " - sector " + Convert::ToString(sectorpageNum / 0x10u, 16, 1) + " - page " + Convert::ToString(sectorpageNum % 0x10u, 16, 1) + ".");
+                    }
+                    break;
+                case pcabCMD::cmdCode::UpdateROM:
+                    if(cmd.argments.size() != 2) { uart->uart.writeLine("ERR > Number of arguments does not match."); }
+                    else
+                    {
+                        if(cmd.argments[1] != FW_MODEL) { uart->uart.writeLine("ERR > Update code error."); break; }
+                        
                     }
                     break;
                 case pcabCMD::cmdCode::SetSN:
@@ -602,7 +626,7 @@ int main()
                     break;
                 case pcabCMD::cmdCode::Reboot:
                     if(cmd.argments.size() != 0) { uart->uart.writeLine("ERR > Number of arguments does not match."); }
-                    setup();
+                    software_reset();
                     break;
                 case pcabCMD::cmdCode::GetIDN:
                     if(cmd.argments.size() != 0) { uart->uart.writeLine("ERR > Number of arguments does not match."); }
@@ -636,6 +660,11 @@ int main()
     }
     close();
     return 0;
+}
+
+void software_reset()
+{
+    *((volatile uint32_t*)(PPB_BASE + 0x0ED0C)) = 0x5FA0004;
 }
 
 void close()

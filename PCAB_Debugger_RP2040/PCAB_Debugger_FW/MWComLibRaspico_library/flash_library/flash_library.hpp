@@ -14,11 +14,10 @@ class flash
     static bool readROM(const uint32_t &address, uint8_t pageDAT[FLASH_PAGE_SIZE]);
     static bool readROM(const uint16_t &blockNum, const uint8_t &sectorpageNum, uint8_t pageDAT[FLASH_PAGE_SIZE]);
     static bool readROM(const uint16_t &blockNum, const uint8_t &sectorNum, const uint8_t &pageNum, uint8_t pageDAT[FLASH_PAGE_SIZE]);
-    static bool overwriteROM(const uint8_t sectorDAT[PICO_FLASH_SIZE_BYTES], const uint32_t &address, const size_t &count);
-    static bool overwriteROM(const uint8_t sectorDAT[PICO_FLASH_SIZE_BYTES], const uint16_t &blockNum, const uint8_t &sectorNum, const size_t &count);
     static bool overwriteROMsector(const uint32_t &address, const uint8_t sectorDAT[FLASH_SECTOR_SIZE]);
     static bool overwriteROMsector(const uint16_t &blockNum, const uint8_t &sectorpageNum, const uint8_t sectorDAT[FLASH_SECTOR_SIZE]);
     static bool overwriteROMpage(const uint32_t &address, const uint8_t pageDAT[FLASH_PAGE_SIZE]);
     static bool overwriteROMpage(const uint16_t &blockNum, const uint8_t &sectorpageNum, const uint8_t pageDAT[FLASH_PAGE_SIZE]);
     static bool overwriteROMpage(const uint16_t &blockNum, const uint8_t &sectorNum, const uint8_t &pageNum, const uint8_t pageDAT[FLASH_PAGE_SIZE]);
+    static void updateROM(const uint32_t &targetAddr, const uint32_t &sourceAddr, const size_t &count);
 };
