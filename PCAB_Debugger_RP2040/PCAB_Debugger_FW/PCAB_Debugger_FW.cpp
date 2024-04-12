@@ -1,6 +1,6 @@
-//#define DEBUG_BOOT_MODE 0x01
+#define DEBUG_BOOT_MODE 0x03
 //#define DEBUG_BOOT_MODE 0x20
-#define DEBUG_BOOT_MODE 0x2A
+//#define DEBUG_BOOT_MODE 0x2A
 
 #include "PCAB_Debugger_FW.hpp"
 #define SNPRINTF_BUFFER_LEN 50
@@ -550,20 +550,6 @@ int main()
                         }
                         if(!flash::overwriteROMpage(blockNum, sectorpageNum, romDAT)) { uart->uart.writeLine("ERR > Address error."); break; }
                         uart->uart.writeLine("DONE > Write ROM block " + Convert::ToString(blockNum, 16, 2) + " - sector " + Convert::ToString(sectorpageNum / 0x10u, 16, 1) + " - page " + Convert::ToString(sectorpageNum % 0x10u, 16, 1) + ".");
-                    }
-                    break;
-                case pcabCMD::cmdCode::UpdateROM:
-                    if(cmd.argments.size() != 3) { uart->uart.writeLine("ERR > Number of arguments does not match."); }
-                    else
-                    {
-                        if(bootMode != 0x2A) { uart->uart.writeLine("ERR > Boot mode error"); break; }
-                        uint32_t targetAddr;
-                        uint32_t sourceAddr;
-                        uint32_t count;
-                        if(!Convert::TryToUInt32(cmd.argments[0], 16, targetAddr) || !Convert::TryToUInt32(cmd.argments[1], 16, sourceAddr) || !Convert::TryToUInt32(cmd.argments[2], 16, count))
-                        { uart->uart.writeLine("ERR > Address error."); break; }
-                        if(!flash::updateROM(targetAddr, sourceAddr, count)) { uart->uart.writeLine("ERR > Update failed."); break; }
-                        
                     }
                     break;
                 case pcabCMD::cmdCode::SetSN:

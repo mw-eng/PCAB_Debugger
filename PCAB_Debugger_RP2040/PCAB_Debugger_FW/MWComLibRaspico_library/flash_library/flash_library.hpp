@@ -19,6 +19,4 @@ class flash
     static bool overwriteROMpage(const uint32_t &address, const uint8_t pageDAT[FLASH_PAGE_SIZE]);
     static bool overwriteROMpage(const uint16_t &blockNum, const uint8_t &sectorpageNum, const uint8_t pageDAT[FLASH_PAGE_SIZE]);
     static bool overwriteROMpage(const uint16_t &blockNum, const uint8_t &sectorNum, const uint8_t &pageNum, const uint8_t pageDAT[FLASH_PAGE_SIZE]);
-    static bool moveROM(const uint32_t &targetAddr, const uint32_t &sourceAddr, const uint32_t &count);
-    static bool updateROM(const uint32_t &targetAddr, const uint32_t &sourceAddr, const uint32_t &count);
 };

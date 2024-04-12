@@ -37,7 +37,6 @@ class pcabCMD : uartSYNC
         WriteROM,
         EraseROM,
         OverwriteROM,
-        UpdateROM,
         SetSN,
         RST,
         ECHO,

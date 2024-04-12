@@ -100,7 +100,7 @@ namespace PCAB_Debugger_GUI
                         count++;
                         datBF = br.ReadBytes(datBF.Length);
                     }
-                    _mod.WriteLine("#" + sn + " UROM 0 " + blockNum.ToString("X0") + " " + ((blockNum - 1) * FLASH_BLOCK_SIZE).ToString("X0"));
+                    _mod.WriteLine("#" + sn + " UROM 0 " + (blockNum * FLASH_BLOCK_SIZE).ToString("X0") + " " + ((blockNum - 1) * FLASH_BLOCK_SIZE).ToString("X0"));
                     try
                     {
                         if (_mod.ReadLine().Substring(0, 3) == "ERR")
