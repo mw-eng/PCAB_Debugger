@@ -3,7 +3,7 @@ The main unit firmware. @ RP2040
 
 ## Flash ROM area
 Firmware is stored at the beginning of the flash ROM. The area used varies depending on the firmware capacity.<br>
-The last block is used to store state information and factory settings, the last 16 bytes store the 15-character serial number in ASCII code, and the last byte stores the character count.<br>
+The last block is store STATE information and factory settings, the last 16 bytes store the 15-character serial number in ASCII code, and the last byte stores the character count.<br>
 
 ## RS485 Serial Communication
 Send commands in the order of *#{SERIAL NUMBER}*, *{COMMAND}*, *{ARGUMENTS}*, and *{EXIT CODE}*, separated by space.<br>
@@ -92,10 +92,10 @@ Reboot | Reload setup function.
 Command | Description
 :--|:--
 SetSN {x} | *Can only be changed in maintenance mode.*<br>Set Bord SN.<br>{x} : Serial Number strings.
-RROM {x-yz} | Read data page from ROM.<br>{x-yz} : Specify the *block number(x), *sector number(y) + page number(z)* in hexadecimal format, separated by "-".
-WROM {x-yz} {HEX} | Write data page to ROM.<br>{x-yz} : Specify the *block number(x), *sector number(y) + page number(z)* in hexadecimal format, separated by "-".<br>{HEX} : HEX data to write.<br>*Data will not be erased.*
-EROM {x-y} | Erase data page from ROM.<br>{x} : Specify the *block number(x)* and *sector number(y)* as hexadecimal format separated by "-".
-OROM {x-yz} {HEX} | Overwrite data sector to ROM.<br>{x-yz} : Specify the *block number(x)* and *sector number(y) + page number(z)* as hexadecimal format separated by "-".<br>{HEX} : HEX data to write.<br>*Data is written after erasing.*
+RROM {x-yz} | Read page data from ROM.<br>{x-yz} : Specify the *block number(x), *sector number(y) + page number(z)* in hexadecimal format, separated by "-".
+WROM {x-yz} {HEX} | Write page data to ROM.<br>{x-yz} : Specify the *block number(x), *sector number(y) + page number(z)* in hexadecimal format, separated by "-".<br>{HEX} : HEX data to write.<br>*Data will not be erased.*
+EROM {x-y} | Erase page data from ROM.<br>{x} : Specify the *block number(x)* and *sector number(y)* as hexadecimal format separated by "-".
+OROM {x-yz} {HEX} | Overwrite sector data to ROM.<br>{x-yz} : Specify the *block number(x)* and *sector number(y) + page number(z)* as hexadecimal format separated by "-".<br>{HEX} : HEX data to write.<br>*Data is written after erasing.*
 
 </details>
 
