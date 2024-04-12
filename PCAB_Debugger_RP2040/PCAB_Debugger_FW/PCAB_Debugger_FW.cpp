@@ -33,20 +33,6 @@ bool lowMODE = false;
 #pragma region Private Function
 
 
-std::string readSerialNum()
-{
-    return "";
-    uint8_t romBF[FLASH_PAGE_SIZE];
-    //readROMblock(blockAddress(ROM_BLOCK_NUM - 1), romBF);
-    // Read SERIAL NUMBER
-    std::string serial = "";
-    uint8_t len = romBF[FLASH_PAGE_SIZE - 1];
-    if(len > 16 || len == 0) { return ""; }
-    for(uint i = FLASH_PAGE_SIZE - 16; i < FLASH_PAGE_SIZE - 16 + len ; i ++)
-    { if(isgraph(romBF[i])) { serial.push_back(romBF[i]); } }
-    if(serial.size() == len) { return serial; }
-    else { return ""; }
-}
 
 
 
@@ -554,7 +540,23 @@ int main()
                     if(cmd.argments.size() != 1) { uart->uart.writeLine("ERR > Number of arguments does not match."); }
                     else
                     {
-                        uart->uart.writeLine("ERR > Unimplemented.");
+                        if(cmd.argments[0].size() == 0) { uart->uart.writeLine("ERR > Argument error."); break; }
+                        if(cmd.argments[0].size() > 16) { uart->uart.writeLine("ERR > Serial code is too long. Limit to 15 characters."); break; }
+                        if(!romAddressRangeCheck(PICO_FLASH_SIZE_BYTES / FLASH_BLOCK_SIZE - 1, FLASH_BLOCK_SIZE / FLASH_PAGE_SIZE - 1)) { uart->uart.writeLine("ERR > It is in an unusable state."); break; }
+                        
+                        uint8_t pageBF[FLASH_PAGE_SIZE];
+                        uint8_t sectBF[FLASH_SECTOR_SIZE];
+                        for(uint i = 0; i < FLASH_SECTOR_SIZE / FLASH_PAGE_SIZE - 1u; i++)
+                        {
+                            flash::readROM(PICO_FLASH_SIZE_BYTES - FLASH_SECTOR_SIZE + i * FLASH_PAGE_SIZE, pageBF);
+                            for(uint j = 0; j < FLASH_PAGE_SIZE; j++) { sectBF[i * FLASH_PAGE_SIZE + j] = pageBF[j]; }
+                        }
+                        for(uint i = 0; i < cmd.argments[0].size() ; i ++) { sectBF[FLASH_SECTOR_SIZE - 0x10u + i] = cmd.argments[0][i]; }
+                        for(uint i = cmd.argments[0].size(); i < 0x0Fu; i ++) { sectBF[FLASH_SECTOR_SIZE - 0x10u + i] = 0; }
+                        sectBF[FLASH_SECTOR_SIZE - 1] = cmd.argments[0].size();
+                        flash::overwriteROM(PICO_FLASH_SIZE_BYTES - FLASH_SECTOR_SIZE, sectBF);
+                        serialNum = cmd.argments[0];
+                        uart->uart.writeLine("DONE > Write serial number.");
                     }
                     break;
                 case pcabCMD::cmdCode::RST:
@@ -607,6 +609,7 @@ int main()
                 case pcabCMD::cmdCode::Reboot:
                     if(cmd.argments.size() != 0) { uart->uart.writeLine("ERR > Number of arguments does not match."); }
                     setup();
+                    uart->uart.writeLine("DONE > Reboot completed.");
                     break;
                 case pcabCMD::cmdCode::GetIDN:
                     if(cmd.argments.size() != 0) { uart->uart.writeLine("ERR > Number of arguments does not match."); }
@@ -681,5 +684,19 @@ bool romAddressRangeCheck(const uint16_t &blockNum, const uint8_t &sectorpageNum
         if( PICO_FLASH_SIZE_BYTES - FLASH_BLOCK_SIZE <= addr && addr < PICO_FLASH_SIZE_BYTES - FLASH_SECTOR_SIZE) { return true; }
     }
     return false;
+}
+
+std::string readSerialNum()
+{
+    uint8_t romBF[FLASH_PAGE_SIZE];
+    flash::readROM(PICO_FLASH_SIZE_BYTES - FLASH_PAGE_SIZE, romBF);
+    // Read SERIAL NUMBER
+    std::string serial = "";
+    uint8_t len = romBF[FLASH_PAGE_SIZE - 1];
+    if(len > 16 || len == 0) { return ""; }
+    for(uint i = FLASH_PAGE_SIZE - 16; i < FLASH_PAGE_SIZE - 16 + len ; i ++)
+    { if(isgraph(romBF[i])) { serial.push_back(romBF[i]); } }
+    if(serial.size() == len) { return serial; }
+    else { return ""; }
 }
 
