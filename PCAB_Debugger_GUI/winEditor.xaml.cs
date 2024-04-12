@@ -6,6 +6,7 @@ using System.Data;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using static PCAB_Debugger_GUI.PCAB;
 
 namespace PCAB_Debugger_GUI
@@ -123,40 +124,19 @@ namespace PCAB_Debugger_GUI
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            dataTable.Clear();
-            dataTableNOW.Clear();
-            int block = 0;
             string strBF;
-            strBF = _mod.PCAB_CMD("*", "RROM " + block.ToString(), 1);
+            int block = 0;
+            BLOCK_COMBOBOX.Items.Clear();
+            strBF = _mod.PCAB_CMD("*", "RROM " + block.ToString("X") + "-00", 1);
             while (strBF.Substring(0, 3) != "ERR")
             {
-                for (int i = 0; i < strBF.Length; i += 32)
-                {
-                    if (strBF.Length < i + 32) { break; }
-                    dataTable.Add(new binaryROW((UInt16)(16 * block + i / 32),
-                                    Convert.ToByte(strBF.Substring(i + 0, 2), 16),
-                                    Convert.ToByte(strBF.Substring(i + 2, 2), 16),
-                                    Convert.ToByte(strBF.Substring(i + 4, 2), 16),
-                                    Convert.ToByte(strBF.Substring(i + 6, 2), 16),
-                                    Convert.ToByte(strBF.Substring(i + 8, 2), 16),
-                                    Convert.ToByte(strBF.Substring(i + 10, 2), 16),
-                                    Convert.ToByte(strBF.Substring(i + 12, 2), 16),
-                                    Convert.ToByte(strBF.Substring(i + 14, 2), 16),
-                                    Convert.ToByte(strBF.Substring(i + 16, 2), 16),
-                                    Convert.ToByte(strBF.Substring(i + 18, 2), 16),
-                                    Convert.ToByte(strBF.Substring(i + 20, 2), 16),
-                                    Convert.ToByte(strBF.Substring(i + 22, 2), 16),
-                                    Convert.ToByte(strBF.Substring(i + 24, 2), 16),
-                                    Convert.ToByte(strBF.Substring(i + 26, 2), 16),
-                                    Convert.ToByte(strBF.Substring(i + 28, 2), 16),
-                                    Convert.ToByte(strBF.Substring(i + 30, 2), 16)));
-                }
+                BLOCK_COMBOBOX.Items.Add(block.ToString("X4"));
                 block++;
-                strBF = _mod.PCAB_CMD("*", "RROM " + block.ToString(), 1);
+                strBF = _mod.PCAB_CMD("*", "RROM " + block.ToString("X") + "-00", 1);
             }
-            foreach (binaryROW row in dataTable) { dataTableNOW.Add(row.Copy()); }
-            BINARY_DATAGRID.ItemsSource = dataTable;
-            foreach (DataGridColumn col in BINARY_DATAGRID.Columns) { col.MinWidth = col.ActualWidth; }
+            SECTOR_COMBOBOX.Items.Clear();
+            for(uint i = 0; i < 0x10u; i++) { SECTOR_COMBOBOX.Items.Add((i * 0x10u).ToString("X2")); }
+            reload();
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -179,14 +159,19 @@ namespace PCAB_Debugger_GUI
 
         private void RELOAD_Click(object sender, RoutedEventArgs e)
         {
-            dataTable.Clear();
-            foreach(binaryROW row in dataTableNOW) { dataTable.Add(row.Copy()); }
-            BINARY_DATAGRID.Items.Refresh();
+            reload();
         }
 
         private void WRITE_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void RESET_Click(object sender, RoutedEventArgs e)
+        {
+            dataTable.Clear();
+            foreach (binaryROW row in dataTableNOW) { dataTable.Add(row.Copy()); }
+            BINARY_DATAGRID.Items.Refresh();
         }
 
         private void BLOCK_COMBOBOX_DropDownClosed(object sender, EventArgs e)
@@ -197,6 +182,44 @@ namespace PCAB_Debugger_GUI
         private void SECTOR_COMBOBOX_DropDownClosed(object sender, EventArgs e)
         {
 
+        }
+
+        private void reload()
+        {
+            BLOCK_COMBOBOX.SelectedIndex = 0;
+            SECTOR_COMBOBOX.SelectedIndex = 0;
+
+            dataTable.Clear();
+            dataTableNOW.Clear();
+            for(int page = 0; page < 0x10u; page++)
+            {
+                string strBF = _mod.PCAB_CMD("*", "RROM " + BLOCK_COMBOBOX.Text + "-" + 
+                    (uint.Parse(SECTOR_COMBOBOX.Text, System.Globalization.NumberStyles.HexNumber) + page).ToString("X"), 1);
+                for (int i = 0; i < strBF.Length; i += 32)
+                {
+                    if (strBF.Length < i + 32) { break; }
+                    dataTable.Add(new binaryROW((UInt16)(page * 0x10u + 16u * (uint)i / 32u),
+                        Convert.ToByte(strBF.Substring(i + 0, 2), 16),
+                        Convert.ToByte(strBF.Substring(i + 2, 2), 16),
+                        Convert.ToByte(strBF.Substring(i + 4, 2), 16),
+                        Convert.ToByte(strBF.Substring(i + 6, 2), 16),
+                        Convert.ToByte(strBF.Substring(i + 8, 2), 16),
+                        Convert.ToByte(strBF.Substring(i + 10, 2), 16),
+                        Convert.ToByte(strBF.Substring(i + 12, 2), 16),
+                        Convert.ToByte(strBF.Substring(i + 14, 2), 16),
+                        Convert.ToByte(strBF.Substring(i + 16, 2), 16),
+                        Convert.ToByte(strBF.Substring(i + 18, 2), 16),
+                        Convert.ToByte(strBF.Substring(i + 20, 2), 16),
+                        Convert.ToByte(strBF.Substring(i + 22, 2), 16),
+                        Convert.ToByte(strBF.Substring(i + 24, 2), 16),
+                        Convert.ToByte(strBF.Substring(i + 26, 2), 16),
+                        Convert.ToByte(strBF.Substring(i + 28, 2), 16),
+                        Convert.ToByte(strBF.Substring(i + 30, 2), 16)));
+                }
+            }
+            foreach (binaryROW row in dataTable) { dataTableNOW.Add(row.Copy()); }
+            BINARY_DATAGRID.ItemsSource = dataTable;
+            foreach (DataGridColumn col in BINARY_DATAGRID.Columns) { col.MinWidth = col.ActualWidth; }
         }
     }
 }
