@@ -73,8 +73,6 @@ GetVin | *Support with v1.2.0 or later*<br>Get Vin Value.
 Command | Description
 :--|:--
 SMEM ({x}) ({y-z}\|{z}) | Save state to memory(ROM).<br>However, whether or not it can be saved depends on the boot mode.<br>To save the default setting, set {z} to 0 or unspecified. ({z} can be specified as 0 to 3.)<br>If {y-z} is specified, it will be written to the specified setting number. ({z} can be specified as 0 to 15.)<br>A sector number can be specified for {x}. The sector numbers available to the user are 0 to 13.<br>*14 is the default setting area when no sector number is specified, and 15 is the data storage area at factory shipment.*<br>*By specifying the sector number, you can save 15×16×4 (=960) settings.*
-To save the default setting, set {y} to 0 or unspecified. ({y} can be specified from 0 to 3.)<br>If you specify {x} as {x-x}, write to the specified block number. However, whether or not it can be saved depends on the boot mode.<br> *Block number refers to WROM.
-LMEM ({x}) ({y-z}\|{z}) | Load state to memory(ROM).<br>Arguments are the same as SMEM.
 GetMODE | Get boot mode.
 GetIDN | Get device identification character.
 *IDN? | Same as GetIDN.
