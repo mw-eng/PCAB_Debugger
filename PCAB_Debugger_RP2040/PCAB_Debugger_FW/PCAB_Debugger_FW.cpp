@@ -553,10 +553,17 @@ int main()
                     }
                     break;
                 case pcabCMD::cmdCode::UpdateROM:
-                    if(cmd.argments.size() != 2) { uart->uart.writeLine("ERR > Number of arguments does not match."); }
+                    if(cmd.argments.size() != 3) { uart->uart.writeLine("ERR > Number of arguments does not match."); }
                     else
                     {
-                        uart->uart.writeLine("ERR > Unimplemented.");
+                        if(bootMode != 0x2A) { uart->uart.writeLine("ERR > Boot mode error"); break; }
+                        uint32_t targetAddr;
+                        uint32_t sourceAddr;
+                        uint32_t count;
+                        if(!Convert::TryToUInt32(cmd.argments[0], 16, targetAddr) || !Convert::TryToUInt32(cmd.argments[1], 16, sourceAddr) || !Convert::TryToUInt32(cmd.argments[2], 16, count))
+                        { uart->uart.writeLine("ERR > Address error."); break; }
+                        if(!flash::updateROM(targetAddr, sourceAddr, count)) { uart->uart.writeLine("ERR > Update failed."); break; }
+                        
                     }
                     break;
                 case pcabCMD::cmdCode::SetSN:

@@ -31,6 +31,12 @@ namespace PCAB_Debugger_GUI
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+#if DEBUG
+            winUpdater win = new winUpdater();
+            win.ShowDialog();
+            this.Close();
+#endif
+
             this.Title += " Ver," + System.Diagnostics.FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetExecutingAssembly().Location).ProductVersion;
 #if DEBUG
             Settings.Default.Reset();

@@ -189,9 +189,5 @@ namespace PCAB_Debugger_GUI
 
         }
 
-        private void Changed(SenderEventArgsPair<binaryROW, PropertyChangedEventArgs> pair)
-        {
-            MessageBox.Show("Changed");
-        }
     }
 }
