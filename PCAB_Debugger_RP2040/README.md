@@ -155,7 +155,7 @@ Number | SW6 | SW5 | SW4 | SW3 | SW2 | SW1 | HEX | Stateus | Description
 
 Number | SW6 | SW5 | SW4 | SW3 | SW2 | SW1 | HEX | Stateus | Description
 :--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--
-32 | 1 | 0 | 0 | 0 | 0 | 0 | 0x20 | Factory reset on boot. | If the switch is in this state at startup, the system boots to factory defaults and restore the autoload settings to their initial state.<br>*User available space remains unchanged.*
+32 | 1 | 0 | 0 | 0 | 0 | 0 | 0x20 | Factory reset on boot. | If the switch is in this state at startup, the system boots to factory defaults and restore the autoload settings to their initial state.<br>*Settings outside the default settings area will not be changed.*
 33 | 1 | 0 | 0 | 0 | 0 | 1 | 0x21 | State33 | Unused.
 34 | 1 | 0 | 0 | 0 | 1 | 0 | 0x22 | State34 | Unused.
 35 | 1 | 0 | 0 | 0 | 1 | 1 | 0x23 | State35 | Unused.
