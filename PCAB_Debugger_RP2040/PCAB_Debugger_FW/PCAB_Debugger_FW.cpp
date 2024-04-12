@@ -556,8 +556,7 @@ int main()
                     if(cmd.argments.size() != 2) { uart->uart.writeLine("ERR > Number of arguments does not match."); }
                     else
                     {
-                        if(cmd.argments[1] != FW_MODEL) { uart->uart.writeLine("ERR > Update code error."); break; }
-                        
+                        uart->uart.writeLine("ERR > Unimplemented.");
                     }
                     break;
                 case pcabCMD::cmdCode::SetSN:
