@@ -136,6 +136,8 @@ namespace PCAB_Debugger_GUI
             }
             SECTOR_COMBOBOX.Items.Clear();
             for(uint i = 0; i < 0x10u; i++) { SECTOR_COMBOBOX.Items.Add((i * 0x10u).ToString("X2")); }
+            BLOCK_COMBOBOX.SelectedIndex = 0;
+            SECTOR_COMBOBOX.SelectedIndex = 0;
             reload();
         }
 
@@ -186,9 +188,6 @@ namespace PCAB_Debugger_GUI
 
         private void reload()
         {
-            BLOCK_COMBOBOX.SelectedIndex = 0;
-            SECTOR_COMBOBOX.SelectedIndex = 0;
-
             dataTable.Clear();
             dataTableNOW.Clear();
             for(int page = 0; page < 0x10u; page++)
@@ -198,7 +197,7 @@ namespace PCAB_Debugger_GUI
                 for (int i = 0; i < strBF.Length; i += 32)
                 {
                     if (strBF.Length < i + 32) { break; }
-                    dataTable.Add(new binaryROW((UInt16)(page * 0x10u + 16u * (uint)i / 32u),
+                    dataTable.Add(new binaryROW((UInt16)(page * 0x10u + (uint)i / 32u),
                         Convert.ToByte(strBF.Substring(i + 0, 2), 16),
                         Convert.ToByte(strBF.Substring(i + 2, 2), 16),
                         Convert.ToByte(strBF.Substring(i + 4, 2), 16),
