@@ -31,12 +31,6 @@ namespace PCAB_Debugger_GUI
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-#if DEBUG
-            winUpdater win = new winUpdater();
-            win.ShowDialog();
-            this.Close();
-#endif
-
             this.Title += " Ver," + System.Diagnostics.FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetExecutingAssembly().Location).ProductVersion;
 #if DEBUG
             Settings.Default.Reset();
@@ -109,8 +103,13 @@ namespace PCAB_Debugger_GUI
                     read_conf(SERIAL_NUMBERS_COMBOBOX.Text);
                     if(SERIAL_NUMBERS_COMBOBOX.Text == "*" && _mod.PCAB_CMD("*", "GetMODE", 1) == "0x2A\n")
                     {
-                        Window win = new winEditor(_mod);
-                        win.ShowDialog();
+                        if(MessageBox.Show("Do you want to launch a binary editor?", "Binary editor",MessageBoxButton.YesNo,MessageBoxImage.Question) == MessageBoxResult.Yes)
+                        {
+                            this.Hide();
+                            Window win = new winEditor(_mod);
+                            win.ShowDialog();
+                            this.Show();
+                        }
                     }
                 }
                 else

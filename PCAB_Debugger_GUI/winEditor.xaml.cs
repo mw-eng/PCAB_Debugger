@@ -189,5 +189,14 @@ namespace PCAB_Debugger_GUI
 
         }
 
+        private void BLOCK_COMBOBOX_DropDownClosed(object sender, EventArgs e)
+        {
+
+        }
+
+        private void SECTOR_COMBOBOX_DropDownClosed(object sender, EventArgs e)
+        {
+
+        }
     }
 }
