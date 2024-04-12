@@ -91,7 +91,6 @@ RROM {x-yz} | Read data page from ROM.<br>{x-yz} : Specify the *block number(x),
 WROM {x-yz} {HEX} | Write data page to ROM.<br>{x-yz} : Specify the *block number(x), *sector number(y) + page number(z)* in hexadecimal format, separated by "-".<br>{HEX} : HEX data to write.<br>*Data will not be erased.*
 EROM {x-y} | Erase data page from ROM.<br>{x} : Specify the *block number(x)* and *sector number(y)* as hexadecimal format separated by "-".
 OROM {x-yz} {HEX} | Overwrite data sector to ROM.<br>{x-yz} : Specify the *block number(x)* and *sector number(y) + page number(z)* as hexadecimal format separated by "-".<br>{HEX} : HEX data to write.<br>*Data is written after erasing.*
-UROM {x} {y} {z} | Firmware update.<br>{x} : Target address.<br>{y} : Source address.<br>{z} : Byte length.*Unimplemented.*
 
 </details>
 
