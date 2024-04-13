@@ -80,7 +80,7 @@ void setup()
 
     // Resture STATE @ default.
     for(uint i = 0; i < NUMBER_OF_SYSTEM; i++) { dpsBF[i] = 0u; dsaBF[i] = 8u; }
-    dsaBF[NUMBER_OF_SYSTEM + 1] = 0u;
+    dsaBF[NUMBER_OF_SYSTEM] = 0u;
     stbAMP = false;
     stbDRA = false;
     stbLNA = false;
@@ -573,7 +573,7 @@ int main()
                         if(!readSTATE(15, 0, 0))
                         {
                             for(uint i = 0; i < NUMBER_OF_SYSTEM; i++) { dpsBF[i] = 0u; dsaBF[i] = 8u; }
-                            dsaBF[NUMBER_OF_SYSTEM + 1] = 0u;
+                            dsaBF[NUMBER_OF_SYSTEM] = 0u;
                             stbAMP = false;
                             stbDRA = false;
                             stbLNA = false;
@@ -681,6 +681,7 @@ void writeDSA()
         stBF.push_back(dsaBF[i - 1] ^ 0x3F);
         dsaNOW[i - 1] = dsaBF[i - 1] & 0x3F;
     }
+    dsaNOW[NUMBER_OF_SYSTEM] = dsaBF[NUMBER_OF_SYSTEM];
 //    spi_sa->spi_write_read(stBF);
 }
 
@@ -736,8 +737,8 @@ bool readSTATE(const uint8_t &sectorNum, const uint8_t &pageNum, const uint8_t &
     if((dat[stateNum * 0x40 + NUMBER_OF_SYSTEM] & 0xF0) != 0) { return false; }                                                         // STB & LPW data check
     for(uint i = 0; i < NUMBER_OF_SYSTEM; i++) { if((dat[stateNum * 0x40 + NUMBER_OF_SYSTEM + 1 + i] & 0xC0) != 0) { return false; } }  // DSA(0-15) data check
     if((dat[stateNum * 0x40 + NUMBER_OF_SYSTEM + 1 + NUMBER_OF_SYSTEM] & 0xE0) != 0) { return false; }                                  // DSA(IN) data check
-    ioBF = dat[stateNum * 0x40 + NUMBER_OF_SYSTEM];
     for(uint i = 0; i < NUMBER_OF_SYSTEM; i++) { dpsBF[i] = dat[stateNum * 0x40 + i]; }
+    ioBF = dat[stateNum * 0x40 + NUMBER_OF_SYSTEM];
     for(uint i = 0; i < NUMBER_OF_SYSTEM + 1; i++) { dsaBF[i] = dat[stateNum * 0x40 + NUMBER_OF_SYSTEM + 1 + i]; }
     stbAMP = (ioBF >> 0) & 1;
     stbDRA = (ioBF >> 1) & 1;
