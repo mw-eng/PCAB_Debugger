@@ -2,14 +2,11 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Data;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
 using static PCAB_Debugger_GUI.PCAB;
 
 namespace PCAB_Debugger_GUI
@@ -71,6 +68,7 @@ namespace PCAB_Debugger_GUI
             public string dat0E  {get=>_dat0E;set=>SetProperty(ref _dat0E,value);}
             public string dat0F  {get=>_dat0F;set=>SetProperty(ref _dat0F, value);}
             public string datSTR {get=> _datSTR; set=>SetProperty(ref _datSTR, value);}
+            public string datLINE { get => _dat00 + _dat01 + _dat02 + _dat03 + _dat04 + _dat05 + _dat06 + _dat07 + _dat08 + _dat09 + _dat0A + _dat0B + _dat0C + _dat0D + _dat0E + _dat0F; }
 
             public binaryROW(UInt16 line, byte dat00, byte dat01, byte dat02, byte dat03, byte dat04, byte dat05, byte dat06, byte dat07, byte dat08, byte dat09, byte dat0A, byte dat0B, byte dat0C, byte dat0D, byte dat0E, byte dat0F)
             {
@@ -139,8 +137,8 @@ namespace PCAB_Debugger_GUI
             }
             SECTOR_COMBOBOX.Items.Clear();
             for(uint i = 0; i < 0x10u; i++) { SECTOR_COMBOBOX.Items.Add((i * 0x10u).ToString("X2")); }
-            BLOCK_COMBOBOX.SelectedIndex = 0;
-            SECTOR_COMBOBOX.SelectedIndex = 0;
+            BLOCK_COMBOBOX.SelectedIndex = BLOCK_COMBOBOX.Items.Count - 1;
+            SECTOR_COMBOBOX.SelectedIndex = SECTOR_COMBOBOX.Items.Count - 1;
             reload();
         }
 
@@ -159,26 +157,10 @@ namespace PCAB_Debugger_GUI
 
         private void BINARY_DATAGRID_PreviewLostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
-            if (e.GetType() == typeof(TextBox))
+            if (e.OriginalSource.GetType() == typeof(TextBox))
             {
                 if (((TextBox)e.OriginalSource).Text.Length == 0) { ((TextBox)e.OriginalSource).Text = "00"; }
                 else if (((TextBox)e.OriginalSource).Text.Length == 1) { ((TextBox)e.OriginalSource).Text = "0" + ((TextBox)e.OriginalSource).Text; }
-            }
-            else if(sender.GetType() == typeof(DataGrid))
-            {
-                binaryROW now = dataTableNOW[int.Parse(((binaryROW)((DataGrid)sender).CurrentCell.Item).addr) / 10];
-                binaryROW edit = (binaryROW)((DataGrid)sender).CurrentCell.Item;
-                if(((DataGrid)sender).CurrentCell.GetType() != typeof(DataGridCellInfo)) { return; }
-                DataGridCellInfo txt = (DataGridCellInfo)(((DataGrid)sender).CurrentCell);
-                switch (((DataGrid)sender).CurrentCell.Column.Header)
-                {
-                    case "00":
-                        //if(now.dat00 == edit.dat00) { txt.Foreground = new SolidColorBrush(Color.FromArgb(255, 0, 0, 0)); }
-                        //else { txt.Foreground = new SolidColorBrush(Color.FromRgb(127, 0, 0)); }
-                        break;
-                    default:
-                        break;
-                }
             }
         }
 
@@ -203,11 +185,28 @@ namespace PCAB_Debugger_GUI
         private void RELOAD_Click(object sender, RoutedEventArgs e)
         {
             reload();
+            MessageBox.Show("Rom reload completed.", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         private void WRITE_Click(object sender, RoutedEventArgs e)
         {
-
+            if (MessageBox.Show("Do you want to overwrite the ROM data at Address:" + BLOCK_COMBOBOX.Text + "-" + SECTOR_COMBOBOX.Text + "?", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning) != MessageBoxResult.Yes) { return; }
+            string strBF;
+            uint sect = uint.Parse(SECTOR_COMBOBOX.Text, System.Globalization.NumberStyles.HexNumber);
+            for (int i = 0; i < dataTable.Count; i += 0x10)
+            {
+                strBF = "";
+                for (int j = 0; j < 0x10u; j++)
+                {
+                    strBF += dataTable[i + j].datLINE;
+                }
+                if (_mod.PCAB_CMD("*", "WROM " + BLOCK_COMBOBOX.Text + "-" + (sect + i / 0x10).ToString("X") + " " + strBF, 1).Substring(0, 3) == "ERR")
+                {
+                    MessageBox.Show("Write rom error.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return; 
+                }
+            }
+            MessageBox.Show("Success write rom.", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         private void RESET_Click(object sender, RoutedEventArgs e)
