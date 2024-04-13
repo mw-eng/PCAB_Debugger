@@ -4,9 +4,12 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
 using System.Runtime.CompilerServices;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
 using static PCAB_Debugger_GUI.PCAB;
 
 namespace PCAB_Debugger_GUI
@@ -141,6 +144,44 @@ namespace PCAB_Debugger_GUI
             reload();
         }
 
+        private void BINARY_DATAGRID_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            if (e.OriginalSource.GetType() == typeof(TextBox))
+            {
+                int cnt = (((TextBox)e.OriginalSource).Text + e.Text).Length - ((TextBox)e.OriginalSource).SelectionLength;
+                if (2 >= cnt && new Regex("[0-9a-fA-F]").IsMatch(e.Text)) { e.Handled = false; ((TextBox)e.OriginalSource).CharacterCasing = CharacterCasing.Upper; }
+                else
+                {
+                    e.Handled = true;
+                }
+            }
+        }
+
+        private void BINARY_DATAGRID_PreviewLostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        {
+            if (e.GetType() == typeof(TextBox))
+            {
+                if (((TextBox)e.OriginalSource).Text.Length == 0) { ((TextBox)e.OriginalSource).Text = "00"; }
+                else if (((TextBox)e.OriginalSource).Text.Length == 1) { ((TextBox)e.OriginalSource).Text = "0" + ((TextBox)e.OriginalSource).Text; }
+            }
+            else if(sender.GetType() == typeof(DataGrid))
+            {
+                binaryROW now = dataTableNOW[int.Parse(((binaryROW)((DataGrid)sender).CurrentCell.Item).addr) / 10];
+                binaryROW edit = (binaryROW)((DataGrid)sender).CurrentCell.Item;
+                if(((DataGrid)sender).CurrentCell.GetType() != typeof(DataGridCellInfo)) { return; }
+                DataGridCellInfo txt = (DataGridCellInfo)(((DataGrid)sender).CurrentCell);
+                switch (((DataGrid)sender).CurrentCell.Column.Header)
+                {
+                    case "00":
+                        //if(now.dat00 == edit.dat00) { txt.Foreground = new SolidColorBrush(Color.FromArgb(255, 0, 0, 0)); }
+                        //else { txt.Foreground = new SolidColorBrush(Color.FromRgb(127, 0, 0)); }
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
 
@@ -220,5 +261,6 @@ namespace PCAB_Debugger_GUI
             BINARY_DATAGRID.ItemsSource = dataTable;
             foreach (DataGridColumn col in BINARY_DATAGRID.Columns) { col.MinWidth = col.ActualWidth; }
         }
+
     }
 }

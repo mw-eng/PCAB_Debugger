@@ -26,7 +26,7 @@
             <ComboBox Grid.Column="3" x:Name="SECTOR_COMBOBOX" Margin="5" FontSize="16" VerticalContentAlignment="Center" DropDownClosed="SECTOR_COMBOBOX_DropDownClosed"/>
             <Button Grid.Column="4" x:Name="RELOAD" Margin="5" Click="RELOAD_Click"><Viewbox Margin="5"><TextBlock>Reload</TextBlock></Viewbox></Button>
         </Grid>
-        <DataGrid Grid.Row="1" x:Name="BINARY_DATAGRID" Margin="5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontFamily="Consolas" FontSize="20" AutoGenerateColumns="False" CanUserSortColumns="False" CanUserResizeColumns="False" BorderThickness="0,0,0,0" SelectionUnit="Cell" SelectionMode="Single" CanUserResizeRows="False">
+        <DataGrid Grid.Row="1" x:Name="BINARY_DATAGRID" Margin="5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontFamily="Consolas" FontSize="20" AutoGenerateColumns="False" CanUserSortColumns="False" CanUserResizeColumns="False" BorderThickness="0,0,0,0" SelectionUnit="Cell" SelectionMode="Single" CanUserResizeRows="False" CanUserReorderColumns="False" PreviewTextInput="BINARY_DATAGRID_PreviewTextInput" PreviewLostKeyboardFocus="BINARY_DATAGRID_PreviewLostKeyboardFocus">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ADDRESS" Binding="{Binding addr}" Width="SizeToCells" FontFamily="Consolas" FontSize="20" IsReadOnly="True"/>
                 <DataGridTextColumn Header="00" Binding="{Binding dat00}" Width="SizeToHeader" FontFamily="Consolas" FontSize="20"/>
