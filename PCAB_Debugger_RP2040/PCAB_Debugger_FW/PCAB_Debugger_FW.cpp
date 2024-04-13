@@ -30,24 +30,6 @@ bool stbDRA = false;
 bool stbLNA = false;
 bool lowMODE = false;
 
-#pragma region Private Function
-
-
-
-
-
-void saveSTATE(const uint16_t &blockNum, const uint8_t &num)
-{
-
-}
-
-bool loadSTATE(const uint16_t &blockNum, const uint8_t &num)
-{
-    return false;
-}
-
-
-#pragma endregion
 
 void setup()
 {
@@ -88,13 +70,17 @@ void setup()
 #ifdef DEBUG_BOOT_MODE
     bootMode = DEBUG_BOOT_MODE;
 #endif
+
+    // Load serial number and ROM id
     serialNum = readSerialNum();
-    romID = 0;
     uint8_t idBF[FLASH_UNIQUE_ID_SIZE_BYTES];
     flash::getID(idBF);
+    romID = 0u;
     for(uint8_t i = 0; i < FLASH_UNIQUE_ID_SIZE_BYTES; i++) { romID += ((0x100u ^ i) * idBF[i]); }
 
-    // Resture Factory STATE
+    // Resture STATE
+    for(uint i = 0; i < NUMBER_OF_SYSTEM; i++) { dpsBF[i] = 0u; dsaBF[i] = 8u; }
+    dsaBF[NUMBER_OF_SYSTEM + 1] = 0u;
     if((bootMode == 0x20 || bootMode == 0x00) && !loadSTATE(ROM_BLOCK_NUM - 1, 0)) { }
     else if((bootMode != 0x01 && bootMode != 0x03 && bootMode != 0x05 && bootMode != 0x07) || !loadSTATE(ROM_BLOCK_NUM - 2, 0)) 
     {
@@ -681,6 +667,8 @@ int main()
     return 0;
 }
 
+#pragma region Private Function
+
 void software_reset()
 {
     *((volatile uint32_t*)(PPB_BASE + 0x0ED0C)) = 0x5FA0004;
@@ -783,3 +771,4 @@ bool loadSTATE(const uint8_t &sectorNum, const uint8_t &pageNum, const uint8_t &
     return true;
 }
 
+#pragma endregion
