@@ -51,4 +51,5 @@ void writeDSA();
 bool romAddressRangeCheck(const uint16_t &blockNum, const uint8_t &sectorpageNum);
 std::string readSerialNum();
 bool saveSTATE(const uint8_t &sectorNum, const uint8_t &pageNum, const uint8_t &stateNum);
-bool loadSTATE(const uint8_t &sectorNum, const uint8_t &pageNum, const uint8_t &stateNum);
+bool readSTATE(const uint8_t &sectorNum, const uint8_t &pageNum, const uint8_t &stateNum);
+void writeNowSTATE();

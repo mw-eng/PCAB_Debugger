@@ -14,7 +14,7 @@ const static std::string FW_REV = "1.1.2";
 ds18b20 *sens;
 adc *analog;
 spi *spi_ps;
-spi *spi_sa;
+//spi *spi_sa;
 pcabCMD *uart;
 bool modeCUI = true;
 bool modeECHO = false;
@@ -85,35 +85,10 @@ void setup()
     stbDRA = false;
     stbLNA = false;
     lowMODE = false;
-    if(bootMode == 0x01 || bootMode == 0x03) { loadSTATE(14,0,0); }
-
-
-    
-    if((bootMode == 0x20 || bootMode == 0x00) && !loadSTATE(ROM_BLOCK_NUM - 1, 0)) { }
-    else if((bootMode != 0x01 && bootMode != 0x03 && bootMode != 0x05 && bootMode != 0x07) || !loadSTATE(ROM_BLOCK_NUM - 2, 0)) 
-    {
-        for(int i = 0; i < NUMBER_OF_SYSTEM; i++ ) { dpsBF[i] = 0; dsaBF[i] = 8;}
-        dsaBF[NUMBER_OF_SYSTEM] = 0;
-        stbAMP = false;
-        stbDRA = false;
-        stbLNA = false;
-        lowMODE = false;
-    }
-    // save factory state
-    if(bootMode == 0x20)
-    {
-        saveSTATE(ROM_BLOCK_NUM - 2, 0);
-        saveSTATE(ROM_BLOCK_NUM - 2, 1);
-        saveSTATE(ROM_BLOCK_NUM - 2, 2);
-        saveSTATE(ROM_BLOCK_NUM - 2, 3);
-    }
-    
+    if(bootMode == 0x01 || bootMode == 0x03) { readSTATE(14, 0, 0); }
+    if(bootMode == 0x20){ readSTATE(15, 0, 0); saveSTATE(14, 0, 0); }
     // Write now state.
-    writeDPS();
-    gpio_put(STB_AMP_PIN, !stbAMP);
-    gpio_put(STB_DRA_PIN, !stbDRA);
-    gpio_put(STB_LNA_PIN, !stbLNA);
-    gpio_put(LPW_MOD_PIN, !lowMODE);
+    writeNowSTATE();
 }
 
 int main()
@@ -455,7 +430,7 @@ int main()
                         if(cmd.argments.size() == 1) { strVect = String::split(cmd.argments[0], '-'); }
                         else if(cmd.argments.size() == 2)
                         {
-                            if(!Convert::TryToUInt8(cmd.argments[0], 10, sectorNum)){uart->uart.writeLine("ERR > Sector number error."); break;}
+                            if(!Convert::TryToUInt4(cmd.argments[0], 10, sectorNum)){uart->uart.writeLine("ERR > Sector number error."); break;}
                             strVect = String::split(cmd.argments[1], '-');
                         }
                         if(strVect.size() == 1) { if(!Convert::TryToUInt2(strVect[0], 10, stateNum)){uart->uart.writeLine("ERR > State number error."); break;} }
@@ -479,7 +454,7 @@ int main()
                         if(cmd.argments.size() == 1) { strVect = String::split(cmd.argments[0], '-'); }
                         else if(cmd.argments.size() == 2)
                         {
-                            if(!Convert::TryToUInt8(cmd.argments[0], 10, sectorNum)){uart->uart.writeLine("ERR > Sector number error."); break;}
+                            if(!Convert::TryToUInt4(cmd.argments[0], 10, sectorNum)){uart->uart.writeLine("ERR > Sector number error."); break;}
                             strVect = String::split(cmd.argments[1], '-');
                         }
                         if(strVect.size() == 1) { if(!Convert::TryToUInt2(strVect[0], 10, stateNum)){uart->uart.writeLine("ERR > State number error."); break;} }
@@ -488,7 +463,8 @@ int main()
                             if(!Convert::TryToUInt4(strVect[0], 10, pageNum)){uart->uart.writeLine("ERR > Page number error."); break;}
                             if(!Convert::TryToUInt2(strVect[1], 10, stateNum)){uart->uart.writeLine("ERR > State number error."); break;}
                         }
-                        if(!loadSTATE(sectorNum, pageNum, stateNum)) { uart->uart.writeLine("ERR > No valid settings were found for the specified address."); break; }
+                        if(!readSTATE(sectorNum, pageNum, stateNum)) { uart->uart.writeLine("ERR > No valid settings were found for the specified address."); break; }
+                        writeNowSTATE();
                         uart->uart.writeLine("DONE > Load state. (sector[" + Convert::ToString(sectorNum, 10, 2) + "]-page[" + Convert::ToString(pageNum, 10, 1) + "]-state[" + Convert::ToString(stateNum, 10, 1) + "]");
                     }
                     break;
@@ -703,12 +679,12 @@ void writeDPS()
 
 void writeDSA()
 {
-//    std::vector<uint8_t> stBF;
-//    for(uint16_t i = NUMBER_OF_SYSTEM ; i > 0 ; i-- )
-//    {
-//        stBF.push_back(dsaBF[i - 1] ^ 0x3F);
-//        dsaNOW[i - 1] = dsaBF[i - 1] & 0x3F;
-//    }
+    std::vector<uint8_t> stBF;
+    for(uint16_t i = NUMBER_OF_SYSTEM ; i > 0 ; i-- )
+    {
+        stBF.push_back(dsaBF[i - 1] ^ 0x3F);
+        dsaNOW[i - 1] = dsaBF[i - 1] & 0x3F;
+    }
 //    spi_sa->spi_write_read(stBF);
 }
 
@@ -739,13 +715,14 @@ std::string readSerialNum()
 
 bool saveSTATE(const uint8_t &sectorNum, const uint8_t &pageNum, const uint8_t &stateNum)
 {
+    if(sectorNum > 0xFu || pageNum > 0xFu || stateNum > 0x3u) { return false; }
+    if(!romAddressRangeCheck(PICO_FLASH_SIZE_BYTES / FLASH_BLOCK_SIZE - 1, sectorNum * 0x10u + pageNum)) { return false; }
     uint8_t pageBF[FLASH_PAGE_SIZE];
     uint8_t ioBF;
     ioBF = stbAMP;
     ioBF += 2 * stbDRA;
     ioBF += 4 * stbLNA;
     ioBF += 8 * lowMODE;
-
     if(!flash::readROM(PICO_FLASH_SIZE_BYTES / FLASH_BLOCK_SIZE - 1, sectorNum, pageNum, pageBF)) { return false; }
     for(uint i = 0; i < NUMBER_OF_SYSTEM ; i ++) { pageBF[stateNum * 0x40 + i] = dpsNOW[i]; }
     pageBF[stateNum * 0x40 + NUMBER_OF_SYSTEM] = ioBF;
@@ -754,7 +731,7 @@ bool saveSTATE(const uint8_t &sectorNum, const uint8_t &pageNum, const uint8_t &
     return flash::overwriteROMpage(PICO_FLASH_SIZE_BYTES / FLASH_BLOCK_SIZE - 1, sectorNum, pageNum, pageBF);
 }
 
-bool loadSTATE(const uint8_t &sectorNum, const uint8_t &pageNum, const uint8_t &stateNum)
+bool readSTATE(const uint8_t &sectorNum, const uint8_t &pageNum, const uint8_t &stateNum)
 {
     uint8_t dat[FLASH_PAGE_SIZE];
     if(!flash::readROM(PICO_FLASH_SIZE_BYTES / FLASH_BLOCK_SIZE - 1, sectorNum, pageNum, dat)) { return false; }
@@ -765,18 +742,23 @@ bool loadSTATE(const uint8_t &sectorNum, const uint8_t &pageNum, const uint8_t &
     if((dat[stateNum * 0x40 + NUMBER_OF_SYSTEM + 1 + NUMBER_OF_SYSTEM] & 0xE0) != 0) { return false; }                                  // DSA(IN) data check
     ioBF = dat[stateNum * 0x40 + NUMBER_OF_SYSTEM];
     for(uint i = 0; i < NUMBER_OF_SYSTEM; i++) { dpsBF[i] = dat[stateNum * 0x40 + i]; }
-    for(uint i = 0; i < NUMBER_OF_SYSTEM + 1; i++) { dsaNOW[i] = dat[stateNum * 0x40 + NUMBER_OF_SYSTEM + 1 + i]; }
+    for(uint i = 0; i < NUMBER_OF_SYSTEM + 1; i++) { dsaBF[i] = dat[stateNum * 0x40 + NUMBER_OF_SYSTEM + 1 + i]; }
     stbAMP = (ioBF >> 0) & 1;
     stbDRA = (ioBF >> 1) & 1;
     stbLNA = (ioBF >> 2) & 1;
     lowMODE = (ioBF >> 3) & 1;
+    return true;
+}
+
+void writeNowSTATE()
+{
+    // Write now state.
     writeDPS();
     writeDSA();
     gpio_put(STB_AMP_PIN, !stbAMP);
     gpio_put(STB_DRA_PIN, !stbDRA);
     gpio_put(STB_LNA_PIN, !stbLNA);
     gpio_put(LPW_MOD_PIN, !lowMODE);
-    return true;
 }
 
 #pragma endregion
