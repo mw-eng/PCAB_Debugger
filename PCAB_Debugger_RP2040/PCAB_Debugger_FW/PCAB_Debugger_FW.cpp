@@ -678,7 +678,7 @@ void writeDSA()
     std::vector<uint8_t> stBF;
     for(uint16_t i = NUMBER_OF_SYSTEM ; i > 0 ; i-- )
     {
-        stBF.push_back(dsaBF[i - 1] ^ 0x3F);
+        stBF.push_back(dsaBF[i - 1]);
         dsaNOW[i - 1] = dsaBF[i - 1] & 0x3F;
     }
     dsaNOW[NUMBER_OF_SYSTEM] = dsaBF[NUMBER_OF_SYSTEM];
@@ -724,7 +724,7 @@ bool saveSTATE(const uint8_t &sectorNum, const uint8_t &pageNum, const uint8_t &
     for(uint i = 0; i < NUMBER_OF_SYSTEM ; i ++) { pageBF[stateNum * 0x40 + i] = dpsNOW[i]; }
     pageBF[stateNum * 0x40 + NUMBER_OF_SYSTEM] = ioBF;
     for(uint i = 0; i < NUMBER_OF_SYSTEM ; i ++) { pageBF[stateNum * 0x40 + NUMBER_OF_SYSTEM + 1 + i] = dsaNOW[i]; }
-    pageBF[stateNum * 0x40 + NUMBER_OF_SYSTEM + 1 + NUMBER_OF_SYSTEM] = dsaNOW[NUMBER_OF_SYSTEM - 1];
+    pageBF[stateNum * 0x40 + NUMBER_OF_SYSTEM + 1 + NUMBER_OF_SYSTEM] = dsaNOW[NUMBER_OF_SYSTEM];
     return flash::overwriteROMpage(PICO_FLASH_SIZE_BYTES / FLASH_BLOCK_SIZE - 1, sectorNum, pageNum, pageBF);
 }
 
