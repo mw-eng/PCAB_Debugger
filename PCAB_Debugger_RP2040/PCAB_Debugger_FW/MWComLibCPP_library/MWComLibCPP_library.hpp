@@ -19,6 +19,8 @@ class Convert
     static bool TryToDouble(const std::string &str, double &out);
     static bool TryToFloat(const std::string &str, float &out);
     static bool TryToUInt(const std::string &str, const uint8_t &BaseNumber, uint &out);
+    static bool TryToUInt2(const std::string &str, const uint8_t &BaseNumber, uint8_t &out);
+    static bool TryToUInt4(const std::string &str, const uint8_t &BaseNumber, uint8_t &out);
     static bool TryToUInt8(const std::string &str, const uint8_t &BaseNumber, uint8_t &out);
     static bool TryToUInt16(const std::string &str, const uint8_t &BaseNumber, uint16_t &out);
     static bool TryToUInt32(const std::string &str, const uint8_t &BaseNumber, uint32_t &out);

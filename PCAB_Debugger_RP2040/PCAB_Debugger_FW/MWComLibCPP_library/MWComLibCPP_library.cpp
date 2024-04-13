@@ -112,6 +112,26 @@ bool Convert::TryToFloat(const std::string &str, float &out)
     return true;
 }
 
+bool Convert::TryToUInt2(const std::string &str, const uint8_t &BaseNumber, uint8_t &out)
+{
+    uint64_t bf;
+    if(TryToUInt64(str, BaseNumber, bf) && bf <= 0x3u)
+    {
+        out = bf;
+        return true;
+    }
+    else { return false; }
+}
+bool Convert::TryToUInt4(const std::string &str, const uint8_t &BaseNumber, uint8_t &out)
+{
+    uint64_t bf;
+    if(TryToUInt64(str, BaseNumber, bf) && bf <= 0xFu)
+    {
+        out = bf;
+        return true;
+    }
+    else { return false; }
+}
 bool Convert::TryToUInt8(const std::string &str, const uint8_t &BaseNumber, uint8_t &out)
 {
     uint64_t bf;

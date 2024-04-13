@@ -451,17 +451,51 @@ int main()
                     uart->uart.writeLine("ERR > Not supported in current version."); 
                     break;
                 case pcabCMD::cmdCode::SaveMEM:
-                    if(cmd.argments.size() > 1) { uart->uart.writeLine("ERR > Number of arguments does not match."); }
+                    if(cmd.argments.size() > 2) { uart->uart.writeLine("ERR > Number of arguments does not match."); }
                     else
                     {
-                        uart->uart.writeLine("ERR > Unimplemented.");
+                        uint8_t sectorNum = 14;
+                        uint8_t pageNum = 0;
+                        uint8_t stateNum = 0;
+                        std::vector<std::string> strVect;
+                        if(cmd.argments.size() == 1) { strVect = String::split(cmd.argments[0], '-'); }
+                        else if(cmd.argments.size() == 2)
+                        {
+                            if(!Convert::TryToUInt8(cmd.argments[0], 10, sectorNum)){uart->uart.writeLine("ERR > Sector number error."); break;}
+                            strVect = String::split(cmd.argments[1], '-');
+                        }
+                        if(strVect.size() == 1) { if(!Convert::TryToUInt2(strVect[0], 10, stateNum)){uart->uart.writeLine("ERR > State number error."); break;} }
+                        else if(strVect.size() == 2)
+                        {
+                            if(!Convert::TryToUInt4(strVect[0], 10, pageNum)){uart->uart.writeLine("ERR > Page number error."); break;}
+                            if(!Convert::TryToUInt2(strVect[1], 10, stateNum)){uart->uart.writeLine("ERR > State number error."); break;}
+                        }
+                        if(!saveSTATE(sectorNum, pageNum, stateNum)) { uart->uart.writeLine("ERR > Specified number is out of range."); break; }
+                        uart->uart.writeLine("DONE > Save state. (sector[" + Convert::ToString(sectorNum, 10, 2) + "]-page[" + Convert::ToString(pageNum, 10, 1) + "]-state[" + Convert::ToString(stateNum, 10, 1) + "]");
                     }
                     break;
                 case pcabCMD::cmdCode::LoadMEM:
-                    if(cmd.argments.size() > 1) { uart->uart.writeLine("ERR > Number of arguments does not match."); }
+                    if(cmd.argments.size() > 2) { uart->uart.writeLine("ERR > Number of arguments does not match."); }
                     else
                     {
-                        uart->uart.writeLine("ERR > Unimplemented.");
+                        uint8_t sectorNum = 14;
+                        uint8_t pageNum = 0;
+                        uint8_t stateNum = 0;
+                        std::vector<std::string> strVect;
+                        if(cmd.argments.size() == 1) { strVect = String::split(cmd.argments[0], '-'); }
+                        else if(cmd.argments.size() == 2)
+                        {
+                            if(!Convert::TryToUInt8(cmd.argments[0], 10, sectorNum)){uart->uart.writeLine("ERR > Sector number error."); break;}
+                            strVect = String::split(cmd.argments[1], '-');
+                        }
+                        if(strVect.size() == 1) { if(!Convert::TryToUInt2(strVect[0], 10, stateNum)){uart->uart.writeLine("ERR > State number error."); break;} }
+                        else if(strVect.size() == 2)
+                        {
+                            if(!Convert::TryToUInt4(strVect[0], 10, pageNum)){uart->uart.writeLine("ERR > Page number error."); break;}
+                            if(!Convert::TryToUInt2(strVect[1], 10, stateNum)){uart->uart.writeLine("ERR > State number error."); break;}
+                        }
+                        if(!loadSTATE(sectorNum, pageNum, stateNum)) { uart->uart.writeLine("ERR > No valid settings were found for the specified address."); break; }
+                        uart->uart.writeLine("DONE > Load state. (sector[" + Convert::ToString(sectorNum, 10, 2) + "]-page[" + Convert::ToString(pageNum, 10, 1) + "]-state[" + Convert::ToString(stateNum, 10, 1) + "]");
                     }
                     break;
                 case pcabCMD::cmdCode::ReadROM:
@@ -673,13 +707,13 @@ void writeDPS()
 
 void writeDSA()
 {
-    std::vector<uint8_t> stBF;
-    for(uint16_t i = NUMBER_OF_SYSTEM ; i > 0 ; i-- )
-    {
-        stBF.push_back(dsaBF[i - 1] ^ 0x3F);
-        dsaNOW[i - 1] = dsaBF[i - 1] & 0x3F;
-    }
-    spi_sa->spi_write_read(stBF);
+//    std::vector<uint8_t> stBF;
+//    for(uint16_t i = NUMBER_OF_SYSTEM ; i > 0 ; i-- )
+//    {
+//        stBF.push_back(dsaBF[i - 1] ^ 0x3F);
+//        dsaNOW[i - 1] = dsaBF[i - 1] & 0x3F;
+//    }
+//    spi_sa->spi_write_read(stBF);
 }
 
 bool romAddressRangeCheck(const uint16_t &blockNum, const uint8_t &sectorpageNum)
@@ -705,5 +739,47 @@ std::string readSerialNum()
     { if(isgraph(romBF[i])) { serial.push_back(romBF[i]); } }
     if(serial.size() == len) { return serial; }
     else { return ""; }
+}
+
+bool saveSTATE(const uint8_t &sectorNum, const uint8_t &pageNum, const uint8_t &stateNum)
+{
+    uint8_t pageBF[FLASH_PAGE_SIZE];
+    uint8_t ioBF;
+    ioBF = stbAMP;
+    ioBF += 2 * stbDRA;
+    ioBF += 4 * stbLNA;
+    ioBF += 8 * lowMODE;
+
+    if(!flash::readROM(PICO_FLASH_SIZE_BYTES / FLASH_BLOCK_SIZE - 1, sectorNum, pageNum, pageBF)) { return false; }
+    for(uint i = 0; i < NUMBER_OF_SYSTEM ; i ++) { pageBF[stateNum * 0x40 + i] = dpsNOW[i]; }
+    pageBF[stateNum * 0x40 + NUMBER_OF_SYSTEM] = ioBF;
+    for(uint i = 0; i < NUMBER_OF_SYSTEM ; i ++) { pageBF[stateNum * 0x40 + NUMBER_OF_SYSTEM + 1 + i] = dsaNOW[i]; }
+    pageBF[stateNum * 0x40 + NUMBER_OF_SYSTEM + 1 + NUMBER_OF_SYSTEM] = dsaNOW[NUMBER_OF_SYSTEM - 1];
+    return flash::overwriteROMpage(PICO_FLASH_SIZE_BYTES / FLASH_BLOCK_SIZE - 1, sectorNum, pageNum, pageBF);
+}
+
+bool loadSTATE(const uint8_t &sectorNum, const uint8_t &pageNum, const uint8_t &stateNum)
+{
+    uint8_t dat[FLASH_PAGE_SIZE];
+    if(!flash::readROM(PICO_FLASH_SIZE_BYTES / FLASH_BLOCK_SIZE - 1, sectorNum, pageNum, dat)) { return false; }
+    uint8_t ioBF;
+    for(uint i = 0; i < NUMBER_OF_SYSTEM; i++) { if((dat[stateNum * 0x40 + i] & 0xC0) != 0) { return false; } }                         // DPS(0-15) data check
+    if((dat[stateNum * 0x40 + NUMBER_OF_SYSTEM] & 0xF0) != 0) { return false; }                                                         // STB & LPW data check
+    for(uint i = 0; i < NUMBER_OF_SYSTEM; i++) { if((dat[stateNum * 0x40 + NUMBER_OF_SYSTEM + 1 + i] & 0xC0) != 0) { return false; } }  // DSA(0-15) data check
+    if((dat[stateNum * 0x40 + NUMBER_OF_SYSTEM + 1 + NUMBER_OF_SYSTEM] & 0xE0) != 0) { return false; }                                  // DSA(IN) data check
+    ioBF = dat[stateNum * 0x40 + NUMBER_OF_SYSTEM];
+    for(uint i = 0; i < NUMBER_OF_SYSTEM; i++) { dpsBF[i] = dat[stateNum * 0x40 + i]; }
+    for(uint i = 0; i < NUMBER_OF_SYSTEM + 1; i++) { dsaNOW[i] = dat[stateNum * 0x40 + NUMBER_OF_SYSTEM + 1 + i]; }
+    stbAMP = (ioBF >> 0) & 1;
+    stbDRA = (ioBF >> 1) & 1;
+    stbLNA = (ioBF >> 2) & 1;
+    lowMODE = (ioBF >> 3) & 1;
+    writeDPS();
+    writeDSA();
+    gpio_put(STB_AMP_PIN, !stbAMP);
+    gpio_put(STB_DRA_PIN, !stbDRA);
+    gpio_put(STB_LNA_PIN, !stbLNA);
+    gpio_put(LPW_MOD_PIN, !lowMODE);
+    return true;
 }
 
