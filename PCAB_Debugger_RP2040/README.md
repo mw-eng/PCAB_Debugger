@@ -72,7 +72,7 @@ GetVin | *Support with v1.2.0 or later*<br>Get Vin Value.
 
 Command | Description
 :--|:--
-SMEM ({x}) ({y-z}\|{z}) | Save state to memory(ROM).<br>However, whether or not it can be saved depends on the boot mode.<br>To save the default setting, set {z} to 0 or unspecified. ({z} can be specified as 0 to 3.)<br>If {y-z} is specified, it will be written to the specified setting number. ({y} can be specified as 0 to 15.)<br>A sector number can be specified for {x}. The sector numbers available to the user are 0 to 14.<br>*14 is the default setting area when no sector number is specified, and 15 is the data storage area at factory shipment.*<br>*By specifying the sector number, you can save 15×16×4 (=960) settings.*
+SMEM ({x}) ({y-z}\|{z}) | Save state to memory(ROM).<br>However, whether or not it can be saved depends on the boot mode.<br>To save the default setting, set {z} to 0 or unspecified. ({z} can be specified as 0 to 3.)<br>If {y-z} is specified, it will be written to the specified setting number. ({y} can be specified as 0 to 15.)<br>A sector number can be specified for {x}. The sector numbers available to the user are 0 to 13.<br>*14 is the default setting area when no sector number is specified, and 15 is the data storage area at factory shipment.*<br>*By specifying the sector number, you can save 15×16×4 (=960) settings.*<br>*The Auto Load Boot uses the settings stored in unspecified {z} (sector number 14, setting numbers 0 to 0).*
 LMEM ({x}) ({y-z}\|{z}) | Load state from memory(ROM).<br>Arguments are the same as SMEM.
 GetMODE | Get boot mode.
 GetIDN | Get device identification character.
@@ -108,10 +108,10 @@ List of settings by onboard hardware switch (SW1) status.
 
 Number | SW6 | SW5 | SW4 | SW3 | SW2 | SW1 | HEX | Stateus | Description
 :--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--
-0 | 0 | 0 | 0 | 0 | 0 | 0 | 0x00 | Default | Default Status Boot.<br>*DPS = ALL 0deg*<br>*DSA(@input) = 0dB*<br>*DSA(@All except input) = 2dB*<br>*ALL Active Mode*
-1 | 0 | 0 | 0 | 0 | 0 | 1 | 0x01 | Auto Load boot. | Load the state (0) saved in ROM and boot.<br>*Picture Stateus*
+0 | 0 | 0 | 0 | 0 | 0 | 0 | 0x00 | Default | Default Status Boot.<br>*DPS(@All) = 0deg*<br>*DSA(@Input) = 0dB*<br>*DSA(@All except input) = 2dB*<br>*ALL Active Mode*
+1 | 0 | 0 | 0 | 0 | 0 | 1 | 0x01 | Auto Load Boot. | Load the state (0) saved in ROM and boot.<br>*Picture Stateus*
 2 | 0 | 0 | 0 | 0 | 1 | 0 | 0x02 | Allow settings to be saved. | Settins can be write in ROM.
-3 | 0 | 0 | 0 | 0 | 1 | 1 | 0x03 | Auto Load boot.<br>and<br>Allow settings to be saved. | Allows to start autoload and save settings.<br>*Basic usage conditions *
+3 | 0 | 0 | 0 | 0 | 1 | 1 | 0x03 | Auto Load Boot.<br>and<br>Allow settings to be saved. | Allows to start autoload and save settings.<br>*Basic usage conditions *
 4 | 0 | 0 | 0 | 1 | 0 | 0 | 0x04 | State4 | Unused.
 5 | 0 | 0 | 0 | 1 | 0 | 1 | 0x05 | State5 | Unused.
 6 | 0 | 0 | 0 | 1 | 1 | 0 | 0x06 | State6 | Unused.

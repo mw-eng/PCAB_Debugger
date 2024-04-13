@@ -78,9 +78,17 @@ void setup()
     romID = 0u;
     for(uint8_t i = 0; i < FLASH_UNIQUE_ID_SIZE_BYTES; i++) { romID += ((0x100u ^ i) * idBF[i]); }
 
-    // Resture STATE
+    // Resture STATE @ default.
     for(uint i = 0; i < NUMBER_OF_SYSTEM; i++) { dpsBF[i] = 0u; dsaBF[i] = 8u; }
     dsaBF[NUMBER_OF_SYSTEM + 1] = 0u;
+    stbAMP = false;
+    stbDRA = false;
+    stbLNA = false;
+    lowMODE = false;
+    if(bootMode == 0x01 || bootMode == 0x03) { loadSTATE(14,0,0); }
+
+
+    
     if((bootMode == 0x20 || bootMode == 0x00) && !loadSTATE(ROM_BLOCK_NUM - 1, 0)) { }
     else if((bootMode != 0x01 && bootMode != 0x03 && bootMode != 0x05 && bootMode != 0x07) || !loadSTATE(ROM_BLOCK_NUM - 2, 0)) 
     {
