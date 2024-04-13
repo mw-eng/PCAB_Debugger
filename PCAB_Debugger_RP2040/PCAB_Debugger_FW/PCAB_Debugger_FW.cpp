@@ -570,20 +570,16 @@ int main()
                     if(cmd.argments.size() != 0) { uart->uart.writeLine("ERR > Number of arguments does not match."); }
                     else
                     {
-                        if(!loadSTATE(NUMBER_OF_SYSTEM - 1, 0))
+                        if(!readSTATE(15, 0, 0))
                         {
-                            for(int i = 0; i < NUMBER_OF_SYSTEM; i++ ) { dpsBF[i] = 0; dsaBF[i] = 0;}
-                            dsaBF[NUMBER_OF_SYSTEM] = 0;
+                            for(uint i = 0; i < NUMBER_OF_SYSTEM; i++) { dpsBF[i] = 0u; dsaBF[i] = 8u; }
+                            dsaBF[NUMBER_OF_SYSTEM + 1] = 0u;
                             stbAMP = false;
                             stbDRA = false;
                             stbLNA = false;
                             lowMODE = false;
                         }
-                        writeDPS();
-                        gpio_put(STB_AMP_PIN, !stbAMP);
-                        gpio_put(STB_DRA_PIN, !stbDRA);
-                        gpio_put(STB_LNA_PIN, !stbLNA);
-                        gpio_put(LPW_MOD_PIN, !lowMODE);
+                        writeNowSTATE();
                         uart->uart.writeLine("DONE > Reset state.");
                     }
                     break;
