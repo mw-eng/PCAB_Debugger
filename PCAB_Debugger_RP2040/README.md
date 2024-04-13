@@ -108,7 +108,7 @@ List of settings by onboard hardware switch (SW1) status.
 
 Number | SW6 | SW5 | SW4 | SW3 | SW2 | SW1 | HEX | Stateus | Description
 :--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--
-0 | 0 | 0 | 0 | 0 | 0 | 0 | 0x00 | Default | Default Status Boot.<br>*DPS = ALL 0deg*<br>*DSA = 0dB(@input) / 2dB(@All except input)*<br>*>ALL Active Mode*
+0 | 0 | 0 | 0 | 0 | 0 | 0 | 0x00 | Default | Default Status Boot.<br>*DPS = ALL 0deg*<br>*DSA(@input) = 0dB*<br>*DSA(@All except input) = 2dB*<br>*ALL Active Mode*
 1 | 0 | 0 | 0 | 0 | 0 | 1 | 0x01 | Auto Load boot. | Load the state (0) saved in ROM and boot.<br>*Picture Stateus*
 2 | 0 | 0 | 0 | 0 | 1 | 0 | 0x02 | Allow settings to be saved. | Settins can be write in ROM.
 3 | 0 | 0 | 0 | 0 | 1 | 1 | 0x03 | Auto Load boot.<br>and<br>Allow settings to be saved. | Allows to start autoload and save settings.<br>*Basic usage conditions *
