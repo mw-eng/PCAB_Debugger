@@ -1,6 +1,6 @@
 //#define DEBUG_BOOT_MODE 0x03
 //#define DEBUG_BOOT_MODE 0x20
-//#define DEBUG_BOOT_MODE 0x2A
+#define DEBUG_BOOT_MODE 0x2A
 #define DEBUG_RASPICO
 
 #include "PCAB_Debugger_FW.hpp"

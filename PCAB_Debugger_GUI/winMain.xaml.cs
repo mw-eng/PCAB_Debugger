@@ -827,7 +827,7 @@ namespace PCAB_Debugger_GUI
                 _mod.CondNOW.Vin = e.ReceiveDAT.Vin;
                 _mod.CondNOW.CPU_TEMP = e.ReceiveDAT.CPU_TEMP;
                 if (!uint.TryParse(e.ReceiveDAT.Id, out uiBF)) { id = "ND"; }
-                else { id = ((uiBF * 3.3f / (1 << 12) - 1.65) / 0.09).ToString("0.00"); }
+                else { id = ((uiBF * 3.3f / (1 << 12) - 0.08) / 0.737).ToString("0.00"); }
                 //else { id = ((uiBF * 3.3f / (1 << 12) - 0.08) / 0.737).ToString("0.00"); }
                 if (!uint.TryParse(e.ReceiveDAT.Vd, out uiBF)) { vd = "ND"; }
                 else { vd = (uiBF * 3.3f / (1 << 12) * 10.091f).ToString("0.00"); }
