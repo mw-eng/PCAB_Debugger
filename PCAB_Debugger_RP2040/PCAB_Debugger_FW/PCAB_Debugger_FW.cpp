@@ -691,15 +691,6 @@ bool romAddressRangeCheck(const uint16_t &blockNum, const uint8_t &sectorpageNum
     if(bootMode == 0x2A) { return true; }
     if(bootMode == 0x02 || bootMode == 0x03)
     {
-        uart->uart.writeLine("DEBUG > block = " + Convert::ToString(blockNum, 16, 8));
-        uart->uart.writeLine("DEBUG > sectorpage = " + Convert::ToString(sectorpageNum, 16, 8));
-        uart->uart.writeLine("DEBUG > addr = " + Convert::ToString(addr, 16, 8));
-        uart->uart.writeLine("DEBUG > Lange MIN = " + Convert::ToString(PICO_FLASH_SIZE_BYTES - FLASH_BLOCK_SIZE, 16, 8));
-        uart->uart.writeLine("DEBUG > Lange MAX = " + Convert::ToString(PICO_FLASH_SIZE_BYTES - FLASH_SECTOR_SIZE, 16, 8));
-        uart->uart.writeLine("DEBUG > PICO_FLASH_SIZE_BYTES = " + Convert::ToString(PICO_FLASH_SIZE_BYTES, 16, 8));
-        uart->uart.writeLine("DEBUG > FLASH_SECTOR_SIZE = " + Convert::ToString(FLASH_SECTOR_SIZE, 16, 8));
-        uart->uart.writeLine("DEBUG > FLASH_BLOCK_SIZE = " + Convert::ToString(FLASH_BLOCK_SIZE, 16, 8));
-        uart->uart.writeLine("DEBUG > FLASH_PAGE_SIZE = " + Convert::ToString(FLASH_PAGE_SIZE, 16, 8));
         if( PICO_FLASH_SIZE_BYTES - FLASH_BLOCK_SIZE <= addr && addr < PICO_FLASH_SIZE_BYTES - FLASH_SECTOR_SIZE) { return true; }
     }
     return false;
