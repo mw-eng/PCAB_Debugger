@@ -1,6 +1,6 @@
 //#define DEBUG_BOOT_MODE 0x03
 //#define DEBUG_BOOT_MODE 0x20
-#define DEBUG_BOOT_MODE 0x2A
+//#define DEBUG_BOOT_MODE 0x2A
 
 #include "PCAB_Debugger_FW.hpp"
 #define SNPRINTF_BUFFER_LEN 50

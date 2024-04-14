@@ -200,7 +200,7 @@ namespace PCAB_Debugger_GUI
                 {
                     strBF += dataTable[i + j].datLINE;
                 }
-                if (_mod.PCAB_CMD("*", "WROM " + BLOCK_COMBOBOX.Text + "-" + (sect + i / 0x10).ToString("X") + " " + strBF, 1).Substring(0, 3) == "ERR")
+                if (_mod.PCAB_CMD("*", "OROM " + BLOCK_COMBOBOX.Text + "-" + (sect + i / 0x10).ToString("X") + " " + strBF, 1).Substring(0, 3) == "ERR")
                 {
                     MessageBox.Show("Write rom error.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                     return; 

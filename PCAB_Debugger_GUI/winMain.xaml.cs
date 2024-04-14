@@ -33,14 +33,19 @@ namespace PCAB_Debugger_GUI
         {
             this.Title += " Ver," + System.Diagnostics.FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetExecutingAssembly().Location).ProductVersion;
 #if DEBUG
-            Settings.Default.Reset();
+            //Settings.Default.Reset();
             this.Title += "_DEBUG MODE";
 #endif
             _state = false;
             SERIAL_PORTS_COMBOBOX_RELOAD();
             if(SERIAL_PORTS_COMBOBOX.Items.Count > 0) { SERIAL_PORTS_COMBOBOX.SelectedIndex = 0; CONNECT_BUTTON.IsEnabled = true; }
             sesn = VisaControlNI.NewResourceManager();
-            
+            for(int i = 0; i < ports.Length; i++) { if(Settings.Default.spCaption == ports[i].Caption) { SERIAL_PORTS_COMBOBOX.SelectedIndex = i; break; } }
+            WAITE_TIME_TEXTBOX.Text = Settings.Default.mli.ToString("0");
+            SERIAL_NUMBERS_TEXTBOX.Text = Settings.Default.sn;
+            VISAADDR_TEXTBOX.Text = Settings.Default.visaAddr;
+            TIMEOUT_TEXTBOX.Text = Settings.Default.visaTO.ToString("0");
+            FILEHEADER_TEXTBOX.Text = Settings.Default.fnHeader;
         }
 
         #region Serial EVENT
@@ -159,7 +164,7 @@ namespace PCAB_Debugger_GUI
                                 {
                                     if (typeof(ComboBox) == objChild.GetType())
                                     {
-                                        if (((ComboBox)objChild).Name == "DPS_" + (i + 1).ToString("00") + "_COMBOBOX")
+                                        if (((ComboBox)objChild).Name == "DPS" + (i + 1).ToString("00") + "_COMBOBOX")
                                         {
                                             strBf = _mod.PCAB_CMD(serialNum, "GetDPS now " + (i + 1).ToString(), 1);
                                             ((ComboBox)objChild).SelectedIndex = int.Parse(strBf.Trim('\n').Trim(' '));
@@ -233,9 +238,9 @@ namespace PCAB_Debugger_GUI
                         {
                             if (typeof(ComboBox) == objChild.GetType())
                             {
-                                if(Regex.IsMatch(((ComboBox)objChild).Name, "DPS_[0-1][0-9]_COMBOBOX"))
+                                if(Regex.IsMatch(((ComboBox)objChild).Name, "DPS[0-1][0-9]_COMBOBOX"))
                                 {
-                                    if (_mod.PCAB_CMD(SERIAL_NUMBERS_COMBOBOX.Text, "SetDPS " + int.Parse(((Grid)objBf).Name.Substring(3, 2)).ToString("0") +
+                                    if (_mod.PCAB_CMD(SERIAL_NUMBERS_COMBOBOX.Text, "SetDPS " + int.Parse(((Grid)objBf).Name.Substring(1, 2)).ToString("0") +
                                     " " + ((ComboBox)objChild).SelectedIndex.ToString("0"), 1).Substring(0, 4) != "DONE")
                                     {
                                         res = false;
@@ -764,6 +769,13 @@ namespace PCAB_Debugger_GUI
                 }
                 else { e.Cancel = true; }
             }
+            Settings.Default.spCaption = SERIAL_PORTS_COMBOBOX.Text;
+            Settings.Default.mli = long.Parse(WAITE_TIME_TEXTBOX.Text);
+            Settings.Default.sn = SERIAL_NUMBERS_TEXTBOX.Text;
+            Settings.Default.visaAddr = VISAADDR_TEXTBOX.Text;
+            Settings.Default.visaTO = long.Parse(TIMEOUT_TEXTBOX.Text);
+            Settings.Default.fnHeader = FILEHEADER_TEXTBOX.Text;
+            Settings.Default.Save();
         }
 
         private void OnError(object sender, PCABEventArgs e)

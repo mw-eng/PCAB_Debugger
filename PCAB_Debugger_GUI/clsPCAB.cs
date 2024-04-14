@@ -72,7 +72,7 @@ namespace PCAB_Debugger_GUI
                     _mod.WriteLine("#" + s + " GetIDN");
                     string[] arrBf = _mod.ReadLine().Split(',');
                     if (arrBf.Length != 4) { _mod.Close(); return false; }
-                    if (arrBf[0] == "Orient Microwave Corp." && arrBf[1] == "LX00-0004-00" && arrBf[3].Substring(0,4) == "1.1." && (arrBf[2] == s || "*" == s))
+                    if (arrBf[0] == "Orient Microwave Corp." && arrBf[1] == "LX00-0004-00" && arrBf[3].Substring(0,5) == "1.1.2" && (arrBf[2] == s || "*" == s))
                     {
                         DAT.Add(new condDAT(s.Replace(" ", ""), "", "", "", "", ""));
                     }
@@ -104,9 +104,8 @@ namespace PCAB_Debugger_GUI
                 string[] arrBf = _mod.ReadLine().Split(',');
                 _state = false;
                 _task = true;
-
                 if (arrBf.Length != 4) { return false; }
-                if (arrBf[0] == "Orient Microwave Corp." && arrBf[1] == "LX00-0004-00" && arrBf[2] == serialNum && arrBf[3] == "1.1.0")
+                if (arrBf[0] == "Orient Microwave Corp." && arrBf[1] == "LX00-0004-00" && arrBf[2] == serialNum && arrBf[3] == "1.1.2")
                 { return true; }
                 else { return false; }
             }

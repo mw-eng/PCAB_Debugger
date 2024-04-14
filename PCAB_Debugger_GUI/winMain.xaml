@@ -315,7 +315,6 @@
                                             <CheckBox x:Name="TRA_CHECKBOX" Content="Trace" IsChecked="True"/>
                                         </StackPanel>
                                     </GroupBox>
-
                                     <Grid Grid.Column="3">
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="1*"/>
