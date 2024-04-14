@@ -43,7 +43,7 @@ std::string Convert::ToString(const bool &val, const bool &formatString)
     return "0";
 }
 std::string Convert::ToString(const bool &val) { return ToString(val, false); }
-std::string Convert::ToString(const int64_t &val, const uint &BaseNumber, const uint &digit)
+std::string Convert::ToString(const uint64_t &val, const uint &BaseNumber, const uint &digit)
 {
     int64_t ulngBF = val;
     std::string strBf = "";
@@ -61,8 +61,8 @@ std::string Convert::ToString(const int64_t &val, const uint &BaseNumber, const 
     for(int i = strBf.length() ; 0 < i ; i-- ){ str.push_back(strBf[i - 1]); }
     return str;
 }
-std::string Convert::ToString(const int64_t &val, const uint &BaseNumber){ return ToString(val, BaseNumber, 0);}
-std::string Convert::ToString(const int64_t &val){ return ToString(val, 10, 0);}
+std::string Convert::ToString(const uint64_t &val, const uint &BaseNumber){ return ToString(val, BaseNumber, 0);}
+std::string Convert::ToString(const uint64_t &val){ return ToString(val, 10, 0);}
 
 bool Convert::TryToBool(const std::string &str, bool &out)
 {
@@ -241,14 +241,22 @@ std::vector<std::string> String::split(const std::string &str, const char &delim
     return elems;
 }
 
-uint64_t Math::POW(const uint64_t &x, const uint64_t &y, bool &out)
+uint64_t Math::POW64(const uint64_t &x, const uint64_t &y, bool &out)
 {
     uint64_t ret = 1;
     for(uint64_t i = 0 ; i < y ; i++ )
     {
-        if(ret < UINT64_MAX / y) { ret *= x; }
+        if(ret < UINT64_MAX / x) { ret *= x; }
         else { out = false; ret = UINT64_MAX; }
     }
     out = true;
     return ret;
 }
+uint32_t Math::POW32(const uint64_t &x, const uint64_t &y, bool &out)
+{uint32_t ret = Math::POW64(x, y, out); if(ret > UINT32_MAX) { out = false; return UINT32_MAX; } else { return ret; } }
+uint16_t Math::POW16(const uint64_t &x, const uint64_t &y, bool &out)
+{uint32_t ret = Math::POW64(x, y, out); if(ret > UINT16_MAX) { out = false; return UINT16_MAX; } else { return ret; } }
+uint8_t Math::POW8(const uint64_t &x, const uint64_t &y, bool &out)
+{uint32_t ret = Math::POW64(x, y, out); if(ret > UINT8_MAX) { out = false; return UINT8_MAX; } else { return ret; } }
+uint Math::POW(const uint64_t &x, const uint64_t &y, bool &out)
+{ return Math::POW32(x, y, out); }

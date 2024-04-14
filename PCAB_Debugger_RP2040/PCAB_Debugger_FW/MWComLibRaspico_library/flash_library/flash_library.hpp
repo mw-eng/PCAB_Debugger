@@ -7,7 +7,7 @@ class flash
 {
     public:
     static void getID(uint8_t id_out[FLASH_UNIQUE_ID_SIZE_BYTES]);
-    static uint32_t getID();
+    static uint64_t getID();
     static bool eraseROM(const uint32_t &address);
     static bool eraseROM(const uint16_t &blockNum, const uint8_t &sectorNum);
     static bool writeROM(const uint32_t &address, const uint8_t pageDAT[FLASH_PAGE_SIZE]);

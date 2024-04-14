@@ -10,9 +10,9 @@ class Convert
     public:
     static std::string ToString(const bool &val, const bool &formatString);
     static std::string ToString(const bool &val);
-    static std::string ToString(const int64_t &val, const uint &BaseNumber, const uint &digit);
-    static std::string ToString(const int64_t &val, const uint &BaseNumber);
-    static std::string ToString(const int64_t &val);
+    static std::string ToString(const uint64_t &val, const uint &BaseNumber, const uint &digit);
+    static std::string ToString(const uint64_t &val, const uint &BaseNumber);
+    static std::string ToString(const uint64_t &val);
 
     static bool TryToBool(const std::string &str, bool &out);
     static bool TryToInt(const std::string &str, int &out);
@@ -100,5 +100,9 @@ class String
 class Math
 {
     public:
-    static uint64_t POW(const uint64_t &x, const uint64_t &y, bool &out);
+    static uint64_t POW64(const uint64_t &x, const uint64_t &y, bool &out);
+    static uint32_t POW32(const uint64_t &x, const uint64_t &y, bool &out);
+    static uint16_t POW16(const uint64_t &x, const uint64_t &y, bool &out);
+    static uint8_t POW8(const uint64_t &x, const uint64_t &y, bool &out);
+    static uint POW(const uint64_t &x, const uint64_t &y, bool &out);
 };

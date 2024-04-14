@@ -1,12 +1,13 @@
 #include "flash_library.hpp"
 
 void flash::getID(uint8_t id_out[FLASH_UNIQUE_ID_SIZE_BYTES]) { flash_get_unique_id(id_out); }
-uint32_t flash::getID()
+uint64_t flash::getID()
 {
     uint8_t idBF[FLASH_UNIQUE_ID_SIZE_BYTES];
-    uint32_t id_out = 0u;
+    uint64_t id_out = 0u;
     bool ret;
-    for(uint8_t i = 0; i < FLASH_UNIQUE_ID_SIZE_BYTES; i++) { id_out += idBF[i] * Math::POW(0x100u, i, ret); }
+    flash_get_unique_id(idBF);
+    for(uint8_t i = 0; i < FLASH_UNIQUE_ID_SIZE_BYTES; i++) { id_out += idBF[i] * Math::POW64(0x100u, (FLASH_UNIQUE_ID_SIZE_BYTES - 1 - i), ret); }
     return id_out;
 }
 
