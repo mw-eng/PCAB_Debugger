@@ -40,11 +40,6 @@ namespace PCAB_Debugger_GUI
             SERIAL_PORTS_COMBOBOX_RELOAD();
             if(SERIAL_PORTS_COMBOBOX.Items.Count > 0) { SERIAL_PORTS_COMBOBOX.SelectedIndex = 0; CONNECT_BUTTON.IsEnabled = true; }
             sesn = VisaControlNI.NewResourceManager();
-            SAVEADDRESS_COMBOBOX.Items.Add("0");
-            SAVEADDRESS_COMBOBOX.Items.Add("1");
-            SAVEADDRESS_COMBOBOX.Items.Add("2");
-            SAVEADDRESS_COMBOBOX.Items.Add("3");
-            SAVEADDRESS_COMBOBOX.SelectedIndex = 0;
             
         }
 
@@ -151,20 +146,24 @@ namespace PCAB_Debugger_GUI
             if (strBf == "1\n") { CHECKBOX_Checked("LPM", null); } else if (strBf == "0\n") { CHECKBOX_Unchecked("LPM", null); } else { CHECKBOX_Indeterminate("LPM", null); }
             for(int i = 0; i < 15; i++)
             {
-                strBf = _mod.PCAB_CMD(serialNum, "GetDPS now " + (i + 1).ToString(), 1);
                 if(int.TryParse(strBf.Trim('\n').Trim(' '),out _))
                 {
-                    foreach(object objBf in PS_GRID.Children)
+                    foreach(object objBf in Port_GRID.Children)
                     {
                         if(typeof(Grid) == objBf.GetType())
                         {
-                            if (((Grid)objBf).Name == "PS" + (i + 1).ToString("00") + "_GRID")
+                            if (((Grid)objBf).Name == "P" + (i + 1).ToString("00") + "_GRID")
                             {
+                                
                                 foreach (object objChild in ((Grid)objBf).Children)
                                 {
                                     if (typeof(ComboBox) == objChild.GetType())
                                     {
-                                        ((ComboBox)objChild).SelectedIndex = int.Parse(strBf.Trim('\n').Trim(' '));
+                                        if (((ComboBox)objChild).Name == "DPS_" + (i + 1).ToString("00") + "_COMBOBOX")
+                                        {
+                                            strBf = _mod.PCAB_CMD(serialNum, "GetDPS now " + (i + 1).ToString(), 1);
+                                            ((ComboBox)objChild).SelectedIndex = int.Parse(strBf.Trim('\n').Trim(' '));
+                                        }
                                     }
                                 }
                             }
@@ -224,20 +223,23 @@ namespace PCAB_Debugger_GUI
         private void WRITEPS_Click(object sender, RoutedEventArgs e)
         {
             bool res = true;
-            foreach (object objBf in PS_GRID.Children)
+            foreach (object objBf in Port_GRID.Children)
             {
                 if (typeof(Grid) == objBf.GetType())
                 {
-                    if (Regex.IsMatch(((Grid)objBf).Name, "PS[0-1][0-9]_GRID"))
+                    if (Regex.IsMatch(((Grid)objBf).Name, "P[0-1][0-9]_GRID"))
                     {
                         foreach (object objChild in ((Grid)objBf).Children)
                         {
                             if (typeof(ComboBox) == objChild.GetType())
                             {
-                                if (_mod.PCAB_CMD(SERIAL_NUMBERS_COMBOBOX.Text, "SetDPS " + int.Parse(((Grid)objBf).Name.Substring(2, 2)).ToString("0") +
-                                    " " + ((ComboBox)objChild).SelectedIndex.ToString("0"), 1).Substring(0, 4) != "DONE")
+                                if(Regex.IsMatch(((ComboBox)objChild).Name, "DPS_[0-1][0-9]_COMBOBOX"))
                                 {
-                                    res = false;
+                                    if (_mod.PCAB_CMD(SERIAL_NUMBERS_COMBOBOX.Text, "SetDPS " + int.Parse(((Grid)objBf).Name.Substring(3, 2)).ToString("0") +
+                                    " " + ((ComboBox)objChild).SelectedIndex.ToString("0"), 1).Substring(0, 4) != "DONE")
+                                    {
+                                        res = false;
+                                    }
                                 }
                             }
                         }

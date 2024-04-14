@@ -25,7 +25,7 @@
         <Setter Property="HorizontalContentAlignment" Value="Left"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
     </Style>
-    <x:Array xmlns:sys="clr-namespace:System;assembly=mscorlib" Type="{x:Type sys:String}" x:Key="PS_List">
+    <x:Array xmlns:sys="clr-namespace:System;assembly=mscorlib" Type="{x:Type sys:String}" x:Key="DPS_List">
         <sys:String>  0     deg (000000 =  0)</sys:String>
         <sys:String>  5.625 deg (000001 =  1)</sys:String>
         <sys:String> 11.25  deg (000010 =  2)</sys:String>
@@ -156,5 +156,11 @@
         <sys:String>15.25 dB (111101 = 61)</sys:String>
         <sys:String>15.5  dB (111110 = 62)</sys:String>
         <sys:String>15.75 dB (111111 = 63)</sys:String>
+    </x:Array>
+    <x:Array xmlns:sys="clr-namespace:System;assembly=mscorlib" Type="{x:Type sys:String}" x:Key="STATE_List">
+        <sys:String>0</sys:String>
+        <sys:String>1</sys:String>
+        <sys:String>2</sys:String>
+        <sys:String>3</sys:String>
     </x:Array>
 </ResourceDictionary>
