@@ -520,7 +520,7 @@ int main()
                         if(modeCUI)
                         {
                             char ch[SNPRINTF_BUFFER_LEN];
-                            int len = snprintf(ch, sizeof(ch), "Id > %.3f [A]", ( analog->readVoltageADC1() - 1.65) / 0.09);
+                            int len = snprintf(ch, sizeof(ch), "Id > %.3f [A]", ( analog->readVoltageADC1() - 0.08) / 0.737);
                             uart->uart.writeLine(std::string(ch, len));
                         } else { uart->uart.writeLine(std::to_string(analog->readADC1())); }
                     }
@@ -532,7 +532,7 @@ int main()
                         if(modeCUI)
                         {
                             char ch[SNPRINTF_BUFFER_LEN];
-                            int len = snprintf(ch, sizeof(ch), "Vin > %.3f [V]", analog->readVoltageADC2() * 10.091);
+                            int len = snprintf(ch, sizeof(ch), "Vin > %.3f [V]", analog->readVoltageADC2() * 15.0);
                             uart->uart.writeLine(std::string(ch, len));
                         } else { uart->uart.writeLine(std::to_string(analog->readADC2())); }
                     }
