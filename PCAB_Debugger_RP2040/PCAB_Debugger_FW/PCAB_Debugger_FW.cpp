@@ -1,6 +1,7 @@
 //#define DEBUG_BOOT_MODE 0x03
 //#define DEBUG_BOOT_MODE 0x20
 //#define DEBUG_BOOT_MODE 0x2A
+#define DEBUG_RASPICO
 
 #include "PCAB_Debugger_FW.hpp"
 #define SNPRINTF_BUFFER_LEN 50
@@ -10,6 +11,17 @@ const static std::string FW_VENDOR = "Orient Microwave Corp.";
 const static std::string FW_MODEL = "LX00-0004-00";
 const static std::string FW_REV = "1.2.0";
 
+#ifdef DEBUG_RASPICO
+    #define DSA_D3_PIN 8
+    #define DSA_D4_PIN 9
+    #define DSA_D4_PIN 10
+    #define SNS_TEMP_PIN 24
+    #define SW_2_PIN 3
+    #define SW_3_PIN SW_1_PIN
+    #define SW_4_PIN SW_1_PIN
+    #define SW_5_PIN SW_1_PIN
+    #define SW_6_PIN 11
+#endif
 
 ds18b20 *sens;
 adc *analog;
@@ -98,9 +110,9 @@ void setup()
     stbLNA = false;
     lowMODE = false;
     if(bootMode == 0x01 || bootMode == 0x03) { readSTATE(14u, 0u, 0u); }
-    if(bootMode == 0x20){ readSTATE(15u, 0u, 0u); saveSTATE(14u, 0u, 0u); }
     // Write now state.
-    writeNowSTATE();
+    if(bootMode == 0x20){ readSTATE(15u, 0u, 0u); writeNowSTATE(); saveSTATE(14u, 0u, 0u); }
+    else { writeNowSTATE(); }
 }
 
 int main()
@@ -222,7 +234,7 @@ int main()
                         }
                         uint16_t num;
                         if(String::strCompare(cmd.argments[1], "IN", true)) { num = NUMBER_OF_SYSTEM + 1; }
-                        else if(!Convert::TryToUInt16(cmd.argments[0], 10, num)) { uart->uart.writeLine("ERR > Argument2 error."); break; }
+                        else if(!Convert::TryToUInt16(cmd.argments[1], 10, num)) { uart->uart.writeLine("ERR > Argument2 error."); break; }
                         if(NUMBER_OF_SYSTEM + 1 < num) { uart->uart.writeLine("ERR > The specified Argument2 is out of range."); break; }
                         if(modeCUI)
                         {
@@ -289,7 +301,7 @@ int main()
                         else if(!Convert::TryToUInt16(cmd.argments[0], 10, num)) { uart->uart.writeLine("ERR > Argument1 error."); break; }
                         if(NUMBER_OF_SYSTEM + 1 < num) { uart->uart.writeLine("ERR > The specified Argument1 is out of range."); break; }
                         if(!Convert::TryToUInt8(cmd.argments[1], 10, conf)) { uart->uart.writeLine("ERR > Argument2 error."); break; }
-                        if(num == 16 && conf > (1u << 5)) { uart->uart.writeLine("ERR > The specified Argument2 is out of range."); break; }
+                        if(num == NUMBER_OF_SYSTEM + 1 && conf > (1u << 5)) { uart->uart.writeLine("ERR > The specified Argument2 is out of range."); break; }
                         else if(conf > (1u << 6)) { uart->uart.writeLine("ERR > The specified Argument2 is out of range."); break; }
                         dsaBF[num - 1] = conf;
                         uart->uart.writeLine("DONE > Set to buffer.");
