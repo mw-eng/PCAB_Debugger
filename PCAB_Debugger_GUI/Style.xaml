@@ -18,8 +18,9 @@
         <Setter Property="IsReadOnly" Value="False" />
     </Style>
     <Style TargetType="{x:Type ComboBox}" x:Key="COMBOBOX_CONTENT_CENTER">
-        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="HorizontalContentAlignment" Value="Left"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="FontSize" Value="14px"/>
     </Style>
     <Style TargetType="{x:Type CheckBox}" x:Key="CHECKBOX_CONTENT_CENTER">
         <Setter Property="HorizontalContentAlignment" Value="Left"/>

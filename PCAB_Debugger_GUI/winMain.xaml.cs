@@ -138,46 +138,6 @@ namespace PCAB_Debugger_GUI
             if (SAVEADDRESS_COMBOBOX.SelectedIndex < 0) { SAVEADDRESS_COMBOBOX.SelectedIndex = 0; }
         }
 
-        private void read_conf(string serialNum)
-        {
-            string strBf;
-            strBf = _mod.PCAB_CMD(serialNum, "GetSTB.AMP", 1);
-            if (strBf == "1\n") { CHECKBOX_Checked("STBAMP", null); } else if (strBf == "0\n") { CHECKBOX_Unchecked("STBAMP", null); } else { CHECKBOX_Indeterminate("STBAMP", null); }
-            strBf = _mod.PCAB_CMD(serialNum, "GetSTB.DRA", 1);
-            if (strBf == "1\n") { CHECKBOX_Checked("STBDRA", null); } else if (strBf == "0\n") { CHECKBOX_Unchecked("STBDRA", null); } else { CHECKBOX_Indeterminate("STBDRA", null); }
-            strBf = _mod.PCAB_CMD(serialNum, "GetSTB.LNA", 1);
-            if (strBf == "1\n") { CHECKBOX_Checked("STBLNA", null); } else if (strBf == "0\n") { CHECKBOX_Unchecked("STBLNA", null); } else { CHECKBOX_Indeterminate("STBLNA", null); }
-            strBf = _mod.PCAB_CMD(serialNum, "GetLPM", 1);
-            if (strBf == "1\n") { CHECKBOX_Checked("LPM", null); } else if (strBf == "0\n") { CHECKBOX_Unchecked("LPM", null); } else { CHECKBOX_Indeterminate("LPM", null); }
-            for(int i = 0; i < 15; i++)
-            {
-                if(int.TryParse(strBf.Trim('\n').Trim(' '),out _))
-                {
-                    foreach(object objBf in Port_GRID.Children)
-                    {
-                        if(typeof(Grid) == objBf.GetType())
-                        {
-                            if (((Grid)objBf).Name == "P" + (i + 1).ToString("00") + "_GRID")
-                            {
-                                
-                                foreach (object objChild in ((Grid)objBf).Children)
-                                {
-                                    if (typeof(ComboBox) == objChild.GetType())
-                                    {
-                                        if (((ComboBox)objChild).Name == "DPS" + (i + 1).ToString("00") + "_COMBOBOX")
-                                        {
-                                            strBf = _mod.PCAB_CMD(serialNum, "GetDPS now " + (i + 1).ToString(), 1);
-                                            ((ComboBox)objChild).SelectedIndex = int.Parse(strBf.Trim('\n').Trim(' '));
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
         private void LOADMEM_Click(object sender, RoutedEventArgs e)
         {
             if (MessageBox.Show("Load configuration from memory."
@@ -225,39 +185,94 @@ namespace PCAB_Debugger_GUI
             }
         }
 
-        private void WRITEPS_Click(object sender, RoutedEventArgs e)
+        private void WRITE_Click(object sender, RoutedEventArgs e)
         {
-            bool res = true;
-            foreach (object objBf in Port_GRID.Children)
+            if(sender is Button)
             {
-                if (typeof(Grid) == objBf.GetType())
+                Button btn = (Button)sender;
+                bool res = true;
+                if (btn.Name == "WRITEDSA" || btn.Name == "WRITED")
                 {
-                    if (Regex.IsMatch(((Grid)objBf).Name, "P[0-1][0-9]_GRID"))
+                    res = true;
+                    foreach (object objBf in Port_GRID.Children)
                     {
-                        foreach (object objChild in ((Grid)objBf).Children)
+                        if (typeof(Grid) == objBf.GetType())
                         {
-                            if (typeof(ComboBox) == objChild.GetType())
+                            if (Regex.IsMatch(((Grid)objBf).Name, "P[0-1][0-9]_GRID"))
                             {
-                                if(Regex.IsMatch(((ComboBox)objChild).Name, "DPS[0-1][0-9]_COMBOBOX"))
+                                foreach (object objChild in ((Grid)objBf).Children)
                                 {
-                                    if (_mod.PCAB_CMD(SERIAL_NUMBERS_COMBOBOX.Text, "SetDPS " + int.Parse(((Grid)objBf).Name.Substring(1, 2)).ToString("0") +
-                                    " " + ((ComboBox)objChild).SelectedIndex.ToString("0"), 1).Substring(0, 4) != "DONE")
+                                    if (typeof(ComboBox) == objChild.GetType())
                                     {
-                                        res = false;
+                                        if (Regex.IsMatch(((ComboBox)objChild).Name, "DSA[0-1][0-9]_COMBOBOX"))
+                                        {
+                                            if (_mod.PCAB_CMD(SERIAL_NUMBERS_COMBOBOX.Text, "SetDSA " + int.Parse(((Grid)objBf).Name.Substring(1, 2)).ToString("0") +
+                                            " " + ((ComboBox)objChild).SelectedIndex.ToString("0"), 1).Substring(0, 4) != "DONE")
+                                            {
+                                                res = false;
+                                            }
+                                        }
                                     }
                                 }
                             }
                         }
                     }
+                    if (res && _mod.PCAB_CMD(SERIAL_NUMBERS_COMBOBOX.Text, "WrtDSA", 1).Substring(0, 4) == "DONE")
+                    {
+                        if (btn.Name == "WRITEDSA")
+                        {
+                            MessageBox.Show("Write att config done.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("Write att error.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        return;
+                    }
                 }
-            }
-            if (res && _mod.PCAB_CMD(SERIAL_NUMBERS_COMBOBOX.Text, "WrtDPS", 1).Substring(0, 4) == "DONE")
-            {
-                MessageBox.Show("Write phase config done.","Success",MessageBoxButton.OK,MessageBoxImage.Information);
-            }
-            else
-            {
-                MessageBox.Show("Write phase config error.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                if (btn.Name == "WRITEDPS" || btn.Name == "WRITED")
+                {
+                    res = true;
+                    foreach (object objBf in Port_GRID.Children)
+                    {
+                        if (typeof(Grid) == objBf.GetType())
+                        {
+                            if (Regex.IsMatch(((Grid)objBf).Name, "P[0-1][0-9]_GRID"))
+                            {
+                                foreach (object objChild in ((Grid)objBf).Children)
+                                {
+                                    if (typeof(ComboBox) == objChild.GetType())
+                                    {
+                                        if (Regex.IsMatch(((ComboBox)objChild).Name, "DPS[0-1][0-9]_COMBOBOX"))
+                                        {
+                                            if (_mod.PCAB_CMD(SERIAL_NUMBERS_COMBOBOX.Text, "SetDPS " + int.Parse(((Grid)objBf).Name.Substring(1, 2)).ToString("0") +
+                                            " " + ((ComboBox)objChild).SelectedIndex.ToString("0"), 1).Substring(0, 4) != "DONE")
+                                            {
+                                                res = false;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    if (res && _mod.PCAB_CMD(SERIAL_NUMBERS_COMBOBOX.Text, "WrtDPS", 1).Substring(0, 4) == "DONE")
+                    {
+                        if (btn.Name == "WRITEDPS")
+                        {
+                            MessageBox.Show("Write phase config done.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("Write phase config error.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        return;
+                    }
+                }
+                if(btn.Name == "WRITED")
+                {
+                    MessageBox.Show("Write att and phase config done.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
             }
         }
 
@@ -352,6 +367,7 @@ namespace PCAB_Debugger_GUI
                 }
             }
         }
+
         private void CHECKBOX_Indeterminate(object sender, RoutedEventArgs e)
         {
             if(typeof(CheckBox) != sender.GetType())
@@ -665,7 +681,9 @@ namespace PCAB_Debugger_GUI
         }
 
         #endregion
-        
+
+        #region Other EVENT
+
         private void DEC_TextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
             // 0-9のみ
@@ -848,6 +866,8 @@ namespace PCAB_Debugger_GUI
             }));
         }
 
+        #endregion
+
         #region Structure
         private struct ChartDAT
         {
@@ -870,6 +890,50 @@ namespace PCAB_Debugger_GUI
             }
         }
         #endregion
+
+        private void read_conf(string serialNum)
+        {
+            string strBf;
+            strBf = _mod.PCAB_CMD(serialNum, "GetSTB.AMP", 1);
+            if (strBf == "1\n") { CHECKBOX_Checked("STBAMP", null); } else if (strBf == "0\n") { CHECKBOX_Unchecked("STBAMP", null); } else { CHECKBOX_Indeterminate("STBAMP", null); }
+            strBf = _mod.PCAB_CMD(serialNum, "GetSTB.DRA", 1);
+            if (strBf == "1\n") { CHECKBOX_Checked("STBDRA", null); } else if (strBf == "0\n") { CHECKBOX_Unchecked("STBDRA", null); } else { CHECKBOX_Indeterminate("STBDRA", null); }
+            strBf = _mod.PCAB_CMD(serialNum, "GetSTB.LNA", 1);
+            if (strBf == "1\n") { CHECKBOX_Checked("STBLNA", null); } else if (strBf == "0\n") { CHECKBOX_Unchecked("STBLNA", null); } else { CHECKBOX_Indeterminate("STBLNA", null); }
+            strBf = _mod.PCAB_CMD(serialNum, "GetLPM", 1);
+            if (strBf == "1\n") { CHECKBOX_Checked("LPM", null); } else if (strBf == "0\n") { CHECKBOX_Unchecked("LPM", null); } else { CHECKBOX_Indeterminate("LPM", null); }
+            for (int i = 0; i < 15; i++)
+            {
+                if (int.TryParse(strBf.Trim('\n').Trim(' '), out _))
+                {
+                    foreach (object objBf in Port_GRID.Children)
+                    {
+                        if (typeof(Grid) == objBf.GetType())
+                        {
+                            if (((Grid)objBf).Name == "P" + (i + 1).ToString("00") + "_GRID")
+                            {
+                                foreach (object objChild in ((Grid)objBf).Children)
+                                {
+                                    if (typeof(ComboBox) == objChild.GetType())
+                                    {
+                                        if (((ComboBox)objChild).Name == "DSA" + (i + 1).ToString("00") + "_COMBOBOX")
+                                        {
+                                            strBf = _mod.PCAB_CMD(serialNum, "GetDSA now " + (i + 1).ToString(), 1);
+                                            ((ComboBox)objChild).SelectedIndex = int.Parse(strBf.Trim('\n').Trim(' '));
+                                        }
+                                        if (((ComboBox)objChild).Name == "DPS" + (i + 1).ToString("00") + "_COMBOBOX")
+                                        {
+                                            strBf = _mod.PCAB_CMD(serialNum, "GetDPS now " + (i + 1).ToString(), 1);
+                                            ((ComboBox)objChild).SelectedIndex = int.Parse(strBf.Trim('\n').Trim(' '));
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
     }
 }

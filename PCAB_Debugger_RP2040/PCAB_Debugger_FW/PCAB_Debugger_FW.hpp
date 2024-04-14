@@ -25,6 +25,11 @@
 #define STB_DRA_PIN 19
 #define STB_AMP_PIN 20
 #define STB_LNA_PIN 21
+#define DSA_D0_PIN 21
+#define DSA_D1_PIN 21
+#define DSA_D2_PIN 21
+#define DSA_D3_PIN 21
+#define DSA_D4_PIN 21
 // Switch PIN Configure
 #define SW_1_PIN 8
 #define SW_2_PIN 9
