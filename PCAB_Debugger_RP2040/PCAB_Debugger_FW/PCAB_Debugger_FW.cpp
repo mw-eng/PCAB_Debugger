@@ -85,8 +85,8 @@ void setup()
     stbDRA = false;
     stbLNA = false;
     lowMODE = false;
-    if(bootMode == 0x01 || bootMode == 0x03) { readSTATE(14, 0, 0); }
-    if(bootMode == 0x20){ readSTATE(15, 0, 0); saveSTATE(14, 0, 0); }
+    if(bootMode == 0x01 || bootMode == 0x03) { readSTATE(14u, 0u, 0u); }
+    if(bootMode == 0x20){ readSTATE(15u, 0u, 0u); saveSTATE(14u, 0u, 0u); }
     // Write now state.
     writeNowSTATE();
 }
@@ -688,11 +688,12 @@ void writeDSA()
 bool romAddressRangeCheck(const uint16_t &blockNum, const uint8_t &sectorpageNum)
 {
     uint32_t addr = blockNum * FLASH_BLOCK_SIZE + sectorpageNum * FLASH_PAGE_SIZE;
-    if(bootMode == 0x2A) { return true; }
-    if(bootMode == 0x02 || bootMode == 0x03)
+    if(bootMode == 0x2Au) { return true; }
+    if(bootMode == 0x02u || bootMode == 0x03u)
     {
         if( PICO_FLASH_SIZE_BYTES - FLASH_BLOCK_SIZE <= addr && addr < PICO_FLASH_SIZE_BYTES - FLASH_SECTOR_SIZE) { return true; }
     }
+    if(bootMode == 0x20u && addr == PICO_FLASH_SIZE_BYTES - 2 * FLASH_SECTOR_SIZE) { return true; }
     return false;
 }
 
