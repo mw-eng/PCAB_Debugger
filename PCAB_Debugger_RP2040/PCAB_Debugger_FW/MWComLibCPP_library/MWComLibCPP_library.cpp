@@ -3,7 +3,7 @@
 uint64_t pow64(const uint8_t &x, const uint &y)
 {
     bool ret;
-    return Math::POW((uint64_t)x, (uint64_t)y, ret);
+    return Math::POW64((uint64_t)x, (uint64_t)y, ret);
 }
 void eraseChar(std::string &str, const char &ch)
 {

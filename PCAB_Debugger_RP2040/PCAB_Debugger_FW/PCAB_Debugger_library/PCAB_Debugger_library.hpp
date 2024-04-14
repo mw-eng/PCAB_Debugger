@@ -59,7 +59,7 @@ class pcabCMD : uartSYNC
         CommandLine(std::string serial, std::string rom, cmdCode cmd, std::string args[], uint numArgs)
         {
             serialNum = serial;
-            if(!Convert::TryToUInt64(rom, 16, romID)) { romID = 0; }
+            if(!Convert::TryToUInt64(rom, 16u, romID)) { romID = 0; }
             command = cmd;
             argments.clear();
             for(uint i = 0 ; i < numArgs ; i++){ argments.push_back(args[i]);}
