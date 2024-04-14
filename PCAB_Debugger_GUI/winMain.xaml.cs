@@ -202,7 +202,7 @@ namespace PCAB_Debugger_GUI
                 , "Warning", MessageBoxButton.OKCancel, MessageBoxImage.Warning) != MessageBoxResult.OK) { return; }
             if (_mod.PCAB_PRESET(SERIAL_NUMBERS_COMBOBOX.Text))
             {
-                read_conf(SERIAL_NUMBERS_COMBOBOX.SelectedIndex.ToString());
+                read_conf(SERIAL_NUMBERS_COMBOBOX.Text);
                 MessageBox.Show("Preset done.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             else
