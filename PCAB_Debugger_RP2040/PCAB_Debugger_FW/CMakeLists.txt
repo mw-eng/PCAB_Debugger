@@ -30,13 +30,4 @@ target_link_libraries(${ProjectName}
     ds18b20_library
 )
 
-#add_compile_definitions(PICO_FLASH_SIZE_BYTES=2*1024*1024) #16M (Raspberry Pi Pico)
-#add_compile_definitions(PICO_FLASH_SIZE_BYTES=4*1024*1024) #32M
-#add_compile_definitions(PICO_FLASH_SIZE_BYTES=8*1024*1024) #64M
-add_compile_definitions(PICO_FLASH_SIZE_BYTES=16*1024*1024) #128M (PCAB)
-#add_compile_definitions(PICO_FLASH_SIZE_BYTES=32*1024*1024) #256M
-#add_compile_definitions(PICO_FLASH_SIZE_BYTES=64*1024*1024) #512M
-#add_compile_definitions(PICO_FLASH_SIZE_BYTES=128*1024*1024) #1024M
-
-# create map/bin/hex/uf2 file in addition to ELF.
 pico_add_extra_outputs(${ProjectName})
