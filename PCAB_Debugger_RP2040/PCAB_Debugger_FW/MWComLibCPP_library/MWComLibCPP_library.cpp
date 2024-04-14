@@ -45,7 +45,7 @@ std::string Convert::ToString(const bool &val, const bool &formatString)
 std::string Convert::ToString(const bool &val) { return ToString(val, false); }
 std::string Convert::ToString(const uint64_t &val, const uint &BaseNumber, const uint &digit)
 {
-    int64_t ulngBF = val;
+    uint64_t ulngBF = val;
     std::string strBf = "";
     std::string str = "";
     while(ulngBF)
