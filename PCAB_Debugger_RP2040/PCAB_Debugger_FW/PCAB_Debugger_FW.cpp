@@ -97,10 +97,7 @@ void setup()
 
     // Load serial number and ROM id
     serialNum = readSerialNum();
-    uint8_t idBF[FLASH_UNIQUE_ID_SIZE_BYTES];
-    flash::getID(idBF);
-    romID = 0u;
-    for(uint8_t i = 0; i < FLASH_UNIQUE_ID_SIZE_BYTES; i++) { romID += ((0x100u ^ i) * idBF[i]); }
+    romID = flash::getID();
 
     // Resture STATE @ default.
     for(uint i = 0; i < NUMBER_OF_SYSTEM; i++) { dpsBF[i] = 0u; dsaBF[i] = 8u; }

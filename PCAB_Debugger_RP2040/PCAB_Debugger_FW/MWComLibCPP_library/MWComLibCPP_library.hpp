@@ -96,3 +96,9 @@ class String
     static std::vector<std::string> split(const std::string &str, const char &delim);
 
 };
+
+class Math
+{
+    public:
+    static uint64_t POW(const uint64_t &x, const uint64_t &y, bool &out);
+};

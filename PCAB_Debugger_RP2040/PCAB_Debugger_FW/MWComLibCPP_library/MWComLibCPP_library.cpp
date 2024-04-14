@@ -2,9 +2,8 @@
 
 uint64_t pow64(const uint8_t &x, const uint &y)
 {
-    uint64_t ret = 1;
-    for(uint i = 0 ; i < y ; i++ ){ ret *= x;}
-    return ret;
+    bool ret;
+    return Math::POW((uint64_t)x, (uint64_t)y, ret);
 }
 void eraseChar(std::string &str, const char &ch)
 {
@@ -17,7 +16,7 @@ void eraseChar(std::string &str, const char &ch)
 }
 void eraseChar(std::string &str, const std::string &chars) { for(char c: chars) { eraseChar(str, c); } }
 void eraseCharNum(std::string &str) { eraseChar(str, ", \n\r\t\f\v"); }
-bool checNUM(std::string &str)
+bool checkNUM(std::string &str)
 {
     std::string strBf = str;
     bool flg = false;
@@ -97,7 +96,7 @@ bool Convert::TryToDouble(const std::string &str, double &out)
 {
     std::string strBf = str;
     eraseCharNum(strBf);
-    if(!checNUM(strBf)) { return false; }
+    if(!checkNUM(strBf)) { return false; }
     if(strBf[0] == '+') { eraseChar(strBf, '+'); }
     out = std::stod(strBf);
     return true;
@@ -106,7 +105,7 @@ bool Convert::TryToFloat(const std::string &str, float &out)
 {
     std::string strBf = str;
     eraseCharNum(strBf);
-    if(!checNUM(strBf)) { return false; }
+    if(!checkNUM(strBf)) { return false; }
     if(strBf[0] == '+') { eraseChar(strBf, '+'); }
     out = std::stof(strBf);
     return true;
@@ -199,21 +198,15 @@ std::string String::rtrim(const std::string  &str, const std::string &targ)
     size_t end = str.find_last_not_of(targ);
     return (end == std::string::npos) ? "" : str.substr(0, end + 1);
 }
-
 std::string String::trim(const std::string  &str, const std::string &targ) { return rtrim(ltrim(str, targ), targ); }
-
 std::string String::ltrim(const std::string &str) { return ltrim(str, " \n\r\t\f\v"); }
-
 std::string String::rtrim(const std::string &str) { return rtrim(str, " \n\r\t\f\v"); }
-
 std::string String::trim(const std::string &str) { return trim(str, " \n\r\t\f\v"); }
-
 uint8_t String::uint8_bitShiftLeft(const uint8_t &bit, const uint8_t &shift)
 {
     unsigned char chBF = bit;
     return (uint8_t)(chBF << shift);
 }
-
 bool String::strCompare(const std::string &a, const std::string &b, const bool &ignoreCase)
 {
     if(a.length() <= 0 && b.length() <= 0){return true;}
@@ -223,16 +216,13 @@ bool String::strCompare(const std::string &a, const std::string &b, const bool &
     }
     else{ return a == b ? true : false; }
 }
-
 bool String::strCompare(const std::string &a, const std::string &b) { return strCompare(a, b, false); }
-
 int String::conv_uint(const std::string &str)
 {
     if(str.length() <= 0){return -1;}
     if (std::all_of(str.cbegin(), str.cend(), isdigit)) { return stoi(str); }
     return -1;
 }
-
 std::vector<std::string> String::split(const std::string &str, const char &delim) {
     std::vector<std::string> elems;
     std::string item;
@@ -249,4 +239,16 @@ std::vector<std::string> String::split(const std::string &str, const char &delim
     if (!item.empty())
         elems.push_back(item);
     return elems;
+}
+
+uint64_t Math::POW(const uint64_t &x, const uint64_t &y, bool &out)
+{
+    uint64_t ret = 1;
+    for(uint64_t i = 0 ; i < y ; i++ )
+    {
+        if(ret < UINT64_MAX / y) { ret *= x; }
+        else { out = false; ret = UINT64_MAX; }
+    }
+    out = true;
+    return ret;
 }
