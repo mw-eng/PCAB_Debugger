@@ -269,7 +269,7 @@
                                         <RowDefinition Height="1*"/>
                                     </Grid.RowDefinitions>
                                     <Viewbox Grid.Row="0"><Label Content="J1 in / Port16" /></Viewbox>
-                                    <ComboBox Grid.Row="1" SelectedIndex="0" x:Name="DSA16_COMBOBOX" ItemsSource="{StaticResource DSA_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/>
+                                    <ComboBox Grid.Row="1" SelectedIndex="0" x:Name="DSA16_COMBOBOX" ItemsSource="{StaticResource DSAin_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/>
                                     <Viewbox Grid.Row="2" Grid.Column="0"><CheckBox x:Name="STBLNA_CHECKBOX" VerticalContentAlignment="Center" Content="Standby LNA" Checked="CHECKBOX_Checked" Unchecked="CHECKBOX_Unchecked" Indeterminate="CHECKBOX_Indeterminate" /></Viewbox>
                                 </Grid>
                             </Grid>
@@ -288,9 +288,9 @@
                                     <ColumnDefinition Width="1*"/>
                                     <ColumnDefinition Width="1*"/>
                                 </Grid.ColumnDefinitions>
-                                <Button Grid.Column="0" x:Name="WRITEDPS" Margin="5" Click="WRITE_Click"><Viewbox Margin="5"><TextBlock>Set Phase Config</TextBlock></Viewbox></Button>
-                                <Button Grid.Column="1" x:Name="WRITEDSA" Margin="5" Click="WRITE_Click"><Viewbox Margin="5"><TextBlock>Set Phase Config</TextBlock></Viewbox></Button>
-                                <Button Grid.Column="2" x:Name="WRITE" Margin="5" Click="WRITE_Click"><Viewbox Margin="5"><TextBlock>Set Phase Config</TextBlock></Viewbox></Button>
+                                <Button Grid.Column="0" x:Name="WRITEDSA" Margin="5" Click="WRITE_Click"><Viewbox Margin="5"><TextBlock>Set ATT Config</TextBlock></Viewbox></Button>
+                                <Button Grid.Column="1" x:Name="WRITEDPS" Margin="5" Click="WRITE_Click"><Viewbox Margin="5"><TextBlock>Set Phase Config</TextBlock></Viewbox></Button>
+                                <Button Grid.Column="2" x:Name="WRITE" Margin="5" Click="WRITE_Click"><Viewbox Margin="5"><TextBlock>Set Config</TextBlock></Viewbox></Button>
                             </Grid>
                             <Grid Grid.Column="1">
                                 <Grid.ColumnDefinitions>

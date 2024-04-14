@@ -191,7 +191,7 @@ namespace PCAB_Debugger_GUI
             {
                 Button btn = (Button)sender;
                 bool res = true;
-                if (btn.Name == "WRITEDSA" || btn.Name == "WRITED")
+                if (btn.Name == "WRITEDSA" || btn.Name == "WRITE")
                 {
                     res = true;
                     foreach (object objBf in Port_GRID.Children)
@@ -230,7 +230,7 @@ namespace PCAB_Debugger_GUI
                         return;
                     }
                 }
-                if (btn.Name == "WRITEDPS" || btn.Name == "WRITED")
+                if (btn.Name == "WRITEDPS" || btn.Name == "WRITE")
                 {
                     res = true;
                     foreach (object objBf in Port_GRID.Children)
@@ -269,7 +269,7 @@ namespace PCAB_Debugger_GUI
                         return;
                     }
                 }
-                if(btn.Name == "WRITED")
+                if(btn.Name == "WRITE")
                 {
                     MessageBox.Show("Write att and phase config done.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
@@ -902,7 +902,7 @@ namespace PCAB_Debugger_GUI
             if (strBf == "1\n") { CHECKBOX_Checked("STBLNA", null); } else if (strBf == "0\n") { CHECKBOX_Unchecked("STBLNA", null); } else { CHECKBOX_Indeterminate("STBLNA", null); }
             strBf = _mod.PCAB_CMD(serialNum, "GetLPM", 1);
             if (strBf == "1\n") { CHECKBOX_Checked("LPM", null); } else if (strBf == "0\n") { CHECKBOX_Unchecked("LPM", null); } else { CHECKBOX_Indeterminate("LPM", null); }
-            for (int i = 0; i < 15; i++)
+            for (int i = 0; i < 16; i++)
             {
                 if (int.TryParse(strBf.Trim('\n').Trim(' '), out _))
                 {

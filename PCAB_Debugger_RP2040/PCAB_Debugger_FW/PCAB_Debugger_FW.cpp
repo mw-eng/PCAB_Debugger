@@ -688,7 +688,7 @@ int main()
                     if(cmd.argments.size() != 0) { uart->uart.writeLine("ERR > Number of arguments does not match."); }
                     else
                     {
-                        if(!readSTATE(15, 0, 0))
+                        if(!readSTATE(15u, 0u, 0u))
                         {
                             for(uint i = 0; i < NUMBER_OF_SYSTEM; i++) { dpsBF[i] = 0u; dsaBF[i] = 8u; }
                             dsaBF[NUMBER_OF_SYSTEM] = 0u;
