@@ -32,7 +32,7 @@ pcabCMD *uart;
 bool modeCUI = true;
 bool modeECHO = false;
 std::string serialNum = "";
-uint64_t romID = 0xFFFFFFFFu;
+uint64_t romID = UINT64_MAX;
 uint8_t bootMode = 0;
 uint8_t dpsBF[NUMBER_OF_SYSTEM];
 uint8_t dpsNOW[NUMBER_OF_SYSTEM];
