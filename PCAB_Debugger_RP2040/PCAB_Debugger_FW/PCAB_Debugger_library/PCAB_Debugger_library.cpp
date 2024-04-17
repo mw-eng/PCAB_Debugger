@@ -40,6 +40,7 @@ pcabCMD::CommandLine pcabCMD::readCMD(bool echo)
     if (String::strCompare(cmd, "GetVd", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdBF.romID, cmdCode::GetVd, strArr, cmdBF.argments.size()); }
     if (String::strCompare(cmd, "GetId", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdBF.romID, cmdCode::GetId, strArr, cmdBF.argments.size()); }
     if (String::strCompare(cmd, "GetVin", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdBF.romID, cmdCode::GetVin, strArr, cmdBF.argments.size()); }
+    if (String::strCompare(cmd, "GetPin", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdBF.romID, cmdCode::GetPin, strArr, cmdBF.argments.size()); }
     if (String::strCompare(cmd, "GetSTB.AMP", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdBF.romID, cmdCode::GetSTB_AMP, strArr, cmdBF.argments.size()); }
     if (String::strCompare(cmd, "GetSTB.DRA", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdBF.romID, cmdCode::GetSTB_DRA, strArr, cmdBF.argments.size()); }
     if (String::strCompare(cmd, "GetSTB.LNA", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdBF.romID, cmdCode::GetSTB_LNA, strArr, cmdBF.argments.size()); }

@@ -65,6 +65,7 @@ GetTMP.CPU | Get CPU Temperature.
 GetVd | Get Vd Value.
 GetId | Get Id Value.
 GetVin | *Support with v1.2.0 or later*<br>Get Vin Value.
+GetPin | *Support with v1.2.0 or later*<br>Get Pin Value.
 
 </details>
 <details>
