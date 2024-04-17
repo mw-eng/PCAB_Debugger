@@ -30,6 +30,59 @@
             "options": {
                 "cwd": "${workspaceRoot}\\build"
             }
+        },
+        {
+            "label": "Build And Write ELF",
+            "type": "shell",
+            "command": "echo BuildAndWriteELF",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "Build All",
+                "Write ELF",
+            ],
+        },
+        {
+            "label": "Build All",
+            "type": "shell",
+            "command": "echo BuildAll",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "CMake",
+                "Build",
+            ],
+        },
+        {
+            "label": "Build Remove",
+            "type": "shell",
+            "command": "rm",
+            "args": [
+                "-R", "build"
+            ],
+            "options": {
+                "cwd": "${workspaceRoot}"
+            },
+        },
+        {
+            "label": "CMake",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "-B", "build"
+            ],
+            "options": {
+                "cwd": "${workspaceRoot}"
+            },
+        },
+        {
+            "label": "Build",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "--build", "build"
+            ],
+            "options": {
+                "cwd": "${workspaceRoot}"
+            },
         }
     ]
 }
