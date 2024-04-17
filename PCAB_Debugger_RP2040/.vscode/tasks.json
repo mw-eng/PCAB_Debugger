@@ -12,14 +12,24 @@
             }
         },
         {
-            "label": "Build project",
+            "label": "Write ELF",
             "type": "shell",
-            "command": "build",
+            "command": "openocd",
             "args": [
+                "-f", "interface/cmsis-dap.cfg",
+                "-f", "target/rp2040.cfg",
+                "-c", { 
+                    "value": "adapter speed 5000",
+                    "quoting": "strong"
+                    },
+                    "-c", { 
+                        "value": "program PCAB_Debugger_FW/PCAB_Debugger_FW.elf verify reset exit",
+                        "quoting": "strong"
+                        }
             ],
             "options": {
-                "cwd": "${workspaceRoot}"
+                "cwd": "${workspaceRoot}\\build"
             }
-        },
+        }
     ]
 }
