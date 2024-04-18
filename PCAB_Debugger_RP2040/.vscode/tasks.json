@@ -12,77 +12,18 @@
             }
         },
         {
-            "label": "Write ELF",
+            "label": "Flash",
             "type": "shell",
             "command": "openocd",
             "args": [
-                "-f", "interface/cmsis-dap.cfg",
-                "-f", "target/rp2040.cfg",
-                "-c", { 
-                    "value": "adapter speed 5000",
-                    "quoting": "strong"
-                    },
-                    "-c", { 
-                        "value": "program PCAB_Debugger_FW/PCAB_Debugger_FW.elf verify reset exit",
-                        "quoting": "strong"
-                        }
+              "-f",
+              "interface/cmsis-dap.cfg",
+              "-f",
+              "target/rp2040.cfg",
+              "-c",
+              "adapter speed 5000; program {${command:cmake.launchTargetPath}} verify reset exit"
             ],
-            "options": {
-                "cwd": "${workspaceRoot}\\build"
-            }
-        },
-        {
-            "label": "Build And Write ELF",
-            "type": "shell",
-            "command": "echo BuildAndWriteELF",
-            "dependsOrder": "sequence",
-            "dependsOn": [
-                "Build All",
-                "Write ELF",
-            ],
-        },
-        {
-            "label": "Build All",
-            "type": "shell",
-            "command": "echo BuildAll",
-            "dependsOrder": "sequence",
-            "dependsOn": [
-                "CMake",
-                "Build",
-            ],
-        },
-        {
-            "label": "Build Remove",
-            "type": "shell",
-            "command": "rm",
-            "args": [
-                "-R", "build"
-            ],
-            "options": {
-                "cwd": "${workspaceRoot}"
-            },
-        },
-        {
-            "label": "CMake",
-            "type": "shell",
-            "command": "cmake",
-            "args": [
-                "-B", "build"
-            ],
-            "options": {
-                "cwd": "${workspaceRoot}"
-            },
-        },
-        {
-            "label": "Build",
-            "type": "shell",
-            "command": "cmake",
-            "args": [
-                "--build", "build"
-            ],
-            "options": {
-                "cwd": "${workspaceRoot}"
-            },
-        }
+            "problemMatcher": []
+          },
     ]
 }
