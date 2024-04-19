@@ -21,11 +21,12 @@ namespace PCAB_Debugger_GUI
             public string Vin { get; set; }
             public string Vd { get; set; }
             public string Id { get; set; }
+            public string Pin { get; set; }
             public string TEMPs { get; set; }
             public string CPU_TEMP { get; set; }
 
-            public condDAT(string sn, string vin, string vd, string id, string tmp, string cpu)
-            { SN = sn; Vin = vin; Vd = vd; Id = id; TEMPs = tmp; CPU_TEMP = cpu; }
+            public condDAT(string sn, string vin, string vd, string id, string pin, string tmp, string cpu)
+            { SN = sn; Vin = vin; Vd = vd; Id = id; Pin = pin; TEMPs = tmp; CPU_TEMP = cpu; }
 
         }
         public condDAT CondNOW;
@@ -74,7 +75,7 @@ namespace PCAB_Debugger_GUI
                     if (arrBf.Length != 4) { _mod.Close(); return false; }
                     if (arrBf[0] == "Orient Microwave Corp." && arrBf[1] == "LX00-0004-00" && arrBf[3].Substring(0,4) == "1.2." && (arrBf[2] == s || "*" == s))
                     {
-                        DAT.Add(new condDAT(s.Replace(" ", ""), "", "", "", "", ""));
+                        DAT.Add(new condDAT(s.Replace(" ", ""), "", "", "", "", "", ""));
                     }
                 }
                 if(DAT.Count < 1) { _mod.Close(); return false; }
@@ -162,11 +163,13 @@ namespace PCAB_Debugger_GUI
                             string temp = _mod.ReadLine();
                             _mod.WriteLine("#" + cdat.SN + " GetVin");
                             string vin = _mod.ReadLine();
+                            _mod.WriteLine("#" + cdat.SN + " GetPin");
+                            string pin = _mod.ReadLine();
                             _mod.WriteLine("#" + cdat.SN + " GetTMP.CPU");
                             string cpu_tmp = _mod.ReadLine();
                             if (CondNOW.SN == cdat.SN && (CondNOW.Id != id || CondNOW.Vd != vd || CondNOW.TEMPs != temp || CondNOW.Vin != vin || CondNOW.CPU_TEMP != cpu_tmp))
                             {
-                                condDAT dat = new condDAT(cdat.SN, vin, vd, id, temp, cpu_tmp);
+                                condDAT dat = new condDAT(cdat.SN, vin, vd, id, pin, temp, cpu_tmp);
                                 OnUpdateDAT?.Invoke(this, new PCABEventArgs(dat, null));
                             }
                         }

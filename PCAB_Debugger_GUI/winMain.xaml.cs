@@ -816,7 +816,7 @@ namespace PCAB_Debugger_GUI
         {
             uint uiBF;
             float flBF;
-            string id = "ND", vd = "ND", vin = "ND", cpu = "ND";
+            string id = "ND", vd = "ND", vin = "ND", cpu = "ND", pin = "ND";
             string[] tmp = { "ND", "ND", "ND", "ND", "ND", "ND", "ND", "ND", "ND", "ND", "ND", "ND", "ND", "ND", "ND" };
             if (_mod != null)
             {
@@ -835,6 +835,8 @@ namespace PCAB_Debugger_GUI
                 else { vin = (uiBF * 3.3f / (1 << 12) * 15).ToString("0.00"); }
                 if (!uint.TryParse(e.ReceiveDAT.CPU_TEMP, out uiBF)) { cpu = "ND"; }
                 else { cpu = (27.0f - (uiBF * 3.3f / (1 << 12) - 0.706f) / 0.001721f).ToString("0.00"); }
+                if (!uint.TryParse(e.ReceiveDAT.Pin, out uiBF)) { pin = "ND"; }
+                else { pin = (uiBF * 3.3f / (1 << 12)).ToString("0.00"); }
                 string[] arrBf = e.ReceiveDAT.TEMPs.Split(',');
                 for (int i = 0; i < arrBf.Length; i++)
                 {
@@ -848,6 +850,7 @@ namespace PCAB_Debugger_GUI
                 SNS_VD_LABEL.Content = vd;
                 SNS_VIN_LABEL.Content = vin;
                 SNS_CPU_TEMP_LABEL.Content = cpu;
+                SNS_PIN_LABEL.Content = pin;
                 TEMP01.Content = tmp[0];
                 TEMP02.Content = tmp[1];
                 TEMP03.Content = tmp[2];
