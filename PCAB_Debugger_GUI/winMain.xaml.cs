@@ -815,7 +815,7 @@ namespace PCAB_Debugger_GUI
         private void OnUpdateDAT(object sender, PCABEventArgs e)
         {
             uint uiBF;
-            float flBF;
+            Int16 i16BF;
             string id = "ND", vd = "ND", vin = "ND", cpu = "ND", pin = "ND";
             string[] tmp = { "ND", "ND", "ND", "ND", "ND", "ND", "ND", "ND", "ND", "ND", "ND", "ND", "ND", "ND", "ND" };
             if (_mod != null)
@@ -840,8 +840,8 @@ namespace PCAB_Debugger_GUI
                 string[] arrBf = e.ReceiveDAT.TEMPs.Split(',');
                 for (int i = 0; i < arrBf.Length; i++)
                 {
-                    if (!float.TryParse(arrBf[i], out flBF)) { tmp[i] = "ND"; }
-                    else { tmp[i] = flBF.ToString("0.00"); }
+                    if (!Int16.TryParse(arrBf[i], out i16BF)) { tmp[i] = "ND"; }
+                    else { tmp[i] = (i16BF / 16.0f).ToString("0.00"); }
                 }
             }
             Dispatcher.BeginInvoke(new Action(() =>
