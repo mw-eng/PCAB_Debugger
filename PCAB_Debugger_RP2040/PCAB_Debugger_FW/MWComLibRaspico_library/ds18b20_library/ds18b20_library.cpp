@@ -22,6 +22,11 @@
 
 ds18b20::ds18b20(PIO pioID, uint gpioNumber, uint8_t senser_count_max)
 {
+    //pull up check
+    gpio_init(gpioNumber);
+    gpio_set_dir(gpioNumber ,GPIO_IN);
+    if(!gpio_get(gpioNumber)){ SENS_TMP.clear(); return; }
+    
     SENS_TMP.clear();
     if (pio_can_add_program (pioID, &onewire_program)) {
         uint offset = pio_add_program (pioID, &onewire_program);
@@ -30,7 +35,6 @@ ds18b20::ds18b20(PIO pioID, uint gpioNumber, uint8_t senser_count_max)
             uint64_t romcode[senser_count_max];
             // find and display 64-bit device addresses
             int num_devs = ow_romsearch (&ow, romcode, senser_count_max, OW_SEARCH_ROM);
-            if(num_devs > 0) { if( romcode[0] == 0u) { return; } }  //null stop
             for(uint8_t i = 0; i < num_devs; i++)
             {
                 SENS_TMP.push_back(romcode[i]);

@@ -21,13 +21,13 @@ const static std::string FW_REV = "1.2.0";
     #define SW_4_PIN SW_1_PIN
     #define SW_5_PIN SW_1_PIN
     #define SW_6_PIN 11
+    
 #endif
 
 ds18b20 *sens;
 adc *analog;
 spi *spi_dps;
 spi *spi_dsa;
-//spi *spi_sa;
 pcabCMD *uart;
 bool modeCUI = true;
 bool modeECHO = false;
@@ -452,18 +452,19 @@ int main()
                         if(sens->getNumberOfSenser() < num || sens->getNumberOfSenser() == 0) { uart->uart.writeLine("ERR > Specified sensor does not exist."); break; }
                         if(num == 0)
                         {
-                            std::vector<float> code = sens->readTEMP();
                             if(modeCUI)
                             {
+                                std::vector<float> code = sens->readTEMP();
                                 char ch[SNPRINTF_BUFFER_LEN];
                                 for(uint8_t i = 0 ; i < code.size() ; i++)
                                 {
-                                    int len = snprintf(ch, sizeof(ch), "%+3u > %0.000f [degC]", i, code[i]);
+                                    int len = snprintf(ch, sizeof(ch), "%+3u > %.3f [degC]", i, code[i]);
                                     uart->uart.writeLine(std::string(ch, len));
                                 }
                             }
                             else
                             {
+                                std::vector<int16_t> code = sens->readSENS();
                                 uart->uart.write(std::to_string(code[0]));
                                 for(uint8_t i = 1 ; i < code.size() ; i++)
                                 { uart->uart.write("," + std::to_string(code[i])); }
@@ -472,15 +473,16 @@ int main()
                         }
                         else
                         {
-                            float code = sens->readTEMP(num - 1);
                             if(modeCUI)
                             {
+                                float code = sens->readTEMP(num - 1);
                                 char ch[SNPRINTF_BUFFER_LEN];
                                 int len = snprintf(ch, sizeof(ch), "%+3u > %0.000f [degC]", num);
                                 uart->uart.writeLine(std::string(ch, len));
                             }
                             else
                             {
+                                int16_t code = sens->readSENS(num - 1);
                                 uart->uart.writeLine(std::to_string(code));
                             }
                         }
