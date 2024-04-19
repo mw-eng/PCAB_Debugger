@@ -20,9 +20,9 @@
 #define OW_SEARCH_ROM       0xF0
 
 
-
 ds18b20::ds18b20(PIO pioID, uint gpioNumber, uint8_t senser_count_max)
 {
+    SENS_TMP.clear();
     if (pio_can_add_program (pioID, &onewire_program)) {
         uint offset = pio_add_program (pioID, &onewire_program);
         // claim a state machine and initialise a driver instance
@@ -30,7 +30,7 @@ ds18b20::ds18b20(PIO pioID, uint gpioNumber, uint8_t senser_count_max)
             uint64_t romcode[senser_count_max];
             // find and display 64-bit device addresses
             int num_devs = ow_romsearch (&ow, romcode, senser_count_max, OW_SEARCH_ROM);
-            SENS_TMP.clear();
+            if(num_devs > 0) { if( romcode[0] == 0u) { return; } }  //null stop
             for(uint8_t i = 0; i < num_devs; i++)
             {
                 SENS_TMP.push_back(romcode[i]);
