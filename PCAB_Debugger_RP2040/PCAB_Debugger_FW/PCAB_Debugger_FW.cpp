@@ -21,7 +21,7 @@ const static std::string FW_REV = "1.2.0";
     #define SW_4_PIN SW_1_PIN
     #define SW_5_PIN SW_1_PIN
     #define SW_6_PIN 11
-    
+    #define PICO_LED_PIN 25
 #endif
 
 ds18b20 *sens;
@@ -83,6 +83,11 @@ void setup()
     gpio_set_dir(SW_4_PIN ,GPIO_IN);
     gpio_set_dir(SW_5_PIN ,GPIO_IN);
     gpio_set_dir(SW_6_PIN ,GPIO_IN);
+#ifdef DEBUG_RASPICO
+    gpio_init(PICO_LED_PIN);
+    gpio_set_dir(PICO_LED_PIN ,GPIO_OUT);
+    gpio_put(PICO_LED_PIN, true);
+#endif
 
     //Get Boot Mode
     bootMode = !gpio_get(SW_1_PIN);
