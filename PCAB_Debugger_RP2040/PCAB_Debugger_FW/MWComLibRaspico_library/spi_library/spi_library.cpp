@@ -70,7 +70,7 @@ std::vector<uint8_t> spi::write_read(std::vector<uint8_t> wdat)
     uint8_t writeDAT[wdat.size()];
     uint8_t buffer[wdat.size()];
     std::copy(wdat.begin(), wdat.end(), writeDAT);
-    spi_write_read_blocking(spi0, writeDAT, buffer, wdat.size());
+    spi_write_read_blocking(spiID, writeDAT, buffer, wdat.size());
     return std::vector<uint8_t>(buffer, buffer + wdat.size());
 }
 
@@ -80,7 +80,7 @@ std::vector<uint16_t> spi::write_read(std::vector<uint16_t> wdat)
     uint16_t writeDAT[wdat.size()];
     uint16_t buffer[wdat.size()];
     std::copy(wdat.begin(), wdat.end(), writeDAT);
-    spi_write16_read16_blocking(spi0, writeDAT, buffer, wdat.size());
+    spi_write16_read16_blocking(spiID, writeDAT, buffer, wdat.size());
     return std::vector<uint16_t>(buffer, buffer + wdat.size());
 }
 
