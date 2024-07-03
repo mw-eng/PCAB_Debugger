@@ -100,10 +100,10 @@ OROM {x-yz} {HEX} | Overwrite sector data to ROM.<br>{x-yz} : Specify the *block
 </details>
 
 ## Hardware Switch Configuration
-List of settings by onboard hardware switch (SW1) status.  
-  
-<img src="https://github.com/mw-eng/PCAB_Debugger/blob/master/PCAB_Debugger_RP2040/assets/SW1.png?raw=true" width="100px"> 0 = OFF(H) / 1 = ON(L)<br>
-*In v1.3.0 and later, sw1 and sw2 are assigned to output pins and must be fixed in the OFF state.*<br>
+List of settings by onboard hardware switch (SW1) status.<br>
+*In v1.3.0 and later, sw1 and sw2 are assigned to output pins and must be fixed in the OFF state.*
+
+<img src="https://github.com/mw-eng/PCAB_Debugger/blob/master/PCAB_Debugger_RP2040/assets/SW1.png?raw=true" width="100px"> 0 = OFF(H) / 1 = ON(L)  
   
 <details open>
 <summary>Switch status 0x00 to 0x0F</summary>
