@@ -84,14 +84,14 @@ void pcabCMD::write(std::string str)
 {
     if(!de_gpio){rs485enable();}
     uart.write(str);
-    rs485disable;
+    rs485disable();
 }
 
 void pcabCMD::writeLine(std::string str)
 {
     if(!de_gpio){rs485enable();}
     uart.writeLine(str);
-    rs485disable;
+    rs485disable();
 }
 
 void pcabCMD::rs485enable()

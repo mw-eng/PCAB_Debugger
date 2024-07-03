@@ -7,9 +7,9 @@ class pcabCMD : uartSYNC
     private:
     uint de_gpio;
     bool de_mode;
+    uartSYNC uart;
 
     public:
-    uartSYNC uart;
 
     /// @brief Command cord. 
     enum cmdCode{
