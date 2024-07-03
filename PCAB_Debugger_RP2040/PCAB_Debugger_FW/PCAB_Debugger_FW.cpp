@@ -1,6 +1,6 @@
 //#define DEBUG_BOOT_MODE 0x03
-//#define DEBUG_BOOT_MODE 0x20
-//#define DEBUG_BOOT_MODE 0x2A
+//#define DEBUG_BOOT_MODE 0x0A
+//#define DEBUG_BOOT_MODE 0x0F
 //#define DEBUG_RASPICO
 
 #include "PCAB_Debugger_FW.hpp"
@@ -113,7 +113,7 @@ void setup()
     lowMODE = false;
     if(bootMode == 0x01 || bootMode == 0x03) { readSTATE(14u, 0u, 0u); }
     // Write now state.
-    if(bootMode == 0x20){ readSTATE(15u, 0u, 0u); writeNowSTATE(); saveSTATE(14u, 0u, 0u); }
+    if(bootMode == 0x0A){ readSTATE(15u, 0u, 0u); writeNowSTATE(); saveSTATE(14u, 0u, 0u); }
     else { writeNowSTATE(); }
 }
 
@@ -829,12 +829,12 @@ void writeDSA()
 bool romAddressRangeCheck(const uint16_t &blockNum, const uint8_t &sectorpageNum)
 {
     uint32_t addr = blockNum * FLASH_BLOCK_SIZE + sectorpageNum * FLASH_PAGE_SIZE;
-    if(bootMode == 0x2Au) { return true; }
+    if(bootMode == 0x0Fu) { return true; }
     if(bootMode == 0x02u || bootMode == 0x03u)
     {
         if( PICO_FLASH_SIZE_BYTES - FLASH_BLOCK_SIZE <= addr && addr < PICO_FLASH_SIZE_BYTES - FLASH_SECTOR_SIZE) { return true; }
     }
-    if(bootMode == 0x20u && addr == PICO_FLASH_SIZE_BYTES - 2 * FLASH_SECTOR_SIZE) { return true; }
+    if(bootMode == 0x0Au && addr == PICO_FLASH_SIZE_BYTES - 2 * FLASH_SECTOR_SIZE) { return true; }
     return false;
 }
 

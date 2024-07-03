@@ -107,92 +107,23 @@ List of settings by onboard hardware switch (SW1) status.
 <details open>
 <summary>Switch status 0x00 to 0x0F</summary>
 
-Number | SW6 | SW5 | SW4 | SW3 | SW2 | SW1 | HEX | Stateus | Description
-:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--
-0 | 0 | 0 | 0 | 0 | 0 | 0 | 0x00 | Default | Default Status Boot.<br>*DPS(@All) = 0deg*<br>*DSA(@Input) = 0dB*<br>*DSA(@All except input) = 2dB*<br>*ALL Active Mode*
-1 | 0 | 0 | 0 | 0 | 0 | 1 | 0x01 | Auto Load Boot. | Load the state (0) saved in ROM and boot.<br>*Picture Stateus*
-2 | 0 | 0 | 0 | 0 | 1 | 0 | 0x02 | Allow settings to be saved. | Settins can be write in ROM.
-3 | 0 | 0 | 0 | 0 | 1 | 1 | 0x03 | Auto Load Boot.<br>and<br>Allow settings to be saved. | Allows to start autoload and save settings.<br>*Basic usage conditions *
-4 | 0 | 0 | 0 | 1 | 0 | 0 | 0x04 | State4 | Unused.
-5 | 0 | 0 | 0 | 1 | 0 | 1 | 0x05 | State5 | Unused.
-6 | 0 | 0 | 0 | 1 | 1 | 0 | 0x06 | State6 | Unused.
-7 | 0 | 0 | 0 | 1 | 1 | 1 | 0x07 | State7 | Unused.
-8 | 0 | 0 | 1 | 0 | 0 | 0 | 0x08 | State8 | Unused.
-9 | 0 | 0 | 1 | 0 | 0 | 1 | 0x09 | State9 | Unused.
-10 | 0 | 0 | 1 | 0 | 1 | 0 | 0x0A | State10 | Unused.
-11 | 0 | 0 | 1 | 0 | 1 | 1 | 0x0B | State11 | Unused.
-12 | 0 | 0 | 1 | 1 | 0 | 0 | 0x0C | State12 | Unused.
-13 | 0 | 0 | 1 | 1 | 0 | 1 | 0x0D | State13 | Unused.
-14 | 0 | 0 | 1 | 1 | 1 | 0 | 0x0E | State14 | Unused.
-15 | 0 | 0 | 1 | 1 | 1 | 1 | 0x0F | State15 | Unused.
-
-</details>
-<details>
-<summary>Switch status 0x10 to 0x1F</summary>
-
-Number | SW6 | SW5 | SW4 | SW3 | SW2 | SW1 | HEX | Stateus | Description
-:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--
-16 | 0 | 1 | 0 | 0 | 0 | 0 | 0x10 | State16 | Unused.
-17 | 0 | 1 | 0 | 0 | 0 | 1 | 0x11 | State17 | Unused.
-18 | 0 | 1 | 0 | 0 | 1 | 0 | 0x12 | State18 | Unused.
-19 | 0 | 1 | 0 | 0 | 1 | 1 | 0x13 | State19 | Unused.
-20 | 0 | 1 | 0 | 1 | 0 | 0 | 0x14 | State20 | Unused.
-21 | 0 | 1 | 0 | 1 | 0 | 1 | 0x15 | State21 | Unused.
-22 | 0 | 1 | 0 | 1 | 1 | 0 | 0x16 | State22 | Unused.
-23 | 0 | 1 | 0 | 1 | 1 | 1 | 0x17 | State23 | Unused.
-24 | 0 | 1 | 1 | 0 | 0 | 0 | 0x18 | State24 | Unused.
-25 | 0 | 1 | 1 | 0 | 0 | 1 | 0x19 | State25 | Unused.
-26 | 0 | 1 | 1 | 0 | 1 | 0 | 0x1A | State26 | Unused.
-27 | 0 | 1 | 1 | 0 | 1 | 1 | 0x1B | State27 | Unused.
-28 | 0 | 1 | 1 | 1 | 0 | 0 | 0x1C | State28 | Unused.
-29 | 0 | 1 | 1 | 1 | 0 | 1 | 0x1D | State29 | Unused.
-30 | 0 | 1 | 1 | 1 | 1 | 0 | 0x1E | State30 | Unused.
-31 | 0 | 1 | 1 | 1 | 1 | 1 | 0x1F | State31 | Unused.
-
-</details>
-<details open>
-<summary>Switch status 0x20 to 0x2F</summary>
-
-Number | SW6 | SW5 | SW4 | SW3 | SW2 | SW1 | HEX | Stateus | Description
-:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--
-32 | 1 | 0 | 0 | 0 | 0 | 0 | 0x20 | Factory reset on boot. | If the switch is in this state at startup, the system boots to factory defaults and restore the autoload settings to their initial state.<br>*Settings outside the default settings area will not be changed.*
-33 | 1 | 0 | 0 | 0 | 0 | 1 | 0x21 | State33 | Unused.
-34 | 1 | 0 | 0 | 0 | 1 | 0 | 0x22 | State34 | Unused.
-35 | 1 | 0 | 0 | 0 | 1 | 1 | 0x23 | State35 | Unused.
-36 | 1 | 0 | 0 | 1 | 0 | 0 | 0x24 | State36 | Unused.
-37 | 1 | 0 | 0 | 1 | 0 | 1 | 0x25 | State37 | Unused.
-38 | 1 | 0 | 0 | 1 | 1 | 0 | 0x26 | State38 | Unused.
-39 | 1 | 0 | 0 | 1 | 1 | 1 | 0x27 | State39 | Unused.
-40 | 1 | 0 | 1 | 0 | 0 | 0 | 0x28 | State40 | Unused.
-41 | 1 | 0 | 1 | 0 | 0 | 1 | 0x29 | State41 | Unused.
-42 | 1 | 0 | 1 | 0 | 1 | 0 | 0x2A | Boot in the maintenance mode. | If the switch is in this state at startup, it boots in the administrator mode.<br>As general rule, do not use it as it may overwrite the ROM area where factory settings and serial numbers are stored.
-43 | 1 | 0 | 1 | 0 | 1 | 1 | 0x2B | State43 | Unused.
-44 | 1 | 0 | 1 | 1 | 0 | 0 | 0x2C | State44 | Unused.
-45 | 1 | 0 | 1 | 1 | 0 | 1 | 0x2D | State45 | Unused.
-46 | 1 | 0 | 1 | 1 | 1 | 0 | 0x2E | State46 | Unused.
-47 | 1 | 0 | 1 | 1 | 1 | 1 | 0x2F | State47 | Unused.
-
-</details>
-<details>
-<summary>Switch status 0x30 to 0x3F</summary>
-
-Number | SW6 | SW5 | SW4 | SW3 | SW2 | SW1 | HEX | Stateus | Description
-:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--
-48 | 1 | 1 | 0 | 0 | 0 | 0 | 0x30 | State48 | Unused.
-49 | 1 | 1 | 0 | 0 | 0 | 1 | 0x31 | State49 | Unused.
-50 | 1 | 1 | 0 | 0 | 1 | 0 | 0x32 | State50 | Unused.
-51 | 1 | 1 | 0 | 0 | 1 | 1 | 0x33 | State51 | Unused.
-52 | 1 | 1 | 0 | 1 | 0 | 0 | 0x34 | State52 | Unused.
-53 | 1 | 1 | 0 | 1 | 0 | 1 | 0x35 | State53 | Unused.
-54 | 1 | 1 | 0 | 1 | 1 | 0 | 0x36 | State54 | Unused.
-55 | 1 | 1 | 0 | 1 | 1 | 1 | 0x37 | State55 | Unused.
-56 | 1 | 1 | 1 | 0 | 0 | 0 | 0x38 | State56 | Unused.
-57 | 1 | 1 | 1 | 0 | 0 | 1 | 0x39 | State57 | Unused.
-58 | 1 | 1 | 1 | 0 | 1 | 0 | 0x3A | State58 | Unused.
-59 | 1 | 1 | 1 | 0 | 1 | 1 | 0x3B | State59 | Unused.
-60 | 1 | 1 | 1 | 1 | 0 | 0 | 0x3C | State60 | Unused.
-61 | 1 | 1 | 1 | 1 | 0 | 1 | 0x3D | State61 | Unused.
-62 | 1 | 1 | 1 | 1 | 1 | 0 | 0x3E | State62 | Unused.
-63 | 1 | 1 | 1 | 1 | 1 | 1 | 0x3F | State63 | Unused.
+Number | SW6 | SW5 | SW4 | SW3 | HEX | Stateus | Description
+:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--
+0 | 0 | 0 | 0 | 0 | 0x00 | Default | Default Status Boot.<br>*DPS(@All) = 0deg*<br>*DSA(@Input) = 0dB*<br>*DSA(@All except input) = 2dB*<br>*ALL Active Mode*
+1 | 0 | 0 | 0 | 1 | 0x01 | Auto Load Boot. | Load the state (0) saved in ROM and boot.<br>*Picture Stateus*
+2 | 0 | 0 | 1 | 0 | 0x02 | Allow settings to be saved. | Settins can be write in ROM.
+3 | 0 | 0 | 1 | 1 | 0x03 | Auto Load Boot.<br>and<br>Allow settings to be saved. | Allows to start autoload and save settings.<br>*Basic usage conditions *
+4 | 0 | 1 | 0 | 0 | 0x04 | State4 | Unused.
+5 | 0 | 1 | 0 | 1 | 0x05 | State5 | Unused.
+6 | 0 | 1 | 1 | 0 | 0x06 | State6 | Unused.
+7 | 0 | 1 | 1 | 1 | 0x07 | State7 | Unused.
+8 | 1 | 0 | 0 | 0 | 0x08 | State8 | Unused.
+9 | 1 | 0 | 0 | 1 | 0x09 | State9 | Unused.
+10 | 1 | 0 | 1 | 0 | 0x0A | State10 | Factory reset on boot. | If the switch is in this state at startup, the system boots to factory defaults and restore the autoload settings to their initial state.<br>*Settings outside the default settings area will not be changed.*
+11 | 1 | 0 | 1 | 1 | 0x0B | State11 | Unused.
+12 | 1 | 1 | 0 | 0 | 0x0C | State12 | Unused.
+13 | 1 | 1 | 0 | 1 | 0x0D | State13 | Unused.
+14 | 1 | 1 | 1 | 0 | 0x0E | State14 | Unused.
+15 | 1 | 1 | 1 | 1 | 0x0F | State15 | Boot in the maintenance mode. | If the switch is in this state at startup, it boots in the administrator mode.<br>As general rule, do not use it as it may overwrite the ROM area where factory settings and serial numbers are stored.
 
 </details>
