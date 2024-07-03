@@ -9,7 +9,7 @@
 #define ROM_BLOCK_NUM PICO_FLASH_SIZE_BYTES / FLASH_BLOCK_SIZE
 const static std::string FW_VENDOR = "Orient Microwave Corp.";
 const static std::string FW_MODEL = "LX00-0004-00";
-const static std::string FW_REV = "1.2.0";
+const static std::string FW_REV = "1.3.0";
 
 #ifdef DEBUG_RASPICO
     #define DSA_D3_PIN 8
@@ -51,7 +51,7 @@ void setup()
     analog = new adc(true, true, true, true , 3.3f);
     spi_dps = new spi(spi0, SPI_CLK, SPI0_CLK_PIN, SPI0_TX_PIN, SPI0_RX_PIN, SPI0_LE_PIN, SPI_BITS, SPI_MODE, SPI_ORDER);
     spi_dsa = new spi(spi1, SPI_CLK, SPI1_CLK_PIN, SPI1_TX_PIN, SPI1_RX_PIN, SPI1_LE_PIN, SPI_BITS, SPI_MODE, SPI_ORDER);
-    uart = new pcabCMD(UART_TX_PIN, UART_RX_PIN, UART_BAUD_RATE);
+    uart = new pcabCMD(UART_TX_PIN, UART_RX_PIN, UART_BAUD_RATE, RS485_DE_PIN);
     //GPIO Setup
     gpio_init(LPW_MOD_PIN);
     gpio_init(STB_DRA_PIN);
@@ -66,8 +66,8 @@ void setup()
     gpio_init(SW_2_PIN);
     gpio_init(SW_3_PIN);
     gpio_init(SW_4_PIN);
-    gpio_init(SW_5_PIN);
-    gpio_init(SW_6_PIN);
+    //gpio_init(SW_5_PIN);
+    //gpio_init(SW_6_PIN);
     gpio_set_dir(LPW_MOD_PIN ,GPIO_OUT);
     gpio_set_dir(STB_DRA_PIN ,GPIO_OUT);
     gpio_set_dir(STB_AMP_PIN ,GPIO_OUT);
@@ -81,8 +81,8 @@ void setup()
     gpio_set_dir(SW_2_PIN ,GPIO_IN);
     gpio_set_dir(SW_3_PIN ,GPIO_IN);
     gpio_set_dir(SW_4_PIN ,GPIO_IN);
-    gpio_set_dir(SW_5_PIN ,GPIO_IN);
-    gpio_set_dir(SW_6_PIN ,GPIO_IN);
+    //gpio_set_dir(SW_5_PIN ,GPIO_IN);
+    //gpio_set_dir(SW_6_PIN ,GPIO_IN);
 #ifdef DEBUG_RASPICO
     gpio_init(PICO_LED_PIN);
     gpio_set_dir(PICO_LED_PIN ,GPIO_OUT);
@@ -94,8 +94,8 @@ void setup()
     bootMode += 2 * !gpio_get(SW_2_PIN);
     bootMode += 4 * !gpio_get(SW_3_PIN);
     bootMode += 8 * !gpio_get(SW_4_PIN);
-    bootMode += 16 * !gpio_get(SW_5_PIN);
-    bootMode += 32 * !gpio_get(SW_6_PIN);
+    //bootMode += 16 * !gpio_get(SW_5_PIN);
+    //bootMode += 32 * !gpio_get(SW_6_PIN);
 #ifdef DEBUG_BOOT_MODE
     bootMode = DEBUG_BOOT_MODE;
 #endif

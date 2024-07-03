@@ -3,21 +3,31 @@
 
 #pragma region pcabCMD Class
 
-pcabCMD::pcabCMD(uartSYNC uart) : uart(uart){}
+pcabCMD::pcabCMD(uartSYNC uart, uint rs485de_gpio) : uart(uart), de_gpio(rs485de_gpio), de_mode(false)
+{
+    gpio_init(rs485de_gpio);
+    gpio_set_dir(rs485de_gpio ,GPIO_OUT);
+    rs485disable();
+}
 
-pcabCMD::pcabCMD(uart_inst_t *uartID, uint tx_gpio, uint rx_gpio, uint baud_ratio, uint data_bits, uint stop_bits, uart_parity_t parity, bool cts, bool rts, std::string nlcode)
-: uart(uartSYNC(uartID, tx_gpio, rx_gpio, baud_ratio, data_bits, stop_bits, parity, cts, rts, nlcode)){}
+pcabCMD::pcabCMD(uart_inst_t *uartID, uint tx_gpio, uint rx_gpio, uint baud_ratio, uint data_bits, uint stop_bits, uart_parity_t parity, bool cts, bool rts, std::string nlcode, uint rs485de_gpio)
+: uart(uartSYNC(uartID, tx_gpio, rx_gpio, baud_ratio, data_bits, stop_bits, parity, cts, rts, nlcode)), de_gpio(rs485de_gpio), de_mode(false)
+{
+    gpio_init(rs485de_gpio);
+    gpio_set_dir(rs485de_gpio ,GPIO_OUT);
+    rs485disable();
+}
 
-pcabCMD::pcabCMD(uart_inst_t *uartID, uint tx_gpio, uint rx_gpio, uint baud_ratio, std::string nlcode)
-: pcabCMD(uartID, tx_gpio, rx_gpio, baud_ratio, 8, 1, UART_PARITY_NONE, false, false, nlcode){}
+pcabCMD::pcabCMD(uart_inst_t *uartID, uint tx_gpio, uint rx_gpio, uint baud_ratio, std::string nlcode, uint rs485de_gpio)
+: pcabCMD(uartID, tx_gpio, rx_gpio, baud_ratio, 8, 1, UART_PARITY_NONE, false, false, nlcode, rs485de_gpio){}
 
-pcabCMD::pcabCMD(uint tx_gpio, uint rx_gpio, uint baud_ratio, std::string nlcode)
-: pcabCMD(uart0, tx_gpio, rx_gpio, baud_ratio, nlcode){}
+pcabCMD::pcabCMD(uint tx_gpio, uint rx_gpio, uint baud_ratio, std::string nlcode, uint rs485de_gpio)
+: pcabCMD(uart0, tx_gpio, rx_gpio, baud_ratio, nlcode, rs485de_gpio){}
 
-pcabCMD::pcabCMD(uint tx_gpio, uint rx_gpio, uint baud_ratio)
-: pcabCMD(uart0, tx_gpio, rx_gpio, baud_ratio, "\r\n"){}
+pcabCMD::pcabCMD(uint tx_gpio, uint rx_gpio, uint baud_ratio, uint rs485de_gpio)
+: pcabCMD(uart0, tx_gpio, rx_gpio, baud_ratio, "\r\n", rs485de_gpio){}
 
-pcabCMD::pcabCMD() : pcabCMD(0, 1, 9600){}
+pcabCMD::pcabCMD() : pcabCMD(0, 1, 9600, 2){}
 
 pcabCMD::~pcabCMD() {}
 
@@ -69,5 +79,33 @@ pcabCMD::CommandLine pcabCMD::readCMD(bool echo)
     if (String::strCompare(cmd, "GetIDR", true)) { return pcabCMD::CommandLine(cmdBF.serialNum, cmdBF.romID, cmdCode::GetIDR, strArr, cmdBF.argments.size()); }
     else { return pcabCMD::CommandLine(cmdBF.serialNum, cmdBF.romID, cmdCode::NONE, strArr, cmdBF.argments.size()); }
 }
+
+void pcabCMD::write(std::string str)
+{
+    if(!de_gpio){rs485enable();}
+    uart.write(str);
+    rs485disable;
+}
+
+void pcabCMD::writeLine(std::string str)
+{
+    if(!de_gpio){rs485enable();}
+    uart.writeLine(str);
+    rs485disable;
+}
+
+void pcabCMD::rs485enable()
+{
+    gpio_put(de_gpio, true);
+    de_gpio = true;
+}
+
+void pcabCMD::rs485disable()
+{
+    gpio_put(de_gpio, false);
+    de_gpio = false;
+}
+
+bool pcabCMD::getRS485mode(){ return de_gpio; }
 
 #pragma endregion pcabCMD Class

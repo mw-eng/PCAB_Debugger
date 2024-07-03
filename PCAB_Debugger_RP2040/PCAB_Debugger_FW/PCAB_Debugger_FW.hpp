@@ -9,6 +9,7 @@
 // UART PIN Configure
 #define UART_TX_PIN 0
 #define UART_RX_PIN 1
+#define RS485_DE_PIN 2
 // SPI PIN Configure
 #define SPI0_TX_PIN 7
 #define SPI0_RX_PIN 4
@@ -31,12 +32,12 @@
 #define DSA_D3_PIN 23
 #define DSA_D4_PIN 24
 // Switch PIN Configure
-#define SW_1_PIN 2
-#define SW_2_PIN 3
-#define SW_3_PIN 8
-#define SW_4_PIN 9
-#define SW_5_PIN 10
-#define SW_6_PIN 11
+//#define SW_1_PIN 2
+//#define SW_2_PIN 3
+#define SW_1_PIN 8
+#define SW_2_PIN 9
+#define SW_3_PIN 10
+#define SW_4_PIN 11
 
 // UART Configure
 //#define UART_BAUD_RATE 9600

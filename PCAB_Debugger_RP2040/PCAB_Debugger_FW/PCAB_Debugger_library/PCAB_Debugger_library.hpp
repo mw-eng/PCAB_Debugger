@@ -4,6 +4,10 @@
 
 class pcabCMD : uartSYNC
 {
+    private:
+    uint de_gpio;
+    bool de_mode;
+
     public:
     uartSYNC uart;
 
@@ -69,7 +73,8 @@ class pcabCMD : uartSYNC
 
     /// @brief Constructor (UART ID = uart0 / Data bits = 8 / Stop Bits = 1 / UART_PARITY_NONE / CTS = false / RTS = false)
     /// @param uart UART CLASS
-    pcabCMD(uartSYNC uart);
+    /// @param rs485de_gpio RS485 DE gpio pin number.
+    pcabCMD(uartSYNC uart, uint rs485de_gpio);
 
     /// @brief Constructor
     /// @param uartID UART ID (uart0 or uart1)
@@ -82,7 +87,8 @@ class pcabCMD : uartSYNC
     /// @param cts CTS
     /// @param rts RTX
     /// @param nlcode New Line string.
-    pcabCMD(uart_inst_t *uartID, uint tx_gpio, uint rx_gpio, uint baud_ratio, uint data_bits, uint stop_bits, uart_parity_t parity, bool cts, bool rts, std::string nlcode);
+    /// @param rs485de_gpio RS485 DE gpio pin number.
+    pcabCMD(uart_inst_t *uartID, uint tx_gpio, uint rx_gpio, uint baud_ratio, uint data_bits, uint stop_bits, uart_parity_t parity, bool cts, bool rts, std::string nlcode, uint rs485de_gpio);
 
     /// @brief Constructor (Data bits = 8 / Stop Bits = 1 / UART_PARITY_NONE / CTS = false / RTS = false)
     /// @param uartID UART ID (uart0 or uart1)
@@ -90,20 +96,23 @@ class pcabCMD : uartSYNC
     /// @param rx_gpio Rx gpio pin number.
     /// @param baud_ratio Baud ratio.
     /// @param nlcode New Line string.
-    pcabCMD(uart_inst_t *uartID, uint tx_gpio, uint rx_gpio, uint baud_ratio, std::string nlcode);
+    /// @param rs485de_gpio RS485 DE gpio pin number.
+    pcabCMD(uart_inst_t *uartID, uint tx_gpio, uint rx_gpio, uint baud_ratio, std::string nlcode, uint rs485de_gpio);
 
     /// @brief Constructor (UART ID = uart0 / Data bits = 8 / Stop Bits = 1 / UART_PARITY_NONE / CTS = false / RTS = false)
     /// @param tx_gpio Tx gpio pin number.
     /// @param rx_gpio Rx gpio pin number.
     /// @param baud_ratio Baud ratio.
     /// @param nlcode New Line string.
-    pcabCMD(uint tx_gpio, uint rx_gpio, uint baud_ratio, std::string nlcode);
+    /// @param rs485de_gpio RS485 DE gpio pin number.
+    pcabCMD(uint tx_gpio, uint rx_gpio, uint baud_ratio, std::string nlcode, uint rs485de_gpio);
 
     /// @brief Constructor (UART ID = uart0 / Data bits = 8 / Stop Bits = 1 / UART_PARITY_NONE / CTS = false / RTS = false)
     /// @param tx_gpio Tx gpio pin number.
     /// @param rx_gpio Rx gpio pin number.
     /// @param baud_ratio Baud ratio.
-    pcabCMD(uint tx_gpio, uint rx_gpio, uint baud_ratio);
+    /// @param rs485de_gpio RS485 DE gpio pin number.
+    pcabCMD(uint tx_gpio, uint rx_gpio, uint baud_ratio, uint rs485de_gpio);
 
     /// @brief Constructor (UART ID = uart0 / Data bits = 8 / Stop Bits = 1 / UART_PARITY_NONE / CTS = false / RTS = false)
     pcabCMD();
@@ -115,6 +124,23 @@ class pcabCMD : uartSYNC
     /// @param echo Return echo during communication.
     CommandLine readCMD(bool echo);
 
+    /// @brief Output uart string and tarminal code. (auto DE state change)
+    /// @param str Write string.
+    void write(std::string str);
+
+    /// @brief Output uart strings. (auto DE state change)
+    /// @param str Write string.
+    void writeLine(std::string str);
+
+    /// @brief Enable DE Pin.
+    void rs485enable();
+
+    /// @brief Disable DE Pin.
+    void rs485disable();
+
+    /// @brief Get DE state.
+    /// @return DE state.
+    bool getRS485mode();
 };
 
 
