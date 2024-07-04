@@ -65,6 +65,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="winLoop.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="winMain.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -78,6 +82,9 @@
     <Compile Include="clsSERIAL.cs" />
     <Compile Include="winEditor.xaml.cs">
       <DependentUpon>winEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="winLoop.xaml.cs">
+      <DependentUpon>winLoop.xaml</DependentUpon>
     </Compile>
     <Compile Include="winMain.xaml.cs">
       <DependentUpon>winMain.xaml</DependentUpon>

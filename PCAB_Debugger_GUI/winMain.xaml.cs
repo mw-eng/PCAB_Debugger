@@ -689,7 +689,51 @@ namespace PCAB_Debugger_GUI
         private void LOOP_START_BUTTON_Click(object sender, RoutedEventArgs e)
         {
             //Get Configuration
+            uint stepDPS = 0;
+            uint stepDSA = 0;
+            int waitTIME = -1;
+            List<int> dps = new List<int>();
+            List<int> dsa = new List<int>();
+            dps.Clear();
+            dsa.Clear();
+            if (DPS_LoopEnable.IsChecked == true)
+            {
+                waitTIME = int.Parse(WAITTIME_TEXTBOX.Text);
+                stepDPS = (uint)Math.Pow(2, (double)DPSstep_COMBOBOX.SelectedIndex);
+                foreach (object objBF in DPS_LOOP_GRID.Children)
+                {
+                    if (typeof(CheckBox) == objBF.GetType())
+                    {
+                        if (((CheckBox)objBF).IsChecked == true)
+                        {
+                            dps.Add(int.Parse(((CheckBox)objBF).Content.ToString().Substring(3)));
+                        }
+                    }
+                }
+            }
+            if (DSA_LoopEnable.IsChecked == true)
+            {
+                waitTIME = int.Parse(WAITTIME_TEXTBOX.Text);
+                stepDSA = (uint)Math.Pow(2, (double)DSAstep_COMBOBOX.SelectedIndex);
+                foreach (object objBF in DSA_LOOP_GRID.Children)
+                {
+                    if (typeof(CheckBox) == objBF.GetType())
+                    {
+                        if (((CheckBox)objBF).IsChecked == true)
+                        {
+                            dsa.Add(int.Parse(((CheckBox)objBF).Content.ToString().Substring(3)));
+                        }
+                    }
+                }
+            }
+            if(waitTIME < 0) { return; }
+            _mod.PCAB_CMD(SERIAL_NUMBERS_COMBOBOX.Text, "CUI 0", 1);
+            _mod.DiscardInBuffer();
+            read_conf(SERIAL_NUMBERS_COMBOBOX.Text);
 
+            winLoop win = new winLoop(_mod, SERIAL_NUMBERS_COMBOBOX.Text, stepDPS, stepDSA, waitTIME, dps, dsa);
+            if (win.ShowDialog() != false) { WRITE_Click(WRITE, e); }
+            else { MessageBox.Show("Loop function.","Error",MessageBoxButton.OK,MessageBoxImage.Error); }
         }
 
         private void DPS_LoopEnable_Checked(object sender, RoutedEventArgs e)
