@@ -682,6 +682,13 @@ namespace PCAB_Debugger_GUI
 
         #endregion
 
+        #region LOOP EVENT
+        private void LOOP_START_BUTTON_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+        #endregion
+
         #region Other EVENT
 
         private void DEC_TextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)

@@ -25,9 +25,15 @@
                     <ColumnDefinition Width="5*"/>
                     <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
-                <Viewbox Grid.Column="0" Margin="5" HorizontalAlignment="Left"><Label Content="Serial Port"/></Viewbox>
+                <Viewbox Grid.Column="0" Margin="5" HorizontalAlignment="Left">
+                    <Label Content="Serial Port"/>
+                </Viewbox>
                 <ComboBox Grid.Column="1" x:Name="SERIAL_PORTS_COMBOBOX" Margin="5" FontSize="16" VerticalContentAlignment="Center" DropDownOpened="SERIAL_PORTS_COMBOBOX_DropDownOpened" DropDownClosed="SERIAL_PORTS_COMBOBOX_DropDownClosed"/>
-                <Button Grid.Column="2" x:Name="CONNECT_BUTTON" Margin="5" Click="CONNECT_BUTTON_Click" IsEnabled="False"><Viewbox><TextBlock>Connect</TextBlock></Viewbox></Button>
+                <Button Grid.Column="2" x:Name="CONNECT_BUTTON" Margin="5" Click="CONNECT_BUTTON_Click" IsEnabled="False">
+                    <Viewbox>
+                        <TextBlock>Connect</TextBlock>
+                    </Viewbox>
+                </Button>
             </Grid>
             <Grid Grid.Row="1" x:Name="SERIAL_CONFIG_GRID">
                 <Grid.ColumnDefinitions>
@@ -40,16 +46,22 @@
                         <ColumnDefinition Width="1*"/>
                         <ColumnDefinition Width="1*"/>
                     </Grid.ColumnDefinitions>
-                    <Viewbox Grid.Column="0" Margin="5" HorizontalAlignment="Left"><Label Content="Monitor loop interval"/></Viewbox>
+                    <Viewbox Grid.Column="0" Margin="5" HorizontalAlignment="Left">
+                        <Label Content="Monitor loop interval"/>
+                    </Viewbox>
                     <TextBox Grid.Column="1" x:Name="WAITE_TIME_TEXTBOX" Style="{StaticResource EDIT_TEXT_LINE}" TextWrapping="Wrap" Text="1000" Margin="5" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" PreviewTextInput="DEC_TextBox_PreviewTextInput" CommandManager.PreviewExecuted="DEC_TextBox_PreviewExecuted" PreviewLostKeyboardFocus="DEC_TextBox_PreviewLostKeyboardForcus" FontSize="16"/>
-                    <Viewbox Grid.Column="2" Margin="5" HorizontalAlignment="Left"><Label Content="[mS]"/></Viewbox>
+                    <Viewbox Grid.Column="2" Margin="5" HorizontalAlignment="Left">
+                        <Label Content="[mS]"/>
+                    </Viewbox>
                 </Grid>
                 <Grid Grid.Column="1">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="1*"/>
                         <ColumnDefinition Width="3*"/>
                     </Grid.ColumnDefinitions>
-                    <Viewbox Grid.Column="0" Margin="5" HorizontalAlignment="Left"><Label Content="Serial Numbers"/></Viewbox>
+                    <Viewbox Grid.Column="0" Margin="5" HorizontalAlignment="Left">
+                        <Label Content="Serial Numbers"/>
+                    </Viewbox>
                     <TextBox Grid.Column="1" x:Name="SERIAL_NUMBERS_TEXTBOX" Style="{StaticResource EDIT_TEXT_LINE}" TextWrapping="Wrap" Text="0000" Margin="5" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" PreviewTextInput="SN_TextBox_PreviewTextInput" CommandManager.PreviewExecuted="SN_TextBox_PreviewExecuted" PreviewLostKeyboardFocus="SN_TextBox_PreviewLostKeyboardForcus" FontSize="16"/>
                 </Grid>
             </Grid>
@@ -64,7 +76,9 @@
                     <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="5*"/>
                 </Grid.ColumnDefinitions>
-                <Viewbox Grid.Column="0" Margin="5" HorizontalAlignment="Left"><Label Content="Serial Number"/></Viewbox>
+                <Viewbox Grid.Column="0" Margin="5" HorizontalAlignment="Left">
+                    <Label Content="Serial Number"/>
+                </Viewbox>
                 <ComboBox Grid.Column="1" x:Name="SERIAL_NUMBERS_COMBOBOX" Margin="5" FontSize="16" VerticalContentAlignment="Center" DropDownOpened="SERIAL_NUMBERS_COMBOBOX_DropDownOpened" DropDownClosed="SERIAL_NUMBERS_COMBOBOX_DropDownClosed"/>
             </Grid>
             <Grid Grid.Row="1">
@@ -75,235 +89,303 @@
                 <TabControl Grid.Column="0" FontSize="18" Margin="5">
                     <TabItem Header="CONTROL">
                         <Grid Grid.Column="0" Background="#FFFFF587">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="3*"/>
-                            <RowDefinition Height="15*"/>
-                            <RowDefinition Height="2*"/>
-                        </Grid.RowDefinitions>
-                        <Grid Grid.Row="0" Margin="5" Background="#FFBCFF98" >
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="1*"/>
-                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="3*"/>
+                                <RowDefinition Height="15*"/>
+                                <RowDefinition Height="2*"/>
                             </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="1*"/>
-                                <ColumnDefinition Width="1*"/>
-                            </Grid.ColumnDefinitions>
-                            <Viewbox Grid.Row="0" Grid.Column="0" Margin="5" HorizontalAlignment="Left"><CheckBox x:Name="STBAMP_CHECKBOX" VerticalContentAlignment="Center" Content="Standby AMP" Checked="CHECKBOX_Checked" Unchecked="CHECKBOX_Unchecked" Indeterminate="CHECKBOX_Indeterminate" /></Viewbox>
-                            <Viewbox Grid.Row="0" Grid.Column="1" Margin="5" HorizontalAlignment="Left"><CheckBox x:Name="STBDRA_CHECKBOX" VerticalContentAlignment="Center" Content="Standby DRA" Checked="CHECKBOX_Checked" Unchecked="CHECKBOX_Unchecked" Indeterminate="CHECKBOX_Indeterminate" /></Viewbox>
-                            <Viewbox Grid.Row="1" Grid.Column="0" Margin="5" HorizontalAlignment="Left"><CheckBox x:Name="SETLPM_CHECKBOX" VerticalContentAlignment="Center" Content="Low Power Mode" Checked="CHECKBOX_Checked" Unchecked="CHECKBOX_Unchecked" Indeterminate="CHECKBOX_Indeterminate" /></Viewbox>
-                        </Grid>
-                        <Grid Grid.Row="1">
-                            <Grid.RowDefinitions>
-                            <RowDefinition Height="1*"/>
-                            <RowDefinition Height="8*"/>
-                            </Grid.RowDefinitions>
-                            <Viewbox Grid.Row="0" Margin="5" HorizontalAlignment="Left"><Label Content="Phase Config" /></Viewbox>
-                            <Grid x:Name="Port_GRID" Grid.Row="1" ShowGridLines="True">
+                            <Grid Grid.Row="0" Margin="5" Background="#FFBCFF98" >
                                 <Grid.RowDefinitions>
-                                <RowDefinition Height="1*"/>
-                                <RowDefinition Height="1*"/>
-                                <RowDefinition Height="1*"/>
-                                <RowDefinition Height="1*"/>
-                            </Grid.RowDefinitions>
+                                    <RowDefinition Height="1*"/>
+                                    <RowDefinition Height="1*"/>
+                                </Grid.RowDefinitions>
                                 <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="1*"/>
-                                <ColumnDefinition Width="1*"/>
-                                <ColumnDefinition Width="1*"/>
-                                <ColumnDefinition Width="1*"/>
-                            </Grid.ColumnDefinitions>
-                                <Grid x:Name="P01_GRID" Grid.Row="3" Grid.Column="3" Margin="5">
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                </Grid.ColumnDefinitions>
+                                <Viewbox Grid.Row="0" Grid.Column="0" Margin="5" HorizontalAlignment="Left">
+                                    <CheckBox x:Name="STBAMP_CHECKBOX" VerticalContentAlignment="Center" Content="Standby AMP" Checked="CHECKBOX_Checked" Unchecked="CHECKBOX_Unchecked" Indeterminate="CHECKBOX_Indeterminate" />
+                                </Viewbox>
+                                <Viewbox Grid.Row="0" Grid.Column="1" Margin="5" HorizontalAlignment="Left">
+                                    <CheckBox x:Name="STBDRA_CHECKBOX" VerticalContentAlignment="Center" Content="Standby DRA" Checked="CHECKBOX_Checked" Unchecked="CHECKBOX_Unchecked" Indeterminate="CHECKBOX_Indeterminate" />
+                                </Viewbox>
+                                <Viewbox Grid.Row="1" Grid.Column="0" Margin="5" HorizontalAlignment="Left">
+                                    <CheckBox x:Name="SETLPM_CHECKBOX" VerticalContentAlignment="Center" Content="Low Power Mode" Checked="CHECKBOX_Checked" Unchecked="CHECKBOX_Unchecked" Indeterminate="CHECKBOX_Indeterminate" />
+                                </Viewbox>
+                            </Grid>
+                            <Grid Grid.Row="1">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="1*"/>
+                                    <RowDefinition Height="8*"/>
+                                </Grid.RowDefinitions>
+                                <Viewbox Grid.Row="0" Margin="5" HorizontalAlignment="Left">
+                                    <Label Content="Phase Config" />
+                                </Viewbox>
+                                <Grid x:Name="Port_GRID" Grid.Row="1" ShowGridLines="True">
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="1*"/>
                                         <RowDefinition Height="1*"/>
                                         <RowDefinition Height="1*"/>
-                                    </Grid.RowDefinitions>
-                                    <Viewbox Grid.Row="0"><Label Content="Port 1" /></Viewbox>
-                                    <ComboBox Grid.Row="1" SelectedIndex="0" x:Name="DSA01_COMBOBOX" ItemsSource="{StaticResource DSA_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/>
-                                    <ComboBox Grid.Row="2" SelectedIndex="0" x:Name="DPS01_COMBOBOX" ItemsSource="{StaticResource DPS_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/>
-                                </Grid>
-                                <Grid x:Name="P02_GRID" Grid.Row="2" Grid.Column="3" Margin="5">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="1*"/>
-                                        <RowDefinition Height="1*"/>
                                         <RowDefinition Height="1*"/>
                                     </Grid.RowDefinitions>
-                                    <Viewbox Grid.Row="0"><Label Content="Port 2" /></Viewbox>
-                                    <ComboBox Grid.Row="1" SelectedIndex="0" x:Name="DSA02_COMBOBOX" ItemsSource="{StaticResource DSA_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/>
-                                    <ComboBox Grid.Row="2" SelectedIndex="0" x:Name="DPS02_COMBOBOX" ItemsSource="{StaticResource DPS_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/>
-                                </Grid>
-                                <Grid x:Name="P03_GRID" Grid.Row="1" Grid.Column="3" Margin="5">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="1*"/>
-                                        <RowDefinition Height="1*"/>
-                                        <RowDefinition Height="1*"/>
-                                    </Grid.RowDefinitions>
-                                    <Viewbox Grid.Row="0"><Label Content="Port 3" /></Viewbox>
-                                    <ComboBox Grid.Row="1" SelectedIndex="0" x:Name="DSA03_COMBOBOX" ItemsSource="{StaticResource DSA_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/>
-                                    <ComboBox Grid.Row="2" SelectedIndex="0" x:Name="DPS03_COMBOBOX" ItemsSource="{StaticResource DPS_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/>
-                                </Grid>
-                                <Grid x:Name="P04_GRID" Grid.Row="0" Grid.Column="3" Margin="5">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="1*"/>
-                                        <RowDefinition Height="1*"/>
-                                        <RowDefinition Height="1*"/>
-                                    </Grid.RowDefinitions>
-                                    <Viewbox Grid.Row="0"><Label Content="Port 4" /></Viewbox>
-                                    <ComboBox Grid.Row="1" SelectedIndex="0" x:Name="DSA04_COMBOBOX" ItemsSource="{StaticResource DSA_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/>
-                                    <ComboBox Grid.Row="2" SelectedIndex="0" x:Name="DPS04_COMBOBOX" ItemsSource="{StaticResource DPS_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/>
-                                </Grid>
-                                <Grid x:Name="P05_GRID" Grid.Row="0" Grid.Column="2" Margin="5">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="1*"/>
-                                        <RowDefinition Height="1*"/>
-                                        <RowDefinition Height="1*"/>
-                                    </Grid.RowDefinitions>
-                                    <Viewbox Grid.Row="0"><Label Content="Port 5" /></Viewbox>
-                                    <ComboBox Grid.Row="1" SelectedIndex="0" x:Name="DSA05_COMBOBOX" ItemsSource="{StaticResource DSA_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/>
-                                    <ComboBox Grid.Row="2" SelectedIndex="0" x:Name="DPS05_COMBOBOX" ItemsSource="{StaticResource DPS_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="1*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid x:Name="P01_GRID" Grid.Row="3" Grid.Column="3" Margin="5">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="1*"/>
+                                            <RowDefinition Height="1*"/>
+                                            <RowDefinition Height="1*"/>
+                                        </Grid.RowDefinitions>
+                                        <Viewbox Grid.Row="0">
+                                            <Label Content="Port 1" />
+                                        </Viewbox>
+                                        <ComboBox Grid.Row="1" SelectedIndex="0" x:Name="DSA01_COMBOBOX" ItemsSource="{StaticResource DSA_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/>
+                                        <ComboBox Grid.Row="2" SelectedIndex="0" x:Name="DPS01_COMBOBOX" ItemsSource="{StaticResource DPS_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/>
                                     </Grid>
-                                <Grid x:Name="P06_GRID" Grid.Row="1" Grid.Column="2" Margin="5">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="1*"/>
-                                        <RowDefinition Height="1*"/>
-                                        <RowDefinition Height="1*"/>
-                                    </Grid.RowDefinitions>
-                                    <Viewbox Grid.Row="0"><Label Content="Port 6" /></Viewbox>
-                                    <ComboBox Grid.Row="1" SelectedIndex="0" x:Name="DSA06_COMBOBOX" ItemsSource="{StaticResource DSA_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/>
-                                    <ComboBox Grid.Row="2" SelectedIndex="0" x:Name="DPS06_COMBOBOX" ItemsSource="{StaticResource DPS_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/>
-                                </Grid>
-                                <Grid x:Name="P07_GRID" Grid.Row="2" Grid.Column="2" Margin="5">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="1*"/>
-                                        <RowDefinition Height="1*"/>
-                                        <RowDefinition Height="1*"/>
-                                    </Grid.RowDefinitions>
-                                    <Viewbox Grid.Row="0"><Label Content="Port 7" /></Viewbox>
-                                    <ComboBox Grid.Row="1" SelectedIndex="0" x:Name="DSA07_COMBOBOX" ItemsSource="{StaticResource DSA_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/>
-                                    <ComboBox Grid.Row="2" SelectedIndex="0" x:Name="DPS07_COMBOBOX" ItemsSource="{StaticResource DPS_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/>
-                                </Grid>
-                                <Grid x:Name="P08_GRID" Grid.Row="3" Grid.Column="2" Margin="5">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="1*"/>
-                                        <RowDefinition Height="1*"/>
-                                        <RowDefinition Height="1*"/>
-                                    </Grid.RowDefinitions>
-                                    <Viewbox Grid.Row="0"><Label Content="Port 8" /></Viewbox>
-                                    <ComboBox Grid.Row="1" SelectedIndex="0" x:Name="DSA08_COMBOBOX" ItemsSource="{StaticResource DSA_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/>
-                                    <ComboBox Grid.Row="2" SelectedIndex="0" x:Name="DPS08_COMBOBOX" ItemsSource="{StaticResource DPS_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/>
-                                </Grid>
-                                <Grid x:Name="P09_GRID" Grid.Row="3" Grid.Column="1" Margin="5">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="1*"/>
-                                        <RowDefinition Height="1*"/>
-                                        <RowDefinition Height="1*"/>
-                                    </Grid.RowDefinitions>
-                                    <Viewbox Grid.Row="0"><Label Content="Port 9" /></Viewbox>
-                                    <ComboBox Grid.Row="1" SelectedIndex="0" x:Name="DSA09_COMBOBOX" ItemsSource="{StaticResource DSA_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/>
-                                    <ComboBox Grid.Row="2" SelectedIndex="0" x:Name="DPS09_COMBOBOX" ItemsSource="{StaticResource DPS_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/>
-                                </Grid>
-                                <Grid x:Name="P10_GRID" Grid.Row="2" Grid.Column="1" Margin="5">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="1*"/>
-                                        <RowDefinition Height="1*"/>
-                                        <RowDefinition Height="1*"/>
-                                    </Grid.RowDefinitions>
-                                    <Viewbox Grid.Row="0"><Label Content="Port 10" /></Viewbox>
-                                    <ComboBox Grid.Row="1" SelectedIndex="0" x:Name="DSA10_COMBOBOX" ItemsSource="{StaticResource DSA_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/>
-                                    <ComboBox Grid.Row="2" SelectedIndex="0" x:Name="DPS10_COMBOBOX" ItemsSource="{StaticResource DPS_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/>
-                                </Grid>
-                                <Grid x:Name="P11_GRID" Grid.Row="1" Grid.Column="1" Margin="5">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="1*"/>
-                                        <RowDefinition Height="1*"/>
-                                        <RowDefinition Height="1*"/>
-                                    </Grid.RowDefinitions>
-                                    <Viewbox Grid.Row="0"><Label Content="Port 11" /></Viewbox>
-                                    <ComboBox Grid.Row="1" SelectedIndex="0" x:Name="DSA11_COMBOBOX" ItemsSource="{StaticResource DSA_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/>
-                                    <ComboBox Grid.Row="2" SelectedIndex="0" x:Name="DPS11_COMBOBOX" ItemsSource="{StaticResource DPS_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/>
-                                </Grid>
-                                <Grid x:Name="P12_GRID" Grid.Row="0" Grid.Column="1" Margin="5">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="1*"/>
-                                        <RowDefinition Height="1*"/>
-                                        <RowDefinition Height="1*"/>
-                                    </Grid.RowDefinitions>
-                                    <Viewbox Grid.Row="0"><Label Content="Port 12" /></Viewbox>
-                                    <ComboBox Grid.Row="1" SelectedIndex="0" x:Name="DSA12_COMBOBOX" ItemsSource="{StaticResource DSA_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/>
-                                    <ComboBox Grid.Row="2" SelectedIndex="0" x:Name="DPS12_COMBOBOX" ItemsSource="{StaticResource DPS_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/>
-                                </Grid>
-                                <Grid x:Name="P13_GRID" Grid.Row="0" Grid.Column="0" Margin="5">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="1*"/>
-                                        <RowDefinition Height="1*"/>
-                                        <RowDefinition Height="1*"/>
-                                    </Grid.RowDefinitions>
-                                    <Viewbox Grid.Row="0"><Label Content="Port 13" /></Viewbox>
-                                    <ComboBox Grid.Row="1" SelectedIndex="0" x:Name="DSA13_COMBOBOX" ItemsSource="{StaticResource DSA_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/>
-                                    <ComboBox Grid.Row="2" SelectedIndex="0" x:Name="DPS13_COMBOBOX" ItemsSource="{StaticResource DPS_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/>
-                                </Grid>
-                                <Grid x:Name="P14_GRID" Grid.Row="1" Grid.Column="0" Margin="5">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="1*"/>
-                                        <RowDefinition Height="1*"/>
-                                        <RowDefinition Height="1*"/>
-                                    </Grid.RowDefinitions>
-                                    <Viewbox Grid.Row="0"><Label Content="Port 14" /></Viewbox>
-                                    <ComboBox Grid.Row="1" SelectedIndex="0" x:Name="DSA14_COMBOBOX" ItemsSource="{StaticResource DSA_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/>
-                                    <ComboBox Grid.Row="2" SelectedIndex="0" x:Name="DPS14_COMBOBOX" ItemsSource="{StaticResource DPS_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/>
-                                </Grid>
-                                <Grid x:Name="P15_GRID" Grid.Row="2" Grid.Column="0" Margin="5">
-                                    <Grid.RowDefinitions>
-                                    <RowDefinition Height="1*"/>
-                                    <RowDefinition Height="1*"/>
-                                    <RowDefinition Height="1*"/>
-                                    </Grid.RowDefinitions>
-                                    <Viewbox Grid.Row="0"><Label Content="Port 15" /></Viewbox>
-                                    <ComboBox Grid.Row="1" SelectedIndex="0" x:Name="DSA15_COMBOBOX" ItemsSource="{StaticResource DSA_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/>
-                                    <ComboBox Grid.Row="2" SelectedIndex="0" x:Name="DPS15_COMBOBOX" ItemsSource="{StaticResource DPS_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/>
-                                </Grid>
-                                <Grid x:Name="P16_GRID" Grid.Row="3" Grid.Column="0" Margin="5">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="1*"/>
-                                        <RowDefinition Height="1*"/>
-                                        <RowDefinition Height="1*"/>
-                                    </Grid.RowDefinitions>
-                                    <Viewbox Grid.Row="0"><Label Content="J1 in / Port16" /></Viewbox>
-                                    <ComboBox Grid.Row="1" SelectedIndex="0" x:Name="DSA16_COMBOBOX" ItemsSource="{StaticResource DSAin_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/>
-                                    <Viewbox Grid.Row="2" Grid.Column="0"><CheckBox x:Name="STBLNA_CHECKBOX" VerticalContentAlignment="Center" Content="Standby LNA" Checked="CHECKBOX_Checked" Unchecked="CHECKBOX_Unchecked" Indeterminate="CHECKBOX_Indeterminate" /></Viewbox>
+                                    <Grid x:Name="P02_GRID" Grid.Row="2" Grid.Column="3" Margin="5">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="1*"/>
+                                            <RowDefinition Height="1*"/>
+                                            <RowDefinition Height="1*"/>
+                                        </Grid.RowDefinitions>
+                                        <Viewbox Grid.Row="0">
+                                            <Label Content="Port 2" />
+                                        </Viewbox>
+                                        <ComboBox Grid.Row="1" SelectedIndex="0" x:Name="DSA02_COMBOBOX" ItemsSource="{StaticResource DSA_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/>
+                                        <ComboBox Grid.Row="2" SelectedIndex="0" x:Name="DPS02_COMBOBOX" ItemsSource="{StaticResource DPS_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/>
+                                    </Grid>
+                                    <Grid x:Name="P03_GRID" Grid.Row="1" Grid.Column="3" Margin="5">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="1*"/>
+                                            <RowDefinition Height="1*"/>
+                                            <RowDefinition Height="1*"/>
+                                        </Grid.RowDefinitions>
+                                        <Viewbox Grid.Row="0">
+                                            <Label Content="Port 3" />
+                                        </Viewbox>
+                                        <ComboBox Grid.Row="1" SelectedIndex="0" x:Name="DSA03_COMBOBOX" ItemsSource="{StaticResource DSA_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/>
+                                        <ComboBox Grid.Row="2" SelectedIndex="0" x:Name="DPS03_COMBOBOX" ItemsSource="{StaticResource DPS_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/>
+                                    </Grid>
+                                    <Grid x:Name="P04_GRID" Grid.Row="0" Grid.Column="3" Margin="5">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="1*"/>
+                                            <RowDefinition Height="1*"/>
+                                            <RowDefinition Height="1*"/>
+                                        </Grid.RowDefinitions>
+                                        <Viewbox Grid.Row="0">
+                                            <Label Content="Port 4" />
+                                        </Viewbox>
+                                        <ComboBox Grid.Row="1" SelectedIndex="0" x:Name="DSA04_COMBOBOX" ItemsSource="{StaticResource DSA_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/>
+                                        <ComboBox Grid.Row="2" SelectedIndex="0" x:Name="DPS04_COMBOBOX" ItemsSource="{StaticResource DPS_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/>
+                                    </Grid>
+                                    <Grid x:Name="P05_GRID" Grid.Row="0" Grid.Column="2" Margin="5">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="1*"/>
+                                            <RowDefinition Height="1*"/>
+                                            <RowDefinition Height="1*"/>
+                                        </Grid.RowDefinitions>
+                                        <Viewbox Grid.Row="0">
+                                            <Label Content="Port 5" />
+                                        </Viewbox>
+                                        <ComboBox Grid.Row="1" SelectedIndex="0" x:Name="DSA05_COMBOBOX" ItemsSource="{StaticResource DSA_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/>
+                                        <ComboBox Grid.Row="2" SelectedIndex="0" x:Name="DPS05_COMBOBOX" ItemsSource="{StaticResource DPS_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/>
+                                    </Grid>
+                                    <Grid x:Name="P06_GRID" Grid.Row="1" Grid.Column="2" Margin="5">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="1*"/>
+                                            <RowDefinition Height="1*"/>
+                                            <RowDefinition Height="1*"/>
+                                        </Grid.RowDefinitions>
+                                        <Viewbox Grid.Row="0">
+                                            <Label Content="Port 6" />
+                                        </Viewbox>
+                                        <ComboBox Grid.Row="1" SelectedIndex="0" x:Name="DSA06_COMBOBOX" ItemsSource="{StaticResource DSA_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/>
+                                        <ComboBox Grid.Row="2" SelectedIndex="0" x:Name="DPS06_COMBOBOX" ItemsSource="{StaticResource DPS_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/>
+                                    </Grid>
+                                    <Grid x:Name="P07_GRID" Grid.Row="2" Grid.Column="2" Margin="5">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="1*"/>
+                                            <RowDefinition Height="1*"/>
+                                            <RowDefinition Height="1*"/>
+                                        </Grid.RowDefinitions>
+                                        <Viewbox Grid.Row="0">
+                                            <Label Content="Port 7" />
+                                        </Viewbox>
+                                        <ComboBox Grid.Row="1" SelectedIndex="0" x:Name="DSA07_COMBOBOX" ItemsSource="{StaticResource DSA_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/>
+                                        <ComboBox Grid.Row="2" SelectedIndex="0" x:Name="DPS07_COMBOBOX" ItemsSource="{StaticResource DPS_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/>
+                                    </Grid>
+                                    <Grid x:Name="P08_GRID" Grid.Row="3" Grid.Column="2" Margin="5">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="1*"/>
+                                            <RowDefinition Height="1*"/>
+                                            <RowDefinition Height="1*"/>
+                                        </Grid.RowDefinitions>
+                                        <Viewbox Grid.Row="0">
+                                            <Label Content="Port 8" />
+                                        </Viewbox>
+                                        <ComboBox Grid.Row="1" SelectedIndex="0" x:Name="DSA08_COMBOBOX" ItemsSource="{StaticResource DSA_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/>
+                                        <ComboBox Grid.Row="2" SelectedIndex="0" x:Name="DPS08_COMBOBOX" ItemsSource="{StaticResource DPS_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/>
+                                    </Grid>
+                                    <Grid x:Name="P09_GRID" Grid.Row="3" Grid.Column="1" Margin="5">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="1*"/>
+                                            <RowDefinition Height="1*"/>
+                                            <RowDefinition Height="1*"/>
+                                        </Grid.RowDefinitions>
+                                        <Viewbox Grid.Row="0">
+                                            <Label Content="Port 9" />
+                                        </Viewbox>
+                                        <ComboBox Grid.Row="1" SelectedIndex="0" x:Name="DSA09_COMBOBOX" ItemsSource="{StaticResource DSA_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/>
+                                        <ComboBox Grid.Row="2" SelectedIndex="0" x:Name="DPS09_COMBOBOX" ItemsSource="{StaticResource DPS_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/>
+                                    </Grid>
+                                    <Grid x:Name="P10_GRID" Grid.Row="2" Grid.Column="1" Margin="5">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="1*"/>
+                                            <RowDefinition Height="1*"/>
+                                            <RowDefinition Height="1*"/>
+                                        </Grid.RowDefinitions>
+                                        <Viewbox Grid.Row="0">
+                                            <Label Content="Port 10" />
+                                        </Viewbox>
+                                        <ComboBox Grid.Row="1" SelectedIndex="0" x:Name="DSA10_COMBOBOX" ItemsSource="{StaticResource DSA_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/>
+                                        <ComboBox Grid.Row="2" SelectedIndex="0" x:Name="DPS10_COMBOBOX" ItemsSource="{StaticResource DPS_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/>
+                                    </Grid>
+                                    <Grid x:Name="P11_GRID" Grid.Row="1" Grid.Column="1" Margin="5">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="1*"/>
+                                            <RowDefinition Height="1*"/>
+                                            <RowDefinition Height="1*"/>
+                                        </Grid.RowDefinitions>
+                                        <Viewbox Grid.Row="0">
+                                            <Label Content="Port 11" />
+                                        </Viewbox>
+                                        <ComboBox Grid.Row="1" SelectedIndex="0" x:Name="DSA11_COMBOBOX" ItemsSource="{StaticResource DSA_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/>
+                                        <ComboBox Grid.Row="2" SelectedIndex="0" x:Name="DPS11_COMBOBOX" ItemsSource="{StaticResource DPS_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/>
+                                    </Grid>
+                                    <Grid x:Name="P12_GRID" Grid.Row="0" Grid.Column="1" Margin="5">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="1*"/>
+                                            <RowDefinition Height="1*"/>
+                                            <RowDefinition Height="1*"/>
+                                        </Grid.RowDefinitions>
+                                        <Viewbox Grid.Row="0">
+                                            <Label Content="Port 12" />
+                                        </Viewbox>
+                                        <ComboBox Grid.Row="1" SelectedIndex="0" x:Name="DSA12_COMBOBOX" ItemsSource="{StaticResource DSA_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/>
+                                        <ComboBox Grid.Row="2" SelectedIndex="0" x:Name="DPS12_COMBOBOX" ItemsSource="{StaticResource DPS_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/>
+                                    </Grid>
+                                    <Grid x:Name="P13_GRID" Grid.Row="0" Grid.Column="0" Margin="5">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="1*"/>
+                                            <RowDefinition Height="1*"/>
+                                            <RowDefinition Height="1*"/>
+                                        </Grid.RowDefinitions>
+                                        <Viewbox Grid.Row="0">
+                                            <Label Content="Port 13" />
+                                        </Viewbox>
+                                        <ComboBox Grid.Row="1" SelectedIndex="0" x:Name="DSA13_COMBOBOX" ItemsSource="{StaticResource DSA_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/>
+                                        <ComboBox Grid.Row="2" SelectedIndex="0" x:Name="DPS13_COMBOBOX" ItemsSource="{StaticResource DPS_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/>
+                                    </Grid>
+                                    <Grid x:Name="P14_GRID" Grid.Row="1" Grid.Column="0" Margin="5">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="1*"/>
+                                            <RowDefinition Height="1*"/>
+                                            <RowDefinition Height="1*"/>
+                                        </Grid.RowDefinitions>
+                                        <Viewbox Grid.Row="0">
+                                            <Label Content="Port 14" />
+                                        </Viewbox>
+                                        <ComboBox Grid.Row="1" SelectedIndex="0" x:Name="DSA14_COMBOBOX" ItemsSource="{StaticResource DSA_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/>
+                                        <ComboBox Grid.Row="2" SelectedIndex="0" x:Name="DPS14_COMBOBOX" ItemsSource="{StaticResource DPS_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/>
+                                    </Grid>
+                                    <Grid x:Name="P15_GRID" Grid.Row="2" Grid.Column="0" Margin="5">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="1*"/>
+                                            <RowDefinition Height="1*"/>
+                                            <RowDefinition Height="1*"/>
+                                        </Grid.RowDefinitions>
+                                        <Viewbox Grid.Row="0">
+                                            <Label Content="Port 15" />
+                                        </Viewbox>
+                                        <ComboBox Grid.Row="1" SelectedIndex="0" x:Name="DSA15_COMBOBOX" ItemsSource="{StaticResource DSA_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/>
+                                        <ComboBox Grid.Row="2" SelectedIndex="0" x:Name="DPS15_COMBOBOX" ItemsSource="{StaticResource DPS_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/>
+                                    </Grid>
+                                    <Grid x:Name="P16_GRID" Grid.Row="3" Grid.Column="0" Margin="5">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="1*"/>
+                                            <RowDefinition Height="1*"/>
+                                            <RowDefinition Height="1*"/>
+                                        </Grid.RowDefinitions>
+                                        <Viewbox Grid.Row="0">
+                                            <Label Content="J1 in / Port16" />
+                                        </Viewbox>
+                                        <ComboBox Grid.Row="1" SelectedIndex="0" x:Name="DSA16_COMBOBOX" ItemsSource="{StaticResource DSAin_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/>
+                                        <Viewbox Grid.Row="2" Grid.Column="0">
+                                            <CheckBox x:Name="STBLNA_CHECKBOX" VerticalContentAlignment="Center" Content="Standby LNA" Checked="CHECKBOX_Checked" Unchecked="CHECKBOX_Unchecked" Indeterminate="CHECKBOX_Indeterminate" />
+                                        </Viewbox>
+                                    </Grid>
                                 </Grid>
                             </Grid>
-                        </Grid>
-                        <Grid Grid.Row="2" Margin="5" Background="#FFFF9999">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="3*"/>
-                                <ColumnDefinition Width="2*"/>
-                                <ColumnDefinition Width="1*"/>
-                                <ColumnDefinition Width="1*"/>
-                                <ColumnDefinition Width="1*"/>
-                            </Grid.ColumnDefinitions>
-                            <Grid Grid.Column="0" Background="#FFFFF587">
+                            <Grid Grid.Row="2" Margin="5" Background="#FFFF9999">
                                 <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="3*"/>
+                                    <ColumnDefinition Width="2*"/>
                                     <ColumnDefinition Width="1*"/>
                                     <ColumnDefinition Width="1*"/>
                                     <ColumnDefinition Width="1*"/>
                                 </Grid.ColumnDefinitions>
-                                <Button Grid.Column="0" x:Name="WRITEDSA" Margin="5" Click="WRITE_Click"><Viewbox Margin="5"><TextBlock>Set ATT Config</TextBlock></Viewbox></Button>
-                                <Button Grid.Column="1" x:Name="WRITEDPS" Margin="5" Click="WRITE_Click"><Viewbox Margin="5"><TextBlock>Set Phase Config</TextBlock></Viewbox></Button>
-                                <Button Grid.Column="2" x:Name="WRITE" Margin="5" Click="WRITE_Click"><Viewbox Margin="5"><TextBlock>Set Config</TextBlock></Viewbox></Button>
+                                <Grid Grid.Column="0" Background="#FFFFF587">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="1*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Button Grid.Column="0" x:Name="WRITEDSA" Margin="5" Click="WRITE_Click">
+                                        <Viewbox Margin="5">
+                                            <TextBlock>Set ATT Config</TextBlock>
+                                        </Viewbox>
+                                    </Button>
+                                    <Button Grid.Column="1" x:Name="WRITEDPS" Margin="5" Click="WRITE_Click">
+                                        <Viewbox Margin="5">
+                                            <TextBlock>Set Phase Config</TextBlock>
+                                        </Viewbox>
+                                    </Button>
+                                    <Button Grid.Column="2" x:Name="WRITE" Margin="5" Click="WRITE_Click">
+                                        <Viewbox Margin="5">
+                                            <TextBlock>Set Config</TextBlock>
+                                        </Viewbox>
+                                    </Button>
+                                </Grid>
+                                <Grid Grid.Column="1">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="1*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Viewbox Grid.Column="0" Margin="5" HorizontalAlignment="Left">
+                                        <Label Content="Save and Load Target"/>
+                                    </Viewbox>
+                                    <ComboBox Grid.Column="1" x:Name="SAVEADDRESS_COMBOBOX" SelectedIndex="0" Margin="5" FontSize="16" ItemsSource="{StaticResource STATE_List}" VerticalContentAlignment="Center" DropDownClosed="SAVEADDRESS_COMBOBOX_DropDownClosed"/>
+                                </Grid>
+                                <Button Grid.Column="2" x:Name="LOADDMEM" Margin="5" Click="LOADMEM_Click">
+                                    <Viewbox Margin="5">
+                                        <TextBlock>Load Memory</TextBlock>
+                                    </Viewbox>
+                                </Button>
+                                <Button Grid.Column="3" x:Name="SAVEMEM" Margin="5" Click="SAVEMEM_Click">
+                                    <Viewbox Margin="5">
+                                        <TextBlock>Save Memory</TextBlock>
+                                    </Viewbox>
+                                </Button>
+                                <Button Grid.Column="4" x:Name="RESET" Margin="5" Click="RESET_Click">
+                                    <Viewbox Margin="5">
+                                        <TextBlock>Preset Config</TextBlock>
+                                    </Viewbox>
+                                </Button>
                             </Grid>
-                            <Grid Grid.Column="1">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="1*"/>
-                                    <ColumnDefinition Width="1*"/>
-                                </Grid.ColumnDefinitions>
-                                <Viewbox Grid.Column="0" Margin="5" HorizontalAlignment="Left"><Label Content="Save and Load Target"/></Viewbox>
-                                <ComboBox Grid.Column="1" x:Name="SAVEADDRESS_COMBOBOX" SelectedIndex="0" Margin="5" FontSize="16" ItemsSource="{StaticResource STATE_List}" VerticalContentAlignment="Center" DropDownClosed="SAVEADDRESS_COMBOBOX_DropDownClosed"/>
-                            </Grid>
-                            <Button Grid.Column="2" x:Name="LOADDMEM" Margin="5" Click="LOADMEM_Click"><Viewbox Margin="5"><TextBlock>Load Memory</TextBlock></Viewbox></Button>
-                            <Button Grid.Column="3" x:Name="SAVEMEM" Margin="5" Click="SAVEMEM_Click"><Viewbox Margin="5"><TextBlock>Save Memory</TextBlock></Viewbox></Button>
-                            <Button Grid.Column="4" x:Name="RESET" Margin="5" Click="RESET_Click"><Viewbox Margin="5"><TextBlock>Preset Config</TextBlock></Viewbox></Button>
-                        </Grid>
                         </Grid>
                     </TabItem>
                     <TabItem Header="VNA" IsEnabled="True">
@@ -322,7 +404,11 @@
                                     <Label Content="VISA Address"/>
                                 </Viewbox>
                                 <TextBox Grid.Column="1" x:Name="VISAADDR_TEXTBOX" Style="{StaticResource EDIT_TEXT_LINE}" TextWrapping="Wrap" Text="TCPIP0::localhost::hislip0::INSTR" Margin="5" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" FontSize="16"/>
-                                <Button Grid.Column="2" x:Name="VISA_CONNECT_CHECK_BUTTON" Margin="5" IsEnabled="True" Click="VISA_CONNECT_CHECK_BUTTON_Click"><Viewbox><TextBlock>Check</TextBlock></Viewbox></Button>
+                                <Button Grid.Column="2" x:Name="VISA_CONNECT_CHECK_BUTTON" Margin="5" IsEnabled="True" Click="VISA_CONNECT_CHECK_BUTTON_Click">
+                                    <Viewbox>
+                                        <TextBlock>Check</TextBlock>
+                                    </Viewbox>
+                                </Button>
                             </Grid>
                             <Grid Grid.Row="1">
                                 <Grid.RowDefinitions>
@@ -367,9 +453,13 @@
                                             <ColumnDefinition Width="2*"/>
                                             <ColumnDefinition Width="1*"/>
                                         </Grid.ColumnDefinitions>
-                                        <Viewbox Grid.Column="0" Margin="5"><Label Content="VISA TIMEOUT"/></Viewbox>
+                                        <Viewbox Grid.Column="0" Margin="5">
+                                            <Label Content="VISA TIMEOUT"/>
+                                        </Viewbox>
                                         <TextBox Grid.Column="1" x:Name="TIMEOUT_TEXTBOX" Style="{StaticResource EDIT_TEXT_LINE}" TextWrapping="Wrap" Text="2000" Margin="5" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" PreviewTextInput="DEC_TextBox_PreviewTextInput" CommandManager.PreviewExecuted="DEC_TextBox_PreviewExecuted" PreviewLostKeyboardFocus="DEC_TextBox_PreviewLostKeyboardForcus" FontSize="16"/>
-                                        <Viewbox Grid.Column="2" Margin="5"><Label Content="[mS]"/></Viewbox>
+                                        <Viewbox Grid.Column="2" Margin="5">
+                                            <Label Content="[mS]"/>
+                                        </Viewbox>
                                     </Grid>
                                 </Grid>
                                 <Grid x:Name="LOOP_GRID" Grid.Row="1" Margin="5" Grid.ColumnSpan="2">
@@ -406,7 +496,9 @@
                                         <ColumnDefinition Width="1*"/>
                                         <ColumnDefinition Width="6*"/>
                                     </Grid.ColumnDefinitions>
-                                    <Viewbox Grid.Column="0" Margin="5"><Label Content="File Name Header"/></Viewbox>
+                                    <Viewbox Grid.Column="0" Margin="5">
+                                        <Label Content="File Name Header"/>
+                                    </Viewbox>
                                     <TextBox Grid.Column="1" x:Name="FILEHEADER_TEXTBOX" Style="{StaticResource EDIT_TEXT_LINE}" TextWrapping="Wrap" Text="DAT" Margin="5" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" FontSize="16"/>
                                 </Grid>
                                 <Button Grid.Row="3" x:Name="GETDAT_BUTTON" Margin="5,5,5,5" IsEnabled="True" Click="GETDAT_BUTTON_Click" Grid.ColumnSpan="2">
@@ -417,100 +509,262 @@
                             </Grid>
                         </Grid>
                     </TabItem>
+                    <TabItem Header="LOOP" IsEnabled="True">
+                        <Grid Background="#FFB7FF9E">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="5*"/>
+                                <RowDefinition Height="0*"/>
+                                <RowDefinition Height="1*"/>
+                            </Grid.RowDefinitions>
+                            <Grid x:Name="LOOP_SEL_GRID" Grid.Row="0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="1*"/>
+                                    <RowDefinition Height="4*"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid Grid.Row="0" Grid.Column="0" Margin="5">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="2*"/>
+                                        <ColumnDefinition Width="2*"/>
+                                        <ColumnDefinition Width="3*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <CheckBox x:Name="DPS_LoopEnable" Content="DPS Loop" IsChecked="True" Margin="5" VerticalContentAlignment="Center" HorizontalContentAlignment="Left"/>
+                                    <Label Grid.Column="1" Content="DPS step" Margin="5" VerticalContentAlignment="Center" HorizontalContentAlignment="Right"/>
+                                    <ComboBox Grid.Column="2" SelectedIndex="0" x:Name="DPSstep_COMBOBOX" ItemsSource="{StaticResource DPS_StepList}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}" Margin="5"/>
+                                </Grid>
+                                <Grid Grid.Row="0" Grid.Column="1" Margin="5">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="2*"/>
+                                        <ColumnDefinition Width="2*"/>
+                                        <ColumnDefinition Width="3*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <CheckBox x:Name="DSA_LoopEnable" Content="DSA Loop" IsChecked="True" Margin="5" VerticalContentAlignment="Center" HorizontalContentAlignment="Left"/>
+                                    <Label Grid.Column="1" Content="DPS step" Margin="5" VerticalContentAlignment="Center" HorizontalContentAlignment="Right"/>
+                                    <ComboBox Grid.Column="2" SelectedIndex="0" x:Name="DSAstep_COMBOBOX" ItemsSource="{StaticResource DSA_StepList}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}" Margin="5"/>
+                                </Grid>
+                                <Grid x:Name="DPS_LOOP_GRID" Grid.Row="1" Grid.Column="0" Margin="5">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="1*"/>
+                                        <RowDefinition Height="1*"/>
+                                        <RowDefinition Height="1*"/>
+                                        <RowDefinition Height="1*"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="1*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <CheckBox Grid.Row="3" Grid.Column="3" Content="DPS1" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" IsChecked="True"/>
+                                    <CheckBox Grid.Row="2" Grid.Column="3" Content="DPS2" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" IsChecked="True"/>
+                                    <CheckBox Grid.Row="1" Grid.Column="3" Content="PS3" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" IsChecked="True"/>
+                                    <CheckBox Grid.Row="0" Grid.Column="3" Content="DPS4" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" IsChecked="True"/>
+                                    <CheckBox Grid.Row="0" Grid.Column="2" Content="DPS5" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" IsChecked="True"/>
+                                    <CheckBox Grid.Row="1" Grid.Column="2" Content="DPS6" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" IsChecked="True"/>
+                                    <CheckBox Grid.Row="2" Grid.Column="2" Content="DPS7" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" IsChecked="True"/>
+                                    <CheckBox Grid.Row="3" Grid.Column="2" Content="DPS8" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" IsChecked="True"/>
+                                    <CheckBox Grid.Row="3" Grid.Column="1" Content="DPS9" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" IsChecked="True"/>
+                                    <CheckBox Grid.Row="2" Grid.Column="1" Content="DPS10" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" IsChecked="True"/>
+                                    <CheckBox Grid.Row="1" Grid.Column="1" Content="DPS11" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" IsChecked="True"/>
+                                    <CheckBox Grid.Row="0" Grid.Column="1" Content="DPS12" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" IsChecked="True"/>
+                                    <CheckBox Grid.Row="0" Grid.Column="0" Content="DPS13" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" IsChecked="True"/>
+                                    <CheckBox Grid.Row="1" Grid.Column="0" Content="DPS14" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" IsChecked="True"/>
+                                    <CheckBox Grid.Row="2" Grid.Column="0" Content="DPS15" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" IsChecked="True"/>
+                                </Grid>
+                                <Grid x:Name="DSA_LOOP_GRID" Grid.Row="1" Grid.Column="1" Margin="5">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="1*"/>
+                                        <RowDefinition Height="1*"/>
+                                        <RowDefinition Height="1*"/>
+                                        <RowDefinition Height="1*"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="1*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <CheckBox Grid.Row="3" Grid.Column="3" Content="DSA1" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" IsChecked="True"/>
+                                    <CheckBox Grid.Row="2" Grid.Column="3" Content="DSA2" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" IsChecked="True"/>
+                                    <CheckBox Grid.Row="1" Grid.Column="3" Content="PSA" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" IsChecked="True"/>
+                                    <CheckBox Grid.Row="0" Grid.Column="3" Content="DSA4" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" IsChecked="True"/>
+                                    <CheckBox Grid.Row="0" Grid.Column="2" Content="DSA5" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" IsChecked="True"/>
+                                    <CheckBox Grid.Row="1" Grid.Column="2" Content="DSA6" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" IsChecked="True"/>
+                                    <CheckBox Grid.Row="2" Grid.Column="2" Content="DSA7" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" IsChecked="True"/>
+                                    <CheckBox Grid.Row="3" Grid.Column="2" Content="DSA8" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" IsChecked="True"/>
+                                    <CheckBox Grid.Row="3" Grid.Column="1" Content="DSA9" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" IsChecked="True"/>
+                                    <CheckBox Grid.Row="2" Grid.Column="1" Content="DSA10" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" IsChecked="True"/>
+                                    <CheckBox Grid.Row="1" Grid.Column="1" Content="DSA11" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" IsChecked="True"/>
+                                    <CheckBox Grid.Row="0" Grid.Column="1" Content="DSA12" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" IsChecked="True"/>
+                                    <CheckBox Grid.Row="0" Grid.Column="0" Content="DSA13" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" IsChecked="True"/>
+                                    <CheckBox Grid.Row="1" Grid.Column="0" Content="DSA14" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" IsChecked="True"/>
+                                    <CheckBox Grid.Row="2" Grid.Column="0" Content="DSA15" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" IsChecked="True"/>
+                                </Grid>
+                            </Grid>
+                            <Grid x:Name="LOOP_CONF_GRID" Grid.Row="2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                </Grid.ColumnDefinitions>
+                                <Label Grid.Column="0" Content="Wait time until next step" Margin="5" VerticalContentAlignment="Center" HorizontalContentAlignment="Right"/>
+                                <TextBox Grid.Column="1" x:Name="WAITTIME_TEXTBOX" Style="{StaticResource EDIT_TEXT_LINE}" TextWrapping="Wrap" Text="500" Margin="5" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" PreviewTextInput="DEC_TextBox_PreviewTextInput" CommandManager.PreviewExecuted="DEC_TextBox_PreviewExecuted" PreviewLostKeyboardFocus="DEC_TextBox_PreviewLostKeyboardForcus" FontSize="16"/>
+                                <Label Grid.Column="2" Content="[mS]" VerticalContentAlignment="Center" HorizontalContentAlignment="Left"/>
+                                <Button Grid.Column="4" x:Name="LOOP_START_BUTTON" Content="START" Margin="5" Click="LOOP_START_BUTTON_Click"/>
+                            </Grid>
+                        </Grid>
+                    </TabItem>
                 </TabControl>
                 <Grid Grid.Column="1" Background="#FFFFB2EE">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="2*"/>
-                    <RowDefinition Height="4*"/>
-                </Grid.RowDefinitions>
-                <Grid Grid.Row="0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="100*"/>
-                        <ColumnDefinition Width="100*"/>
-                    </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                            <RowDefinition Height="1*"/>
-                            <RowDefinition Height="1*"/>
-                            <RowDefinition Height="1*"/>
-                        </Grid.RowDefinitions>
-                    <Grid Grid.Row="0" Grid.Column="0" Margin="5" Background="#FFE389FF">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="1*"/>
-                            <ColumnDefinition Width="1*"/>
-                        </Grid.ColumnDefinitions>
-                        <Viewbox Grid.Column="0" ><Label Content="CPU TMP"/></Viewbox>
-                        <Viewbox Grid.Column="1" ><Label Name="SNS_CPU_TEMP_LABEL" Content="ND"/></Viewbox>
-                    </Grid>
-                    <Grid Grid.Row="0" Grid.Column="1" Margin="5" Background="#FFE389FF">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="1*"/>
-                            <ColumnDefinition Width="1*"/>
-                        </Grid.ColumnDefinitions>
-                        <Viewbox Grid.Column="0" ><Label Content="SNS Id"/></Viewbox>
-                        <Viewbox Grid.Column="1" ><Label Name="SNS_ID_LABEL" Content="ND"/></Viewbox>
-                    </Grid>
-                    <Grid Grid.Row="1" Grid.Column="0" Margin="5" Background="#FFE389FF">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="1*"/>
-                            <ColumnDefinition Width="1*"/>
-                        </Grid.ColumnDefinitions>
-                        <Viewbox Grid.Column="0" ><Label Content="SNS Vin"/></Viewbox>
-                        <Viewbox Grid.Column="1" ><Label Name="SNS_VIN_LABEL" Content="ND"/></Viewbox>
-                    </Grid>
-                    <Grid Grid.Row="1" Grid.Column="1" Margin="5" Background="#FFE389FF">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="1*"/>
-                            <ColumnDefinition Width="1*"/>
-                        </Grid.ColumnDefinitions>
-                        <Viewbox Grid.Column="0" ><Label Content="SNS Vd"/></Viewbox>
-                        <Viewbox Grid.Column="1" ><Label Name="SNS_VD_LABEL" Content="ND"/></Viewbox>
-                    </Grid>
-                    <Grid Grid.Row="2" Grid.Column="0" Margin="5" Background="#FFE389FF">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="1*"/>
-                            <ColumnDefinition Width="1*"/>
-                        </Grid.ColumnDefinitions>
-                        <Viewbox Grid.Column="0" ><Label Content="SNS Pin"/></Viewbox>
-                        <Viewbox Grid.Column="1" ><Label Name="SNS_PIN_LABEL" Content="ND"/></Viewbox>
-                    </Grid>
-                </Grid>
-                <Grid Grid.Row="1">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="6*"/>
+                        <RowDefinition Height="2*"/>
+                        <RowDefinition Height="4*"/>
                     </Grid.RowDefinitions>
-                    <Viewbox Grid.Row="0" Margin="5" HorizontalAlignment="Left"><Label Content="TEMPERATURE [degreeC]" /></Viewbox>
-                    <Grid Grid.Row="1" Margin="5" Background="#FFE389FF" ShowGridLines="True">
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100*"/>
+                            <ColumnDefinition Width="100*"/>
+                        </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="1*"/>
                             <RowDefinition Height="1*"/>
                             <RowDefinition Height="1*"/>
-                            <RowDefinition Height="1*"/>
-                            <RowDefinition Height="1*"/>
                         </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="1*"/>
-                            <ColumnDefinition Width="1*"/>
-                            <ColumnDefinition Width="1*"/>
-                        </Grid.ColumnDefinitions>
-                        <Viewbox Grid.Row="0" Grid.Column="0"><Label Name="TEMP01" Content="ND" /></Viewbox>
-                        <Viewbox Grid.Row="1" Grid.Column="0"><Label Name="TEMP02" Content="ND" /></Viewbox>
-                        <Viewbox Grid.Row="2" Grid.Column="0"><Label Name="TEMP03" Content="ND" /></Viewbox>
-                        <Viewbox Grid.Row="3" Grid.Column="0"><Label Name="TEMP04" Content="ND" /></Viewbox>
-                        <Viewbox Grid.Row="4" Grid.Column="0"><Label Name="TEMP05" Content="ND" /></Viewbox>
-                        <Viewbox Grid.Row="0" Grid.Column="1"><Label Name="TEMP06" Content="ND" /></Viewbox>
-                        <Viewbox Grid.Row="1" Grid.Column="1"><Label Name="TEMP07" Content="ND" /></Viewbox>
-                        <Viewbox Grid.Row="2" Grid.Column="1"><Label Name="TEMP08" Content="ND" /></Viewbox>
-                        <Viewbox Grid.Row="3" Grid.Column="1"><Label Name="TEMP09" Content="ND" /></Viewbox>
-                        <Viewbox Grid.Row="4" Grid.Column="1"><Label Name="TEMP10" Content="ND" /></Viewbox>
-                        <Viewbox Grid.Row="0" Grid.Column="2"><Label Name="TEMP11" Content="ND" /></Viewbox>
-                        <Viewbox Grid.Row="1" Grid.Column="2"><Label Name="TEMP12" Content="ND" /></Viewbox>
-                        <Viewbox Grid.Row="2" Grid.Column="2"><Label Name="TEMP13" Content="ND" /></Viewbox>
-                        <Viewbox Grid.Row="3" Grid.Column="2"><Label Name="TEMP14" Content="ND" /></Viewbox>
-                        <Viewbox Grid.Row="4" Grid.Column="2"><Label Name="TEMP15" Content="ND" /></Viewbox>
+                        <Grid Grid.Row="0" Grid.Column="0" Margin="5" Background="#FFE389FF">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="1*"/>
+                            </Grid.ColumnDefinitions>
+                            <Viewbox Grid.Column="0" >
+                                <Label Content="CPU TMP"/>
+                            </Viewbox>
+                            <Viewbox Grid.Column="1" >
+                                <Label Name="SNS_CPU_TEMP_LABEL" Content="ND"/>
+                            </Viewbox>
+                        </Grid>
+                        <Grid Grid.Row="0" Grid.Column="1" Margin="5" Background="#FFE389FF">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="1*"/>
+                            </Grid.ColumnDefinitions>
+                            <Viewbox Grid.Column="0" >
+                                <Label Content="SNS Id"/>
+                            </Viewbox>
+                            <Viewbox Grid.Column="1" >
+                                <Label Name="SNS_ID_LABEL" Content="ND"/>
+                            </Viewbox>
+                        </Grid>
+                        <Grid Grid.Row="1" Grid.Column="0" Margin="5" Background="#FFE389FF">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="1*"/>
+                            </Grid.ColumnDefinitions>
+                            <Viewbox Grid.Column="0" >
+                                <Label Content="SNS Vin"/>
+                            </Viewbox>
+                            <Viewbox Grid.Column="1" >
+                                <Label Name="SNS_VIN_LABEL" Content="ND"/>
+                            </Viewbox>
+                        </Grid>
+                        <Grid Grid.Row="1" Grid.Column="1" Margin="5" Background="#FFE389FF">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="1*"/>
+                            </Grid.ColumnDefinitions>
+                            <Viewbox Grid.Column="0" >
+                                <Label Content="SNS Vd"/>
+                            </Viewbox>
+                            <Viewbox Grid.Column="1" >
+                                <Label Name="SNS_VD_LABEL" Content="ND"/>
+                            </Viewbox>
+                        </Grid>
+                        <Grid Grid.Row="2" Grid.Column="0" Margin="5" Background="#FFE389FF">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="1*"/>
+                            </Grid.ColumnDefinitions>
+                            <Viewbox Grid.Column="0" >
+                                <Label Content="SNS Pin"/>
+                            </Viewbox>
+                            <Viewbox Grid.Column="1" >
+                                <Label Name="SNS_PIN_LABEL" Content="ND"/>
+                            </Viewbox>
+                        </Grid>
+                    </Grid>
+                    <Grid Grid.Row="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="6*"/>
+                        </Grid.RowDefinitions>
+                        <Viewbox Grid.Row="0" Margin="5" HorizontalAlignment="Left">
+                            <Label Content="TEMPERATURE [degreeC]" />
+                        </Viewbox>
+                        <Grid Grid.Row="1" Margin="5" Background="#FFE389FF" ShowGridLines="True">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="1*"/>
+                            </Grid.ColumnDefinitions>
+                            <Viewbox Grid.Row="0" Grid.Column="0">
+                                <Label Name="TEMP01" Content="ND" />
+                            </Viewbox>
+                            <Viewbox Grid.Row="1" Grid.Column="0">
+                                <Label Name="TEMP02" Content="ND" />
+                            </Viewbox>
+                            <Viewbox Grid.Row="2" Grid.Column="0">
+                                <Label Name="TEMP03" Content="ND" />
+                            </Viewbox>
+                            <Viewbox Grid.Row="3" Grid.Column="0">
+                                <Label Name="TEMP04" Content="ND" />
+                            </Viewbox>
+                            <Viewbox Grid.Row="4" Grid.Column="0">
+                                <Label Name="TEMP05" Content="ND" />
+                            </Viewbox>
+                            <Viewbox Grid.Row="0" Grid.Column="1">
+                                <Label Name="TEMP06" Content="ND" />
+                            </Viewbox>
+                            <Viewbox Grid.Row="1" Grid.Column="1">
+                                <Label Name="TEMP07" Content="ND" />
+                            </Viewbox>
+                            <Viewbox Grid.Row="2" Grid.Column="1">
+                                <Label Name="TEMP08" Content="ND" />
+                            </Viewbox>
+                            <Viewbox Grid.Row="3" Grid.Column="1">
+                                <Label Name="TEMP09" Content="ND" />
+                            </Viewbox>
+                            <Viewbox Grid.Row="4" Grid.Column="1">
+                                <Label Name="TEMP10" Content="ND" />
+                            </Viewbox>
+                            <Viewbox Grid.Row="0" Grid.Column="2">
+                                <Label Name="TEMP11" Content="ND" />
+                            </Viewbox>
+                            <Viewbox Grid.Row="1" Grid.Column="2">
+                                <Label Name="TEMP12" Content="ND" />
+                            </Viewbox>
+                            <Viewbox Grid.Row="2" Grid.Column="2">
+                                <Label Name="TEMP13" Content="ND" />
+                            </Viewbox>
+                            <Viewbox Grid.Row="3" Grid.Column="2">
+                                <Label Name="TEMP14" Content="ND" />
+                            </Viewbox>
+                            <Viewbox Grid.Row="4" Grid.Column="2">
+                                <Label Name="TEMP15" Content="ND" />
+                            </Viewbox>
+                        </Grid>
                     </Grid>
                 </Grid>
-            </Grid>
             </Grid>
         </Grid>
     </Grid>
