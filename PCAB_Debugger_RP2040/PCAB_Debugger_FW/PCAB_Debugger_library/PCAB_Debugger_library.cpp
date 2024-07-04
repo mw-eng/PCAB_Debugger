@@ -82,30 +82,32 @@ pcabCMD::CommandLine pcabCMD::readCMD(bool echo)
 
 void pcabCMD::write(std::string str)
 {
-    if(!de_gpio){rs485enable();}
+    if(!de_mode){rs485enable(); sleep_ms(10);}
     uart.write(str);
+    sleep_ms(10);
     rs485disable();
 }
 
 void pcabCMD::writeLine(std::string str)
 {
-    if(!de_gpio){rs485enable();}
+    if(!de_mode){rs485enable(); sleep_ms(10);}
     uart.writeLine(str);
+    sleep_ms(10);
     rs485disable();
 }
 
 void pcabCMD::rs485enable()
 {
     gpio_put(de_gpio, true);
-    de_gpio = true;
+    de_mode = true;
 }
 
 void pcabCMD::rs485disable()
 {
     gpio_put(de_gpio, false);
-    de_gpio = false;
+    de_mode = false;
 }
 
-bool pcabCMD::getRS485mode(){ return de_gpio; }
+bool pcabCMD::getRS485mode(){ return de_mode; }
 
 #pragma endregion pcabCMD Class
