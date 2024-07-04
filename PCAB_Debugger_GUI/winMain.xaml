@@ -531,7 +531,7 @@
                                         <ColumnDefinition Width="2*"/>
                                         <ColumnDefinition Width="3*"/>
                                     </Grid.ColumnDefinitions>
-                                    <CheckBox x:Name="DPS_LoopEnable" Content="DPS Loop" IsChecked="True" Margin="5" VerticalContentAlignment="Center" HorizontalContentAlignment="Left"/>
+                                    <CheckBox x:Name="DPS_LoopEnable" Content="DPS Loop" Margin="5" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" Checked="DPS_LoopEnable_Checked" Unchecked="DPS_LoopEnable_Unchecked"/>
                                     <Label Grid.Column="1" Content="DPS step" Margin="5" VerticalContentAlignment="Center" HorizontalContentAlignment="Right"/>
                                     <ComboBox Grid.Column="2" SelectedIndex="0" x:Name="DPSstep_COMBOBOX" ItemsSource="{StaticResource DPS_StepList}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}" Margin="5"/>
                                 </Grid>
@@ -541,7 +541,7 @@
                                         <ColumnDefinition Width="2*"/>
                                         <ColumnDefinition Width="3*"/>
                                     </Grid.ColumnDefinitions>
-                                    <CheckBox x:Name="DSA_LoopEnable" Content="DSA Loop" IsChecked="True" Margin="5" VerticalContentAlignment="Center" HorizontalContentAlignment="Left"/>
+                                    <CheckBox x:Name="DSA_LoopEnable" Content="DSA Loop" Margin="5" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" Checked="DSA_LoopEnable_Checked" Unchecked="DSA_LoopEnable_Unchecked"/>
                                     <Label Grid.Column="1" Content="DPS step" Margin="5" VerticalContentAlignment="Center" HorizontalContentAlignment="Right"/>
                                     <ComboBox Grid.Column="2" SelectedIndex="0" x:Name="DSAstep_COMBOBOX" ItemsSource="{StaticResource DSA_StepList}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}" Margin="5"/>
                                 </Grid>
@@ -589,7 +589,7 @@
                                     </Grid.ColumnDefinitions>
                                     <CheckBox Grid.Row="3" Grid.Column="3" Content="DSA1" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" IsChecked="True"/>
                                     <CheckBox Grid.Row="2" Grid.Column="3" Content="DSA2" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" IsChecked="True"/>
-                                    <CheckBox Grid.Row="1" Grid.Column="3" Content="PSA" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" IsChecked="True"/>
+                                    <CheckBox Grid.Row="1" Grid.Column="3" Content="PSA3" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" IsChecked="True"/>
                                     <CheckBox Grid.Row="0" Grid.Column="3" Content="DSA4" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" IsChecked="True"/>
                                     <CheckBox Grid.Row="0" Grid.Column="2" Content="DSA5" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" IsChecked="True"/>
                                     <CheckBox Grid.Row="1" Grid.Column="2" Content="DSA6" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" IsChecked="True"/>

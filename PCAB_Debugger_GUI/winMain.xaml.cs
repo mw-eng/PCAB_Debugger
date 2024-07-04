@@ -46,6 +46,9 @@ namespace PCAB_Debugger_GUI
             VISAADDR_TEXTBOX.Text = Settings.Default.visaAddr;
             TIMEOUT_TEXTBOX.Text = Settings.Default.visaTO.ToString("0");
             FILEHEADER_TEXTBOX.Text = Settings.Default.fnHeader;
+
+            DPS_LoopEnable.IsChecked = true;
+            DSA_LoopEnable.IsChecked = true;
         }
 
         #region Serial EVENT
@@ -685,7 +688,35 @@ namespace PCAB_Debugger_GUI
         #region LOOP EVENT
         private void LOOP_START_BUTTON_Click(object sender, RoutedEventArgs e)
         {
+            //Get Configuration
 
+        }
+
+        private void DPS_LoopEnable_Checked(object sender, RoutedEventArgs e)
+        {
+            DPSstep_COMBOBOX.IsEnabled = true;
+            DPS_LOOP_GRID.IsEnabled = true;
+            LOOP_CONF_GRID.IsEnabled = true;
+        }
+        private void DPS_LoopEnable_Unchecked(object sender, RoutedEventArgs e)
+        {
+            DPSstep_COMBOBOX.IsEnabled = false;
+            DPS_LOOP_GRID.IsEnabled = false;
+            if (DSA_LoopEnable.IsChecked != true) { LOOP_CONF_GRID.IsEnabled = false; }
+        }
+
+        private void DSA_LoopEnable_Checked(object sender, RoutedEventArgs e)
+        {
+            DSAstep_COMBOBOX.IsEnabled = true;
+            DSA_LOOP_GRID.IsEnabled = true;
+            LOOP_CONF_GRID.IsEnabled = true;
+        }
+
+        private void DSA_LoopEnable_Unchecked(object sender, RoutedEventArgs e)
+        {
+            DSAstep_COMBOBOX.IsEnabled = false;
+            DSA_LOOP_GRID.IsEnabled = false;
+            if (DPS_LoopEnable.IsChecked != true) { LOOP_CONF_GRID.IsEnabled = false; }
         }
         #endregion
 
