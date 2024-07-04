@@ -79,7 +79,7 @@ namespace PCAB_Debugger_GUI
                                 foreach (int a in dsa)
                                 {
                                     //Write Phase State
-                                    if (_mod.PCAB_CMD(sn, "SetDPS " + a.ToString("0") + " " + cntDSA.ToString("0"), 1).Substring(0, 4) != "DONE") { this.DialogResult = false; this.Close(); }
+                                    if (_mod.PCAB_CMD(sn, "SetDSA " + a.ToString("0") + " " + cntDSA.ToString("0"), 1).Substring(0, 4) != "DONE") { this.DialogResult = false; this.Close(); }
                                 }
                                 if (_mod.PCAB_CMD(sn, " WrtDSA", 1).Substring(0, 4) != "DONE") { ExitTASK(); return; }
                                 OnUpdateDAT();
@@ -114,7 +114,7 @@ namespace PCAB_Debugger_GUI
                             foreach (int a in dsa)
                             {
                                 //Write Phase State
-                                if (_mod.PCAB_CMD(sn, "SetDPS " + a.ToString("0") + " " + cntDSA.ToString("0"), 1).Substring(0, 4) != "DONE") { ExitTASK(); return; }
+                                if (_mod.PCAB_CMD(sn, "SetDSA " + a.ToString("0") + " " + cntDSA.ToString("0"), 1).Substring(0, 4) != "DONE") { ExitTASK(); return; }
                             }
                             if (_mod.PCAB_CMD(sn, " WrtDSA", 1).Substring(0, 4) != "DONE") { ExitTASK(); return; }
                             OnUpdateDAT();
