@@ -104,7 +104,7 @@ namespace PCAB_Debugger_GUI
                     _state = true;
                     ((TextBlock)((Viewbox)CONNECT_BUTTON.Content).Child).Text = "Disconnect";
                     read_conf(SERIAL_NUMBERS_COMBOBOX.Text);
-                    if(SERIAL_NUMBERS_COMBOBOX.Text == "*" && _mod.PCAB_CMD("*", "GetMODE", 1) == "0x2A\n")
+                    if(SERIAL_NUMBERS_COMBOBOX.Text == "*" && _mod.PCAB_CMD("*", "GetMODE", 1) == "0x0F\n")
                     {
                         if(MessageBox.Show("Do you want to launch a binary editor?", "Binary editor",MessageBoxButton.YesNo,MessageBoxImage.Question) == MessageBoxResult.Yes)
                         {

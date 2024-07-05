@@ -9,7 +9,7 @@
 #define ROM_BLOCK_NUM PICO_FLASH_SIZE_BYTES / FLASH_BLOCK_SIZE
 const static std::string FW_VENDOR = "Orient Microwave Corp.";
 const static std::string FW_MODEL = "LX00-0004-00";
-const static std::string FW_REV = "1.2.1";
+const static std::string FW_REV = "1.3.0";
 
 #ifdef DEBUG_RASPICO
     #define DSA_D3_PIN 8
