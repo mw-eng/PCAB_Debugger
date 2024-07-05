@@ -47,12 +47,5 @@ ${\color{LightSkyBlue} 4. \space VNA \space automatic \space measurement \space 
 
 <br><img src="https://github.com/mw-eng/PCAB_Debugger/blob/master/PCAB_Debugger_GUI/assets/UI3.png?raw=true" width="600px"><br>
 <br>
-${\color{LightSkyGreen} 5. \space LOOP \space automatic \space loop \space control}$<br>
-4.1.  VISA Address	         : Instrument visa address.<br>
-4.2.  Check Button	         : Instrument communication check.<br>
-4.3.  Channel		         : Config collection channels.<br>
-4.4.  Mode Settings	         : Automatic trigger settings.<br>
-4.5.  Save target	         : What to save.<br>
-4.6.  PS{xx}		         : Check loop target.<br>
-4.7.  File Name Header       : Save file name header.<br>
-4.8.  RUN Button             : Automatic measurement execution button.<br>
+${\color{Lime} 5. \space LOOP \space automatic \space loop \space control}$<br>
+5.1.  DPS Loop 	             : <br>
