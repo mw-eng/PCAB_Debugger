@@ -15,21 +15,24 @@ ${\color{Magenta} 2. \space Control \space and \space Receive}$<br>
 2.1.  Serial Number          : Select serial numbers to send and receive.<br>
 2.2.  CPU TMP                : CPU internal temperature value [degreeC].<br>
 2.3.  SNS Vin                : Vin voltage value [V].<br>
-2.4.  SNS Id                 : Id current value [A].<br>
-2.5.  SNS Vd                 : Vd voltage value [V].<br>
-2.6.  Tempurature            : 1-wire sensor temperature value [degreeC].<br>
+2.4.  SNS Pin                : PreAMP Detector voltage value [V].<br>
+2.5.  SNS Id                 : Id current value [A].<br>
+2.6.  SNS Vd                 : Vd voltage value [V].<br>
+2.7.  Tempurature            : 1-wire sensor temperature value [degreeC].<br>
 
 ${\color{Gold} 3. \space Control \space TAB}$<br>
 3.1.  Standby AMP            : If checked, it will go into standby mode.<br>
 3.2.  Standby DRA            : If checked, it will go into standby mode.<br>
 3.3.  Low Power Mode         : If checked, it will go into low power mode.<br>
-3.4.  Phase Config           : Setting the phase.<br>
+3.4.  Phase and ATT Config   : Setting the phase delay and attenation.<br>
 3.5.  Standby LNA            : If checked, it will go into standby mode.<br>
-3.6.  Save and Load Target   : Memory number to save and load.<br>
-3.7.  Load Memory            : Load state to memory(ROM).<br>
-3.8.  Save Memory            : Save state to memory(ROM).<br>
-3.9.  Preset Config          : Preset config.<br>
-3.11. Set Phase Config       : Write phase config.<br>
+3.6.  Set ATT Config         : Write attenation config.<br>
+3.7.  Set Phase Config       : Write phase delay config.<br>
+3.8.  Set Config             : Write phase delay and attnation config.<br>
+3.9.  Save and Load Target   : Memory number to save and load.<br>
+3.10. Load Memory            : Load state to memory(ROM).<br>
+3.11. Save Memory            : Save state to memory(ROM).<br>
+3.12. Preset Config          : Preset config.<br>
 
 
 <br><img src="https://github.com/mw-eng/PCAB_Debugger/blob/master/PCAB_Debugger_GUI/assets/UI2.png?raw=true" width="600px"><br>
@@ -48,4 +51,11 @@ ${\color{LightSkyBlue} 4. \space VNA \space automatic \space measurement \space 
 <br><img src="https://github.com/mw-eng/PCAB_Debugger/blob/master/PCAB_Debugger_GUI/assets/UI3.png?raw=true" width="600px"><br>
 <br>
 ${\color{Lime} 5. \space LOOP \space automatic \space loop \space control}$<br>
-5.1.  DPS Loop 	             : <br>
+5.1.  DPS Loop 	             : Enable the phase delay step loop.<br>
+5.2.  DPS step				 : Select the phase delay step interval.<br>
+5.3.  DPSn                   : Select target.<br>
+5.4.  DSA Loop 	             : Enable the attenation step loop.<br>
+5.5.  DSA step				 : Select the attenation step interval.<br>
+5.6.  DSAn                   : Select target.<br>
+5.7.  Waite Time             : Waite time befor next step.<br>
+5.8.  START Button			 : Automatic loop control execution button.<br>
