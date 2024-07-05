@@ -9,7 +9,7 @@ Control GUI program.
 ${\color{Aqua} 1. \space Settings \space before \space connection}$<br>
 1.1.  Serial Port            : Select the *Serial Port* coneected to PCAB.<br>
 1.2.  Monitor loop inberval  : Specifies the acquisition interval for monitors (temperature, etc.) in milliseconds.<br>
-1.3.  Serial Numbers         : Enter the serial number of the connect target (separate with A when connecting multiple units).<br>
+1.3.  Serial Numbers         : Enter the serial number of the connect target (separate with "," when connecting multiple units).<br>
 
 ${\color{Magenta} 2. \space Control \space and \space Receive}$<br>
 2.1.  Serial Number          : Select serial numbers to send and receive.<br>
