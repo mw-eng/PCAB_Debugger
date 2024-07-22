@@ -686,6 +686,7 @@ namespace PCAB_Debugger_GUI
         #endregion
 
         #region LOOP EVENT
+
         private void LOOP_START_BUTTON_Click(object sender, RoutedEventArgs e)
         {
             //Get Configuration
@@ -731,7 +732,7 @@ namespace PCAB_Debugger_GUI
             _mod.DiscardInBuffer();
             read_conf(SERIAL_NUMBERS_COMBOBOX.Text);
 
-            winLoop win = new winLoop(_mod, SERIAL_NUMBERS_COMBOBOX.Text, stepDPS, stepDSA, waitTIME, dps, dsa);
+            winLoop win = new winLoop(_mod, SERIAL_NUMBERS_COMBOBOX.Text, stepDPS, stepDSA, waitTIME, dps, dsa, null);
             if (win.ShowDialog() != false) { WRITE_Click(WRITE, e); }
             else { MessageBox.Show("Loop function.","Error",MessageBoxButton.OK,MessageBoxImage.Error); }
         }
@@ -742,6 +743,7 @@ namespace PCAB_Debugger_GUI
             DPS_LOOP_GRID.IsEnabled = true;
             LOOP_CONF_GRID.IsEnabled = true;
         }
+
         private void DPS_LoopEnable_Unchecked(object sender, RoutedEventArgs e)
         {
             DPSstep_COMBOBOX.IsEnabled = false;
@@ -762,6 +764,88 @@ namespace PCAB_Debugger_GUI
             DSA_LOOP_GRID.IsEnabled = false;
             if (DPS_LoopEnable.IsChecked != true) { LOOP_CONF_GRID.IsEnabled = false; }
         }
+        #endregion
+
+        #region VNALOOP EVENT
+
+        private void VNALOOP_START_BUTTON_Click(object sender, RoutedEventArgs e)
+        {
+            //Get Configuration
+            uint stepDPS = 0;
+            uint stepDSA = 0;
+            int waitTIME = -1;
+            List<int> dps = new List<int>();
+            List<int> dsa = new List<int>();
+            dps.Clear();
+            dsa.Clear();
+            if (DPS_VnaLoopEnable.IsChecked == true)
+            {
+                waitTIME = int.Parse(VNALOOP_WAITTIME_TEXTBOX.Text);
+                stepDPS = (uint)Math.Pow(2, (double)VNALOOP_DPSstep_COMBOBOX.SelectedIndex);
+                foreach (object objBF in DPS_VNALOOP_GRID.Children)
+                {
+                    if (typeof(CheckBox) == objBF.GetType())
+                    {
+                        if (((CheckBox)objBF).IsChecked == true)
+                        {
+                            dps.Add(int.Parse(((CheckBox)objBF).Content.ToString().Substring(3)));
+                        }
+                    }
+                }
+            }
+            if (DSA_VnaLoopEnable.IsChecked == true)
+            {
+                waitTIME = int.Parse(VNALOOP_WAITTIME_TEXTBOX.Text);
+                stepDSA = (uint)Math.Pow(2, (double)VNALOOP_DSAstep_COMBOBOX.SelectedIndex);
+                foreach (object objBF in DSA_VNALOOP_GRID.Children)
+                {
+                    if (typeof(CheckBox) == objBF.GetType())
+                    {
+                        if (((CheckBox)objBF).IsChecked == true)
+                        {
+                            dsa.Add(int.Parse(((CheckBox)objBF).Content.ToString().Substring(3)));
+                        }
+                    }
+                }
+            }
+            if (waitTIME < 0) { return; }
+            _mod.PCAB_CMD(SERIAL_NUMBERS_COMBOBOX.Text, "CUI 0", 1);
+            _mod.DiscardInBuffer();
+            read_conf(SERIAL_NUMBERS_COMBOBOX.Text);
+
+            winLoop win = new winLoop(_mod, SERIAL_NUMBERS_COMBOBOX.Text, stepDPS, stepDSA, waitTIME, dps, dsa, null);
+            if (win.ShowDialog() != false) { WRITE_Click(WRITE, e); }
+            else { MessageBox.Show("Loop function.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
+        }
+
+        private void DPS_VnaLoopEnable_Checked(object sender, RoutedEventArgs e)
+        {
+            VNALOOP_DPSstep_COMBOBOX.IsEnabled = true;
+            DPS_VNALOOP_GRID.IsEnabled = true;
+            VNALOOP_CONF_GRID.IsEnabled = true;
+        }
+
+        private void DPS_VnaLoopEnable_Unchecked(object sender, RoutedEventArgs e)
+        {
+            VNALOOP_DPSstep_COMBOBOX.IsEnabled = false;
+            DPS_VNALOOP_GRID.IsEnabled = false;
+            if (DSA_VnaLoopEnable.IsChecked != true) { VNALOOP_CONF_GRID.IsEnabled = false; }
+        }
+
+        private void DSA_VnaLoopEnable_Checked(object sender, RoutedEventArgs e)
+        {
+            VNALOOP_DSAstep_COMBOBOX.IsEnabled = true;
+            DSA_VNALOOP_GRID.IsEnabled = true;
+            VNALOOP_CONF_GRID.IsEnabled = true;
+        }
+
+        private void DSA_VnaLoopEnable_Unchecked(object sender, RoutedEventArgs e)
+        {
+            VNALOOP_DSAstep_COMBOBOX.IsEnabled = false;
+            DSA_VNALOOP_GRID.IsEnabled = false;
+            if (DPS_VnaLoopEnable.IsChecked != true) { VNALOOP_CONF_GRID.IsEnabled = false; }
+        }
+
         #endregion
 
         #region Other EVENT

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MWComLibCS.ExternalControl;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -21,11 +22,12 @@ namespace PCAB_Debugger_GUI
         bool runTASK;
         int cntDPS = -1;
         int cntDSA = -1;
+        IEEE488 instr;
 
-        public winLoop(PCAB MOD, string serialNumber, uint StepDPS, uint StepDSA, int WaitTime, List<int> DPS, List<int> DSA)
+        public winLoop(PCAB MOD, string serialNumber, uint StepDPS, uint StepDSA, int WaitTime, List<int> DPS, List<int> DSA, IEEE488 INSTRUMENT)
         {
             InitializeComponent();
-            _mod = MOD; sn = serialNumber; stepDPS = StepDPS; stepDSA = StepDSA; waitTIME = WaitTime; dps = DPS; dsa = DSA;
+            _mod = MOD; sn = serialNumber; stepDPS = StepDPS; stepDSA = StepDSA; waitTIME = WaitTime; dps = DPS; dsa = DSA;instr = INSTRUMENT;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -120,7 +122,6 @@ namespace PCAB_Debugger_GUI
             }
         }
 
-
         private void OnUpdateDAT()
         {
             Dispatcher.BeginInvoke(new Action(() =>
@@ -136,5 +137,6 @@ namespace PCAB_Debugger_GUI
         {
             Dispatcher.BeginInvoke(new Action(() => { this.DialogResult = true; this.Close(); }));
         }
+
     }
 }
