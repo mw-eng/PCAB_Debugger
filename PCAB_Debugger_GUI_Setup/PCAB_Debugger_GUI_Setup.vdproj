@@ -21,6 +21,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_2A96E36B1A6E6A02D1C0EF43229E532D"
+        "OwnerKey" = "8:_55219439E27A4BB88D2EDAAFB85C87A6"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_2F06F5BA90734A6EAD5D9E4504F83401"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -51,12 +57,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_A1A4BB80D7D16393BFC7611E261A7BD2"
-        "OwnerKey" = "8:_55219439E27A4BB88D2EDAAFB85C87A6"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_A319CD15B281D34DB79A6E6A8D30B8B3"
         "OwnerKey" = "8:_55219439E27A4BB88D2EDAAFB85C87A6"
         "MsmSig" = "8:_UNDEFINED"
@@ -64,7 +64,7 @@
         "Entry"
         {
         "MsmKey" = "8:_A319CD15B281D34DB79A6E6A8D30B8B3"
-        "OwnerKey" = "8:_A1A4BB80D7D16393BFC7611E261A7BD2"
+        "OwnerKey" = "8:_2A96E36B1A6E6A02D1C0EF43229E532D"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -235,6 +235,37 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_2A96E36B1A6E6A02D1C0EF43229E532D"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:MWComLibCS.ExternalControl, Version=1.0.0.1, Culture=neutral, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_2A96E36B1A6E6A02D1C0EF43229E532D"
+                    {
+                    "Name" = "8:MWComLibCS.ExternalControl.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:MWComLibCS.ExternalControl.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_74480F6C3B5E4178865AAF909950A49F"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_2F06F5BA90734A6EAD5D9E4504F83401"
             {
             "SourcePath" = "8:..\\PCAB_Debugger_GUI\\PCAB_Debugger_GUI.ico"
@@ -314,37 +345,6 @@
             "PackageAs" = "3:1"
             "Register" = "3:1"
             "Exclude" = "11:TRUE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_A1A4BB80D7D16393BFC7611E261A7BD2"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:MWComLibCS.ExternalControl, Version=1.0.0.1, Culture=neutral, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_A1A4BB80D7D16393BFC7611E261A7BD2"
-                    {
-                    "Name" = "8:MWComLibCS.ExternalControl.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:MWComLibCS.ExternalControl.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_74480F6C3B5E4178865AAF909950A49F"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
@@ -499,8 +499,8 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:PCAB_DebuggerGUI"
-        "ProductCode" = "8:{A254B95D-AF6D-45C1-8692-A0F7FBE2E230}"
-        "PackageCode" = "8:{A7CB1779-408E-4353-974D-D481F385873D}"
+        "ProductCode" = "8:{8CC80B95-3E68-4E79-8E8D-BB9D45725184}"
+        "PackageCode" = "8:{DA689A66-6A04-4B19-A834-3D7DCCCAE33D}"
         "UpgradeCode" = "8:{198D4CD5-58E0-4489-9EBD-6C88B79D8A3B}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
