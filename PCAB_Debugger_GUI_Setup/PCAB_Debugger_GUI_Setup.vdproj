@@ -499,8 +499,8 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:PCAB_DebuggerGUI"
-        "ProductCode" = "8:{8CC80B95-3E68-4E79-8E8D-BB9D45725184}"
-        "PackageCode" = "8:{DA689A66-6A04-4B19-A834-3D7DCCCAE33D}"
+        "ProductCode" = "8:{761F7A80-E024-451F-A0BF-758393ADB3C9}"
+        "PackageCode" = "8:{0D258DA0-214B-4879-A974-40DA85728EB2}"
         "UpgradeCode" = "8:{198D4CD5-58E0-4489-9EBD-6C88B79D8A3B}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
