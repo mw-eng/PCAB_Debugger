@@ -54,9 +54,9 @@ ${\color{LightSkyBlue} 4. \space AUTO \space TAB \space}$ Automatic measurement 
 |4-7|File Name Header	|Save file name header.|
 |4-8|DPS Loop 			|Enable the phase delay step loop.|
 |4-9|DPS step			|Select the phase delay step interval.|
-|4-0|DPSn				|Select target.|
+|4-0|DPSn				|Select loop target.|
 |4-11|DSA Loop 			|Enable the attenation step loop.|
 |4-12|DSA step			|Select the attenation step interval.|
-|4-13|DSAn				|Select target.|
+|4-13|DSAn				|Select loop target.|
 |4-14|Waite Time		|Waite time befor next step.|
 |4-15|START Button		|Automatic loop control execution button.|
