@@ -622,11 +622,59 @@
                     <TabItem Header="VNA LOOP" IsEnabled="True">
                         <Grid Background="#FFB7FF9E">
                             <Grid.RowDefinitions>
+                                <RowDefinition Height="3*"/>
                                 <RowDefinition Height="5*"/>
-                                <RowDefinition Height="0*"/>
                                 <RowDefinition Height="1*"/>
                             </Grid.RowDefinitions>
-                            <Grid x:Name="VNALOOP_SEL_GRID" Grid.Row="0">
+                            <Grid x:Name="VNALOOP_VNACONF_GRID" Grid.Row="0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="1*"/>
+                                    <RowDefinition Height="3*"/>
+                                </Grid.RowDefinitions>
+                                <Grid Grid.Row="0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="2*"/>
+                                        <ColumnDefinition Width="10*"/>
+                                        <ColumnDefinition Width="2*"/>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="2*"/>
+                                        <ColumnDefinition Width="2*"/>
+                                        <ColumnDefinition Width="1*"/>
+                                    </Grid.ColumnDefinitions>
+                                        <Viewbox Grid.Column="0" Margin="5"><Label Content="VISA Address"/></Viewbox>
+                                        <TextBox Grid.Column="1" x:Name="VNALOOP_VISAADDR_TEXTBOX" Style="{StaticResource EDIT_TEXT_LINE}" TextWrapping="Wrap" Text="TCPIP0::localhost::hislip0::INSTR" Margin="5" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" FontSize="16"/>
+                                        <Button Grid.Column="2" x:Name="VNALOOP_VISA_CONNECT_CHECK_BUTTON" Margin="5" IsEnabled="True" Click="VNALOOP_VISA_CONNECT_CHECK_BUTTON_Click"><Viewbox><TextBlock>Check</TextBlock></Viewbox></Button>
+                                        <Viewbox Grid.Column="4" Margin="5"><Label Content="VISA TIMEOUT"/></Viewbox>
+                                        <TextBox Grid.Column="5" x:Name="VNALOOP_TIMEOUT_TEXTBOX" Style="{StaticResource EDIT_TEXT_LINE}" TextWrapping="Wrap" Text="2000" Margin="5" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" PreviewTextInput="DEC_TextBox_PreviewTextInput" CommandManager.PreviewExecuted="DEC_TextBox_PreviewExecuted" PreviewLostKeyboardFocus="DEC_TextBox_PreviewLostKeyboardForcus" FontSize="16"/>
+                                        <Viewbox Grid.Column="6" Margin="5"><Label Content="[mS]"/></Viewbox>
+                                </Grid>
+                                <Grid Grid.Row="1">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="1*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <GroupBox Grid.Column="0" Header="Channel" Margin="5">
+                                        <StackPanel Orientation="Vertical" Margin="5">
+                                            <RadioButton x:Name="VNALOOP_CH_ALL" Content="All" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" IsChecked="True" Click="VNALOOP_CH_Click"/>
+                                            <StackPanel Orientation="Horizontal">
+                                                <RadioButton Content="Select" x:Name="VNALOOP_CH_SEL" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" Click="VNALOOP_CH_Click"/>
+                                                <ComboBox Grid.Column="1" x:Name="VNALOOP_CHANNEL_COMBOBOX" Margin="5" VerticalContentAlignment="Center" Width="100" IsEnabled="False"/>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </GroupBox>
+                                    <GroupBox Grid.Column="1" Header="Mode Settings" Margin="5">
+                                        <CheckBox x:Name="VNALOOP_SING_CHECKBOX" Content="Auto Single Trigger" Margin="5" IsChecked="True"/>
+                                    </GroupBox>
+                                    <GroupBox Grid.Column="2" Header="Save target" Margin="5">
+                                        <StackPanel Orientation="Vertical" Margin="5">
+                                            <CheckBox x:Name="VNALOOP_SCRE_CHECKBOX" Content="Screen" IsChecked="True"/>
+                                            <CheckBox x:Name="VNALOOP_TRA_CHECKBOX" Content="Trace" IsChecked="True"/>
+                                        </StackPanel>
+                                    </GroupBox>
+                                </Grid>
+                            </Grid>
+                            <Grid x:Name="VNALOOP_SEL_GRID" Grid.Row="1" Background="#FFD6FF9E">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="1*"/>
                                     <RowDefinition Height="4*"/>

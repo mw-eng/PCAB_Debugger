@@ -737,6 +737,54 @@ namespace PCAB_Debugger_GUI
             else { MessageBox.Show("Loop function.","Error",MessageBoxButton.OK,MessageBoxImage.Error); }
         }
 
+        private void VNALOOP_VISA_CONNECT_CHECK_BUTTON_Click(object sender, RoutedEventArgs e)
+        {
+            string strBF = VNALOOP_VISAADDR_TEXTBOX.Text;
+            try
+            {
+                IEEE488 instr;
+                instr = new IEEE488(new VisaControlNI(sesn, strBF));
+                IEEE488_IDN idn = instr.IDN();
+                MessageBox.Show("Vender\t\t: " + idn.Vender +
+                              "\nModel Number\t: " + idn.ModelNumber +
+                              "\nRevision Code\t: " + idn.RevisionCode +
+                              "\nSerial Number\t: " + idn.SerialNumber, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception err)
+            {
+                MessageBox.Show(err.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void VNALOOP_CH_Click(object sender, RoutedEventArgs e)
+        {
+            if (((RadioButton)sender).Name == "VNALOOP_CH_ALL")
+            {
+                VNALOOP_CHANNEL_COMBOBOX.IsEnabled = false;
+                CH_SEL.IsChecked = false;
+            }
+            else
+            {
+                VNALOOP_CHANNEL_COMBOBOX.IsEnabled = true;
+                VNALOOP_CH_ALL.IsChecked = false;
+                VNALOOP_CHANNEL_COMBOBOX.Items.Clear();
+                try
+                {
+                    IEEE488 instr;
+                    instr = new IEEE488(new VisaControlNI(sesn, VNALOOP_VISAADDR_TEXTBOX.Text));
+                    agPNA835x pna = new agPNA835x(instr);
+                    foreach (uint i in pna.getChannelCatalog())
+                    {
+                        VNALOOP_CHANNEL_COMBOBOX.Items.Add(i.ToString());
+                    }
+                }
+                catch (Exception err)
+                {
+                    MessageBox.Show(err.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
+
         private void DPS_LoopEnable_Checked(object sender, RoutedEventArgs e)
         {
             DPSstep_COMBOBOX.IsEnabled = true;
@@ -764,6 +812,7 @@ namespace PCAB_Debugger_GUI
             DSA_LOOP_GRID.IsEnabled = false;
             if (DPS_LoopEnable.IsChecked != true) { LOOP_CONF_GRID.IsEnabled = false; }
         }
+
         #endregion
 
         #region VNALOOP EVENT
