@@ -24,7 +24,7 @@ ${\color{Magenta} 2. \space Control \space and \space Receive}$<br>
 |2-6|SNS Vd       |Vd voltage value [V].|
 |2-7|Tempurature  |1-wire sensor temperature value [degreeC].|
 
-${\color{Gold} 3. \space Control \space TAB}$<br>
+${\color{Gold} 3. \space CONTROL \space TAB}$<br>
 |No|Item|Description|
 |:--|:--|:--|
 |3-1|Standby AMP			|If checked, it will go into standby mode.|
@@ -43,7 +43,7 @@ ${\color{Gold} 3. \space Control \space TAB}$<br>
 
 <br><img src="https://github.com/mw-eng/PCAB_Debugger/blob/master/PCAB_Debugger_GUI/assets/UI2.png?raw=true" width="600px"><br>
 <br>
-${\color{LightSkyBlue} 4. \space AUTO \space automatic \space measurement \space control}$<br>
+${\color{LightSkyBlue} 4. \space AUTO \space TAB \space}$ Automatic measurement control<br>
 |No|Item|Description|
 |:--|:--|:--|
 |4-1|VISA Address		|Instrument visa address.|
