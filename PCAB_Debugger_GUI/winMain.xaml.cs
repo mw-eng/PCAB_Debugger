@@ -35,6 +35,7 @@ namespace PCAB_Debugger_GUI
 #if DEBUG
             //Settings.Default.Reset();
             this.Title += "_DEBUG MODE";
+            CONTL_GRID.IsEnabled = true;
 #endif
             _state = false;
             SERIAL_PORTS_COMBOBOX_RELOAD();
@@ -49,6 +50,13 @@ namespace PCAB_Debugger_GUI
 
             DPS_LoopEnable.IsChecked = true;
             DSA_LoopEnable.IsChecked = true;
+            DPS_VnaLoopEnable.IsChecked = true;
+            DSA_VnaLoopEnable.IsChecked = true;
+            VNALOOP_SCRE_CHECKBOX.IsChecked = true;
+            VNALOOP_TRA_CHECKBOX.IsChecked = true;
+            VNALOOP_VISAADDR_TEXTBOX.Text = Settings.Default.visaAddr;
+            VNALOOP_TIMEOUT_TEXTBOX.Text = Settings.Default.visaTO.ToString("0");
+            VNALOOP_FILEHEADER_TEXTBOX.Text = Settings.Default.fnHeader;
         }
 
         #region Serial EVENT
@@ -442,6 +450,9 @@ namespace PCAB_Debugger_GUI
                 catch (Exception err)
                 {
                     MessageBox.Show(err.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    CHANNEL_COMBOBOX.IsEnabled = false;
+                    CH_SEL.IsChecked = false;
+                    CH_ALL.IsChecked = true;
                 }
             }
         }
@@ -737,54 +748,6 @@ namespace PCAB_Debugger_GUI
             else { MessageBox.Show("Loop function.","Error",MessageBoxButton.OK,MessageBoxImage.Error); }
         }
 
-        private void VNALOOP_VISA_CONNECT_CHECK_BUTTON_Click(object sender, RoutedEventArgs e)
-        {
-            string strBF = VNALOOP_VISAADDR_TEXTBOX.Text;
-            try
-            {
-                IEEE488 instr;
-                instr = new IEEE488(new VisaControlNI(sesn, strBF));
-                IEEE488_IDN idn = instr.IDN();
-                MessageBox.Show("Vender\t\t: " + idn.Vender +
-                              "\nModel Number\t: " + idn.ModelNumber +
-                              "\nRevision Code\t: " + idn.RevisionCode +
-                              "\nSerial Number\t: " + idn.SerialNumber, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
-            }
-            catch (Exception err)
-            {
-                MessageBox.Show(err.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
-
-        private void VNALOOP_CH_Click(object sender, RoutedEventArgs e)
-        {
-            if (((RadioButton)sender).Name == "VNALOOP_CH_ALL")
-            {
-                VNALOOP_CHANNEL_COMBOBOX.IsEnabled = false;
-                CH_SEL.IsChecked = false;
-            }
-            else
-            {
-                VNALOOP_CHANNEL_COMBOBOX.IsEnabled = true;
-                VNALOOP_CH_ALL.IsChecked = false;
-                VNALOOP_CHANNEL_COMBOBOX.Items.Clear();
-                try
-                {
-                    IEEE488 instr;
-                    instr = new IEEE488(new VisaControlNI(sesn, VNALOOP_VISAADDR_TEXTBOX.Text));
-                    agPNA835x pna = new agPNA835x(instr);
-                    foreach (uint i in pna.getChannelCatalog())
-                    {
-                        VNALOOP_CHANNEL_COMBOBOX.Items.Add(i.ToString());
-                    }
-                }
-                catch (Exception err)
-                {
-                    MessageBox.Show(err.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-            }
-        }
-
         private void DPS_LoopEnable_Checked(object sender, RoutedEventArgs e)
         {
             DPSstep_COMBOBOX.IsEnabled = true;
@@ -867,6 +830,57 @@ namespace PCAB_Debugger_GUI
             else { MessageBox.Show("Loop function.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
         }
 
+        private void VNALOOP_VISA_CONNECT_CHECK_BUTTON_Click(object sender, RoutedEventArgs e)
+        {
+            string strBF = VNALOOP_VISAADDR_TEXTBOX.Text;
+            try
+            {
+                IEEE488 instr;
+                instr = new IEEE488(new VisaControlNI(sesn, strBF));
+                IEEE488_IDN idn = instr.IDN();
+                MessageBox.Show("Vender\t\t: " + idn.Vender +
+                              "\nModel Number\t: " + idn.ModelNumber +
+                              "\nRevision Code\t: " + idn.RevisionCode +
+                              "\nSerial Number\t: " + idn.SerialNumber, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception err)
+            {
+                MessageBox.Show(err.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void VNALOOP_CH_Click(object sender, RoutedEventArgs e)
+        {
+            if (((RadioButton)sender).Name == "VNALOOP_CH_ALL")
+            {
+                VNALOOP_CHANNEL_COMBOBOX.IsEnabled = false;
+                VNALOOP_CH_SEL.IsChecked = false;
+            }
+            else
+            {
+                VNALOOP_CHANNEL_COMBOBOX.IsEnabled = true;
+                VNALOOP_CH_ALL.IsChecked = false;
+                VNALOOP_CHANNEL_COMBOBOX.Items.Clear();
+                try
+                {
+                    IEEE488 instr;
+                    instr = new IEEE488(new VisaControlNI(sesn, VNALOOP_VISAADDR_TEXTBOX.Text));
+                    agPNA835x pna = new agPNA835x(instr);
+                    foreach (uint i in pna.getChannelCatalog())
+                    {
+                        VNALOOP_CHANNEL_COMBOBOX.Items.Add(i.ToString());
+                    }
+                }
+                catch (Exception err)
+                {
+                    MessageBox.Show(err.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    VNALOOP_CHANNEL_COMBOBOX.IsEnabled = false;
+                    VNALOOP_CH_SEL.IsChecked = false;
+                    VNALOOP_CH_ALL.IsChecked = true;
+                }
+            }
+        }
+
         private void DPS_VnaLoopEnable_Checked(object sender, RoutedEventArgs e)
         {
             VNALOOP_DPSstep_COMBOBOX.IsEnabled = true;
@@ -878,7 +892,10 @@ namespace PCAB_Debugger_GUI
         {
             VNALOOP_DPSstep_COMBOBOX.IsEnabled = false;
             DPS_VNALOOP_GRID.IsEnabled = false;
-            if (DSA_VnaLoopEnable.IsChecked != true) { VNALOOP_CONF_GRID.IsEnabled = false; }
+            if (DPS_VnaLoopEnable.IsChecked != true &&
+                DSA_VnaLoopEnable.IsChecked != true &&
+                VNALOOP_SCRE_CHECKBOX.IsChecked != true &&
+                VNALOOP_TRA_CHECKBOX.IsChecked != true) { VNALOOP_CONF_GRID.IsEnabled = false; }
         }
 
         private void DSA_VnaLoopEnable_Checked(object sender, RoutedEventArgs e)
@@ -892,7 +909,23 @@ namespace PCAB_Debugger_GUI
         {
             VNALOOP_DSAstep_COMBOBOX.IsEnabled = false;
             DSA_VNALOOP_GRID.IsEnabled = false;
-            if (DPS_VnaLoopEnable.IsChecked != true) { VNALOOP_CONF_GRID.IsEnabled = false; }
+            if (DPS_VnaLoopEnable.IsChecked != true &&
+                DSA_VnaLoopEnable.IsChecked != true &&
+                VNALOOP_SCRE_CHECKBOX.IsChecked != true &&
+                VNALOOP_TRA_CHECKBOX.IsChecked != true) { VNALOOP_CONF_GRID.IsEnabled = false; }
+        }
+
+        private void VNALOOP_SaveTarget_CHECKBOX_Checked(object sender, RoutedEventArgs e)
+        {
+            VNALOOP_CONF_GRID.IsEnabled = true;
+        }
+
+        private void VNALOOP_SaveTarget_CHECKBOX_Unchecked(object sender, RoutedEventArgs e)
+        {
+            if (DPS_VnaLoopEnable.IsChecked != true &&
+                DSA_VnaLoopEnable.IsChecked != true &&
+                VNALOOP_SCRE_CHECKBOX.IsChecked != true &&
+                VNALOOP_TRA_CHECKBOX.IsChecked != true) { VNALOOP_CONF_GRID.IsEnabled = false; }
         }
 
         #endregion
@@ -1005,9 +1038,9 @@ namespace PCAB_Debugger_GUI
             Settings.Default.spCaption = SERIAL_PORTS_COMBOBOX.Text;
             Settings.Default.mli = long.Parse(WAITE_TIME_TEXTBOX.Text);
             Settings.Default.sn = SERIAL_NUMBERS_TEXTBOX.Text;
-            Settings.Default.visaAddr = VISAADDR_TEXTBOX.Text;
-            Settings.Default.visaTO = long.Parse(TIMEOUT_TEXTBOX.Text);
-            Settings.Default.fnHeader = FILEHEADER_TEXTBOX.Text;
+            Settings.Default.visaAddr = VNALOOP_VISAADDR_TEXTBOX.Text;
+            Settings.Default.visaTO = long.Parse(VNALOOP_TIMEOUT_TEXTBOX.Text);
+            Settings.Default.fnHeader = VNALOOP_FILEHEADER_TEXTBOX.Text;
             Settings.Default.Save();
         }
 
