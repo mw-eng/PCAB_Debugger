@@ -7,7 +7,11 @@ Control GUI program.
 <img src="https://github.com/mw-eng/PCAB_Debugger/blob/master/PCAB_Debugger_GUI/assets/UI1.png?raw=true" width="600px"><br>
 <br>
 ${\color{Aqua} 1. \space Settings \space before \space connection}$<br>
-1.1.  Serial Port            : Select the *Serial Port* coneected to PCAB.<br>
+|No|Item|Description|
+|:--|:--|:--|
+|1.1.|Serial Port|Select the *Serial Port* coneected to PCAB.
+
+
 1.2.  Monitor loop inberval  : Specifies the acquisition interval for monitors (temperature, etc.) in milliseconds.<br>
 1.3.  Serial Numbers         : Enter the serial number of the connect target (separate with "," when connecting multiple units).<br>
 
@@ -37,25 +41,20 @@ ${\color{Gold} 3. \space Control \space TAB}$<br>
 
 <br><img src="https://github.com/mw-eng/PCAB_Debugger/blob/master/PCAB_Debugger_GUI/assets/UI2.png?raw=true" width="600px"><br>
 <br>
-${\color{LightSkyBlue} 4. \space VNA \space automatic \space measurement \space control}$<br>
+${\color{LightSkyBlue} 4. \space AUTO \space automatic \space measurement \space control}$<br>
 4.1.  VISA Address	         : Instrument visa address.<br>
 4.2.  Check Button	         : Instrument communication check.<br>
 4.3.  Channel		         : Config collection channels.<br>
 4.4.  Mode Settings	         : Automatic trigger settings.<br>
-4.5.  Save target	         : What to save.<br>
-4.6.  PS{xx}		         : Check loop target.<br>
+4.5.  Save target	         : Select save target.<br>
 4.7.  File Name Header       : Save file name header.<br>
-4.8.  RUN Button             : Automatic measurement execution button.<br>
 
+4.8.  DPS Loop 	             : Enable the phase delay step loop.<br>
+4.9.  DPS step				 : Select the phase delay step interval.<br>
+4.0.  DPSn                   : Select target.<br>
+4.11.  DSA Loop 	             : Enable the attenation step loop.<br>
+4.12.  DSA step				 : Select the attenation step interval.<br>
+4.13.  DSAn                   : Select target.<br>
+4.14.  Waite Time             : Waite time befor next step.<br>
 
-<br><img src="https://github.com/mw-eng/PCAB_Debugger/blob/master/PCAB_Debugger_GUI/assets/UI3.png?raw=true" width="600px"><br>
-<br>
-${\color{Lime} 5. \space LOOP \space automatic \space loop \space control}$<br>
-5.1.  DPS Loop 	             : Enable the phase delay step loop.<br>
-5.2.  DPS step				 : Select the phase delay step interval.<br>
-5.3.  DPSn                   : Select target.<br>
-5.4.  DSA Loop 	             : Enable the attenation step loop.<br>
-5.5.  DSA step				 : Select the attenation step interval.<br>
-5.6.  DSAn                   : Select target.<br>
-5.7.  Waite Time             : Waite time befor next step.<br>
-5.8.  START Button			 : Automatic loop control execution button.<br>
+4.15.  START Button			 : Automatic loop control execution button.<br>
