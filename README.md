@@ -12,7 +12,11 @@ Control GUI program.
 The main unit firmware.
 [README.md](./PCAB_Debugger_RP2040/README.md)
 
-## Environment
+## Reference URL for building a development environment
+### Visual Studio
+[Visual Studio Community](https://visualstudio.microsoft.com/ja/vs/community/)  
+
+### Raspberry Pi Pico
 Document > [Getting started with Raspberry Pi Pico](https://datasheets.raspberrypi.com/pico/getting-started-with-pico.pdf)  
 GitHub > [raspberrypi](https://github.com/raspberrypi)  
 Repository > [raspberrypi/pico-setup-windows](https://github.com/raspberrypi/pico-setup-windows)  
