@@ -440,6 +440,7 @@
                                         <StackPanel Orientation="Vertical" Margin="5">
                                             <CheckBox x:Name="VNALOOP_SCRE_CHECKBOX" Content="Screen" Checked="VNALOOP_SaveTarget_CHECKBOX_Checked" Unchecked="VNALOOP_SaveTarget_CHECKBOX_Unchecked"/>
                                             <CheckBox x:Name="VNALOOP_TRA_CHECKBOX" Content="Trace" Checked="VNALOOP_SaveTarget_CHECKBOX_Checked" Unchecked="VNALOOP_SaveTarget_CHECKBOX_Unchecked"/>
+                                            <CheckBox x:Name="VNALOOP_SNP_CHECKBOX" Content="SnP" Checked="VNALOOP_SaveTarget_CHECKBOX_Checked" Unchecked="VNALOOP_SaveTarget_CHECKBOX_Unchecked"/>
                                         </StackPanel>
                                     </GroupBox>
                                 </Grid>

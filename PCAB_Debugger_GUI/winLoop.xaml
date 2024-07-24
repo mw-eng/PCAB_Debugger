@@ -5,13 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PCAB_Debugger_GUI"
         mc:Ignorable="d"
-        Title="PCAB Debugger Loop state" Height="300" Width="600" Loaded="Window_Loaded">
+        Title="PCAB Debugger Loop state" Height="200" Width="300" Loaded="Window_Loaded">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="4*"/>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="1*"/>
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
-        <Grid>
+        <Grid Margin="5">
             <Grid.RowDefinitions>
                 <RowDefinition Height="1*"/>
                 <RowDefinition Height="1*"/>
@@ -20,11 +21,21 @@
                 <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
-            <Viewbox Grid.Row="0" Grid.Column="0"><Label Content="DPS" Margin="5"/></Viewbox>
-            <Viewbox Grid.Row="0" Grid.Column="1"><Label Content="DSA" Margin="5"/></Viewbox>
-            <Viewbox Grid.Row="1" Grid.Column="0"><Label Content="LOCK" Margin="5" x:Name="dps_state"/></Viewbox>
-            <Viewbox Grid.Row="1" Grid.Column="1"><Label Content="LOCK" Margin="5" x:Name="dsa_state"/></Viewbox>
+            <Viewbox Grid.Row="0" Grid.Column="0">
+                <Label Content="DPS"/>
+            </Viewbox>
+            <Viewbox Grid.Row="0" Grid.Column="1">
+                <Label Content="DSA"/>
+            </Viewbox>
+            <Viewbox Grid.Row="1" Grid.Column="0">
+                <Label Content="LOCK" x:Name="dps_state"/>
+            </Viewbox>
+            <Viewbox Grid.Row="1" Grid.Column="1">
+                <Label Content="LOCK" x:Name="dsa_state"/>
+            </Viewbox>
         </Grid>
-        <Button Grid.Row="1" x:Name="Cancel" Margin="5" Click="Cancel_Click" ><Viewbox Margin="5"><TextBlock>Cancel</TextBlock></Viewbox></Button>
+        <ProgressBar Grid.Row="1" Margin="5" x:Name="Progress" ValueChanged="Progress_ValueChanged"/>
+        <Viewbox Grid.Row="1" Margin="5"><Label x:Name="MessageLabel" Content="Sweep... 0%"/></Viewbox>
+        <Button Grid.Row="2" x:Name="Cancel" Margin="5" Click="Cancel_Click" ><Viewbox Margin="5"><TextBlock>Cancel</TextBlock></Viewbox></Button>
     </Grid>
 </Window>

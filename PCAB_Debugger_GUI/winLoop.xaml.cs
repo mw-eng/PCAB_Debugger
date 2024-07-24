@@ -1,9 +1,11 @@
 ﻿using MWComLibCS.ExternalControl;
 using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace PCAB_Debugger_GUI
 {
@@ -12,28 +14,66 @@ namespace PCAB_Debugger_GUI
     /// </summary>
     public partial class winLoop : Window
     {
-        uint stepDPS;
-        uint stepDSA;
-        int waitTIME;
-        List<int> dps;
-        List<int> dsa;
-        PCAB _mod;
-        string sn;
-        bool runTASK;
+        winMain owner;
+        bool runTASK = false;
+        uint stepDPS = 0;
+        uint stepDSA = 0;
+        int waitTIME = -1;
         int cntDPS = -1;
         int cntDSA = -1;
-        IEEE488 instr;
+        string sn;
+        List<int> dps = new List<int>();
+        List<int> dsa = new List<int>();
+        PCAB _mod;
 
-        public winLoop(PCAB MOD, string serialNumber, uint StepDPS, uint StepDSA, int WaitTime, List<int> DPS, List<int> DSA, IEEE488 INSTRUMENT)
+        public winLoop(winMain WINowner, bool VNA)
         {
             InitializeComponent();
-            _mod = MOD; sn = serialNumber; stepDPS = StepDPS; stepDSA = StepDSA; waitTIME = WaitTime; dps = DPS; dsa = DSA;instr = INSTRUMENT;
+            owner = WINowner;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            //Get Configuration
+            dps.Clear();
+            dsa.Clear();
+            if (owner.DPS_VnaLoopEnable.IsChecked == true)
+            {
+                waitTIME = int.Parse(owner.VNALOOP_WAITTIME_TEXTBOX.Text);
+                stepDPS = (uint)Math.Pow(2, (double)owner.VNALOOP_DPSstep_COMBOBOX.SelectedIndex);
+                foreach (object objBF in owner.DPS_VNALOOP_GRID.Children)
+                {
+                    if (typeof(CheckBox) == objBF.GetType())
+                    {
+                        if (((CheckBox)objBF).IsChecked == true)
+                        {
+                            dps.Add(int.Parse(((CheckBox)objBF).Content.ToString().Substring(3)));
+                        }
+                    }
+                }
+            }
+            if (owner.DSA_VnaLoopEnable.IsChecked == true)
+            {
+                waitTIME = int.Parse(owner.VNALOOP_WAITTIME_TEXTBOX.Text);
+                stepDSA = (uint)Math.Pow(2, (double)owner.VNALOOP_DSAstep_COMBOBOX.SelectedIndex);
+                foreach (object objBF in owner.DSA_VNALOOP_GRID.Children)
+                {
+                    if (typeof(CheckBox) == objBF.GetType())
+                    {
+                        if (((CheckBox)objBF).IsChecked == true)
+                        {
+                            dsa.Add(int.Parse(((CheckBox)objBF).Content.ToString().Substring(3)));
+                        }
+                    }
+                }
+            }
+            if (waitTIME < 0) { return; }
+            _mod = owner._mod;
+            sn = owner.SERIAL_NUMBERS_COMBOBOX.Text;
+            _mod.PCAB_CMD(sn, "CUI 0", 1);
+            _mod.DiscardInBuffer();
             runTASK = true;
-            Task tsk = Task.Factory.StartNew(() => { LOOP_Task((uint)waitTIME); });
+            Task task = Task.Factory.StartNew(() => { LOOP_Task((uint)waitTIME); });
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e)
@@ -130,6 +170,7 @@ namespace PCAB_Debugger_GUI
                 else { dps_state.Content = (5.625 * cntDPS).ToString() + "deg (" + cntDPS.ToString() + ")"; }
                 if (cntDSA < 0) { dsa_state.Content = "LOCK"; }
                 else { dsa_state.Content = (0.25 * cntDSA).ToString() + "dB (" + cntDSA.ToString() + ")"; }
+                Progress.Value = cntDSA;
             }));
         }
 
@@ -138,5 +179,12 @@ namespace PCAB_Debugger_GUI
             Dispatcher.BeginInvoke(new Action(() => { this.DialogResult = true; this.Close(); }));
         }
 
+        private void Progress_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            Dispatcher.BeginInvoke(new Action(() =>
+            {
+                MessageLabel.Content = "Sweep... " + Progress.Value.ToString() + "%";
+            }));
+        }
     }
 }
