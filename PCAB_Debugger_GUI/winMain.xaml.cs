@@ -783,10 +783,28 @@ namespace PCAB_Debugger_GUI
 
         private void VNALOOP_START_BUTTON_Click(object sender, RoutedEventArgs e)
         {
+            string dirPath = "";
+            if (VNALOOP_SCRE_CHECKBOX.IsChecked == true ||
+                VNALOOP_TRA_CHECKBOX.IsChecked == true ||
+                VNALOOP_SNP_CHECKBOX.IsChecked == true)
+            {
+                using (System.Windows.Forms.FolderBrowserDialog fbd = new System.Windows.Forms.FolderBrowserDialog())
+                {
+                    fbd.Description = "Please Select Folder";
+                    fbd.RootFolder = Environment.SpecialFolder.Desktop;
+                    fbd.ShowNewFolderButton = true;
+                    if (fbd.ShowDialog() != System.Windows.Forms.DialogResult.OK)
+                    {
+                        return;
+                    }
+                    dirPath = fbd.SelectedPath;
+                }
+            }
+
             _mod.PCAB_CMD(SERIAL_NUMBERS_COMBOBOX.Text, "CUI 0", 1);
             _mod.DiscardInBuffer();
             read_conf(SERIAL_NUMBERS_COMBOBOX.Text);
-            winLoop win = new winLoop(this);
+            winLoop win = new winLoop(this, dirPath);
             if (win.ShowDialog() != false) { WRITE_Click(WRITE, e); }
             else { MessageBox.Show("Loop function.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
         }
