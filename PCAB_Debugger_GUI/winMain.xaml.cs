@@ -744,7 +744,7 @@ namespace PCAB_Debugger_GUI
             _mod.DiscardInBuffer();
             read_conf(SERIAL_NUMBERS_COMBOBOX.Text);
 
-            winLoop win = new winLoop(this, false);
+            winLoop win = new winLoop(this);
             if (win.ShowDialog() != false) { WRITE_Click(WRITE, e); }
             else { MessageBox.Show("Loop function.","Error",MessageBoxButton.OK,MessageBoxImage.Error); }
         }
@@ -786,7 +786,7 @@ namespace PCAB_Debugger_GUI
             _mod.PCAB_CMD(SERIAL_NUMBERS_COMBOBOX.Text, "CUI 0", 1);
             _mod.DiscardInBuffer();
             read_conf(SERIAL_NUMBERS_COMBOBOX.Text);
-            winLoop win = new winLoop(this, true);
+            winLoop win = new winLoop(this);
             if (win.ShowDialog() != false) { WRITE_Click(WRITE, e); }
             else { MessageBox.Show("Loop function.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
         }

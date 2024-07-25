@@ -479,7 +479,7 @@
                                         <ColumnDefinition Width="3*"/>
                                     </Grid.ColumnDefinitions>
                                     <CheckBox x:Name="DSA_VnaLoopEnable" Content="DSA Loop" Margin="5" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" Checked="DSA_VnaLoopEnable_Checked" Unchecked="DSA_VnaLoopEnable_Unchecked"/>
-                                    <Label Grid.Column="1" Content="DPS step" Margin="5" VerticalContentAlignment="Center" HorizontalContentAlignment="Right"/>
+                                    <Label Grid.Column="1" Content="DSA step" Margin="5" VerticalContentAlignment="Center" HorizontalContentAlignment="Right"/>
                                     <ComboBox Grid.Column="2" SelectedIndex="0" x:Name="VNALOOP_DSAstep_COMBOBOX" ItemsSource="{StaticResource DSA_StepList}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}" Margin="5"/>
                                 </Grid>
                                 <Grid x:Name="DPS_VNALOOP_GRID" Grid.Row="1" Grid.Column="0" Margin="5">

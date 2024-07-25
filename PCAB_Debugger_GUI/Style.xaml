@@ -210,7 +210,6 @@
         <sys:String>0.25 dB (000001 =  1)</sys:String>
         <sys:String>0.5  dB (000010 =  2)</sys:String>
         <sys:String>1    dB (000100 =  4)</sys:String>
-        <sys:String>1.25 dB (000101 =  5)</sys:String>
         <sys:String>2    dB (001000 =  8)</sys:String>
         <sys:String>4    dB (010000 = 16)</sys:String>
         <sys:String>8    dB (100000 = 32)</sys:String>

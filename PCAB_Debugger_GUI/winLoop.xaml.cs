@@ -21,12 +21,13 @@ namespace PCAB_Debugger_GUI
         int waitTIME = -1;
         int cntDPS = -1;
         int cntDSA = -1;
+        double proc = 0;
         string sn;
         List<int> dps = new List<int>();
         List<int> dsa = new List<int>();
         PCAB _mod;
 
-        public winLoop(winMain WINowner, bool VNA)
+        public winLoop(winMain WINowner)
         {
             InitializeComponent();
             owner = WINowner;
@@ -100,7 +101,6 @@ namespace PCAB_Debugger_GUI
                                 if (_mod.PCAB_CMD(sn, "SetDPS " + p.ToString("0") + " " + cntDPS.ToString("0"), 1).Substring(0, 4) != "DONE") { this.DialogResult = false; this.Close(); }
                             }
                             if (_mod.PCAB_CMD(sn, " WrtDPS", 1).Substring(0, 4) != "DONE"){ ExitTASK(); return; }
-                            OnUpdateDAT();
                             for (cntDSA = 0; cntDSA < 64; cntDSA+= (int)stepDSA)
                             {
                                 if (!runTASK) { ExitTASK();return; }
@@ -110,6 +110,7 @@ namespace PCAB_Debugger_GUI
                                     if (_mod.PCAB_CMD(sn, "SetDSA " + a.ToString("0") + " " + cntDSA.ToString("0"), 1).Substring(0, 4) != "DONE") { this.DialogResult = false; this.Close(); }
                                 }
                                 if (_mod.PCAB_CMD(sn, " WrtDSA", 1).Substring(0, 4) != "DONE") { ExitTASK(); return; }
+                                proc = (cntDPS / stepDPS * 64.0 / stepDPS + cntDSA / stepDSA) / (64.0 / stepDPS * 64.0 / stepDSA);
                                 OnUpdateDAT();
                                 Thread.Sleep(waitTIME);
                             }
@@ -128,6 +129,7 @@ namespace PCAB_Debugger_GUI
                                 if (_mod.PCAB_CMD(sn, "SetDPS " + p.ToString("0") + " " + cntDPS.ToString("0"), 1).Substring(0, 4) != "DONE") { ExitTASK(); return; }
                             }
                             if (_mod.PCAB_CMD(sn, " WrtDPS", 1).Substring(0, 4) != "DONE") { ExitTASK(); return; }
+                            proc = (cntDPS / stepDPS) / (64.0 / stepDPS);
                             OnUpdateDAT();
                             Thread.Sleep(waitTIME);
                         }
@@ -145,6 +147,7 @@ namespace PCAB_Debugger_GUI
                                 if (_mod.PCAB_CMD(sn, "SetDSA " + a.ToString("0") + " " + cntDSA.ToString("0"), 1).Substring(0, 4) != "DONE") { ExitTASK(); return; }
                             }
                             if (_mod.PCAB_CMD(sn, " WrtDSA", 1).Substring(0, 4) != "DONE") { ExitTASK(); return; }
+                            proc = (cntDSA / stepDSA) / (64.0 / stepDSA);
                             OnUpdateDAT();
                             Thread.Sleep(waitTIME);
                         }
@@ -170,7 +173,7 @@ namespace PCAB_Debugger_GUI
                 else { dps_state.Content = (5.625 * cntDPS).ToString() + "deg (" + cntDPS.ToString() + ")"; }
                 if (cntDSA < 0) { dsa_state.Content = "LOCK"; }
                 else { dsa_state.Content = (0.25 * cntDSA).ToString() + "dB (" + cntDSA.ToString() + ")"; }
-                Progress.Value = cntDSA;
+                Progress.Value = (int)(proc * 100);
             }));
         }
 
