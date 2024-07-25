@@ -1,14 +1,9 @@
-﻿using MWComLibCS.ExternalControl;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using static PCAB_Debugger_GUI.agPNA835x;
 
 namespace PCAB_Debugger_GUI
 {
