@@ -41,7 +41,7 @@ namespace PCAB_Debugger_GUI
             SERIAL_PORTS_COMBOBOX_RELOAD();
             if(SERIAL_PORTS_COMBOBOX.Items.Count > 0) { SERIAL_PORTS_COMBOBOX.SelectedIndex = 0; CONNECT_BUTTON.IsEnabled = true; }
             sesn = VisaControlNI.NewResourceManager();
-            for(int i = 0; i < ports.Length; i++) { if(Settings.Default.spCaption == ports[i].Caption) { SERIAL_PORTS_COMBOBOX.SelectedIndex = i; break; } }
+            for(int i = 0; i < ports?.Length; i++) { if(Settings.Default.spCaption == ports[i].Caption) { SERIAL_PORTS_COMBOBOX.SelectedIndex = i; break; } }
             WAITE_TIME_TEXTBOX.Text = Settings.Default.mli.ToString("0");
             SERIAL_NUMBERS_TEXTBOX.Text = Settings.Default.sn;
             VISAADDR_TEXTBOX.Text = Settings.Default.visaAddr;
@@ -64,9 +64,12 @@ namespace PCAB_Debugger_GUI
         {
             SERIAL_PORTS_COMBOBOX.Items.Clear();
             ports = GetDeviceNames();
-            foreach (SerialPortTable port in ports)
+            if (ports != null)
             {
-                SERIAL_PORTS_COMBOBOX.Items.Add(port.Caption);
+                foreach (SerialPortTable port in ports)
+                {
+                    SERIAL_PORTS_COMBOBOX.Items.Add(port.Caption);
+                }
             }
         }
 
