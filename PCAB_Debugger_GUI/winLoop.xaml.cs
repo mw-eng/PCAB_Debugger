@@ -36,6 +36,10 @@ namespace PCAB_Debugger_GUI
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             //Get Configuration
+            _mod = owner._mod;
+            sn = owner.SERIAL_NUMBERS_COMBOBOX.Text;
+            _mod.PCAB_CMD(sn, "CUI 0", 1);
+            _mod.DiscardInBuffer();
             dps.Clear();
             dsa.Clear();
             if (owner.DPS_VnaLoopEnable.IsChecked == true)
@@ -68,12 +72,10 @@ namespace PCAB_Debugger_GUI
                     }
                 }
             }
-            if (waitTIME < 0) { return; }
-            _mod = owner._mod;
-            sn = owner.SERIAL_NUMBERS_COMBOBOX.Text;
-            _mod.PCAB_CMD(sn, "CUI 0", 1);
-            _mod.DiscardInBuffer();
-            runTASK = true;
+
+
+            if (waitTIME == 0) { runTASK = false; }
+            else{ runTASK = true;}
             Task task = Task.Factory.StartNew(() => { LOOP_Task((uint)waitTIME); });
         }
 
@@ -93,17 +95,17 @@ namespace PCAB_Debugger_GUI
                         cntDPS = 0;
                         cntDSA = 0;
                         OnUpdateDAT();
-                        for (cntDPS = 0; cntDPS < 64; cntDPS+=(int)stepDPS)
+                        for (cntDPS = 0; cntDPS < 64; cntDPS += (int)stepDPS)
                         {
                             foreach (int p in dps)
                             {
                                 //Write Phase State
                                 if (_mod.PCAB_CMD(sn, "SetDPS " + p.ToString("0") + " " + cntDPS.ToString("0"), 1).Substring(0, 4) != "DONE") { this.DialogResult = false; this.Close(); }
                             }
-                            if (_mod.PCAB_CMD(sn, " WrtDPS", 1).Substring(0, 4) != "DONE"){ ExitTASK(); return; }
-                            for (cntDSA = 0; cntDSA < 64; cntDSA+= (int)stepDSA)
+                            if (_mod.PCAB_CMD(sn, " WrtDPS", 1).Substring(0, 4) != "DONE") { ExitTASK(); return; }
+                            for (cntDSA = 0; cntDSA < 64; cntDSA += (int)stepDSA)
                             {
-                                if (!runTASK) { ExitTASK();return; }
+                                if (!runTASK) { ExitTASK(); return; }
                                 foreach (int a in dsa)
                                 {
                                     //Write Phase State
@@ -154,6 +156,7 @@ namespace PCAB_Debugger_GUI
                     }
                     Dispatcher.BeginInvoke(new Action(() => { this.DialogResult = true; this.Close(); })); ;
                 }
+                else { ExitTASK(); return; }
             }
             catch
             {
