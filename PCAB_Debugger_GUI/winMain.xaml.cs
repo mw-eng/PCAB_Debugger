@@ -22,7 +22,7 @@ namespace PCAB_Debugger_GUI
         SerialPortTable[] ports;
         public PCAB _mod;
         bool _state;
-        int sesn;
+        public int sesn;
 
         public winMain()
         {
