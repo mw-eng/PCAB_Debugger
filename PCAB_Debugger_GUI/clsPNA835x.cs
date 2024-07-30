@@ -28,6 +28,8 @@ namespace PCAB_Debugger_GUI
         /// <summary>コンストラクタ</summary>
         public agPNA835x(IEEE488 Instrument)        { instr = Instrument; }
 
+        public IEEE488 Instrument { get { return instr; } }
+
         /// <summary>Get Trigger Mode</summary>
         /// <param name="ch">Channel</param>
         /// <returns>Trigger Mode</returns>
@@ -179,7 +181,6 @@ namespace PCAB_Debugger_GUI
                 return true;
             }
         }
-
 
         public void setSCPIcommand(string cmd)
         {

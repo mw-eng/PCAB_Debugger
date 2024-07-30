@@ -26,7 +26,7 @@ namespace PCAB_Debugger_GUI
         List<int> dps = new List<int>();
         List<int> dsa = new List<int>();
         PCAB _mod;
-        IEEE488 instr;
+        agPNA835x instr;
 
         public winLoop(winMain WINowner,string DirPATH)
         {
@@ -74,15 +74,13 @@ namespace PCAB_Debugger_GUI
                     }
                 }
             }
-
             if (owner.VNALOOP_SCRE_CHECKBOX.IsChecked == true ||
-                owner.VNALOOP_TRA_CHECKBOX.IsChecked == true ||
-                owner.VNALOOP_SNP_CHECKBOX.IsChecked == true)
+                owner.VNALOOP_TRA_CHECKBOX.IsChecked == true)
             {
-                instr = new IEEE488(new VisaControlNI(owner.sesn, owner.VNALOOP_VISAADDR_TEXTBOX.Text));
+                instr = new agPNA835x(new IEEE488(new VisaControlNI(owner.sesn, owner.VNALOOP_VISAADDR_TEXTBOX.Text)));
                 try
                 {
-                    IEEE488_IDN idn = instr.IDN();
+                    IEEE488_IDN idn = instr.Instrument.IDN();
                 }
                 catch
                 {
@@ -92,7 +90,7 @@ namespace PCAB_Debugger_GUI
                 }
             }
 
-            if (waitTIME == 0) { runTASK = false; }
+            if (waitTIME < 0) { runTASK = false; }
             else{ runTASK = true;}
             Task task = Task.Factory.StartNew(() => { LOOP_Task((uint)waitTIME); });
         }
@@ -210,6 +208,7 @@ namespace PCAB_Debugger_GUI
                 MessageLabel.Content = "Sweep... " + Progress.Value.ToString() + "%";
             }));
         }
+
 
         private void vna()
         {
@@ -439,5 +438,7 @@ namespace PCAB_Debugger_GUI
             //    MessageBox.Show(err.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             //}
         }
+
+
     }
 }

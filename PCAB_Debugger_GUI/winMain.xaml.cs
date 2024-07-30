@@ -704,8 +704,7 @@ namespace PCAB_Debugger_GUI
         {
             string dirPath = "";
             if (VNALOOP_SCRE_CHECKBOX.IsChecked == true ||
-                VNALOOP_TRA_CHECKBOX.IsChecked == true ||
-                VNALOOP_SNP_CHECKBOX.IsChecked == true)
+                VNALOOP_TRA_CHECKBOX.IsChecked == true)
             {
                 using (System.Windows.Forms.FolderBrowserDialog fbd = new System.Windows.Forms.FolderBrowserDialog())
                 {
@@ -793,8 +792,7 @@ namespace PCAB_Debugger_GUI
             if (DPS_VnaLoopEnable.IsChecked != true &&
                 DSA_VnaLoopEnable.IsChecked != true &&
                 VNALOOP_SCRE_CHECKBOX.IsChecked != true &&
-                VNALOOP_TRA_CHECKBOX.IsChecked != true &&
-                VNALOOP_SNP_CHECKBOX.IsChecked != true) { VNALOOP_CONF_GRID.IsEnabled = false; }
+                VNALOOP_TRA_CHECKBOX.IsChecked != true) { VNALOOP_CONF_GRID.IsEnabled = false; }
         }
 
         private void DSA_VnaLoopEnable_Checked(object sender, RoutedEventArgs e)
@@ -811,8 +809,7 @@ namespace PCAB_Debugger_GUI
             if (DPS_VnaLoopEnable.IsChecked != true &&
                 DSA_VnaLoopEnable.IsChecked != true &&
                 VNALOOP_SCRE_CHECKBOX.IsChecked != true &&
-                VNALOOP_TRA_CHECKBOX.IsChecked != true &&
-                VNALOOP_SNP_CHECKBOX.IsChecked != true) { VNALOOP_CONF_GRID.IsEnabled = false; }
+                VNALOOP_TRA_CHECKBOX.IsChecked != true) { VNALOOP_CONF_GRID.IsEnabled = false; }
         }
 
         private void VNALOOP_SaveTarget_CHECKBOX_Checked(object sender, RoutedEventArgs e)
@@ -825,8 +822,7 @@ namespace PCAB_Debugger_GUI
             if (DPS_VnaLoopEnable.IsChecked != true &&
                 DSA_VnaLoopEnable.IsChecked != true &&
                 VNALOOP_SCRE_CHECKBOX.IsChecked != true &&
-                VNALOOP_TRA_CHECKBOX.IsChecked != true &&
-                VNALOOP_SNP_CHECKBOX.IsChecked != true) { VNALOOP_CONF_GRID.IsEnabled = false; }
+                VNALOOP_TRA_CHECKBOX.IsChecked != true) { VNALOOP_CONF_GRID.IsEnabled = false; }
         }
 
         #endregion
