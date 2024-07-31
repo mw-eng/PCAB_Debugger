@@ -39,9 +39,9 @@ namespace PCAB_Debugger_GUI
 #endif
             _state = false;
             SERIAL_PORTS_COMBOBOX_RELOAD();
-            if(SERIAL_PORTS_COMBOBOX.Items.Count > 0) { SERIAL_PORTS_COMBOBOX.SelectedIndex = 0; CONNECT_BUTTON.IsEnabled = true; }
+            if (SERIAL_PORTS_COMBOBOX.Items.Count > 0) { SERIAL_PORTS_COMBOBOX.SelectedIndex = 0; CONNECT_BUTTON.IsEnabled = true; }
             sesn = VisaControlNI.NewResourceManager();
-            for(int i = 0; i < ports?.Length; i++) { if(Settings.Default.spCaption == ports[i].Caption) { SERIAL_PORTS_COMBOBOX.SelectedIndex = i; break; } }
+            for (int i = 0; i < ports?.Length; i++) { if (Settings.Default.spCaption == ports[i].Caption) { SERIAL_PORTS_COMBOBOX.SelectedIndex = i; break; } }
             WAITE_TIME_TEXTBOX.Text = Settings.Default.mli.ToString("0");
             SERIAL_NUMBERS_TEXTBOX.Text = Settings.Default.sn;
             VISAADDR_TEXTBOX.Text = Settings.Default.visaAddr;
@@ -56,6 +56,14 @@ namespace PCAB_Debugger_GUI
             VNALOOP_VISAADDR_TEXTBOX.Text = Settings.Default.visaAddr;
             VNALOOP_TIMEOUT_TEXTBOX.Text = Settings.Default.visaTO.ToString("0");
             VNALOOP_FILEHEADER_TEXTBOX.Text = Settings.Default.fnHeader;
+            foreach (object objBF in DPS_VNALOOP_GRID.Children)
+            {
+                if (typeof(CheckBox) == objBF.GetType()) { ((CheckBox)objBF).IsChecked = true; }
+            }
+            foreach (object objBF in DSA_VNALOOP_GRID.Children)
+            {
+                if (typeof(CheckBox) == objBF.GetType()) { ((CheckBox)objBF).IsChecked = true; }
+            }
         }
 
         #region Serial EVENT
@@ -721,8 +729,9 @@ namespace PCAB_Debugger_GUI
             _mod.DiscardInBuffer();
             read_conf(SERIAL_NUMBERS_COMBOBOX.Text);
             winLoop win = new winLoop(this, dirPath);
-            if (win.ShowDialog() != false) { WRITE_Click(WRITE, e); }
-            else { MessageBox.Show("Loop function.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
+            bool? winRET = win.ShowDialog();
+            if (winRET == true) { WRITE_Click(WRITE, e); MessageBox.Show("Loop function is done.", "Information", MessageBoxButton.OK, MessageBoxImage.Information); }
+            else if (winRET == false) { MessageBox.Show("Loop function.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
         }
 
         private void VNALOOP_VISA_CONNECT_CHECK_BUTTON_Click(object sender, RoutedEventArgs e)
@@ -780,7 +789,21 @@ namespace PCAB_Debugger_GUI
         {
             VNALOOP_DPSstep_COMBOBOX.IsEnabled = true;
             DPS_VNALOOP_GRID.IsEnabled = true;
-            VNALOOP_CONF_GRID.IsEnabled = true;
+            if (DSA_VnaLoopEnable.IsChecked != true &&
+                VNALOOP_SCRE_CHECKBOX.IsChecked != true &&
+                VNALOOP_TRA_CHECKBOX.IsChecked != true)
+            {
+                foreach (object objBF in DPS_VNALOOP_GRID.Children)
+                {
+                    if (typeof(CheckBox) == objBF.GetType())
+                    {
+                        if (((CheckBox)objBF).IsChecked == true)
+                        {
+                            VNALOOP_CONF_GRID.IsEnabled = true;
+                        }
+                    }
+                }
+            }
         }
 
         private void DPS_VnaLoopEnable_Unchecked(object sender, RoutedEventArgs e)
@@ -797,7 +820,21 @@ namespace PCAB_Debugger_GUI
         {
             VNALOOP_DSAstep_COMBOBOX.IsEnabled = true;
             DSA_VNALOOP_GRID.IsEnabled = true;
-            VNALOOP_CONF_GRID.IsEnabled = true;
+            if (DPS_VnaLoopEnable.IsChecked != true &&
+                VNALOOP_SCRE_CHECKBOX.IsChecked != true &&
+                VNALOOP_TRA_CHECKBOX.IsChecked != true)
+            {
+                foreach (object objBF in DSA_VNALOOP_GRID.Children)
+                {
+                    if (typeof(CheckBox) == objBF.GetType())
+                    {
+                        if (((CheckBox)objBF).IsChecked == true)
+                        {
+                            VNALOOP_CONF_GRID.IsEnabled = true;
+                        }
+                    }
+                }
+            }
         }
 
         private void DSA_VnaLoopEnable_Unchecked(object sender, RoutedEventArgs e)
@@ -806,6 +843,50 @@ namespace PCAB_Debugger_GUI
             DSA_VNALOOP_GRID.IsEnabled = false;
             if (DPS_VnaLoopEnable.IsChecked != true &&
                 DSA_VnaLoopEnable.IsChecked != true &&
+                VNALOOP_SCRE_CHECKBOX.IsChecked != true &&
+                VNALOOP_TRA_CHECKBOX.IsChecked != true) { VNALOOP_CONF_GRID.IsEnabled = false; }
+        }
+
+        private void DPSn_CheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            VNALOOP_CONF_GRID.IsEnabled = true;
+        }
+
+        private void DPSn_CheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            foreach (object objBF in DPS_VNALOOP_GRID.Children)
+            {
+                if (typeof(CheckBox) == objBF.GetType())
+                {
+                    if (((CheckBox)objBF).IsChecked == true)
+                    {
+                        return;
+                    }
+                }
+            }
+            if (DSA_VnaLoopEnable.IsChecked != true &&
+                VNALOOP_SCRE_CHECKBOX.IsChecked != true &&
+                VNALOOP_TRA_CHECKBOX.IsChecked != true) { VNALOOP_CONF_GRID.IsEnabled = false; }
+        }
+
+        private void DSAn_CheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            VNALOOP_CONF_GRID.IsEnabled = true;
+        }
+
+        private void DSAn_CheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            foreach (object objBF in DSA_VNALOOP_GRID.Children)
+            {
+                if (typeof(CheckBox) == objBF.GetType())
+                {
+                    if (((CheckBox)objBF).IsChecked == true)
+                    {
+                        return;
+                    }
+                }
+            }
+            if (DPS_VnaLoopEnable.IsChecked != true &&
                 VNALOOP_SCRE_CHECKBOX.IsChecked != true &&
                 VNALOOP_TRA_CHECKBOX.IsChecked != true) { VNALOOP_CONF_GRID.IsEnabled = false; }
         }
@@ -1081,5 +1162,14 @@ namespace PCAB_Debugger_GUI
             }
         }
 
+        private void CheckBox_Checked_1(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void CheckBox_Unchecked_1(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

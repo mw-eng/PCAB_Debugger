@@ -15,12 +15,8 @@ namespace PCAB_Debugger_GUI
     public partial class winLoop : Window
     {
         winMain owner;
-        bool runTASK = false;
-        uint stepDPS = 0;
-        uint stepDSA = 0;
+        bool runTASK = true;
         int waitTIME = -1;
-        int cntDPS = -1;
-        int cntDSA = -1;
         double proc = 0;
         string sn;
         string dirPath;
@@ -29,6 +25,7 @@ namespace PCAB_Debugger_GUI
         List<int> dsa = new List<int>();
         List<uint> ch = new List<uint>();
         List<uint> sheets = new List<uint>();
+        List<loopCONF> loops = new List<loopCONF>();
         List<SweepMode> trig = new List<SweepMode>();
         PCAB _mod;
         agPNA835x instr;
@@ -43,6 +40,8 @@ namespace PCAB_Debugger_GUI
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             bool fileFLG = false;
+            uint stepDPS = 0;
+            uint stepDSA = 0;
             //Get Configuration
             _mod = owner._mod;
             sn = owner.SERIAL_NUMBERS_COMBOBOX.Text;
@@ -80,6 +79,39 @@ namespace PCAB_Debugger_GUI
                     }
                 }
             }
+            loops.Clear();
+            loopCONF loopCONFBF = new loopCONF();
+            if(stepDPS >0 && stepDSA > 0)
+            {
+                for (int cntDPS = 0; cntDPS < 64; cntDPS += (int)stepDPS)
+                {
+                    for (int cntDSA = 0; cntDSA < 64; cntDSA += (int)stepDSA)
+                    {
+                        loopCONFBF.dps = cntDPS;
+                        loopCONFBF.dsa = cntDSA;
+                        loops.Add(loopCONFBF);
+                    }
+                }
+            }
+            else if (stepDPS > 0)
+            {
+                for (int cntDPS = 0; cntDPS < 64; cntDPS += (int)stepDPS)
+                {
+                    loopCONFBF.dps = cntDPS;
+                    loopCONFBF.dsa = -1;
+                    loops.Add(loopCONFBF);
+                }
+            }
+            else if (stepDSA > 0)
+            {
+                for (int cntDSA = 0; cntDSA < 64; cntDSA += (int)stepDSA)
+                {
+                    loopCONFBF.dps = -1;
+                    loopCONFBF.dsa = cntDSA;
+                    loops.Add(loopCONFBF);
+                }
+            }
+
             if (owner.VNALOOP_SCRE_CHECKBOX.IsChecked == true ||
                 owner.VNALOOP_TRA_CHECKBOX.IsChecked == true)
             {
@@ -147,13 +179,10 @@ namespace PCAB_Debugger_GUI
                 if (fileFLG)
                 {
                     if (MessageBox.Show("The file exists in the specified folder.\nDo you want to overwrite?",
-                        "Warning", MessageBoxButton.OKCancel, MessageBoxImage.Warning) == MessageBoxResult.Cancel) { this.DialogResult = true; this.Close(); }
+                        "Warning", MessageBoxButton.OKCancel, MessageBoxImage.Warning) == MessageBoxResult.Cancel) { this.DialogResult = null; this.Close(); return; }
                 }
 
             }
-
-            if (waitTIME < 0) { runTASK = false; }
-            else{ runTASK = true;}
             Task task = Task.Factory.StartNew(() => { LOOP_Task((uint)waitTIME); });
         }
 
@@ -269,6 +298,12 @@ namespace PCAB_Debugger_GUI
             {
                 MessageLabel.Content = "Sweep... " + Progress.Value.ToString() + "%";
             }));
+        }
+
+        private struct loopCONF
+        {
+            public int dps { get; set; }
+            public int dsa { get; set; }
         }
 
         private void vna()

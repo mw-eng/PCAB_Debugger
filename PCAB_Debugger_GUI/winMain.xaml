@@ -496,21 +496,21 @@
                                         <ColumnDefinition Width="1*"/>
                                         <ColumnDefinition Width="1*"/>
                                     </Grid.ColumnDefinitions>
-                                    <CheckBox Grid.Row="3" Grid.Column="3" Content="DPS1" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" IsChecked="True"/>
-                                    <CheckBox Grid.Row="2" Grid.Column="3" Content="DPS2" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" IsChecked="True"/>
-                                    <CheckBox Grid.Row="1" Grid.Column="3" Content="DPS3" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" IsChecked="True"/>
-                                    <CheckBox Grid.Row="0" Grid.Column="3" Content="DPS4" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" IsChecked="True"/>
-                                    <CheckBox Grid.Row="0" Grid.Column="2" Content="DPS5" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" IsChecked="True"/>
-                                    <CheckBox Grid.Row="1" Grid.Column="2" Content="DPS6" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" IsChecked="True"/>
-                                    <CheckBox Grid.Row="2" Grid.Column="2" Content="DPS7" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" IsChecked="True"/>
-                                    <CheckBox Grid.Row="3" Grid.Column="2" Content="DPS8" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" IsChecked="True"/>
-                                    <CheckBox Grid.Row="3" Grid.Column="1" Content="DPS9" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" IsChecked="True"/>
-                                    <CheckBox Grid.Row="2" Grid.Column="1" Content="DPS10" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" IsChecked="True"/>
-                                    <CheckBox Grid.Row="1" Grid.Column="1" Content="DPS11" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" IsChecked="True"/>
-                                    <CheckBox Grid.Row="0" Grid.Column="1" Content="DPS12" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" IsChecked="True"/>
-                                    <CheckBox Grid.Row="0" Grid.Column="0" Content="DPS13" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" IsChecked="True"/>
-                                    <CheckBox Grid.Row="1" Grid.Column="0" Content="DPS14" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" IsChecked="True"/>
-                                    <CheckBox Grid.Row="2" Grid.Column="0" Content="DPS15" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" IsChecked="True"/>
+                                    <CheckBox Grid.Row="3" Grid.Column="3" Content="DPS1" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" Checked="DPSn_CheckBox_Checked" Unchecked="DPSn_CheckBox_Unchecked"/>
+                                    <CheckBox Grid.Row="2" Grid.Column="3" Content="DPS2" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" Checked="DPSn_CheckBox_Checked" Unchecked="DPSn_CheckBox_Unchecked"/>
+                                    <CheckBox Grid.Row="1" Grid.Column="3" Content="DPS3" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" Checked="DPSn_CheckBox_Checked" Unchecked="DPSn_CheckBox_Unchecked"/>
+                                    <CheckBox Grid.Row="0" Grid.Column="3" Content="DPS4" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" Checked="DPSn_CheckBox_Checked" Unchecked="DPSn_CheckBox_Unchecked"/>
+                                    <CheckBox Grid.Row="0" Grid.Column="2" Content="DPS5" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" Checked="DPSn_CheckBox_Checked" Unchecked="DPSn_CheckBox_Unchecked"/>
+                                    <CheckBox Grid.Row="1" Grid.Column="2" Content="DPS6" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" Checked="DPSn_CheckBox_Checked" Unchecked="DPSn_CheckBox_Unchecked"/>
+                                    <CheckBox Grid.Row="2" Grid.Column="2" Content="DPS7" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" Checked="DPSn_CheckBox_Checked" Unchecked="DPSn_CheckBox_Unchecked"/>
+                                    <CheckBox Grid.Row="3" Grid.Column="2" Content="DPS8" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" Checked="DPSn_CheckBox_Checked" Unchecked="DPSn_CheckBox_Unchecked"/>
+                                    <CheckBox Grid.Row="3" Grid.Column="1" Content="DPS9" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" Checked="DPSn_CheckBox_Checked" Unchecked="DPSn_CheckBox_Unchecked"/>
+                                    <CheckBox Grid.Row="2" Grid.Column="1" Content="DPS10" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" Checked="DPSn_CheckBox_Checked" Unchecked="DPSn_CheckBox_Unchecked"/>
+                                    <CheckBox Grid.Row="1" Grid.Column="1" Content="DPS11" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" Checked="DPSn_CheckBox_Checked" Unchecked="DPSn_CheckBox_Unchecked"/>
+                                    <CheckBox Grid.Row="0" Grid.Column="1" Content="DPS12" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" Checked="DPSn_CheckBox_Checked" Unchecked="DPSn_CheckBox_Unchecked"/>
+                                    <CheckBox Grid.Row="0" Grid.Column="0" Content="DPS13" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" Checked="DPSn_CheckBox_Checked" Unchecked="DPSn_CheckBox_Unchecked"/>
+                                    <CheckBox Grid.Row="1" Grid.Column="0" Content="DPS14" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" Checked="DPSn_CheckBox_Checked" Unchecked="DPSn_CheckBox_Unchecked"/>
+                                    <CheckBox Grid.Row="2" Grid.Column="0" Content="DPS15" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" Checked="DPSn_CheckBox_Checked" Unchecked="DPSn_CheckBox_Unchecked"/>
                                 </Grid>
                                 <Grid x:Name="DSA_VNALOOP_GRID" Grid.Row="1" Grid.Column="1" Margin="5">
                                     <Grid.RowDefinitions>
@@ -525,21 +525,21 @@
                                         <ColumnDefinition Width="1*"/>
                                         <ColumnDefinition Width="1*"/>
                                     </Grid.ColumnDefinitions>
-                                    <CheckBox Grid.Row="3" Grid.Column="3" Content="DSA1" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" IsChecked="True"/>
-                                    <CheckBox Grid.Row="2" Grid.Column="3" Content="DSA2" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" IsChecked="True"/>
-                                    <CheckBox Grid.Row="1" Grid.Column="3" Content="DSA3" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" IsChecked="True"/>
-                                    <CheckBox Grid.Row="0" Grid.Column="3" Content="DSA4" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" IsChecked="True"/>
-                                    <CheckBox Grid.Row="0" Grid.Column="2" Content="DSA5" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" IsChecked="True"/>
-                                    <CheckBox Grid.Row="1" Grid.Column="2" Content="DSA6" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" IsChecked="True"/>
-                                    <CheckBox Grid.Row="2" Grid.Column="2" Content="DSA7" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" IsChecked="True"/>
-                                    <CheckBox Grid.Row="3" Grid.Column="2" Content="DSA8" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" IsChecked="True"/>
-                                    <CheckBox Grid.Row="3" Grid.Column="1" Content="DSA9" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" IsChecked="True"/>
-                                    <CheckBox Grid.Row="2" Grid.Column="1" Content="DSA10" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" IsChecked="True"/>
-                                    <CheckBox Grid.Row="1" Grid.Column="1" Content="DSA11" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" IsChecked="True"/>
-                                    <CheckBox Grid.Row="0" Grid.Column="1" Content="DSA12" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" IsChecked="True"/>
-                                    <CheckBox Grid.Row="0" Grid.Column="0" Content="DSA13" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" IsChecked="True"/>
-                                    <CheckBox Grid.Row="1" Grid.Column="0" Content="DSA14" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" IsChecked="True"/>
-                                    <CheckBox Grid.Row="2" Grid.Column="0" Content="DSA15" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" IsChecked="True"/>
+                                    <CheckBox Grid.Row="3" Grid.Column="3" Content="DSA1" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" Checked="DSAn_CheckBox_Checked" Unchecked="DSAn_CheckBox_Unchecked"/>
+                                    <CheckBox Grid.Row="2" Grid.Column="3" Content="DSA2" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" Checked="DSAn_CheckBox_Checked" Unchecked="DSAn_CheckBox_Unchecked"/>
+                                    <CheckBox Grid.Row="1" Grid.Column="3" Content="DSA3" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" Checked="DSAn_CheckBox_Checked" Unchecked="DSAn_CheckBox_Unchecked"/>
+                                    <CheckBox Grid.Row="0" Grid.Column="3" Content="DSA4" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" Checked="DSAn_CheckBox_Checked" Unchecked="DSAn_CheckBox_Unchecked"/>
+                                    <CheckBox Grid.Row="0" Grid.Column="2" Content="DSA5" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" Checked="DSAn_CheckBox_Checked" Unchecked="DSAn_CheckBox_Unchecked"/>
+                                    <CheckBox Grid.Row="1" Grid.Column="2" Content="DSA6" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" Checked="DSAn_CheckBox_Checked" Unchecked="DSAn_CheckBox_Unchecked"/>
+                                    <CheckBox Grid.Row="2" Grid.Column="2" Content="DSA7" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" Checked="DSAn_CheckBox_Checked" Unchecked="DSAn_CheckBox_Unchecked"/>
+                                    <CheckBox Grid.Row="3" Grid.Column="2" Content="DSA8" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" Checked="DSAn_CheckBox_Checked" Unchecked="DSAn_CheckBox_Unchecked"/>
+                                    <CheckBox Grid.Row="3" Grid.Column="1" Content="DSA9" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" Checked="DSAn_CheckBox_Checked" Unchecked="DSAn_CheckBox_Unchecked"/>
+                                    <CheckBox Grid.Row="2" Grid.Column="1" Content="DSA10" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" Checked="DSAn_CheckBox_Checked" Unchecked="DSAn_CheckBox_Unchecked"/>
+                                    <CheckBox Grid.Row="1" Grid.Column="1" Content="DSA11" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" Checked="DSAn_CheckBox_Checked" Unchecked="DSAn_CheckBox_Unchecked"/>
+                                    <CheckBox Grid.Row="0" Grid.Column="1" Content="DSA12" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" Checked="DSAn_CheckBox_Checked" Unchecked="DSAn_CheckBox_Unchecked"/>
+                                    <CheckBox Grid.Row="0" Grid.Column="0" Content="DSA13" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" Checked="DSAn_CheckBox_Checked" Unchecked="DSAn_CheckBox_Unchecked"/>
+                                    <CheckBox Grid.Row="1" Grid.Column="0" Content="DSA14" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" Checked="DSAn_CheckBox_Checked" Unchecked="DSAn_CheckBox_Unchecked"/>
+                                    <CheckBox Grid.Row="2" Grid.Column="0" Content="DSA15" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" Checked="DSAn_CheckBox_Checked" Unchecked="DSAn_CheckBox_Unchecked"/>
                                 </Grid>
                             </Grid>
                             <Grid x:Name="VNALOOP_CONF_GRID" Grid.Row="2">
