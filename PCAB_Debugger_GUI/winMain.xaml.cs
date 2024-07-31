@@ -1,14 +1,10 @@
 ﻿using MWComLibCS.ExternalControl;
 using PCAB_Debugger_GUI.Properties;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using static PCAB_Debugger_GUI.agPNA835x;
 using static PCAB_Debugger_GUI.PCAB;
 using static PCAB_Debugger_GUI.ShowSerialPortName;
 
