@@ -445,6 +445,7 @@ namespace PCAB_Debugger_GUI
             {
                 IEEE488 instr;
                 instr = new IEEE488(new VisaControlNI(sesn, strBF));
+                instr.IEEE488_VisaControl.SetTimeout(uint.Parse(VNALOOP_TIMEOUT_TEXTBOX.Text));
                 IEEE488_IDN idn = instr.IDN();
                 MessageBox.Show("Vender\t\t: " + idn.Vender +
                               "\nModel Number\t: " + idn.ModelNumber +

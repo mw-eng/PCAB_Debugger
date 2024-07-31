@@ -64,8 +64,10 @@ namespace PCAB_Debugger_GUI
         /// <param name="ch"></param>
         public void trigSingle(uint ch) { setTriggerMode(ch, SweepMode.SING); }
         /// <summary>Set HOLD Trigger</summary>
+        /// <param name="ch"></param>
         public void trigHold(uint ch) { setTriggerMode(ch, SweepMode.HOLD); }
         /// <summary>Set Trigger Continuous</summary>
+        /// <param name="ch"></param>
         public void trigContinuous(uint ch) { setTriggerMode(ch, SweepMode.CONT); }
 
         /// <summary>Select Sheet</summary>

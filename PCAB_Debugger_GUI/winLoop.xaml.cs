@@ -127,6 +127,7 @@ namespace PCAB_Debugger_GUI
                 if (owner.VNALOOP_SCRE_CHECKBOX.IsChecked == true) { saveSCR = true; }
                 if (owner.VNALOOP_TRA_CHECKBOX.IsChecked == true) { saveTRA = true; }
                 instr = new agPNA835x(new IEEE488(new VisaControlNI(owner.sesn, owner.VNALOOP_VISAADDR_TEXTBOX.Text)));
+                instr.Instrument.IEEE488_VisaControl.SetTimeout(uint.Parse(owner.VNALOOP_TIMEOUT_TEXTBOX.Text));
                 //Get instrument configure
                 try
                 {
@@ -171,9 +172,9 @@ namespace PCAB_Debugger_GUI
                     {
                         foreach (loopCONF cnf in loops)
                         {
-                            string filePath = dirPath + "\\" + fileHeader + "_";
-                            if (cnf.dps > 0) { filePath += "DPS" + cnf.dps.ToString("00"); }
-                            if (cnf.dsa > 0) { filePath += "DSA" + cnf.dsa.ToString("00"); }
+                            string filePath = dirPath + "\\" + fileHeader;
+                            if (cnf.dps >= 0) { filePath += "_DPS" + cnf.dps.ToString("00"); }
+                            if (cnf.dsa >= 0) { filePath += "_DSA" + cnf.dsa.ToString("00"); }
                             filePath += "_Sheet" + sh.ToString() + ".png";
                             if (System.IO.File.Exists(filePath)) { fileFLG = true; break; }
                         }
@@ -186,9 +187,9 @@ namespace PCAB_Debugger_GUI
                     {
                         foreach (loopCONF cnf in loops)
                         {
-                            string filePath = dirPath + "\\" + fileHeader + "_";
-                            if (cnf.dps > 0) { filePath += "DPS" + cnf.dps.ToString("00"); }
-                            if (cnf.dsa > 0) { filePath += "DSA" + cnf.dsa.ToString("00"); }
+                            string filePath = dirPath + "\\" + fileHeader;
+                            if (cnf.dps >= 0) { filePath += "_DPS" + cnf.dps.ToString("00"); }
+                            if (cnf.dsa >= 0) { filePath += "_DSA" + cnf.dsa.ToString("00"); }
                             filePath += "_Sheet" + sh.ToString() + ".csv";
                             if (System.IO.File.Exists(filePath)) { fileFLG = true; break; }
                         }
@@ -221,26 +222,26 @@ namespace PCAB_Debugger_GUI
                 {
                     foreach (loopCONF cnf in loops)
                     {
-                        string filePath = dirPath + "\\" + fileHeader + "_";
+                        string filePath = dirPath + "\\" + fileHeader;
                         if (!runTASK) { ExitCancelTASK(); return; }
-                        if (cnf.dps > 0)
+                        if (cnf.dps >= 0)
                         {
                             foreach (int p in dps)
                             {
                                 //Write Phase State
                                 if (_mod.PCAB_CMD(sn, "SetDPS " + p.ToString("0") + " " + cnf.dps.ToString("0"), 1).Substring(0, 4) != "DONE") { ExitErrTASK(); return; }
                             }
-                            filePath += "DPS" + cnf.dps.ToString("00");
+                            filePath += "_DPS" + cnf.dps.ToString("00");
                         }
                         if (!runTASK) { ExitCancelTASK(); return; }
-                        if (cnf.dsa > 0)
+                        if (cnf.dsa >= 0)
                         {
                             foreach (int a in dsa)
                             {
                                 //Write ATT State
                                 if (_mod.PCAB_CMD(sn, "SetDSA " + a.ToString("0") + " " + cnf.dsa.ToString("0"), 1).Substring(0, 4) != "DONE") { ExitErrTASK(); return; }
                             }
-                            filePath += "DSA" + cnf.dsa.ToString("00");
+                            filePath += "_DSA" + cnf.dsa.ToString("00");
                         }
                         if (!runTASK) { ExitCancelTASK(); return; }
                         Thread.Sleep(waiteTime);
@@ -253,6 +254,7 @@ namespace PCAB_Debugger_GUI
                                 instr.trigSingle(ch);
                             }
                         }
+                        Thread.Sleep(100);
                         if (!runTASK)
                         {
                             //Trigger ReSET
