@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using static PCAB_Debugger_GUI.agPNA835x;
 
 namespace PCAB_Debugger_GUI
 {
@@ -23,8 +24,12 @@ namespace PCAB_Debugger_GUI
         double proc = 0;
         string sn;
         string dirPath;
+        string fileHeader;
         List<int> dps = new List<int>();
         List<int> dsa = new List<int>();
+        List<uint> ch = new List<uint>();
+        List<uint> sheets = new List<uint>();
+        List<SweepMode> trig = new List<SweepMode>();
         PCAB _mod;
         agPNA835x instr;
 
@@ -37,16 +42,18 @@ namespace PCAB_Debugger_GUI
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            bool fileFLG = false;
             //Get Configuration
             _mod = owner._mod;
             sn = owner.SERIAL_NUMBERS_COMBOBOX.Text;
+            fileHeader = owner.VNALOOP_FILEHEADER_TEXTBOX.Text;
             _mod.PCAB_CMD(sn, "CUI 0", 1);
             _mod.DiscardInBuffer();
             dps.Clear();
             dsa.Clear();
+            waitTIME = int.Parse(owner.VNALOOP_WAITTIME_TEXTBOX.Text);
             if (owner.DPS_VnaLoopEnable.IsChecked == true)
             {
-                waitTIME = int.Parse(owner.VNALOOP_WAITTIME_TEXTBOX.Text);
                 stepDPS = (uint)Math.Pow(2, (double)owner.VNALOOP_DPSstep_COMBOBOX.SelectedIndex);
                 foreach (object objBF in owner.DPS_VNALOOP_GRID.Children)
                 {
@@ -61,7 +68,6 @@ namespace PCAB_Debugger_GUI
             }
             if (owner.DSA_VnaLoopEnable.IsChecked == true)
             {
-                waitTIME = int.Parse(owner.VNALOOP_WAITTIME_TEXTBOX.Text);
                 stepDSA = (uint)Math.Pow(2, (double)owner.VNALOOP_DSAstep_COMBOBOX.SelectedIndex);
                 foreach (object objBF in owner.DSA_VNALOOP_GRID.Children)
                 {
@@ -78,9 +84,38 @@ namespace PCAB_Debugger_GUI
                 owner.VNALOOP_TRA_CHECKBOX.IsChecked == true)
             {
                 instr = new agPNA835x(new IEEE488(new VisaControlNI(owner.sesn, owner.VNALOOP_VISAADDR_TEXTBOX.Text)));
+                //Get instrument configure
                 try
                 {
                     IEEE488_IDN idn = instr.Instrument.IDN();
+                    ch.Clear();
+                    if(owner.VNALOOP_CH_ALL.IsChecked == true)
+                    {
+                        foreach (uint i in instr.getChannelCatalog())
+                        {
+                            ch.Add(i);
+                        }
+                    }
+                    else
+                    {
+                        ch.Add(uint.Parse(owner.VNALOOP_CHANNEL_COMBOBOX.Text));
+                    }
+                    trig.Clear();
+                    if(owner.VNALOOP_SING_CHECKBOX.IsChecked == true) 
+                    {
+                        foreach(uint i in ch)
+                        {
+                            trig.Add(instr.getTriggerMode(i));
+                        }
+                    }
+                    sheets.Clear();
+                    if (owner.VNALOOP_SCRE_CHECKBOX.IsChecked == true)
+                    {
+                        foreach (uint i in instr.getSheetsCatalog())
+                        {
+                            sheets.Add(i);
+                        }
+                    }
                 }
                 catch
                 {
@@ -88,6 +123,33 @@ namespace PCAB_Debugger_GUI
                     this.DialogResult = false;
                     this.Close();
                 }
+                //check file path
+                //if (owner.VNALOOP_SCRE_CHECKBOX.IsChecked == true)
+                //{
+                //    foreach (uint i in sheets)
+                //    {
+                //        for (int num = 0; num < 64; num++)
+                //        {
+                //            if (System.IO.File.Exists(dirPath + "\\" + fileHeader + "_" + num.ToString("00") + "_Sheet" + i.ToString() + ".png")) { fileFLG = true; }
+                //        }
+                //    }
+                //}
+                //if (owner.VNALOOP_TRA_CHECKBOX.IsChecked == true)
+                //{
+                //    foreach (uint i in sheets)
+                //    {
+                //        for (int num = 0; num < 64; num++)
+                //        {
+                //            if (System.IO.File.Exists(dirPath + "\\" + fileHeader + "_" + num.ToString("00") + "_Sheet" + i.ToString() + ".csv")) { fileFLG = true; }
+                //        }
+                //    }
+                //}
+                if (fileFLG)
+                {
+                    if (MessageBox.Show("The file exists in the specified folder.\nDo you want to overwrite?",
+                        "Warning", MessageBoxButton.OKCancel, MessageBoxImage.Warning) == MessageBoxResult.Cancel) { this.DialogResult = true; this.Close(); }
+                }
+
             }
 
             if (waitTIME < 0) { runTASK = false; }
@@ -208,7 +270,6 @@ namespace PCAB_Debugger_GUI
                 MessageLabel.Content = "Sweep... " + Progress.Value.ToString() + "%";
             }));
         }
-
 
         private void vna()
         {

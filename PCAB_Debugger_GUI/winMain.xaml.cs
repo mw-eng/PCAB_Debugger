@@ -441,9 +441,7 @@ namespace PCAB_Debugger_GUI
                 CHANNEL_COMBOBOX.Items.Clear();
                 try
                 {
-                    IEEE488 instr;
-                    instr = new IEEE488(new VisaControlNI(sesn, VISAADDR_TEXTBOX.Text));
-                    agPNA835x pna = new agPNA835x(instr);
+                    agPNA835x pna = new agPNA835x(new IEEE488(new VisaControlNI(sesn, VISAADDR_TEXTBOX.Text)));
                     foreach (uint i in pna.getChannelCatalog())
                     {
                         CHANNEL_COMBOBOX.Items.Add(i.ToString());
@@ -760,13 +758,13 @@ namespace PCAB_Debugger_GUI
                 VNALOOP_CHANNEL_COMBOBOX.Items.Clear();
                 try
                 {
-                    IEEE488 instr;
-                    instr = new IEEE488(new VisaControlNI(sesn, VNALOOP_VISAADDR_TEXTBOX.Text));
-                    agPNA835x pna = new agPNA835x(instr);
+                    agPNA835x pna = new agPNA835x(new IEEE488(new VisaControlNI(sesn, VISAADDR_TEXTBOX.Text)));
                     foreach (uint i in pna.getChannelCatalog())
                     {
                         VNALOOP_CHANNEL_COMBOBOX.Items.Add(i.ToString());
                     }
+                    pna.Instrument.Dispose();
+                    pna = null;
                 }
                 catch (Exception err)
                 {
