@@ -494,18 +494,13 @@ namespace PCAB_Debugger_GUI
         {
             VNALOOP_DPSstep_COMBOBOX.IsEnabled = true;
             DPS_VNALOOP_GRID.IsEnabled = true;
-            if (DSA_VnaLoopEnable.IsChecked != true &&
-                VNALOOP_SCRE_CHECKBOX.IsChecked != true &&
-                VNALOOP_TRA_CHECKBOX.IsChecked != true)
+            foreach (object objBF in DPS_VNALOOP_GRID.Children)
             {
-                foreach (object objBF in DPS_VNALOOP_GRID.Children)
+                if (typeof(CheckBox) == objBF.GetType())
                 {
-                    if (typeof(CheckBox) == objBF.GetType())
+                    if (((CheckBox)objBF).IsChecked == true)
                     {
-                        if (((CheckBox)objBF).IsChecked == true)
-                        {
-                            VNALOOP_CONF_GRID.IsEnabled = true;
-                        }
+                        VNALOOP_CONF_GRID.IsEnabled = true;
                     }
                 }
             }
@@ -515,28 +510,41 @@ namespace PCAB_Debugger_GUI
         {
             VNALOOP_DPSstep_COMBOBOX.IsEnabled = false;
             DPS_VNALOOP_GRID.IsEnabled = false;
-            if (DPS_VnaLoopEnable.IsChecked != true &&
-                DSA_VnaLoopEnable.IsChecked != true &&
-                VNALOOP_SCRE_CHECKBOX.IsChecked != true &&
-                VNALOOP_TRA_CHECKBOX.IsChecked != true) { VNALOOP_CONF_GRID.IsEnabled = false; }
+            if (VNALOOP_SCRE_CHECKBOX.IsChecked != true &&
+                VNALOOP_TRA_CHECKBOX.IsChecked != true)
+            {
+                if (DSA_VnaLoopEnable.IsChecked != true)
+                {
+                    VNALOOP_CONF_GRID.IsEnabled = false;
+                }
+                else
+                {
+                    foreach (object objBF in DSA_VNALOOP_GRID.Children)
+                    {
+                        if (typeof(CheckBox) == objBF.GetType())
+                        {
+                            if (((CheckBox)objBF).IsChecked == true)
+                            {
+                                return;
+                            }
+                        }
+                    }
+                    VNALOOP_CONF_GRID.IsEnabled = false;
+                }
+            }
         }
 
         private void DSA_VnaLoopEnable_Checked(object sender, RoutedEventArgs e)
         {
             VNALOOP_DSAstep_COMBOBOX.IsEnabled = true;
             DSA_VNALOOP_GRID.IsEnabled = true;
-            if (DPS_VnaLoopEnable.IsChecked != true &&
-                VNALOOP_SCRE_CHECKBOX.IsChecked != true &&
-                VNALOOP_TRA_CHECKBOX.IsChecked != true)
+            foreach (object objBF in DSA_VNALOOP_GRID.Children)
             {
-                foreach (object objBF in DSA_VNALOOP_GRID.Children)
+                if (typeof(CheckBox) == objBF.GetType())
                 {
-                    if (typeof(CheckBox) == objBF.GetType())
+                    if (((CheckBox)objBF).IsChecked == true)
                     {
-                        if (((CheckBox)objBF).IsChecked == true)
-                        {
-                            VNALOOP_CONF_GRID.IsEnabled = true;
-                        }
+                        VNALOOP_CONF_GRID.IsEnabled = true;
                     }
                 }
             }
@@ -546,10 +554,28 @@ namespace PCAB_Debugger_GUI
         {
             VNALOOP_DSAstep_COMBOBOX.IsEnabled = false;
             DSA_VNALOOP_GRID.IsEnabled = false;
-            if (DPS_VnaLoopEnable.IsChecked != true &&
-                DSA_VnaLoopEnable.IsChecked != true &&
-                VNALOOP_SCRE_CHECKBOX.IsChecked != true &&
-                VNALOOP_TRA_CHECKBOX.IsChecked != true) { VNALOOP_CONF_GRID.IsEnabled = false; }
+            if (VNALOOP_SCRE_CHECKBOX.IsChecked != true &&
+                VNALOOP_TRA_CHECKBOX.IsChecked != true)
+            {
+                if (DPS_VnaLoopEnable.IsChecked != true)
+                {
+                    VNALOOP_CONF_GRID.IsEnabled = false;
+                }
+                else
+                {
+                    foreach (object objBF in DPS_VNALOOP_GRID.Children)
+                    {
+                        if (typeof(CheckBox) == objBF.GetType())
+                        {
+                            if (((CheckBox)objBF).IsChecked == true)
+                            {
+                                return;
+                            }
+                        }
+                    }
+                    VNALOOP_CONF_GRID.IsEnabled = false;
+                }
+            }
         }
 
         private void DPSn_CheckBox_Checked(object sender, RoutedEventArgs e)
@@ -569,9 +595,28 @@ namespace PCAB_Debugger_GUI
                     }
                 }
             }
-            if (DSA_VnaLoopEnable.IsChecked != true &&
-                VNALOOP_SCRE_CHECKBOX.IsChecked != true &&
-                VNALOOP_TRA_CHECKBOX.IsChecked != true) { VNALOOP_CONF_GRID.IsEnabled = false; }
+            if (VNALOOP_SCRE_CHECKBOX.IsChecked != true &&
+                VNALOOP_TRA_CHECKBOX.IsChecked != true)
+            {
+                if (DSA_VnaLoopEnable.IsChecked != true)
+                {
+                    VNALOOP_CONF_GRID.IsEnabled = false;
+                }
+                else
+                {
+                    foreach (object objBF in DSA_VNALOOP_GRID.Children)
+                    {
+                        if (typeof(CheckBox) == objBF.GetType())
+                        {
+                            if (((CheckBox)objBF).IsChecked == true)
+                            {
+                                return;
+                            }
+                        }
+                    }
+                    VNALOOP_CONF_GRID.IsEnabled = false;
+                }
+            }
         }
 
         private void DSAn_CheckBox_Checked(object sender, RoutedEventArgs e)
@@ -591,9 +636,28 @@ namespace PCAB_Debugger_GUI
                     }
                 }
             }
-            if (DPS_VnaLoopEnable.IsChecked != true &&
-                VNALOOP_SCRE_CHECKBOX.IsChecked != true &&
-                VNALOOP_TRA_CHECKBOX.IsChecked != true) { VNALOOP_CONF_GRID.IsEnabled = false; }
+            if (VNALOOP_SCRE_CHECKBOX.IsChecked != true &&
+                VNALOOP_TRA_CHECKBOX.IsChecked != true)
+            {
+                if (DPS_VnaLoopEnable.IsChecked != true)
+                {
+                    VNALOOP_CONF_GRID.IsEnabled = false;
+                }
+                else
+                {
+                    foreach (object objBF in DPS_VNALOOP_GRID.Children)
+                    {
+                        if (typeof(CheckBox) == objBF.GetType())
+                        {
+                            if (((CheckBox)objBF).IsChecked == true)
+                            {
+                                return;
+                            }
+                        }
+                    }
+                    VNALOOP_CONF_GRID.IsEnabled = false;
+                }
+            }
         }
 
         private void VNALOOP_SaveTarget_CHECKBOX_Checked(object sender, RoutedEventArgs e)
@@ -603,10 +667,69 @@ namespace PCAB_Debugger_GUI
 
         private void VNALOOP_SaveTarget_CHECKBOX_Unchecked(object sender, RoutedEventArgs e)
         {
-            if (DPS_VnaLoopEnable.IsChecked != true &&
-                DSA_VnaLoopEnable.IsChecked != true &&
-                VNALOOP_SCRE_CHECKBOX.IsChecked != true &&
-                VNALOOP_TRA_CHECKBOX.IsChecked != true) { VNALOOP_CONF_GRID.IsEnabled = false; }
+            if (VNALOOP_SCRE_CHECKBOX.IsChecked != true &&
+                VNALOOP_TRA_CHECKBOX.IsChecked != true)
+            {
+                if (DPS_VnaLoopEnable.IsChecked == true)
+                {
+                    foreach (object objBF in DPS_VNALOOP_GRID.Children)
+                    {
+                        if (typeof(CheckBox) == objBF.GetType())
+                        {
+                            if (((CheckBox)objBF).IsChecked == true)
+                            {
+                                return;
+                            }
+                        }
+                    }
+                }
+                if (DSA_VnaLoopEnable.IsChecked == true)
+                {
+                    foreach (object objBF in DSA_VNALOOP_GRID.Children)
+                    {
+                        if (typeof(CheckBox) == objBF.GetType())
+                        {
+                            if (((CheckBox)objBF).IsChecked == true)
+                            {
+                                return;
+                            }
+                        }
+                    }
+                }
+                VNALOOP_CONF_GRID.IsEnabled = false;
+            }
+        }
+
+        private void DPS_CHECK_ALL_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (object objBF in DPS_VNALOOP_GRID.Children)
+            {
+                if (typeof(CheckBox) == objBF.GetType()) { ((CheckBox)objBF).IsChecked = true; }
+            }
+        }
+
+        private void DPS_UNCHECK_ALL_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (object objBF in DPS_VNALOOP_GRID.Children)
+            {
+                if (typeof(CheckBox) == objBF.GetType()) { ((CheckBox)objBF).IsChecked = false; }
+            }
+        }
+
+        private void DSA_CHECK_ALL_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (object objBF in DSA_VNALOOP_GRID.Children)
+            {
+                if (typeof(CheckBox) == objBF.GetType()) { ((CheckBox)objBF).IsChecked = true; }
+            }
+        }
+
+        private void DSA_UNCHECK_ALL_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (object objBF in DSA_VNALOOP_GRID.Children)
+            {
+                if (typeof(CheckBox) == objBF.GetType()) { ((CheckBox)objBF).IsChecked = false; }
+            }
         }
 
         #endregion
@@ -844,5 +967,34 @@ namespace PCAB_Debugger_GUI
             }
         }
 
+        private void ALL_DSA_CHECKBOX_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ALL_DSA_CHECKBOX_Unchecked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ALL_DPS_CHECKBOX_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ALL_DPS_CHECKBOX_Unchecked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ALL_DSA_COMBOBOX_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+        private void ALL_DPS_COMBOBOX_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }

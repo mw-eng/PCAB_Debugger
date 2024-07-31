@@ -57,7 +57,6 @@ namespace PCAB_Debugger_GUI
             waitTIME = int.Parse(owner.VNALOOP_WAITTIME_TEXTBOX.Text);
             if (owner.DPS_VnaLoopEnable.IsChecked == true)
             {
-                stepDPS = (uint)Math.Pow(2, (double)owner.VNALOOP_DPSstep_COMBOBOX.SelectedIndex);
                 foreach (object objBF in owner.DPS_VNALOOP_GRID.Children)
                 {
                     if (typeof(CheckBox) == objBF.GetType())
@@ -68,10 +67,10 @@ namespace PCAB_Debugger_GUI
                         }
                     }
                 }
+                if (dps.Count > 0) { stepDPS = (uint)Math.Pow(2, (double)owner.VNALOOP_DPSstep_COMBOBOX.SelectedIndex); }
             }
             if (owner.DSA_VnaLoopEnable.IsChecked == true)
             {
-                stepDSA = (uint)Math.Pow(2, (double)owner.VNALOOP_DSAstep_COMBOBOX.SelectedIndex);
                 foreach (object objBF in owner.DSA_VNALOOP_GRID.Children)
                 {
                     if (typeof(CheckBox) == objBF.GetType())
@@ -82,6 +81,7 @@ namespace PCAB_Debugger_GUI
                         }
                     }
                 }
+                if (dsa.Count > 0) { stepDSA = (uint)Math.Pow(2, (double)owner.VNALOOP_DSAstep_COMBOBOX.SelectedIndex); }
             }
             loops.Clear();
             loopCONF loopCONFBF = new loopCONF();
