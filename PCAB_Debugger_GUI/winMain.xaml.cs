@@ -405,6 +405,35 @@ namespace PCAB_Debugger_GUI
             }
         }
 
+        private void ALL_DSA_CHECKBOX_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ALL_DSA_CHECKBOX_Unchecked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ALL_DPS_CHECKBOX_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ALL_DPS_CHECKBOX_Unchecked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ALL_DSA_COMBOBOX_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+        private void ALL_DPS_COMBOBOX_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
         #endregion
 
         #region VNALOOP EVENT
@@ -967,34 +996,5 @@ namespace PCAB_Debugger_GUI
             }
         }
 
-        private void ALL_DSA_CHECKBOX_Checked(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void ALL_DSA_CHECKBOX_Unchecked(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void ALL_DPS_CHECKBOX_Checked(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void ALL_DPS_CHECKBOX_Unchecked(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void ALL_DSA_COMBOBOX_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
-
-        private void ALL_DPS_COMBOBOX_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
     }
 }
