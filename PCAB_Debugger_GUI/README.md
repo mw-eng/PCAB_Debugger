@@ -3,8 +3,9 @@ Control GUI program.
 
 ## Requirements / Supported Platforms
 * .NET Framework 4.7.2 or later.
-* Keygisht IO Libraries Suite 18.2.27313.1 or later. @[Keysight](https://www.keysight.com/zz/en/lib/software-detail/computer-software/io-libraries-suite-downloads-2175637.html)
 * VNA A.17.20.09 (64 bit)
+* Keygisht IO Libraries Suite 18.2.27313.1 or later. @[Keysight](https://www.keysight.com/zz/en/lib/software-detail/computer-software/io-libraries-suite-downloads-2175637.html)
+* NI-VISA 18.5 @[National Instruments](https://www.ni.com/ja/support/downloads/drivers/download.ni-visa.html#306043)
 
 ## How to use
 
