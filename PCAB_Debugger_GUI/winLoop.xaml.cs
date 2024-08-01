@@ -231,6 +231,7 @@ namespace PCAB_Debugger_GUI
                                 //Write Phase State
                                 if (_mod.PCAB_CMD(sn, "SetDPS " + p.ToString("0") + " " + cnf.dps.ToString("0"), 1).Substring(0, 4) != "DONE") { ExitErrTASK(); return; }
                             }
+                            if (_mod.PCAB_CMD(sn, "WrtDPS", 1).Substring(0, 4) != "DONE") { ExitErrTASK(); return; }
                             filePath += "_DPS" + cnf.dps.ToString("00");
                         }
                         if (!runTASK) { ExitCancelTASK(); return; }
@@ -241,6 +242,7 @@ namespace PCAB_Debugger_GUI
                                 //Write ATT State
                                 if (_mod.PCAB_CMD(sn, "SetDSA " + a.ToString("0") + " " + cnf.dsa.ToString("0"), 1).Substring(0, 4) != "DONE") { ExitErrTASK(); return; }
                             }
+                            if (_mod.PCAB_CMD(sn, "WrtDSA", 1).Substring(0, 4) != "DONE") { ExitErrTASK(); return; }
                             filePath += "_DSA" + cnf.dsa.ToString("00");
                         }
                         if (!runTASK) { ExitCancelTASK(); return; }
