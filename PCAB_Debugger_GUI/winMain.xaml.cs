@@ -31,7 +31,7 @@ namespace PCAB_Debugger_GUI
 #if DEBUG
             //Settings.Default.Reset();
             this.Title += "_DEBUG MODE";
-            //CONTL_GRID.IsEnabled = true;
+            CONTL_GRID.IsEnabled = true;
 #endif
             _state = false;
             SERIAL_PORTS_COMBOBOX_RELOAD();
