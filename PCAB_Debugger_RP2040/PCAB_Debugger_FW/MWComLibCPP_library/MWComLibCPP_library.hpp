@@ -25,6 +25,16 @@ class Convert
     static bool TryToUInt16(const std::string &str, const uint8_t &BaseNumber, uint16_t &out);
     static bool TryToUInt32(const std::string &str, const uint8_t &BaseNumber, uint32_t &out);
     static bool TryToUInt64(const std::string &str, const uint8_t &BaseNumber, uint64_t &out);
+
+    /// @brief Serial Line Internet Protocol Encode
+    /// @param dat Original Data
+    /// @return SLIP Data
+    static std::vector<uint8_t> EncodeSLPI(const std::vector<uint8_t> dat);
+    /// @brief Serial Line Internet Protocol Decode
+    /// @param dat SLIP Data
+    /// @param size SLIP Data size
+    /// @return Original Data
+    static std::vector<uint8_t> DecodeSLPI(const std::vector<uint8_t> dat, size_t size);
 };
 
 class String
