@@ -57,6 +57,18 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="cntConfig.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="cntConfigSettings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="cntMonitor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Style.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -80,6 +92,15 @@
     <Compile Include="clsPCAB.cs" />
     <Compile Include="clsPNA835x.cs" />
     <Compile Include="clsSERIAL.cs" />
+    <Compile Include="cntConfig.xaml.cs">
+      <DependentUpon>cntConfig.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="cntConfigSettings.xaml.cs">
+      <DependentUpon>cntConfigSettings.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="cntMonitor.xaml.cs">
+      <DependentUpon>cntMonitor.xaml</DependentUpon>
+    </Compile>
     <Compile Include="winEditor.xaml.cs">
       <DependentUpon>winEditor.xaml</DependentUpon>
     </Compile>
