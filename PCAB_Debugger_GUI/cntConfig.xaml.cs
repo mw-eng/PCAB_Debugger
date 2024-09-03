@@ -1,17 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace PCAB_Debugger_GUI
 {
@@ -23,6 +12,27 @@ namespace PCAB_Debugger_GUI
         public cntConfig()
         {
             InitializeComponent();
+        }
+
+        private void SAVEADDRESS_COMBOBOX_DropDownClosed(object sender, EventArgs e)
+        {
+            if (SAVEADDRESS_COMBOBOX.SelectedIndex < 0) { SAVEADDRESS_COMBOBOX.SelectedIndex = 0; }
+        }
+
+        private void LOADMEM_Click(object sender, RoutedEventArgs e)
+        {
+        }
+
+        private void RESET_Click(object sender, RoutedEventArgs e)
+        {
+        }
+
+        private void SAVEMEM_Click(object sender, RoutedEventArgs e)
+        {
+        }
+
+        private void WRITE_Click(object sender, RoutedEventArgs e)
+        {
         }
     }
 }
