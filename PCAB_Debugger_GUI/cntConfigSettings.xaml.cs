@@ -440,147 +440,163 @@ namespace PCAB_Debugger_GUI
         private void ALL_DSA_CHECKBOX_Checked(object sender, RoutedEventArgs e)
         {
             ALL_DSA_COMBOBOX.IsEnabled = true;
-            foreach (object objBf in Port_GRID.Children)
-            {
-                if (typeof(Grid) == objBf.GetType())
-                {
-                    if (Regex.IsMatch(((Grid)objBf).Name, "P[0-1][0-9]_GRID") && ((Grid)objBf).Name != "P16_GRID")
-                    {
-                        foreach (object objChild in ((Grid)objBf).Children)
-                        {
-                            if (typeof(ComboBox) == objChild.GetType())
-                            {
-                                if (Regex.IsMatch(((ComboBox)objChild).Name, "DSA[0-1][0-9]_COMBOBOX"))
-                                {
-                                    ((ComboBox)objChild).IsEnabled = false;
-                                    ((ComboBox)objChild).SelectedIndex = ALL_DSA_COMBOBOX.SelectedIndex;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+            DSA01_COMBOBOX.IsEnabled = false;
+            DSA02_COMBOBOX.IsEnabled = false;
+            DSA03_COMBOBOX.IsEnabled = false;
+            DSA04_COMBOBOX.IsEnabled = false;
+            DSA05_COMBOBOX.IsEnabled = false;
+            DSA06_COMBOBOX.IsEnabled = false;
+            DSA07_COMBOBOX.IsEnabled = false;
+            DSA08_COMBOBOX.IsEnabled = false;
+            DSA09_COMBOBOX.IsEnabled = false;
+            DSA10_COMBOBOX.IsEnabled = false;
+            DSA11_COMBOBOX.IsEnabled = false;
+            DSA12_COMBOBOX.IsEnabled = false;
+            DSA13_COMBOBOX.IsEnabled = false;
+            DSA14_COMBOBOX.IsEnabled = false;
+            DSA15_COMBOBOX.IsEnabled = false;
+            DSA01_COMBOBOX.SelectedIndex = ALL_DSA_COMBOBOX.SelectedIndex;
+            DSA02_COMBOBOX.SelectedIndex = ALL_DSA_COMBOBOX.SelectedIndex;
+            DSA03_COMBOBOX.SelectedIndex = ALL_DSA_COMBOBOX.SelectedIndex;
+            DSA04_COMBOBOX.SelectedIndex = ALL_DSA_COMBOBOX.SelectedIndex;
+            DSA05_COMBOBOX.SelectedIndex = ALL_DSA_COMBOBOX.SelectedIndex;
+            DSA06_COMBOBOX.SelectedIndex = ALL_DSA_COMBOBOX.SelectedIndex;
+            DSA07_COMBOBOX.SelectedIndex = ALL_DSA_COMBOBOX.SelectedIndex;
+            DSA08_COMBOBOX.SelectedIndex = ALL_DSA_COMBOBOX.SelectedIndex;
+            DSA09_COMBOBOX.SelectedIndex = ALL_DSA_COMBOBOX.SelectedIndex;
+            DSA10_COMBOBOX.SelectedIndex = ALL_DSA_COMBOBOX.SelectedIndex;
+            DSA11_COMBOBOX.SelectedIndex = ALL_DSA_COMBOBOX.SelectedIndex;
+            DSA12_COMBOBOX.SelectedIndex = ALL_DSA_COMBOBOX.SelectedIndex;
+            DSA13_COMBOBOX.SelectedIndex = ALL_DSA_COMBOBOX.SelectedIndex;
+            DSA14_COMBOBOX.SelectedIndex = ALL_DSA_COMBOBOX.SelectedIndex;
+            DSA15_COMBOBOX.SelectedIndex = ALL_DSA_COMBOBOX.SelectedIndex;
         }
 
         private void ALL_DSA_CHECKBOX_Unchecked(object sender, RoutedEventArgs e)
         {
             ALL_DSA_COMBOBOX.IsEnabled = false;
 
-            foreach (object objBf in Port_GRID.Children)
-            {
-                if (typeof(Grid) == objBf.GetType())
-                {
-                    if (Regex.IsMatch(((Grid)objBf).Name, "P[0-1][0-9]_GRID") && ((Grid)objBf).Name != "P16_GRID")
-                    {
-                        foreach (object objChild in ((Grid)objBf).Children)
-                        {
-                            if (typeof(ComboBox) == objChild.GetType())
-                            {
-                                if (Regex.IsMatch(((ComboBox)objChild).Name, "DSA[0-1][0-9]_COMBOBOX"))
-                                {
-                                    ((ComboBox)objChild).IsEnabled = true;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+            DSA01_COMBOBOX.IsEnabled = true;
+            DSA02_COMBOBOX.IsEnabled = true;
+            DSA03_COMBOBOX.IsEnabled = true;
+            DSA04_COMBOBOX.IsEnabled = true;
+            DSA05_COMBOBOX.IsEnabled = true;
+            DSA06_COMBOBOX.IsEnabled = true;
+            DSA07_COMBOBOX.IsEnabled = true;
+            DSA08_COMBOBOX.IsEnabled = true;
+            DSA09_COMBOBOX.IsEnabled = true;
+            DSA10_COMBOBOX.IsEnabled = true;
+            DSA11_COMBOBOX.IsEnabled = true;
+            DSA12_COMBOBOX.IsEnabled = true;
+            DSA13_COMBOBOX.IsEnabled = true;
+            DSA14_COMBOBOX.IsEnabled = true;
+            DSA15_COMBOBOX.IsEnabled = true;
         }
 
         private void ALL_DPS_CHECKBOX_Checked(object sender, RoutedEventArgs e)
         {
             ALL_DPS_COMBOBOX.IsEnabled = true;
-            foreach (object objBf in Port_GRID.Children)
-            {
-                if (typeof(Grid) == objBf.GetType())
-                {
-                    if (Regex.IsMatch(((Grid)objBf).Name, "P[0-1][0-9]_GRID"))
-                    {
-                        foreach (object objChild in ((Grid)objBf).Children)
-                        {
-                            if (typeof(ComboBox) == objChild.GetType())
-                            {
-                                if (Regex.IsMatch(((ComboBox)objChild).Name, "DPS[0-1][0-9]_COMBOBOX"))
-                                {
-                                    ((ComboBox)objChild).IsEnabled = false;
-                                    ((ComboBox)objChild).SelectedIndex = ALL_DPS_COMBOBOX.SelectedIndex;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+            DPS01_COMBOBOX.IsEnabled = false;
+            DPS02_COMBOBOX.IsEnabled = false;
+            DPS03_COMBOBOX.IsEnabled = false;
+            DPS04_COMBOBOX.IsEnabled = false;
+            DPS05_COMBOBOX.IsEnabled = false;
+            DPS06_COMBOBOX.IsEnabled = false;
+            DPS07_COMBOBOX.IsEnabled = false;
+            DPS08_COMBOBOX.IsEnabled = false;
+            DPS09_COMBOBOX.IsEnabled = false;
+            DPS10_COMBOBOX.IsEnabled = false;
+            DPS11_COMBOBOX.IsEnabled = false;
+            DPS12_COMBOBOX.IsEnabled = false;
+            DPS13_COMBOBOX.IsEnabled = false;
+            DPS14_COMBOBOX.IsEnabled = false;
+            DPS15_COMBOBOX.IsEnabled = false;
+            DPS01_COMBOBOX.SelectedIndex = ALL_DPS_COMBOBOX.SelectedIndex;
+            DPS02_COMBOBOX.SelectedIndex = ALL_DPS_COMBOBOX.SelectedIndex;
+            DPS03_COMBOBOX.SelectedIndex = ALL_DPS_COMBOBOX.SelectedIndex;
+            DPS04_COMBOBOX.SelectedIndex = ALL_DPS_COMBOBOX.SelectedIndex;
+            DPS05_COMBOBOX.SelectedIndex = ALL_DPS_COMBOBOX.SelectedIndex;
+            DPS06_COMBOBOX.SelectedIndex = ALL_DPS_COMBOBOX.SelectedIndex;
+            DPS07_COMBOBOX.SelectedIndex = ALL_DPS_COMBOBOX.SelectedIndex;
+            DPS08_COMBOBOX.SelectedIndex = ALL_DPS_COMBOBOX.SelectedIndex;
+            DPS09_COMBOBOX.SelectedIndex = ALL_DPS_COMBOBOX.SelectedIndex;
+            DPS10_COMBOBOX.SelectedIndex = ALL_DPS_COMBOBOX.SelectedIndex;
+            DPS11_COMBOBOX.SelectedIndex = ALL_DPS_COMBOBOX.SelectedIndex;
+            DPS12_COMBOBOX.SelectedIndex = ALL_DPS_COMBOBOX.SelectedIndex;
+            DPS13_COMBOBOX.SelectedIndex = ALL_DPS_COMBOBOX.SelectedIndex;
+            DPS14_COMBOBOX.SelectedIndex = ALL_DPS_COMBOBOX.SelectedIndex;
+            DPS15_COMBOBOX.SelectedIndex = ALL_DPS_COMBOBOX.SelectedIndex;
         }
 
         private void ALL_DPS_CHECKBOX_Unchecked(object sender, RoutedEventArgs e)
         {
             ALL_DPS_COMBOBOX.IsEnabled = false;
-            foreach (object objBf in Port_GRID.Children)
-            {
-                if (typeof(Grid) == objBf.GetType())
-                {
-                    if (Regex.IsMatch(((Grid)objBf).Name, "P[0-1][0-9]_GRID"))
-                    {
-                        foreach (object objChild in ((Grid)objBf).Children)
-                        {
-                            if (typeof(ComboBox) == objChild.GetType())
-                            {
-                                if (Regex.IsMatch(((ComboBox)objChild).Name, "DPS[0-1][0-9]_COMBOBOX"))
-                                {
-                                    ((ComboBox)objChild).IsEnabled = true;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+            DPS01_COMBOBOX.IsEnabled = true;
+            DPS02_COMBOBOX.IsEnabled = true;
+            DPS03_COMBOBOX.IsEnabled = true;
+            DPS04_COMBOBOX.IsEnabled = true;
+            DPS05_COMBOBOX.IsEnabled = true;
+            DPS06_COMBOBOX.IsEnabled = true;
+            DPS07_COMBOBOX.IsEnabled = true;
+            DPS08_COMBOBOX.IsEnabled = true;
+            DPS09_COMBOBOX.IsEnabled = true;
+            DPS10_COMBOBOX.IsEnabled = true;
+            DPS11_COMBOBOX.IsEnabled = true;
+            DPS12_COMBOBOX.IsEnabled = true;
+            DPS13_COMBOBOX.IsEnabled = true;
+            DPS14_COMBOBOX.IsEnabled = true;
+            DPS15_COMBOBOX.IsEnabled = true;
         }
 
         private void ALL_DSA_COMBOBOX_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (Port_GRID == null) { return; }
-            foreach (object objBf in Port_GRID.Children)
+            try
             {
-                if (typeof(Grid) == objBf.GetType())
-                {
-                    if (Regex.IsMatch(((Grid)objBf).Name, "P[0-1][0-9]_GRID") && ((Grid)objBf).Name != "P16_GRID")
-                    {
-                        foreach (object objChild in ((Grid)objBf).Children)
-                        {
-                            if (typeof(ComboBox) == objChild.GetType())
-                            {
-                                if (Regex.IsMatch(((ComboBox)objChild).Name, "DSA[0-1][0-9]_COMBOBOX"))
-                                {
-                                    ((ComboBox)objChild).SelectedIndex = ALL_DSA_COMBOBOX.SelectedIndex;
-                                }
-                            }
-                        }
-                    }
-                }
+                DSA01_COMBOBOX.SelectedIndex = ALL_DSA_COMBOBOX.SelectedIndex;
+                DSA02_COMBOBOX.SelectedIndex = ALL_DSA_COMBOBOX.SelectedIndex;
+                DSA03_COMBOBOX.SelectedIndex = ALL_DSA_COMBOBOX.SelectedIndex;
+                DSA04_COMBOBOX.SelectedIndex = ALL_DSA_COMBOBOX.SelectedIndex;
+                DSA05_COMBOBOX.SelectedIndex = ALL_DSA_COMBOBOX.SelectedIndex;
+                DSA06_COMBOBOX.SelectedIndex = ALL_DSA_COMBOBOX.SelectedIndex;
+                DSA07_COMBOBOX.SelectedIndex = ALL_DSA_COMBOBOX.SelectedIndex;
+                DSA08_COMBOBOX.SelectedIndex = ALL_DSA_COMBOBOX.SelectedIndex;
+                DSA09_COMBOBOX.SelectedIndex = ALL_DSA_COMBOBOX.SelectedIndex;
+                DSA10_COMBOBOX.SelectedIndex = ALL_DSA_COMBOBOX.SelectedIndex;
+                DSA11_COMBOBOX.SelectedIndex = ALL_DSA_COMBOBOX.SelectedIndex;
+                DSA12_COMBOBOX.SelectedIndex = ALL_DSA_COMBOBOX.SelectedIndex;
+                DSA13_COMBOBOX.SelectedIndex = ALL_DSA_COMBOBOX.SelectedIndex;
+                DSA14_COMBOBOX.SelectedIndex = ALL_DSA_COMBOBOX.SelectedIndex;
+                DSA15_COMBOBOX.SelectedIndex = ALL_DSA_COMBOBOX.SelectedIndex;
+            }
+            catch (Exception ex)
+            {
+                if (ex.HResult != -2147467261) { throw; }
             }
         }
 
         private void ALL_DPS_COMBOBOX_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (Port_GRID == null) { return; }
-            foreach (object objBf in Port_GRID.Children)
+            try
             {
-                if (typeof(Grid) == objBf.GetType())
-                {
-                    if (Regex.IsMatch(((Grid)objBf).Name, "P[0-1][0-9]_GRID"))
-                    {
-                        foreach (object objChild in ((Grid)objBf).Children)
-                        {
-                            if (typeof(ComboBox) == objChild.GetType())
-                            {
-                                if (Regex.IsMatch(((ComboBox)objChild).Name, "DPS[0-1][0-9]_COMBOBOX"))
-                                {
-                                    ((ComboBox)objChild).SelectedIndex = ALL_DPS_COMBOBOX.SelectedIndex;
-                                }
-                            }
-                        }
-                    }
-                }
+                DPS01_COMBOBOX.SelectedIndex = ALL_DPS_COMBOBOX.SelectedIndex;
+                DPS02_COMBOBOX.SelectedIndex = ALL_DPS_COMBOBOX.SelectedIndex;
+                DPS03_COMBOBOX.SelectedIndex = ALL_DPS_COMBOBOX.SelectedIndex;
+                DPS04_COMBOBOX.SelectedIndex = ALL_DPS_COMBOBOX.SelectedIndex;
+                DPS05_COMBOBOX.SelectedIndex = ALL_DPS_COMBOBOX.SelectedIndex;
+                DPS06_COMBOBOX.SelectedIndex = ALL_DPS_COMBOBOX.SelectedIndex;
+                DPS07_COMBOBOX.SelectedIndex = ALL_DPS_COMBOBOX.SelectedIndex;
+                DPS08_COMBOBOX.SelectedIndex = ALL_DPS_COMBOBOX.SelectedIndex;
+                DPS09_COMBOBOX.SelectedIndex = ALL_DPS_COMBOBOX.SelectedIndex;
+                DPS10_COMBOBOX.SelectedIndex = ALL_DPS_COMBOBOX.SelectedIndex;
+                DPS11_COMBOBOX.SelectedIndex = ALL_DPS_COMBOBOX.SelectedIndex;
+                DPS12_COMBOBOX.SelectedIndex = ALL_DPS_COMBOBOX.SelectedIndex;
+                DPS13_COMBOBOX.SelectedIndex = ALL_DPS_COMBOBOX.SelectedIndex;
+                DPS14_COMBOBOX.SelectedIndex = ALL_DPS_COMBOBOX.SelectedIndex;
+                DPS15_COMBOBOX.SelectedIndex = ALL_DPS_COMBOBOX.SelectedIndex;
+            }
+            catch (Exception ex)
+            {
+                if (ex.HResult != -2147467261) { throw; }
             }
         }
     }

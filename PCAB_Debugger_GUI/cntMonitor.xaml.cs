@@ -258,6 +258,16 @@ namespace PCAB_Debugger_GUI
                 }
             }
         }
+        public string TITLE
+        {
+            get { return LABEL_TITLE.Content.ToString(); }
+            set
+            {
+                LABEL_TITLE.Content = value;
+                if (string.IsNullOrWhiteSpace(value)) { GRID_TITLE.Height = new GridLength(0, GridUnitType.Star); }
+                else { GRID_TITLE.Height = new GridLength(1, GridUnitType.Star); }
+            }
+        }
 
         public string GetTempID(uint id)
         {
@@ -450,6 +460,7 @@ namespace PCAB_Debugger_GUI
             SNSpin = "---";
             SNSvd = "---";
             SNSid = "---";
+            TITLE = "";
             for (uint i = 1; i < 16; i++)
             {
                 SetTempID(i, "ND");
