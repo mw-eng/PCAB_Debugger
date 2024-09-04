@@ -10,6 +10,7 @@ namespace PCAB_Debugger_GUI
     public partial class cntMonitor : UserControl
     {
         #region Property
+        public uint ID {  get; set; }
         public string TEMPcpu
         {
             get { return SNS_CPU_TEMP_LABEL.Content.ToString(); }
@@ -452,8 +453,10 @@ namespace PCAB_Debugger_GUI
             }
         }
         #endregion
-        public cntMonitor()
+        public cntMonitor() : this(0) { }
+        public cntMonitor(uint id)
         {
+            this.ID = id;
             InitializeComponent();
             TEMPcpu = "---";
             SNSvin = "---";

@@ -57,6 +57,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="winMonitor.xaml.cs">
+      <DependentUpon>winMonitor.xaml</DependentUpon>
+    </Compile>
     <Page Include="cntConfig.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -111,6 +114,10 @@
       <DependentUpon>winMain.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="winMonitor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
