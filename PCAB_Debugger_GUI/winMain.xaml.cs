@@ -1116,6 +1116,7 @@ namespace PCAB_Debugger_GUI
         {
 
             monitor.TEMPviewIDs = !monitor.TEMPviewIDs;
+            config.CONFIG_SETTINGS.SetDSA(5, 10);
             
         }
     }

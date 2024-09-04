@@ -1,19 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace PCAB_Debugger_GUI
 {
@@ -22,30 +9,31 @@ namespace PCAB_Debugger_GUI
     /// </summary>
     public partial class cntMonitor : UserControl
     {
+        #region Property
         public string TEMPcpu
         {
             get { return SNS_CPU_TEMP_LABEL.Content.ToString(); }
             set { SNS_CPU_TEMP_LABEL.Content = value; }
-        }
-        public string SNSpin
-        {
-            get { return SNS_PIN_LABEL.Content.ToString(); }
-            set { SNS_PIN_LABEL.Content = value; }
         }
         public string SNSvin
         {
             get { return SNS_VIN_LABEL.Content.ToString(); }
             set { SNS_VIN_LABEL.Content = value; }
         }
-        public string SNSid
+        public string SNSpin
         {
-            get { return SNS_ID_LABEL.Content.ToString(); }
-            set { SNS_ID_LABEL.Content = value; }
+            get { return SNS_PIN_LABEL.Content.ToString(); }
+            set { SNS_PIN_LABEL.Content = value; }
         }
         public string SNSvd
         {
             get { return SNS_VD_LABEL.Content.ToString(); }
             set { SNS_VD_LABEL.Content = value; }
+        }
+        public string SNSid
+        {
+            get { return SNS_ID_LABEL.Content.ToString(); }
+            set { SNS_ID_LABEL.Content = value; }
         }
         public string TEMP01ID
         {
@@ -271,24 +259,44 @@ namespace PCAB_Debugger_GUI
             }
         }
 
-        public cntMonitor()
-        {
-            InitializeComponent();
-            TEMPviewIDs = false;
-            TEMPcpu = "---";
-        }
-
         public string GetTempID(uint id)
         {
             switch (id)
             {
                 case 1:
                     return TEMP01ID;
+                case 2:
+                    return TEMP02ID;
+                case 3:
+                    return TEMP03ID;
+                case 4:
+                    return TEMP04ID;
+                case 5:
+                    return TEMP05ID;
+                case 6:
+                    return TEMP06ID;
+                case 7:
+                    return TEMP07ID;
+                case 8:
+                    return TEMP08ID;
+                case 9:
+                    return TEMP09ID;
+                case 10:
+                    return TEMP10ID;
+                case 11:
+                    return TEMP11ID;
+                case 12:
+                    return TEMP12ID;
+                case 13:
+                    return TEMP13ID;
+                case 14:
+                    return TEMP14ID;
+                case 15:
+                    return TEMP15ID;
                 default:
                     throw new ArgumentException("A non-existent TEMP number was specified.", "GetTempID[" + id + "]");
             }
         }
-
         public void SetTempID(uint id, string tempID)
         {
             switch (id)
@@ -296,22 +304,90 @@ namespace PCAB_Debugger_GUI
                 case 1:
                     TEMP01ID = tempID;
                     break;
+                case 2:
+                    TEMP02ID = tempID;
+                    break;
+                case 3:
+                    TEMP03ID = tempID;
+                    break;
+                case 4:
+                    TEMP04ID = tempID;
+                    break;
+                case 5:
+                    TEMP05ID = tempID;
+                    break;
+                case 6:
+                    TEMP06ID = tempID;
+                    break;
+                case 7:
+                    TEMP07ID = tempID;
+                    break;
+                case 8:
+                    TEMP08ID = tempID;
+                    break;
+                case 9:
+                    TEMP09ID = tempID;
+                    break;
+                case 10:
+                    TEMP10ID = tempID;
+                    break;
+                case 11:
+                    TEMP11ID = tempID;
+                    break;
+                case 12:
+                    TEMP12ID = tempID;
+                    break;
+                case 13:
+                    TEMP13ID = tempID;
+                    break;
+                case 14:
+                    TEMP14ID = tempID;
+                    break;
+                case 15:
+                    TEMP15ID = tempID;
+                    break;
                 default:
-                    throw new ArgumentException("A non-existent TEMP number was specified.", "GetTempID[" + id + "]");
+                    throw new ArgumentException("A non-existent TEMP number was specified.", "SetTempID[" + id + "]");
             }
         }
-
         public string GetTempValue(uint id)
         {
             switch (id)
             {
                 case 1:
                     return TEMP01VALUE;
+                case 2:
+                    return TEMP02VALUE;
+                case 3:
+                    return TEMP03VALUE;
+                case 4:
+                    return TEMP04VALUE;
+                case 5:
+                    return TEMP05VALUE;
+                case 6:
+                    return TEMP06VALUE;
+                case 7:
+                    return TEMP07VALUE;
+                case 8:
+                    return TEMP08VALUE;
+                case 9:
+                    return TEMP09VALUE;
+                case 10:
+                    return TEMP10VALUE;
+                case 11:
+                    return TEMP11VALUE;
+                case 12:
+                    return TEMP12VALUE;
+                case 13:
+                    return TEMP13VALUE;
+                case 14:
+                    return TEMP14VALUE;
+                case 15:
+                    return TEMP15VALUE;
                 default:
-                    throw new ArgumentException("A non-existent TEMP number was specified.", "GetTempID[" + id + "]");
+                    throw new ArgumentException("A non-existent TEMP number was specified.", "GetTempValue[" + id + "]");
             }
         }
-
         public void SetTempValue(uint id, string tempValue)
         {
             switch (id)
@@ -319,9 +395,67 @@ namespace PCAB_Debugger_GUI
                 case 1:
                     TEMP01VALUE = tempValue;
                     break;
+                case 2:
+                    TEMP02VALUE = tempValue;
+                    break;
+                case 3:
+                    TEMP03VALUE = tempValue;
+                    break;
+                case 4:
+                    TEMP04VALUE = tempValue;
+                    break;
+                case 5:
+                    TEMP05VALUE = tempValue;
+                    break;
+                case 6:
+                    TEMP06VALUE = tempValue;
+                    break;
+                case 7:
+                    TEMP07VALUE = tempValue;
+                    break;
+                case 8:
+                    TEMP08VALUE = tempValue;
+                    break;
+                case 9:
+                    TEMP09VALUE = tempValue;
+                    break;
+                case 10:
+                    TEMP10VALUE = tempValue;
+                    break;
+                case 11:
+                    TEMP11VALUE = tempValue;
+                    break;
+                case 12:
+                    TEMP12VALUE = tempValue;
+                    break;
+                case 13:
+                    TEMP13VALUE = tempValue;
+                    break;
+                case 14:
+                    TEMP14VALUE = tempValue;
+                    break;
+                case 15:
+                    TEMP15VALUE = tempValue;
+                    break;
                 default:
-                    throw new ArgumentException("A non-existent TEMP number was specified.", "GetTempID[" + id + "]");
+                    throw new ArgumentException("A non-existent TEMP number was specified.", "SetTempValue[" + id + "]");
             }
+        }
+        #endregion
+        public cntMonitor()
+        {
+            InitializeComponent();
+            TEMPcpu = "---";
+            SNSvin = "---";
+            SNSpin = "---";
+            SNSvd = "---";
+            SNSid = "---";
+            for (uint i = 1; i < 16; i++)
+            {
+                SetTempID(i, "ND");
+                SetTempValue(i, "---");
+            }
+            TEMPviewIDs = false;
         }
     }
 

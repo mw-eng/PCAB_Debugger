@@ -153,6 +153,7 @@ namespace PCAB_Debugger_GUI
                     default:
                         throw new ArgumentException("A non-existent DSA number was specified.", "SetDSA[" + number + "]");
                 }
+                if(ALL_DSA_CHECKBOX.IsChecked == true) { ALL_DSA_CHECKBOX.IsChecked = false; }
             }
             catch (Exception ex)
             {
@@ -253,6 +254,7 @@ namespace PCAB_Debugger_GUI
                     default:
                         throw new ArgumentException("A non-existent DPS number was specified.", "SetDPS[" + number + "]");
                 }
+                if (ALL_DSA_CHECKBOX.IsChecked == true) { ALL_DSA_CHECKBOX.IsChecked = false; }
             }
             catch (Exception ex)
             {
@@ -463,6 +465,7 @@ namespace PCAB_Debugger_GUI
         private void ALL_DSA_CHECKBOX_Unchecked(object sender, RoutedEventArgs e)
         {
             ALL_DSA_COMBOBOX.IsEnabled = false;
+
             foreach (object objBf in Port_GRID.Children)
             {
                 if (typeof(Grid) == objBf.GetType())
