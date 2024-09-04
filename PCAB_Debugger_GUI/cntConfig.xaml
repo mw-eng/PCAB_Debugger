@@ -27,7 +27,7 @@
             <RowDefinition Height="18*"/>
             <RowDefinition Height="2*"/>
         </Grid.RowDefinitions>
-        <local:cntConfigSettings />
+        <local:cntConfigSettings x:Name="CONFIG_SETTINGS" />
         <Grid Grid.Row="1" Margin="5" Background="#FFFF9999">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="3*"/>
