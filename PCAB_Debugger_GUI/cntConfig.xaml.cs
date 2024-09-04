@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
+using static PCAB_Debugger_GUI.cntConfigSettings;
 
 namespace PCAB_Debugger_GUI
 {
@@ -9,6 +11,18 @@ namespace PCAB_Debugger_GUI
     /// </summary>
     public partial class cntConfig : UserControl
     {
+        public enum ButtonCategory
+        {
+            LOADMEM,
+            SAVEMEM,
+            RESET,
+            WRITEDSA,
+            WRITEDPS,
+            WRITE,
+            NULL
+        }
+        public delegate void ButtonClickEventHandler(object sender, RoutedEventArgs e, ButtonCategory category);
+        public event ButtonClickEventHandler ButtonClickEvent;
         public cntConfig()
         {
             InitializeComponent();
@@ -21,18 +35,37 @@ namespace PCAB_Debugger_GUI
 
         private void LOADMEM_Click(object sender, RoutedEventArgs e)
         {
-        }
-
-        private void RESET_Click(object sender, RoutedEventArgs e)
-        {
+            ButtonClickEvent?.Invoke(sender, e, ButtonCategory.LOADMEM);
         }
 
         private void SAVEMEM_Click(object sender, RoutedEventArgs e)
         {
+            ButtonClickEvent?.Invoke(sender, e, ButtonCategory.SAVEMEM);
+        }
+
+        private void RESET_Click(object sender, RoutedEventArgs e)
+        {
+            ButtonClickEvent?.Invoke(sender, e, ButtonCategory.RESET);
         }
 
         private void WRITE_Click(object sender, RoutedEventArgs e)
         {
+            if (sender is Button)
+            {
+                Button btn = (Button)sender;
+                switch (btn.Name)
+                {
+                    case "WRITEDSA":
+                        ButtonClickEvent?.Invoke(sender, e, ButtonCategory.WRITEDSA);
+                        break;
+                    case "WRITEDPS":
+                        ButtonClickEvent?.Invoke(sender, e, ButtonCategory.WRITEDPS);
+                        break;
+                    case "WRITE":
+                        ButtonClickEvent?.Invoke(sender, e, ButtonCategory.WRITE);
+                        break;
+                }
+            }
         }
     }
 }

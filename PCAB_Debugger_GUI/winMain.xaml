@@ -65,7 +65,6 @@
                     <TextBox Grid.Column="1" x:Name="SERIAL_NUMBERS_TEXTBOX" Style="{StaticResource EDIT_TEXT_LINE}" TextWrapping="Wrap" Text="0000" Margin="5" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" PreviewTextInput="SN_TextBox_PreviewTextInput" CommandManager.PreviewExecuted="SN_TextBox_PreviewExecuted" PreviewLostKeyboardFocus="SN_TextBox_PreviewLostKeyboardForcus" FontSize="16"/>
                 </Grid>
             </Grid>
-            <Button Content="Button" HorizontalAlignment="Left" Margin="131,10,0,0" VerticalAlignment="Top" Height="35" Width="68" Click="Button_Click"/>
         </Grid>
         <Grid Grid.Row="1" x:Name="CONTL_GRID" IsEnabled="False" Background="#FFFFCBF4">
             <Grid.RowDefinitions>

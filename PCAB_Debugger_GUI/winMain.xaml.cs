@@ -1111,13 +1111,5 @@ namespace PCAB_Debugger_GUI
                 }
             }
         }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-
-            monitor.TEMPviewIDs = !monitor.TEMPviewIDs;
-            config.CONFIG_SETTINGS.SetDSA(5, 10);
-            
-        }
     }
 }
