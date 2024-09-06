@@ -108,7 +108,8 @@ OROM {x-yz} {HEX} | Overwrite sector data to ROM.<br>{x-yz} : Specify the *block
 </details>
 
 <details>
-<summary>Binary Communication Mode command *Support with v1.3.3 or later*</summary>
+<summary>Binary Communication Mode command</summary>
+*Support with v1.3.3 or later*
 
 Command Code | Description
 :--|:--
