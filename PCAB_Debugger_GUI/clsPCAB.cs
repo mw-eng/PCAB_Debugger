@@ -8,6 +8,32 @@ using System.Collections.Generic;
 
 namespace PCAB_Debugger_GUI
 {
+    public class PCAB_SerialInterface
+    {
+        private SerialPort _serialport;
+        private List<PCAB_UnitInterface> pcabUNITs;
+    }
+
+    public class PCAB_UnitInterface
+    {
+        private string _name;
+        private cntConfig _config;
+        private cntMonitor _monitor;
+
+        public PCAB_UnitInterface(string name, cntConfig config, cntMonitor monitor)
+        {
+            _name = name;
+            _config = config;
+            _monitor = monitor;
+        }
+    }
+
+    public class PCAB_CommandInterface
+    {
+
+
+    }
+
     public class PCAB
     {
         private bool? _task;    //true:run / false:stop / null:Interrupt
@@ -38,9 +64,11 @@ namespace PCAB_Debugger_GUI
             CondNOW = new condDAT();
             DAT = new List<condDAT>();
             //_mod.BaudRate = 9600;
-            _mod.BaudRate = 115200;
+            //_mod.BaudRate = 115200;
+            _mod.BaudRate = 3686400;
             _mod.DataBits = 8;
-            _mod.Parity = Parity.None;
+            //_mod.Parity = Parity.None;
+            _mod.Parity = Parity.Even;
             _mod.StopBits = StopBits.One;
             _mod.Handshake = Handshake.None;
             _mod.DtrEnable = true;

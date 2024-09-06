@@ -1,7 +1,7 @@
 //#define DEBUG_BOOT_MODE 0x03
 //#define DEBUG_BOOT_MODE 0x0A
 //#define DEBUG_BOOT_MODE 0x0F
-//#define DEBUG_RASPICO
+#define DEBUG_RASPICO
 
 #include "PCAB_Debugger_FW.hpp"
 #define SNPRINTF_BUFFER_LEN 50
@@ -42,6 +42,7 @@ bool stbAMP = false;
 bool stbDRA = false;
 bool stbLNA = false;
 bool lowMODE = false;
+bool modeSLPI = false;
 
 
 void setup()
@@ -51,7 +52,12 @@ void setup()
     analog = new adc(true, true, true, true , 3.3f);
     spi_dps = new spi(spi0, SPI_CLK, SPI0_CLK_PIN, SPI0_TX_PIN, SPI0_RX_PIN, SPI0_LE_PIN, SPI_BITS, SPI_MODE, SPI_ORDER);
     spi_dsa = new spi(spi1, SPI_CLK, SPI1_CLK_PIN, SPI1_TX_PIN, SPI1_RX_PIN, SPI1_LE_PIN, SPI_BITS, SPI_MODE, SPI_ORDER);
-    uart = new pcabCMD(UART_TX_PIN, UART_RX_PIN, UART_BAUD_RATE, RS485_DE_PIN);
+    //uart = new pcabCMD(UART_TX_PIN, UART_RX_PIN, UART_BAUD_RATE, RS485_DE_PIN);
+#ifdef UART_PARITY_ENABLE
+    uart = new pcabCMD(uart0, UART_TX_PIN, UART_RX_PIN, UART_BAUD_RATE, UART_DATA_BITS, UART_STOP_BIT, UART_PARITY_EVEN, false, false, "\r\n", RS485_DE_PIN);
+#else
+    uart = new pcabCMD(uart0, UART_TX_PIN, UART_RX_PIN, UART_BAUD_RATE, UART_DATA_BITS, UART_STOP_BIT, UART_PARITY_NONE, false, false, "\r\n", RS485_DE_PIN);
+#endif
     //GPIO Setup
     gpio_init(LPW_MOD_PIN);
     gpio_init(STB_DRA_PIN);
@@ -122,7 +128,7 @@ int main()
     setup();
     while (1)
     {
-        pcabCMD::CommandLine cmd = uart->readCMD(modeECHO);
+        pcabCMD::CommandLine cmd = uart->readCMD(modeECHO, modeSLPI);
         if((cmd.serialNum.size() > 0 && (String::strCompare(cmd.serialNum, "*", true) || String::strCompare(cmd.serialNum, serialNum, true))) || (cmd.serialNum.size() == 0 && cmd.romID == romID))
         {
             if(modeECHO || modeCUI){uart->writeLine("");}

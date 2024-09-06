@@ -187,55 +187,6 @@ bool Convert::TryToUInt64(const std::string &str, const uint8_t &BaseNumber, uin
     return true;
 }
 
-
-std::vector<uint8_t> EncodeSLPI(const std::vector<uint8_t> &dat)
-{
-    std::vector<uint8_t> slpi;
-    slpi.clear();
-    for(uint8_t d : dat)
-    {
-        switch (d)
-        {
-        case 0xC0:
-            slpi.push_back(0xDB);
-            slpi.push_back(0xDC);
-            break;
-        case 0xDB:
-            slpi.push_back(0xDB);
-            slpi.push_back(0xDD);
-            break;
-        default:
-            slpi.push_back(d);
-            break;
-        }
-    }
-    return slpi;
-}
-std::vector<uint8_t> DecodeSLPI(const std::vector<uint8_t> &dat, size_t size)
-{
-    std::vector<uint8_t> slpi;
-    slpi.clear();
-
-    for(size_t i = 0; i < size; ++i)
-    {
-        switch (dat[i])
-        {
-        case 0xC0:
-            return slpi;
-            break;
-        case 0xDB:
-            if(dat[i + 1] == 0xDC) { slpi.push_back(0xC0); }
-            else if(dat[i + 1] == 0xDD) { slpi.push_back(0xDB); }
-            ++i;
-        default:
-            slpi.push_back(dat[i]);
-            break;
-        }
-    }
-    return slpi;
-}
-
-
 std::string String::ltrim(const std::string &str, const std::string &targ)
 {
     size_t start = str.find_first_not_of(targ);

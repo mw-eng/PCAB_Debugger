@@ -24,6 +24,60 @@ uartSYNC::uartSYNC() : uartSYNC(0, 1, 9600){}
 
 uartSYNC::~uartSYNC() {}
 
+/// @brief Serial Line Internet Protocol Encode
+/// @param dat Original Data
+/// @return SLIP Data
+std::vector<uint8_t> EncodeSLIP(const std::vector<uint8_t> &dat)
+{
+    std::vector<uint8_t> slip;
+    slip.clear();
+    for(uint8_t d : dat)
+    {
+        switch (d)
+        {
+        case 0xC0:
+            slip.push_back(0xDB);
+            slip.push_back(0xDC);
+            break;
+        case 0xDB:
+            slip.push_back(0xDB);
+            slip.push_back(0xDD);
+            break;
+        default:
+            slip.push_back(d);
+            break;
+        }
+    }
+    return slip;
+}
+
+ /// @brief Serial Line Internet Protocol Decode
+ /// @param dat SLIP Data
+ /// @return Original Data
+std::vector<uint8_t> DecodeSLIP(const std::vector<uint8_t> &dat)
+{
+    std::vector<uint8_t> slip;
+    slip.clear();
+
+    for(size_t i = 0; i < dat.size(); ++i)
+    {
+        switch (dat[i])
+        {
+        case 0xC0:
+            return slip;
+        case 0xDB:
+            if(dat[i + 1] == 0xDC) { slip.push_back(0xC0); }
+            else if(dat[i + 1] == 0xDD) { slip.push_back(0xDB); }
+            ++i;
+            break;
+        default:
+            slip.push_back(dat[i]);
+            break;
+        }
+    }
+    return slip;
+}
+
 std::string uartSYNC::readLine(bool echo)
 {
     char chBF;
@@ -31,43 +85,34 @@ std::string uartSYNC::readLine(bool echo)
     do
     {
         chBF = uart_getc(uart);
-        char chRET[] = {chBF, '\0'};
-        if(echo){uart_puts(uart, chRET);}
+        if(echo){char chRET[] = {chBF, '\0'}; uart_puts(uart, chRET);}
         strBf += chBF;
         if(strBf.find_last_not_of(nlc) == std::string::npos){return "";}
     } while (strBf.find_last_not_of(nlc) == strBf.length() - 1 );
     return String::rtrim(strBf, nlc);
 }
 
+std::vector<uint8_t> uartSYNC::readSLIP_block(bool echo)
+{
+    uint8_t byteBF[1];
+    std::vector<uint8_t> dat;
+    dat.clear();
+    do{
+        uart_read_blocking(uart, byteBF,sizeof(byteBF));
+        if(echo){uart_write_blocking(uart, byteBF, sizeof(byteBF));}
+        dat.push_back(byteBF[0]);
+        if(dat.size() == SIZE_MAX - 1){return std::vector<uint8_t>();}
+    }while(byteBF[0] != 0xC0);
+    return DecodeSLIP(dat);
+    //return Convert::EncodeSLIP(dat);
+    //return dat;
+}
+
 void uartSYNC::write(std::string str) { uart_puts(uart, str.c_str()); }
 
-void uartSYNC::writeLine(std::string str) { write(str + nlc); }
+void uartSYNC::write(std::vector<uint8_t> dat) { uart_write_blocking(uart, dat.data(), sizeof(dat)); }
 
-uartSYNC::CommandLine uartSYNC::readCMD(bool echo)
-{
-    std::string strBf = readLine(echo);
-    std::string serialNum = "";
-    std::string romID = "";
-    std::vector<std::string> strVect = String::split(strBf, ' ');
-    if(strVect.size() <= 0){return uartSYNC::CommandLine("", "", "", NULL, 0);}
-    strBf = String::trim(strVect[0]);
-    strVect.erase(std::cbegin(strVect));
-    if(strBf.size() > 0)
-    {
-        if(String::strCompare(strBf.substr(0, 1), "#", true) && strVect.size() > 0)
-        {
-            serialNum = strBf.substr(1);
-            strBf = strVect[0];
-            strVect.erase(std::cbegin(strVect));
-        }else if(String::strCompare(strBf.substr(0, 1), "$", true) && strVect.size() > 0)
-        {
-            romID = strBf.substr(1);
-            strBf = strVect[0];
-            strVect.erase(std::cbegin(strVect));
-        }
-    }
-    std::string strArr[strVect.size()];
-    std::copy(strVect.begin(), strVect.end(), strArr);
-    return uartSYNC::CommandLine(serialNum, romID, strBf, strArr, strVect.size());
-}
+void uartSYNC::writeSLIP_block(std::vector<uint8_t> dat){ write(EncodeSLIP(dat)); }
+
+void uartSYNC::writeLine(std::string str) { write(str + nlc); }
 

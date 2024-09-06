@@ -22,12 +22,14 @@ target_link_libraries(${ProjectName}
     hardware_spi
     hardware_pio
     hardware_adc
+    MWComLibCPP_library
     flash_library
+    uart_library
     spi_library
     adc_library
-    MWComLibCPP_library
-    PCAB_Debugger_library
     ds18b20_library
+    onewire_library
+    PCAB_Debugger_library
 )
 
 pico_add_extra_outputs(${ProjectName})

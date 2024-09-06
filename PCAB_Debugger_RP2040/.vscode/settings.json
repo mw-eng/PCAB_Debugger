@@ -54,7 +54,8 @@
         "xstring": "cpp",
         "xtr1common": "cpp",
         "xutility": "cpp",
-        "list": "cpp"
+        "list": "cpp",
+        "format": "cpp"
     },
     "cmake.statusbar.advanced": {
         "debug": {

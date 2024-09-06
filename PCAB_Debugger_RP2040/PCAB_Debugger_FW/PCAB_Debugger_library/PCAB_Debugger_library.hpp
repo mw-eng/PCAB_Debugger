@@ -1,6 +1,6 @@
 #pragma once
-#include "uart_library.hpp"
 #include "MWComLibCPP_library.hpp"
+#include "uart_library.hpp"
 
 class pcabCMD : uartSYNC
 {
@@ -122,11 +122,16 @@ class pcabCMD : uartSYNC
 
     /// @brief Read string line as command.
     /// @param echo Return echo during communication.
-    CommandLine readCMD(bool echo);
+    /// @param slpi true:SLPI mode / false:ASCII mode
+    CommandLine readCMD(bool echo, bool slpi);
 
     /// @brief Output uart string and tarminal code. (auto DE state change)
     /// @param str Write string.
     void write(std::string str);
+    
+    /// @brief Output uart bynary date.
+    /// @param dat Write bynary date.
+    void write(std::vector<uint8_t> dat);
 
     /// @brief Output uart strings. (auto DE state change)
     /// @param str Write string.

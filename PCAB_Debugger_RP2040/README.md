@@ -5,10 +5,16 @@ The main unit firmware. @ RP2040
 Firmware is stored at the beginning of the flash ROM. The area used varies depending on the firmware capacity.<br>
 The last block is store STATE information and factory settings, the last 16 bytes store the 15-character serial number in ASCII code, and the last byte stores the character count.<br>
 
-## RS485 Serial Communication
+## RS485 Serial Communication Protocol
+### ASCII Communication Mode
 Send commands in the order of *#{SERIAL NUMBER}*, *{COMMAND}*, *{ARGUMENTS}*, and *{EXIT CODE}*, separated by space.<br>
 or<br>
 Send commands in the order of *${ROM ID}*, *{COMMAND}*, *{ARGUMENTS}*, and *{EXIT CODE}*, separated by space.<br>
+### Binary Communication Mode
+*Support with v1.3.3 or later*<br>
+Send commands in the order of *#{SERIAL NUMBER}*, *{COMMAND}*, *{ARGUMENT}*, and *{EXIT CODE}*, separated by *0xFF*.<br>
+or<br>
+Send commands in the order of *${ROM ID}*, *{COMMAND}*, *{ARGUMENT}*, and *{EXIT CODE}*, separated by *0xFF*.<br>
 
 <details>
 <summary>Description</summary>
@@ -16,6 +22,7 @@ Send commands in the order of *${ROM ID}*, *{COMMAND}*, *{ARGUMENTS}*, and *{EXI
 Specify the serial number of the communication partner in *{SERIAL NUMBER}*. However, if *"\*"* is specified, communication will be performed for all serial numbers.<br>
 *{COMMAND}* and *{ARGUMENTS}* refer to *Command Lists*.<br>
 *{EXIT CODE}* is *\n(Line Feed Code)* or *\r(Carriage Return Code)* or *\r\n*.<br>
+However, in SLIP mode (Binary Communication Mode) it can only *0x0D*.
 We recommend *\r(CR)* when CUI and echo are enable, and *\n(LF)* when CUI and local echo are enabled or GUI is enabled.<br>
 ### example
 - #0010 WrtDPS
@@ -36,8 +43,8 @@ WrtDPS | Write binary data to the digital phase sifter.
 GetDPS {0/1/false/true/bf/now} {x} | Get digital phase sifter settings.<br>{1/true/now} : Get the currently written binary data.<br>{0/false/bf} : Get the buffer binary data.(Get the binary data written with the WrtDPS command.)<br>{x} : Phase Shifter No. ( {0} is gets all data.)
 SetDPS {x} {DEC} | Set binary data in the buffer.<br>{x} : Phase Shifter No.<br>{DEC} : Decimal binary value.
 WrtDSA | *Support with v1.2.0 or later*<br>Write binary data to the digital step attenuator.
-GetDSA {0/1/false/true/bf/now} {x} | *Support with v1.2.0 or later*<br>Get digital step attenuator settings.<br>{1/true/now} : Get the currently written binary data.<br>{0/false/bf} : Get the buffer binary data.(Get the binary data written with the WrtDSA command.)<br>{x} : Digital Step attenuator No. ( {0} is gets all data. / {16|IN} is input attenuator No.)
-SetDSA {x} {DEC} | *Support with v1.2.0 or later*<br>Set binary data in the buffer.<br>{x} : Digital Step attenuator No. ({16|IN} is input attenuator No.)<br>{DEC} : Decimal binary value.
+GetDSA {0/1/false/true/bf/now} {x} | *Support with v1.2.0 or later*<br>Get digital step attenuator settings.<br>{1/true/now} : Get the currently written binary data.<br>{0/false/bf} : Get the buffer binary data.(Get the binary data written with the WrtDSA command.)<br>{x} : Digital Step attenuator No. ( {0} is gets all data. / {16} is input attenuator No.)
+SetDSA {x} {DEC} | *Support with v1.2.0 or later*<br>Set binary data in the buffer.<br>{x} : Digital Step attenuator No. ({16} is input attenuator No.)<br>{DEC} : Decimal binary value.
 </details>
 <details>
 <summary>Get and Set the MODE</summary>
@@ -51,7 +58,7 @@ SetSTB.DRA {0/1/false/true}| Set DRA STBY<br>{1/true} : Standby MODE<br>{0/false
 GetSTB.LNA | Get LNA STBY.
 SetSTB.LNA {0/1/false/true}| Set LNA STBY<br>{1/true} : Standby MODE<br>{0/false} : Run MODE
 GetLPM | Get low power mode.
-SetLPM {0/1/false/true} | Get low power mode<br>{1/true} : Low Power MODE<br>{0/false} : Full Power MODE
+SetLPM {0/1/false/true} | Set low power mode<br>{1/true} : Low Power MODE<br>{0/false} : Full Power MODE
 
 </details>
 <details>
@@ -84,6 +91,7 @@ CUI {0/1/false/true} | CUI Control Use<br>{1/true} : CUI MODE<br>{0/false} : GUI
 RST | Restore factory default settings.<br>*PS all 0<br>DSA all 2dB(No,0 = 0dB)<br>STB all 0(RUN MODE)<br>LPM 0(Full Power MODE)*
 *RST | Same as RST.
 Reboot | Reload setup function.
+BCN | Switch to binary communication mode.
 
 </details>
 <details>
@@ -96,6 +104,52 @@ RROM {x-yz} | Read page data from ROM.<br>{x-yz} : Specify the *block number(x),
 WROM {x-yz} {HEX} | Write page data to ROM.<br>{x-yz} : Specify the *block number(x), *sector number(y) + page number(z)* in hexadecimal format, separated by "-".<br>{HEX} : HEX data to write.<br>*Data will not be erased.*
 EROM {x-y} | Erase page data from ROM.<br>{x} : Specify the *block number(x)* and *sector number(y)* as hexadecimal format separated by "-".
 OROM {x-yz} {HEX} | Overwrite sector data to ROM.<br>{x-yz} : Specify the *block number(x)* and *sector number(y) + page number(z)* as hexadecimal format separated by "-".<br>{HEX} : HEX data to write.<br>*Data is written after erasing.*
+
+</details>
+
+<details>
+<summary>Binary Communication Mode command *Support with v1.3.3 or later*</summary>
+
+Command Code | Description
+:--|:--
+0x0D | Frame end code.
+0xFE | Switch to ASCII communication mode.
+0xFF | Command separator code.
+0xC0 0xFF {Byte} | Write Byte data to the input attenuator.
+0xC1 0xFF {Binary} | Write binary data to the digital step attenuator.<br>Binary data is the same as DPS.
+0xC2 0xFF {Binary} | Write binary data to the digital phase sifter.<br>The binary data must be specified in the order of DPS numbers 1 to 15, and each DPS setting must be specified in 8 bits ( i.e. 15 bytes of data ).
+0xC3 0xFF {0x00/0x01} | Set AMP STBY.<br>{0x00} : Run MODE<br>{0x01} : Standby MODE
+0xC4 0xFF {0x00/0x01} | Set DRA STBY.<br>{0x00} : Run MODE<br>{0x01} : Standby MODE
+0xC5 0xFF {0x00/0x01} | Set LNA STBY.<br>{0x00} : Run MODE<br>{0x01} : Standby MODE
+0xC6 0xFF {0x00/0x01} | Set low power mode.<br>{0x00} : Full Power MODE<br>{0x01} : Low Power MODE
+0xD0 | Get input attenuator settings.<br>The response data is in the same binary format as it was written.
+0xD1 | Get digital step attenuator settings.<br>The response data is in the same binary format as it was written.
+0xD2 | Get digital phase sifter settins.<br>The response data is in the same binary format as it was written.
+0xD3 | Get AMP STBY.<br>The response data is in the same binary format as it was written.
+0xD4 | Get DRA STBY.<br>The response data is in the same binary format as it was written.
+0xD5 | Get LNA STBY.<br>The response data is in the same binary format as it was written.
+0xD6 | Get low power mode.<br>The response data is in the same binary format as it was written.
+0xE1 | Get all temperature sensor IDs.<br> 8byte * 15
+0xE2 | Get all temperature data.<br>The response data is 2 bytes of raw data.
+0xE3 | Get CPU Temperature.<br>The response data is 2 bytes of raw data.
+0xE4 | Get Vd Value.<br>The response data is 2 bytes of raw data.
+0xE5 | Get Id Value.<br>The response data is 2 bytes of raw data.
+0xF6 | Get Vin Value.<br>The response data is 2 bytes of raw data.
+0xF7 | Get Pin Value.<br>The response data is 2 bytes of raw data.
+0xFA | Restore factory default settings.<br>PS all 0<br>DSA all 2dB(No,0 = 0dB)<br>STB all 0(RUN MODE)<br>LPM 0(Full Power MODE)
+0xFB 0xFF {0x00/0x01/0x02/0x03}| Save state to memory(ROM).<br>However, whether or not it can be saved depends on the boot mode.<br>To save the default setting, specify 0x00.
+0xFC 0xFF {0x00/0x01/0x02/0x03}| Load state from memory(ROM).<br>Argument are the same as 0xFA.
+
+Return Code | Description
+:--|:--
+0x0D | Frame end code.
+0xFF | Command separator code.
+0x00 | Successfull code.
+0x00 0xFF {binary} | Successfull code and binary data.
+0xF1 | Command not found error code.
+0xF2 | Data length error code.
+0xFE | Other errors code.
+
 
 </details>
 

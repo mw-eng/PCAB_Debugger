@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
-using static PCAB_Debugger_GUI.cntConfigSettings;
 
 namespace PCAB_Debugger_GUI
 {
@@ -20,6 +18,7 @@ namespace PCAB_Debugger_GUI
             WRITEDSA,
             WRITEDPS,
             WRITE,
+            READ,
             NULL
         }
         public delegate void ButtonClickEventHandler(object sender, RoutedEventArgs e, ButtonCategory category);
@@ -69,6 +68,11 @@ namespace PCAB_Debugger_GUI
                         break;
                 }
             }
+        }
+
+        private void READ_Click(object sender, RoutedEventArgs e)
+        {
+            ButtonClickEvent?.Invoke(sender, e, ButtonCategory.READ);
         }
     }
 }

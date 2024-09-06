@@ -11,23 +11,6 @@ class uartSYNC
     
     public:
 
-    /// @brief Command line structure.
-    struct CommandLine
-    {
-        std::string serialNum;
-        std::string romID;
-        std::string command;
-        std::vector<std::string> argments;
-        CommandLine(std::string serial, std::string rom, std::string cmd, std::string args[], uint numArgs)
-        {
-            serialNum = serial;
-            romID = rom;
-            command = cmd;
-            argments.clear();
-            for(uint i = 0 ; i < numArgs ; i++){ argments.push_back(args[i]);}
-        }
-    };
-
     /// @brief Constructor
     /// @param uartID UART ID (uart0 or uart1)
     /// @param tx_gpio Tx gpio pin number.
@@ -72,16 +55,25 @@ class uartSYNC
     /// @param echo Return echo during communication.
     std::string readLine(bool echo);
 
-    /// @brief Read string line as command.
+    /// @brief Read SLPI block. (Read and decode binary date.)
     /// @param echo Return echo during communication.
-    CommandLine readCMD(bool echo);
+    std::vector<uint8_t> readSLIP_block(bool echo);
     
     /// @brief Send string.
     /// @param str string to send.
     void write(std::string str);
 
+    /// @brief Send binary.
+    /// @param dat Binary to send.
+    void write(std::vector<uint8_t> dat);
+
+    /// @brief Send SLPI block. (Encode and send binary date.)
+    /// @param dat Binary to send.
+    void writeSLIP_block(std::vector<uint8_t> dat);
+
     /// @brief Send string as one line. (Add new line string automatically string to send.)
     /// @param str string to send.
     void writeLine(std::string str);
+    
 };
 
