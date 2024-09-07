@@ -35,10 +35,64 @@ pcabCMD::CommandLine pcabCMD::readCMD(bool echo, bool slpi)
 {
     if(slpi)
     {
-        std::vector datBF = readSLIP_block(echo);
+        std::vector<uint8_t> datBF = readSLIP_block(echo);
         std::string serialNum;
         std::string romID = "";
-        return pcabCMD::CommandLine("", "", cmdCode::NUL, NULL, 0);
+        std::vector<size_t> cnt = std::vector<size_t>();
+        cnt.clear();
+        for(size_t s = 0; s < datBF.size(); ++s)
+        {
+            if(datBF[s]==0xFF) { cnt.push_back(s); }
+        }
+
+        if(cnt.size() < 1 || 2 < cnt.size()){ return pcabCMD::CommandLine("", "", cmdCode::NUL, NULL, 0); }
+        std::string strBF = std::string(datBF.begin(), datBF.begin() + cnt[0]);
+        if(strBF.size() > 0)
+        {
+            if(String::strCompare(strBF.substr(0, 1), "#", true))
+            {
+                serialNum = strBF.substr(1);
+            }else if(String::strCompare(strBF.substr(0, 1), "$", true))
+            {
+                romID = strBF.substr(1);
+            }
+        }
+        std::vector<uint8_t> arg;
+        if(cnt.size() == 2 && cnt[1] + 1 <= datBF.size())
+        {
+            arg = std::vector<uint8_t>(datBF.size() - cnt[1] - 1);
+            copy(datBF.begin() + cnt[1] + 1, datBF.end(), arg.begin());
+        }
+        
+        switch (datBF[cnt[0] + 1])
+        {
+        case 0xC0:
+        case 0xC1: return pcabCMD::CommandLine(serialNum, romID, cmdCode::WrtDSA, arg);
+        case 0xC2: return pcabCMD::CommandLine(serialNum, romID, cmdCode::WrtDPS, arg);
+        case 0xC3: return pcabCMD::CommandLine(serialNum, romID, cmdCode::SetSTB_AMP, arg);
+        case 0xC4: return pcabCMD::CommandLine(serialNum, romID, cmdCode::SetSTB_DRA, arg);
+        case 0xC5: return pcabCMD::CommandLine(serialNum, romID, cmdCode::SetSTB_LNA, arg);
+        case 0xC6: return pcabCMD::CommandLine(serialNum, romID, cmdCode::SetLPM, arg);
+        case 0xD0: return pcabCMD::CommandLine(serialNum, romID, cmdCode::GetDSA, {0x0F});
+        case 0xD1: return pcabCMD::CommandLine(serialNum, romID, cmdCode::GetDSA, arg);
+        case 0xD2: return pcabCMD::CommandLine(serialNum, romID, cmdCode::GetDPS, arg);
+        case 0xD3: return pcabCMD::CommandLine(serialNum, romID, cmdCode::GetSTB_AMP, arg);
+        case 0xD4: return pcabCMD::CommandLine(serialNum, romID, cmdCode::GetSTB_DRA, arg);
+        case 0xD5: return pcabCMD::CommandLine(serialNum, romID, cmdCode::GetSTB_LNA, arg);
+        case 0xD6: return pcabCMD::CommandLine(serialNum, romID, cmdCode::GetLPM, arg);
+        case 0xE1: return pcabCMD::CommandLine(serialNum, romID, cmdCode::GetTMP_ID, arg);
+        case 0xE2: return pcabCMD::CommandLine(serialNum, romID, cmdCode::GetTMP_VAL, arg);
+        case 0xE3: return pcabCMD::CommandLine(serialNum, romID, cmdCode::GetTMP_CPU, arg);
+        case 0xE4: return pcabCMD::CommandLine(serialNum, romID, cmdCode::GetVd, arg);
+        case 0xE5: return pcabCMD::CommandLine(serialNum, romID, cmdCode::GetId, arg);
+        case 0xE6: return pcabCMD::CommandLine(serialNum, romID, cmdCode::GetVin, arg);
+        case 0xE7: return pcabCMD::CommandLine(serialNum, romID, cmdCode::GetPin, arg);
+        case 0xFA: return pcabCMD::CommandLine(serialNum, romID, cmdCode::RST, arg);
+        case 0xFB: return pcabCMD::CommandLine(serialNum, romID, cmdCode::SaveMEM, arg);
+        case 0xFC: return pcabCMD::CommandLine(serialNum, romID, cmdCode::LoadMEM, arg);
+        case 0xFE: return pcabCMD::CommandLine(serialNum, romID, cmdCode::ASCII, arg);
+        default: return pcabCMD::CommandLine(serialNum, romID, cmdCode::NONE, NULL, 0);
+        }
     }
     else
     {
@@ -110,11 +164,12 @@ pcabCMD::CommandLine pcabCMD::readCMD(bool echo, bool slpi)
         if (String::strCompare(cmd, "GetIDN", true)) { return pcabCMD::CommandLine(serialNum, romID, cmdCode::GetIDN, strArr, argments.size()); }
         if (String::strCompare(cmd, "*IDN?", true)) { return pcabCMD::CommandLine(serialNum, romID, cmdCode::GetIDN, strArr, argments.size()); }
         if (String::strCompare(cmd, "GetIDR", true)) { return pcabCMD::CommandLine(serialNum, romID, cmdCode::GetIDR, strArr, argments.size()); }
+        if (String::strCompare(cmd, "BCM", true)) { return pcabCMD::CommandLine(serialNum, romID, cmdCode::BINARY, strArr, argments.size()); }
         else { return pcabCMD::CommandLine(serialNum, romID, cmdCode::NONE, strArr, argments.size()); }
     }
 }
 
-void pcabCMD::write(std::vector<uint8_t> dat)
+void pcabCMD::writeBlock(std::vector<uint8_t> dat)
 {
     if(!de_mode){rs485enable(); sleep_ms(10);}
     uart.writeSLIP_block(dat);

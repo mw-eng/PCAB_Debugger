@@ -51,6 +51,8 @@ class pcabCMD : uartSYNC
         GetMODE,
         Reboot,
         NONE,
+        BINARY,
+        ASCII,
         NUL
     };
 
@@ -61,6 +63,7 @@ class pcabCMD : uartSYNC
         uint64_t romID;
         cmdCode command;
         std::vector<std::string> argments;
+        std::vector<uint8_t> argment;
         CommandLine(std::string serial, std::string rom, cmdCode cmd, std::string args[], uint numArgs)
         {
             serialNum = serial;
@@ -68,6 +71,13 @@ class pcabCMD : uartSYNC
             command = cmd;
             argments.clear();
             for(uint i = 0 ; i < numArgs ; i++){ argments.push_back(args[i]);}
+        }
+        CommandLine(std::string serial, std::string rom, cmdCode cmd, std::vector<uint8_t> arg)
+        {
+            serialNum = serial;
+            if(!Convert::TryToUInt64(rom, 16u, romID)) { romID = 0; }
+            command = cmd;
+            argment = arg;
         }
     };
 
@@ -131,7 +141,7 @@ class pcabCMD : uartSYNC
     
     /// @brief Output uart bynary date.
     /// @param dat Write bynary date.
-    void write(std::vector<uint8_t> dat);
+    void writeBlock(std::vector<uint8_t> dat);
 
     /// @brief Output uart strings. (auto DE state change)
     /// @param str Write string.

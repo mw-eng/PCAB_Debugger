@@ -11,9 +11,9 @@ add_compile_options(-Wall -g3 -O2)
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 17)
 set (CMAKE_BUILD_TYPE "Debug")
-#set (PICO_DEOPTIMIZED_DEBUG "on")
+set (PICO_DEOPTIMIZED_DEBUG "on")
 #set (CMAKE_BUILD_TYPE "Release")
-set (PICO_DEOPTIMIZED_DEBUG "off")
+#set (PICO_DEOPTIMIZED_DEBUG "off")
 
 add_compile_definitions(PICO_FLASH_SIZE_BYTES=2*1024*1024) #16Mbit (Raspberry Pi Pico)
 #add_compile_definitions(PICO_FLASH_SIZE_BYTES=4*1024*1024) #32Mbit

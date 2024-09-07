@@ -42,7 +42,7 @@ bool stbAMP = false;
 bool stbDRA = false;
 bool stbLNA = false;
 bool lowMODE = false;
-bool modeSLPI = false;
+bool modeBCM = false;
 
 
 void setup()
@@ -128,7 +128,7 @@ int main()
     setup();
     while (1)
     {
-        pcabCMD::CommandLine cmd = uart->readCMD(modeECHO, modeSLPI);
+        pcabCMD::CommandLine cmd = uart->readCMD(modeECHO, modeBCM);
         if((cmd.serialNum.size() > 0 && (String::strCompare(cmd.serialNum, "*", true) || String::strCompare(cmd.serialNum, serialNum, true))) || (cmd.serialNum.size() == 0 && cmd.romID == romID))
         {
             if(modeECHO || modeCUI){uart->writeLine("");}
@@ -774,8 +774,25 @@ int main()
                         uart->writeLine(Convert::ToString(romID, 16, 16));
                     }
                     break;
+                case pcabCMD::cmdCode::BINARY:
+                    if(cmd.argments.size() != 0) { uart->writeLine("ERR > Number of arguments does not match."); }
+                    else
+                    {
+                        modeBCM = true;
+                        uart->writeBlock(std::vector<uint8_t>(0xF1));
+                    }
+                    break;
+                case pcabCMD::cmdCode::ASCII:
+                    if(cmd.argment.size() != 0) { uart->writeBlock(std::vector<uint8_t>(0xF1)); }
+                    else
+                    {
+                        modeBCM = false;
+                        uart->writeLine("DONE > ASCII Communication Mode."); 
+                    }
+                    break;
                 case pcabCMD::cmdCode::NONE:
-                    uart->writeLine("ERR > Command Not Found.");
+                    if(modeBCM){ uart->writeBlock(std::vector<uint8_t>(0xF1)); }
+                    else { uart->writeLine("ERR > Command Not Found."); }
                     break;
                 default:
                     //uart->writeLine("");
