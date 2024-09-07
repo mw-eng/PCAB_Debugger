@@ -48,6 +48,7 @@ std::vector<uint8_t> EncodeSLIP(const std::vector<uint8_t> &dat)
             break;
         }
     }
+    slip.push_back(0xC0);
     return slip;
 }
 
@@ -110,7 +111,7 @@ std::vector<uint8_t> uartSYNC::readSLIP_block(bool echo)
 
 void uartSYNC::write(std::string str) { uart_puts(uart, str.c_str()); }
 
-void uartSYNC::write(std::vector<uint8_t> dat) { uart_write_blocking(uart, dat.data(), sizeof(dat)); }
+void uartSYNC::write(std::vector<uint8_t> dat) { uart_write_blocking(uart, dat.data(), dat.size()); }
 
 void uartSYNC::writeSLIP_block(std::vector<uint8_t> dat){ write(EncodeSLIP(dat)); }
 

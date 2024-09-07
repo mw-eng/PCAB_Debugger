@@ -69,3 +69,4 @@ std::string readSerialNum();
 bool saveSTATE(const uint8_t &sectorNum, const uint8_t &pageNum, const uint8_t &stateNum);
 bool readSTATE(const uint8_t &sectorNum, const uint8_t &pageNum, const uint8_t &stateNum);
 void writeNowSTATE();
+std::vector<uint8_t> retCODE(uint8_t code);

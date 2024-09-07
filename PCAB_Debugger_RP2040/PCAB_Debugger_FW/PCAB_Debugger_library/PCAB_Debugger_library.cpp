@@ -169,7 +169,7 @@ pcabCMD::CommandLine pcabCMD::readCMD(bool echo, bool slpi)
     }
 }
 
-void pcabCMD::writeBlock(std::vector<uint8_t> dat)
+void pcabCMD::writeSLIP_block(std::vector<uint8_t> dat)
 {
     if(!de_mode){rs485enable(); sleep_ms(10);}
     uart.writeSLIP_block(dat);

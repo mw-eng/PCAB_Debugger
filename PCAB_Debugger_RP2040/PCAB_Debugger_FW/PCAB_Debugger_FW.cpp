@@ -136,7 +136,7 @@ int main()
                 switch (cmd.command)
                 {
                     case pcabCMD::cmdCode::ASCII:
-                        if(cmd.argment.size() != 0) { uart->writeBlock(std::vector<uint8_t>(0xF2)); }
+                        if(cmd.argment.size() != 0) { uart->writeSLIP_block(retCODE(0xF2)); }
                         else
                         {
                             modeBCM = false;
@@ -144,7 +144,7 @@ int main()
                         }
                         break;
                     case pcabCMD::cmdCode::NONE:
-                        uart->writeBlock(std::vector<uint8_t>(0xF1));
+                        uart->writeSLIP_block(retCODE(0xF1));
                         break;
                     default:
                         //uart->writeLine("");
@@ -801,7 +801,7 @@ int main()
                         else
                         {
                             modeBCM = true;
-                            uart->writeBlock(std::vector<uint8_t>(0xF2));
+                            uart->writeSLIP_block(retCODE(0x00));
                         }
                         break;
                     case pcabCMD::cmdCode::NONE:
@@ -935,6 +935,14 @@ void writeNowSTATE()
     gpio_put(STB_DRA_PIN, !stbDRA);
     gpio_put(STB_LNA_PIN, !stbLNA);
     gpio_put(LPW_MOD_PIN, !lowMODE);
+}
+
+std::vector<uint8_t> retCODE(uint8_t code)
+{
+    std::vector<uint8_t> res = std::vector<uint8_t>();
+    res.clear();
+    res.push_back(code);
+    return res;
 }
 
 #pragma endregion

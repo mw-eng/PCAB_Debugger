@@ -141,7 +141,7 @@ class pcabCMD : uartSYNC
     
     /// @brief Output uart bynary date.
     /// @param dat Write bynary date.
-    void writeBlock(std::vector<uint8_t> dat);
+    void writeSLIP_block(std::vector<uint8_t> dat);
 
     /// @brief Output uart strings. (auto DE state change)
     /// @param str Write string.
