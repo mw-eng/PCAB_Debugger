@@ -34,12 +34,12 @@ class ds18b20
     
     /// @brief Get all sensor readings.
     /// @return Senser reading data.
-    std::vector<int16_t> readSENS();
+    std::vector<uint16_t> readSENS();
 
     /// @brief Get the measurement value of the specified sensor.
     /// @param sensNUM Senser number.
     /// @return Senser reading data.
-    int16_t readSENS(uint sensNUM);
+    uint16_t readSENS(uint sensNUM);
 
     /// @brief Get temperature of all sensors.
     /// @return Temperature.

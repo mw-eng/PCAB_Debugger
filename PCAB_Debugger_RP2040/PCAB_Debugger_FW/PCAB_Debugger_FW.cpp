@@ -621,9 +621,14 @@ int main()
                             std::vector<uint64_t> code = sens->getSENS_ROMCODE();
                             for(uint i = 0; i < code.size(); i++)
                             {
-                                for(size_t len = 0; len < 64u; len++)
-                                {
-                                }
+                                result.push_back((uint8_t)((code[i] & 0xFF00000000000000) >> 56));
+                                result.push_back((uint8_t)((code[i] & 0x00FF000000000000) >> 48));
+                                result.push_back((uint8_t)((code[i] & 0x0000FF0000000000) >> 40));
+                                result.push_back((uint8_t)((code[i] & 0x000000FF00000000) >> 32));
+                                result.push_back((uint8_t)((code[i] & 0x00000000FF000000) >> 24));
+                                result.push_back((uint8_t)((code[i] & 0x0000000000FF0000) >> 16));
+                                result.push_back((uint8_t)((code[i] & 0x000000000000FF00) >> 8));
+                                result.push_back((uint8_t)(code[i] & 0x00000000000000FF) );
                             }
                             uart->writeSLIP_block(result);
                         }
@@ -683,12 +688,11 @@ int main()
                             result.clear();
                             result.push_back(0x00);
                             result.push_back(0xFF);
-                            std::vector<int16_t> code = sens->readSENS();
+                            std::vector<uint16_t> code = sens->readSENS();
                             for(uint i = 0; i < code.size(); i++)
                             {
-                                for(size_t len = 0; len < 64u; len++)
-                                {
-                                }
+                                result.push_back((uint8_t)((code[i] & 0xFF00) >> 8));
+                                result.push_back((uint8_t)(code[i] & 0x00FF) );
                             }
                             uart->writeSLIP_block(result);
                         }
@@ -715,7 +719,7 @@ int main()
                                 }
                                 else
                                 {
-                                    std::vector<int16_t> code = sens->readSENS();
+                                    std::vector<uint16_t> code = sens->readSENS();
                                     uart->write(std::to_string(code[0]));
                                     for(uint8_t i = 1 ; i < code.size() ; i++)
                                     { uart->write("," + std::to_string(code[i])); }
@@ -743,7 +747,18 @@ int main()
                 case pcabCMD::cmdCode::GetTMP_CPU:
                     if(modeBCM)
                     {
-
+                        if(cmd.argment.size() != 0) { uart->writeSLIP_block(retCODE(0xF2)); }
+                        else
+                        {
+                            std::vector<uint8_t> result;
+                            result.clear();
+                            result.push_back(0x00);
+                            result.push_back(0xFF);
+                            uint16_t tmp = analog->readADC4();
+                            result.push_back((uint8_t)((tmp & 0xFF00) >> 8));
+                            result.push_back((uint8_t)(tmp & 0x00FF) );
+                            uart->writeSLIP_block(result);
+                        }
                     }
                     else
                     {
@@ -762,7 +777,18 @@ int main()
                 case pcabCMD::cmdCode::GetVd:
                     if(modeBCM)
                     {
-
+                        if(cmd.argment.size() != 0) { uart->writeSLIP_block(retCODE(0xF2)); }
+                        else
+                        {
+                            std::vector<uint8_t> result;
+                            result.clear();
+                            result.push_back(0x00);
+                            result.push_back(0xFF);
+                            uint16_t tmp = analog->readADC0();
+                            result.push_back((uint8_t)((tmp & 0xFF00) >> 8));
+                            result.push_back((uint8_t)(tmp & 0x00FF) );
+                            uart->writeSLIP_block(result);
+                        }
                     }
                     else
                     {
@@ -781,7 +807,18 @@ int main()
                 case pcabCMD::cmdCode::GetId:
                     if(modeBCM)
                     {
-
+                        if(cmd.argment.size() != 0) { uart->writeSLIP_block(retCODE(0xF2)); }
+                        else
+                        {
+                            std::vector<uint8_t> result;
+                            result.clear();
+                            result.push_back(0x00);
+                            result.push_back(0xFF);
+                            uint16_t tmp = analog->readADC1();
+                            result.push_back((uint8_t)((tmp & 0xFF00) >> 8));
+                            result.push_back((uint8_t)(tmp & 0x00FF) );
+                            uart->writeSLIP_block(result);
+                        }
                     }
                     else
                     {
@@ -800,7 +837,18 @@ int main()
                 case pcabCMD::cmdCode::GetVin:
                     if(modeBCM)
                     {
-
+                        if(cmd.argment.size() != 0) { uart->writeSLIP_block(retCODE(0xF2)); }
+                        else
+                        {
+                            std::vector<uint8_t> result;
+                            result.clear();
+                            result.push_back(0x00);
+                            result.push_back(0xFF);
+                            uint16_t tmp = analog->readADC2();
+                            result.push_back((uint8_t)((tmp & 0xFF00) >> 8));
+                            result.push_back((uint8_t)(tmp & 0x00FF) );
+                            uart->writeSLIP_block(result);
+                        }
                     }
                     else
                     {
@@ -819,7 +867,18 @@ int main()
                 case pcabCMD::cmdCode::GetPin:
                     if(modeBCM)
                     {
-
+                        if(cmd.argment.size() != 0) { uart->writeSLIP_block(retCODE(0xF2)); }
+                        else
+                        {
+                            std::vector<uint8_t> result;
+                            result.clear();
+                            result.push_back(0x00);
+                            result.push_back(0xFF);
+                            uint16_t tmp = analog->readADC3();
+                            result.push_back((uint8_t)((tmp & 0xFF00) >> 8));
+                            result.push_back((uint8_t)(tmp & 0x00FF) );
+                            uart->writeSLIP_block(result);
+                        }
                     }
                     else
                     {
@@ -835,10 +894,89 @@ int main()
                         }
                     }
                     break;
+                case pcabCMD::cmdCode::GetAD:
+                    if(modeBCM)
+                    {
+                        if(cmd.argment.size() != 0) { uart->writeSLIP_block(retCODE(0xF2)); }
+                        else
+                        {
+                            std::vector<uint8_t> result;
+                            result.clear();
+                            result.push_back(0x00);
+                            result.push_back(0xFF);
+                            uint16_t tmp;
+                            tmp = analog->readADC0();
+                            result.push_back((uint8_t)((tmp & 0xFF00) >> 8));
+                            result.push_back((uint8_t)(tmp & 0x00FF) );
+                            tmp = analog->readADC1();
+                            result.push_back((uint8_t)((tmp & 0xFF00) >> 8));
+                            result.push_back((uint8_t)(tmp & 0x00FF) );
+                            tmp = analog->readADC2();
+                            result.push_back((uint8_t)((tmp & 0xFF00) >> 8));
+                            result.push_back((uint8_t)(tmp & 0x00FF) );
+                            tmp = analog->readADC3();
+                            result.push_back((uint8_t)((tmp & 0xFF00) >> 8));
+                            result.push_back((uint8_t)(tmp & 0x00FF) );
+                            tmp = analog->readADC4();
+                            result.push_back((uint8_t)((tmp & 0xFF00) >> 8));
+                            result.push_back((uint8_t)(tmp & 0x00FF) );
+                            uart->writeSLIP_block(result);
+                        }
+                    }
+                    else { uart->writeLine("ERR > This command is not supported in ASCII mode."); }
+                    break;
+                case pcabCMD::cmdCode::GetSENS:
+                    if(modeBCM)
+                    {
+                        if(cmd.argment.size() != 0) { uart->writeSLIP_block(retCODE(0xF2)); }
+                        else
+                        {
+                            std::vector<uint8_t> result;
+                            result.clear();
+                            result.push_back(0x00);
+                            result.push_back(0xFF);
+                            uint16_t tmp;
+                            tmp = analog->readADC0();
+                            result.push_back((uint8_t)((tmp & 0xFF00) >> 8));
+                            result.push_back((uint8_t)(tmp & 0x00FF) );
+                            tmp = analog->readADC1();
+                            result.push_back((uint8_t)((tmp & 0xFF00) >> 8));
+                            result.push_back((uint8_t)(tmp & 0x00FF) );
+                            tmp = analog->readADC2();
+                            result.push_back((uint8_t)((tmp & 0xFF00) >> 8));
+                            result.push_back((uint8_t)(tmp & 0x00FF) );
+                            tmp = analog->readADC3();
+                            result.push_back((uint8_t)((tmp & 0xFF00) >> 8));
+                            result.push_back((uint8_t)(tmp & 0x00FF) );
+                            tmp = analog->readADC4();
+                            result.push_back((uint8_t)((tmp & 0xFF00) >> 8));
+                            result.push_back((uint8_t)(tmp & 0x00FF) );
+                            std::vector<uint64_t> code = sens->getSENS_ROMCODE();
+                            for(uint i = 0; i < code.size(); i++)
+                            {
+                                result.push_back((uint8_t)((code[i] & 0xFF00000000000000) >> 56));
+                                result.push_back((uint8_t)((code[i] & 0x00FF000000000000) >> 48));
+                                result.push_back((uint8_t)((code[i] & 0x0000FF0000000000) >> 40));
+                                result.push_back((uint8_t)((code[i] & 0x000000FF00000000) >> 32));
+                                result.push_back((uint8_t)((code[i] & 0x00000000FF000000) >> 24));
+                                result.push_back((uint8_t)((code[i] & 0x0000000000FF0000) >> 16));
+                                result.push_back((uint8_t)((code[i] & 0x000000000000FF00) >> 8));
+                                result.push_back((uint8_t)(code[i] & 0x00000000000000FF) );
+                            }
+                            uart->writeSLIP_block(result);
+                        }
+                    }
+                    else { uart->writeLine("ERR > This command is not supported in ASCII mode."); }
+                    break;
                 case pcabCMD::cmdCode::SaveMEM:
                     if(modeBCM)
                     {
-
+                        if(cmd.argment.size() != 1) { uart->writeSLIP_block(retCODE(0xF2)); }
+                        else
+                        {
+                            if(!saveSTATE(14, 0, cmd.argment[0])) { uart->writeSLIP_block(retCODE(0xFE));}
+                            else { uart->writeSLIP_block(retCODE(0x00)); }
+                        }
                     }
                     else
                     {
@@ -869,7 +1007,13 @@ int main()
                 case pcabCMD::cmdCode::LoadMEM:
                     if(modeBCM)
                     {
-
+                        if(cmd.argment.size() != 1) { uart->writeSLIP_block(retCODE(0xF2)); }
+                        else
+                        {
+                            if(!readSTATE(14, 0, cmd.argment[0])) { uart->writeSLIP_block(retCODE(0xFE)); break; }
+                            writeNowSTATE();
+                            uart->writeSLIP_block(retCODE(0x00));
+                        }
                     }
                     else
                     {

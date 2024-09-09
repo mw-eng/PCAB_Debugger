@@ -51,10 +51,10 @@ ds18b20::ds18b20() : ds18b20(0) {}
 
 ds18b20::~ds18b20(){}
 
-std::vector<int16_t> ds18b20::readSENS()
+std::vector<uint16_t> ds18b20::readSENS()
 {
-    if(SENS_TMP.size() <= 0) { return std::vector<int16_t>(); }
-    std::vector<int16_t> temp;
+    if(SENS_TMP.size() <= 0) { return std::vector<uint16_t>(); }
+    std::vector<uint16_t> temp;
     temp.clear();
     ow_reset (&ow);
     ow_send (&ow, OW_SKIP_ROM);
@@ -68,14 +68,14 @@ std::vector<int16_t> ds18b20::readSENS()
             ow_send (&ow, x >> b);
         }
         ow_send (&ow, DS18B20_READ_SCRATCHPAD);
-        int16_t tempBf = 0;
+        uint16_t tempBf = 0;
         tempBf = ow_read (&ow) | (ow_read (&ow) << 8);
         temp.push_back(tempBf);
     }
     return temp;
 }
 
-int16_t ds18b20::readSENS(uint sensNUM)
+uint16_t ds18b20::readSENS(uint sensNUM)
 {
     if(SENS_TMP.size() <= sensNUM) { return 0; }
     ow_reset (&ow);
@@ -88,7 +88,7 @@ int16_t ds18b20::readSENS(uint sensNUM)
         ow_send (&ow, SENS_TMP[sensNUM] >> b);
     }
     ow_send (&ow, DS18B20_READ_SCRATCHPAD);
-    int16_t tempBf = 0;
+    uint16_t tempBf = 0;
     tempBf = ow_read (&ow) | (ow_read (&ow) << 8);
     return tempBf;
 }
@@ -97,7 +97,7 @@ std::vector<float> ds18b20::readTEMP()
 {
     std::vector<float> temp;
     temp.clear();
-    for (int16_t &x:readSENS()) { temp.push_back(x / 16.0f); }
+    for (uint16_t &x:readSENS()) { temp.push_back(x / 16.0f); }
     return temp;
 }
 

@@ -87,6 +87,8 @@ pcabCMD::CommandLine pcabCMD::readCMD(bool echo, bool slpi)
         case 0xE5: return pcabCMD::CommandLine(serialNum, romID, cmdCode::GetId, arg);
         case 0xE6: return pcabCMD::CommandLine(serialNum, romID, cmdCode::GetVin, arg);
         case 0xE7: return pcabCMD::CommandLine(serialNum, romID, cmdCode::GetPin, arg);
+        case 0xEE: return pcabCMD::CommandLine(serialNum, romID, cmdCode::GetAD, arg);
+        case 0xEF: return pcabCMD::CommandLine(serialNum, romID, cmdCode::GetSENS, arg);
         case 0xFA: return pcabCMD::CommandLine(serialNum, romID, cmdCode::RST, arg);
         case 0xFB: return pcabCMD::CommandLine(serialNum, romID, cmdCode::SaveMEM, arg);
         case 0xFC: return pcabCMD::CommandLine(serialNum, romID, cmdCode::LoadMEM, arg);

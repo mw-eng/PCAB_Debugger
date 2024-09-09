@@ -26,6 +26,8 @@ class pcabCMD : uartSYNC
         GetId,
         GetVin,
         GetPin,
+        GetAD,
+        GetSENS,
         GetSTB_AMP,
         SetSTB_AMP,
         GetSTB_DRA,
