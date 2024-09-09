@@ -135,8 +135,8 @@ Command Code | Description
 0xE3 | Get CPU Temperature.<br>The response data is 2 bytes of raw data.
 0xE4 | Get Vd Value.<br>The response data is 2 bytes of raw data.
 0xE5 | Get Id Value.<br>The response data is 2 bytes of raw data.
-0xF6 | Get Vin Value.<br>The response data is 2 bytes of raw data.
-0xF7 | Get Pin Value.<br>The response data is 2 bytes of raw data.
+0xE6 | Get Vin Value.<br>The response data is 2 bytes of raw data.
+0xE7 | Get Pin Value.<br>The response data is 2 bytes of raw data.
 0xFA | Restore factory default settings.<br>PS all 0<br>DSA all 2dB(No,0 = 0dB)<br>STB all 0(RUN MODE)<br>LPM 0(Full Power MODE)
 0xFB 0xFF {0x00/0x01/0x02/0x03} | Save state to memory(ROM).<br>However, whether or not it can be saved depends on the boot mode.<br>To save the default setting, specify 0x00.
 0xFC 0xFF {0x00/0x01/0x02/0x03} | Load state from memory(ROM).<br>Argument are the same as 0xFA.
