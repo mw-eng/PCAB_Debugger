@@ -66,8 +66,8 @@ pcabCMD::CommandLine pcabCMD::readCMD(bool echo, bool slpi)
         
         switch (datBF[cnt[0] + 1])
         {
-        case 0xC0:
-        case 0xC1: return pcabCMD::CommandLine(serialNum, romID, cmdCode::WrtDSA, arg);
+        case 0xA0:
+        case 0xA1: return pcabCMD::CommandLine(serialNum, romID, cmdCode::WrtDSA, arg);
         case 0xC2: return pcabCMD::CommandLine(serialNum, romID, cmdCode::WrtDPS, arg);
         case 0xC3: return pcabCMD::CommandLine(serialNum, romID, cmdCode::SetSTB_AMP, arg);
         case 0xC4: return pcabCMD::CommandLine(serialNum, romID, cmdCode::SetSTB_DRA, arg);

@@ -115,7 +115,7 @@ Command Code | Description
 :--|:--
 0xC0 | Frame end code.
 0xFF | Command separator code.
-0xC0 0xFF {Byte} | Write Byte data to the input attenuator.
+0xA0 0xFF {Byte} | Write Byte data to the input attenuator.
 0xC1 0xFF {Binary} | Write binary data to the digital step attenuator.<br>The binary data must be specified in the order of DSA numbers 1 to 15, and each DSA setting must be specified in 8 bits ( i.e. 15 bytes of data ).
 0xC2 0xFF {Binary} | Write binary data to the digital phase sifter.<br>The binary data must be specified in the order of DPS numbers 1 to 15, and each DPS setting must be specified in 8 bits ( i.e. 15 bytes of data ).
 0xC3 0xFF {0x00/0x01} | Set AMP STBY.<br>{0x00} : Run MODE<br>{0x01} : Standby MODE
