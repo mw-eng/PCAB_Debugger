@@ -113,8 +113,7 @@ OROM {x-yz} {HEX} | Overwrite sector data to ROM.<br>{x-yz} : Specify the *block
 
 Command Code | Description
 :--|:--
-0x0D | Frame end code.
-0xFE | Switch to ASCII communication mode.
+0xC0 | Frame end code.
 0xFF | Command separator code.
 0xC0 0xFF {Byte} | Write Byte data to the input attenuator.
 0xC1 0xFF {Binary} | Write binary data to the digital step attenuator.<br>The binary data must be specified in the order of DSA numbers 1 to 15, and each DSA setting must be specified in 8 bits ( i.e. 15 bytes of data ).
@@ -140,6 +139,7 @@ Command Code | Description
 0xFA | Restore factory default settings.<br>PS all 0<br>DSA all 2dB(No,0 = 0dB)<br>STB all 0(RUN MODE)<br>LPM 0(Full Power MODE)
 0xFB 0xFF {0x00/0x01/0x02/0x03} | Save state to memory(ROM).<br>However, whether or not it can be saved depends on the boot mode.<br>To save the default setting, specify 0x00.
 0xFC 0xFF {0x00/0x01/0x02/0x03} | Load state from memory(ROM).<br>Argument are the same as 0xFA.
+0xFE | Switch to ASCII communication mode.
 
 Return Code | Description
 :--|:--
