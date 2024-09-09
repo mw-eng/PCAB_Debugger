@@ -143,7 +143,7 @@ Command Code | Description
 0xFB 0xFF {0x00/0x01/0x02/0x03} | Save state to memory(ROM).<br>However, whether or not it can be saved depends on the boot mode.<br>To save the default setting, specify 0x00.
 0xFC 0xFF {0x00/0x01/0x02/0x03} | Load state from memory(ROM).<br>Argument are the same as 0xFA.
 0xAA 0xFF {Address} | Read page data from ROM.<br>{Address(4byte)} : Specify the address to read (sector by sector)
-0xBB 0xFF {Address} {Binary} | Overwrite sector data to ROM.<br>{Address(4byte)} : Specify the address to write (sector by sector).<br>{Binary(4kbyte)} * Specify the sector data to write.
+0xBB 0xFF {Address} {Binary} | Overwrite sector data to ROM.<br>{Address(4byte)} : Specify the address to write (sector by sector).<br>{Binary(4096byte)} * Specify the sector data to write.
 0xFE | Switch to ASCII communication mode.
 
 Return Code | Description
