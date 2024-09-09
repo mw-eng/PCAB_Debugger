@@ -22,7 +22,7 @@ Send commands in the order of *${ROM ID}*, *{COMMAND}*, *{ARGUMENT}*, and *{EXIT
 Specify the serial number of the communication partner in *{SERIAL NUMBER}*. However, if *"\*"* is specified, communication will be performed for all serial numbers.<br>
 *{COMMAND}* and *{ARGUMENTS}* refer to *Command Lists*.<br>
 *{EXIT CODE}* is *\n(Line Feed Code)* or *\r(Carriage Return Code)* or *\r\n*.<br>
-However, in SLIP mode (Binary Communication Mode) it can only *0x0D*.
+However, in SLIP mode (Binary Communication Mode) it can only *0xC0*.
 We recommend *\r(CR)* when CUI and echo are enable, and *\n(LF)* when CUI and local echo are enabled or GUI is enabled.<br>
 ### example
 - #0010 WrtDPS
