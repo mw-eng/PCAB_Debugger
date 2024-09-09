@@ -66,8 +66,8 @@ pcabCMD::CommandLine pcabCMD::readCMD(bool echo, bool slpi)
         
         switch (datBF[cnt[0] + 1])
         {
-        case 0xA0:
-        case 0xA1: return pcabCMD::CommandLine(serialNum, romID, cmdCode::WrtDSA, arg);
+        case 0xB0:
+        case 0xC1: return pcabCMD::CommandLine(serialNum, romID, cmdCode::WrtDSA, arg);
         case 0xC2: return pcabCMD::CommandLine(serialNum, romID, cmdCode::WrtDPS, arg);
         case 0xC3: return pcabCMD::CommandLine(serialNum, romID, cmdCode::SetSTB_AMP, arg);
         case 0xC4: return pcabCMD::CommandLine(serialNum, romID, cmdCode::SetSTB_DRA, arg);
@@ -87,12 +87,15 @@ pcabCMD::CommandLine pcabCMD::readCMD(bool echo, bool slpi)
         case 0xE5: return pcabCMD::CommandLine(serialNum, romID, cmdCode::GetId, arg);
         case 0xE6: return pcabCMD::CommandLine(serialNum, romID, cmdCode::GetVin, arg);
         case 0xE7: return pcabCMD::CommandLine(serialNum, romID, cmdCode::GetPin, arg);
+        case 0xEA: return pcabCMD::CommandLine(serialNum, romID, cmdCode::GetMODE, arg);
         case 0xEE: return pcabCMD::CommandLine(serialNum, romID, cmdCode::GetAD, arg);
         case 0xEF: return pcabCMD::CommandLine(serialNum, romID, cmdCode::GetSENS, arg);
         case 0xFA: return pcabCMD::CommandLine(serialNum, romID, cmdCode::RST, arg);
         case 0xFB: return pcabCMD::CommandLine(serialNum, romID, cmdCode::SaveMEM, arg);
         case 0xFC: return pcabCMD::CommandLine(serialNum, romID, cmdCode::LoadMEM, arg);
         case 0xFE: return pcabCMD::CommandLine(serialNum, romID, cmdCode::ASCII, arg);
+        case 0xAA: return pcabCMD::CommandLine(serialNum, romID, cmdCode::ReadROM, arg);
+        case 0xBB: return pcabCMD::CommandLine(serialNum, romID, cmdCode::OverwriteROM, arg);
         default: return pcabCMD::CommandLine(serialNum, romID, cmdCode::NONE, NULL, 0);
         }
     }

@@ -115,7 +115,7 @@ Command Code | Description
 :--|:--
 0xC0 | Frame end code.
 0xFF | Command separator code.
-0xA0 0xFF {Byte} | Write Byte data to the input attenuator.
+0xB0 0xFF {Byte} | Write Byte data to the input attenuator.
 0xC1 0xFF {Binary} | Write binary data to the digital step attenuator.<br>The binary data must be specified in the order of DSA numbers 1 to 15, and each DSA setting must be specified in 8 bits ( i.e. 15 bytes of data ).
 0xC2 0xFF {Binary} | Write binary data to the digital phase sifter.<br>The binary data must be specified in the order of DPS numbers 1 to 15, and each DPS setting must be specified in 8 bits ( i.e. 15 bytes of data ).
 0xC3 0xFF {0x00/0x01} | Set AMP STBY.<br>{0x00} : Run MODE<br>{0x01} : Standby MODE
@@ -136,11 +136,14 @@ Command Code | Description
 0xE5 | Get Id Value.<br>The response data is 2 bytes of raw data.
 0xE6 | Get Vin Value.<br>The response data is 2 bytes of raw data.
 0xE7 | Get Pin Value.<br>The response data is 2 bytes of raw data.
+0xEA | Get Mode.<br>The response data is 1 bytes of raw data.
 0xEE | Get all Analog values.<br>The responce data is {Vd(2byte) + Id(2byte) + Vin(2byte) + Pin(2byte) + CPU Temp(2byte)} of raw data.
 0xEF | Get all senser values.<br>The responce data is {AnalogValues(10byte)+TempratureData(8byte * 15)}
 0xFA | Restore factory default settings.<br>PS all 0<br>DSA all 2dB(No,0 = 0dB)<br>STB all 0(RUN MODE)<br>LPM 0(Full Power MODE)
 0xFB 0xFF {0x00/0x01/0x02/0x03} | Save state to memory(ROM).<br>However, whether or not it can be saved depends on the boot mode.<br>To save the default setting, specify 0x00.
 0xFC 0xFF {0x00/0x01/0x02/0x03} | Load state from memory(ROM).<br>Argument are the same as 0xFA.
+0xAA 0xFF {Address} | Read page data from ROM.<br>{Address(4byte)} : Specify the address to read (sector by sector)
+0xBB 0xFF {Address} {Binary} | Overwrite sector data to ROM.<br>{Address(4byte)} : Specify the address to write (sector by sector).<br>{Binary(4kbyte)} * Specify the sector data to write.
 0xFE | Switch to ASCII communication mode.
 
 Return Code | Description
