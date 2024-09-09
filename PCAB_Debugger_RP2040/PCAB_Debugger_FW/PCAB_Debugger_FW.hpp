@@ -64,6 +64,8 @@ void setup();
 void close();
 void writeDPS();
 void writeDSA();
+void writeDSAin();
+void writeDSAall();
 bool romAddressRangeCheck(const uint16_t &blockNum, const uint8_t &sectorpageNum);
 std::string readSerialNum();
 bool saveSTATE(const uint8_t &sectorNum, const uint8_t &pageNum, const uint8_t &stateNum);

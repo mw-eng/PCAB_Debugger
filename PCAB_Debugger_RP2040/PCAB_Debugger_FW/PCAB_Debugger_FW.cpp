@@ -137,7 +137,18 @@ int main()
                 case pcabCMD::cmdCode::WrtDPS:
                     if(modeBCM)
                     {
-
+                        if(cmd.argment.size() != NUMBER_OF_SYSTEM) { uart->writeSLIP_block(retCODE(0xF2)); }
+                        else
+                        {
+                            bool errFLG = false;
+                            for(size_t i = 0; i < cmd.argment.size(); i++)
+                            {
+                                if(cmd.argment[i] > (1u << 6) ) { errFLG = true; break; }
+                                dpsBF[i] = cmd.argment[i];
+                            }
+                            if(errFLG) { uart->writeSLIP_block(retCODE(0xFE)); }
+                            else { writeDPS(); uart->writeSLIP_block(retCODE(0x00)); }
+                        }
                     }
                     else
                     {
@@ -152,7 +163,16 @@ int main()
                 case pcabCMD::cmdCode::GetDPS:
                     if(modeBCM)
                     {
-
+                        std::vector<uint8_t> result;
+                        result.clear();
+                        if(cmd.argment.size() == 0)
+                        {
+                            result.push_back(0x00);
+                            result.push_back(0xFF);
+                            for(uint16_t i= 0; i< NUMBER_OF_SYSTEM; i++) { result.push_back(dpsNOW[i - 1] & 0x3F); }
+                        }
+                        else { result.push_back(0xF2); }
+                        uart->writeSLIP_block(result);
                     }
                     else
                     {
@@ -237,14 +257,30 @@ int main()
                 case pcabCMD::cmdCode::WrtDSA:
                     if(modeBCM)
                     {
-
+                        if(cmd.argment.size() == 1)
+                        {
+                            if(cmd.argment[0] > (1u << 5)) { uart->writeSLIP_block(retCODE(0xFE)); }
+                            else { dsaBF[NUMBER_OF_SYSTEM] = cmd.argment[0]; writeDSAin(); uart->writeSLIP_block(retCODE(0x00)); }
+                        }
+                        else if(cmd.argment.size() == NUMBER_OF_SYSTEM)
+                        {
+                            bool errFLG = false;
+                            for(size_t i = 0; i < cmd.argment.size(); i++)
+                            {
+                                if(cmd.argment[i] > (1u << 6) ) { errFLG = true; break; }
+                                dsaBF[i] = cmd.argment[i];
+                            }
+                            if(errFLG) { uart->writeSLIP_block(retCODE(0xFE)); }
+                            else { writeDSA(); uart->writeSLIP_block(retCODE(0x00)); }
+                        }
+                        else { uart->writeSLIP_block(retCODE(0xF2)); }
                     }
                     else
                     {
                         if(cmd.argments.size() != 0) { uart->writeLine("ERR > Number of arguments does not match."); }
                         else
                         {
-                            writeDSA();
+                            writeDSAall();
                             uart->writeLine("DONE > Write Digital Phase Shifter Status.");
                         }
                     }
@@ -252,7 +288,22 @@ int main()
                 case pcabCMD::cmdCode::GetDSA:
                     if(modeBCM)
                     {
-
+                        std::vector<uint8_t> result;
+                        result.clear();
+                        if(cmd.argment.size() == 0)
+                        {
+                            result.push_back(0x00);
+                            result.push_back(0xFF);
+                            for(uint16_t i= 0; i< NUMBER_OF_SYSTEM; i++) { result.push_back(dsaNOW[i - 1] & 0x3F); }
+                        } 
+                        else if(cmd.argment.size() == 1)
+                        {
+                            result.push_back(0x00);
+                            result.push_back(0xFF);
+                            result.push_back(dsaNOW[NUMBER_OF_SYSTEM]);
+                        }
+                        else { result.push_back(0xF2); }
+                        uart->writeSLIP_block(result);
                     }
                     else
                     {
@@ -344,7 +395,17 @@ int main()
                 case pcabCMD::cmdCode::GetSTB_AMP:
                     if(modeBCM)
                     {
-
+                        if(cmd.argment.size() != 0) { uart->writeSLIP_block(retCODE(0xF2)); }
+                        else
+                        {
+                            std::vector<uint8_t> result;
+                            result.clear();
+                            result.push_back(0x00);
+                            result.push_back(0xFF);
+                            if(stbAMP) { result.push_back(0x01); }
+                            else { result.push_back(0x00); }
+                            uart->writeSLIP_block(result);
+                        }
                     }
                     else
                     {
@@ -363,7 +424,17 @@ int main()
                 case pcabCMD::cmdCode::GetSTB_DRA:
                     if(modeBCM)
                     {
-
+                        if(cmd.argment.size() != 0) { uart->writeSLIP_block(retCODE(0xF2)); }
+                        else
+                        {
+                            std::vector<uint8_t> result;
+                            result.clear();
+                            result.push_back(0x00);
+                            result.push_back(0xFF);
+                            if(stbDRA) { result.push_back(0x01); }
+                            else { result.push_back(0x00); }
+                            uart->writeSLIP_block(result);
+                        }
                     }
                     else
                     {
@@ -382,7 +453,17 @@ int main()
                 case pcabCMD::cmdCode::GetSTB_LNA:
                     if(modeBCM)
                     {
-
+                        if(cmd.argment.size() != 0) { uart->writeSLIP_block(retCODE(0xF2)); }
+                        else
+                        {
+                            std::vector<uint8_t> result;
+                            result.clear();
+                            result.push_back(0x00);
+                            result.push_back(0xFF);
+                            if(stbLNA) { result.push_back(0x01); }
+                            else { result.push_back(0x00); }
+                            uart->writeSLIP_block(result);
+                        }
                     }
                     else
                     {
@@ -401,7 +482,17 @@ int main()
                 case pcabCMD::cmdCode::GetLPM:
                     if(modeBCM)
                     {
-
+                        if(cmd.argment.size() != 0) { uart->writeSLIP_block(retCODE(0xF2)); }
+                        else
+                        {
+                            std::vector<uint8_t> result;
+                            result.clear();
+                            result.push_back(0x00);
+                            result.push_back(0xFF);
+                            if(lowMODE) { result.push_back(0x01); }
+                            else { result.push_back(0x00); }
+                            uart->writeSLIP_block(result);
+                        }
                     }
                     else
                     {
@@ -986,19 +1077,29 @@ void writeDPS()
 void writeDSA()
 {
     std::vector<uint8_t> stBF;
-    uint8_t ioBF = dsaBF[NUMBER_OF_SYSTEM];
-    dsaNOW[NUMBER_OF_SYSTEM] = dsaBF[NUMBER_OF_SYSTEM];
     for(uint16_t i = NUMBER_OF_SYSTEM ; i > 0 ; i-- )
     {
         stBF.push_back(dsaBF[i - 1] ^ 0x3F);
         dsaNOW[i - 1] = dsaBF[i - 1] & 0x3F;
     }
     spi_dsa->spi_write_read(stBF);
+}
+
+void writeDSAin()
+{
+    uint8_t ioBF = dsaBF[NUMBER_OF_SYSTEM];
     gpio_put(DSA_D0_PIN, !((ioBF >> 0) & 1));
     gpio_put(DSA_D1_PIN, !((ioBF >> 1) & 1));
     gpio_put(DSA_D2_PIN, !((ioBF >> 2) & 1));
     gpio_put(DSA_D3_PIN, !((ioBF >> 3) & 1));
     gpio_put(DSA_D4_PIN, !((ioBF >> 4) & 1));
+    dsaNOW[NUMBER_OF_SYSTEM] = dsaBF[NUMBER_OF_SYSTEM];
+}
+
+void writeDSAall()
+{
+    writeDSAin();
+    writeDSA();
 }
 
 bool romAddressRangeCheck(const uint16_t &blockNum, const uint8_t &sectorpageNum)
@@ -1068,7 +1169,7 @@ void writeNowSTATE()
 {
     // Write now state.
     writeDPS();
-    writeDSA();
+    writeDSAall();
     gpio_put(STB_AMP_PIN, !stbAMP);
     gpio_put(STB_DRA_PIN, !stbDRA);
     gpio_put(STB_LNA_PIN, !stbLNA);
