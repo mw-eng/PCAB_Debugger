@@ -511,7 +511,13 @@ int main()
                 case pcabCMD::cmdCode::SetSTB_AMP:
                     if(modeBCM)
                     {
-
+                        if(cmd.argment.size() != 1) { uart->writeSLIP_block(retCODE(0xF2)); }
+                        else
+                        {
+                            if(cmd.argment[0] == 0x00) { stbAMP = false; gpio_put(STB_AMP_PIN, !stbAMP); uart->writeSLIP_block(retCODE(0x00)); }
+                            else if(cmd.argment[0] == 0x01) { stbAMP = true; gpio_put(STB_AMP_PIN, !stbAMP); uart->writeSLIP_block(retCODE(0x00)); }
+                            else { uart->writeSLIP_block(retCODE(0xFE)); }
+                        }
                     }
                     else
                     {
@@ -530,7 +536,13 @@ int main()
                 case pcabCMD::cmdCode::SetSTB_DRA:
                     if(modeBCM)
                     {
-
+                        if(cmd.argment.size() != 1) { uart->writeSLIP_block(retCODE(0xF2)); }
+                        else
+                        {
+                            if(cmd.argment[0] == 0x00) { stbDRA = false; gpio_put(STB_DRA_PIN, !stbDRA); uart->writeSLIP_block(retCODE(0x00)); }
+                            else if(cmd.argment[0] == 0x01) { stbDRA = true; gpio_put(STB_DRA_PIN, !stbDRA); uart->writeSLIP_block(retCODE(0x00)); }
+                            else { uart->writeSLIP_block(retCODE(0xFE)); }
+                        }
                     }
                     else
                     {
@@ -549,7 +561,13 @@ int main()
                 case pcabCMD::cmdCode::SetSTB_LNA:
                     if(modeBCM)
                     {
-
+                        if(cmd.argment.size() != 1) { uart->writeSLIP_block(retCODE(0xF2)); }
+                        else
+                        {
+                            if(cmd.argment[0] == 0x00) { stbLNA = false; gpio_put(STB_LNA_PIN, !stbLNA); uart->writeSLIP_block(retCODE(0x00)); }
+                            else if(cmd.argment[0] == 0x01) { stbLNA = true; gpio_put(STB_LNA_PIN, !stbLNA); uart->writeSLIP_block(retCODE(0x00)); }
+                            else { uart->writeSLIP_block(retCODE(0xFE)); }
+                        }
                     }
                     else
                     {
@@ -568,7 +586,13 @@ int main()
                 case pcabCMD::cmdCode::SetLPM:
                     if(modeBCM)
                     {
-
+                        if(cmd.argment.size() != 1) { uart->writeSLIP_block(retCODE(0xF2)); }
+                        else
+                        {
+                            if(cmd.argment[0] == 0x00) { lowMODE = false; gpio_put(LPW_MOD_PIN, !lowMODE); uart->writeSLIP_block(retCODE(0x00)); }
+                            else if(cmd.argment[0] == 0x01) { lowMODE = true; gpio_put(LPW_MOD_PIN, !lowMODE); uart->writeSLIP_block(retCODE(0x00)); }
+                            else { uart->writeSLIP_block(retCODE(0xFE)); }
+                        }
                     }
                     else
                     {
@@ -587,7 +611,22 @@ int main()
                 case pcabCMD::cmdCode::GetTMP_ID:
                     if(modeBCM)
                     {
-
+                        if(cmd.argment.size() != 0) { uart->writeSLIP_block(retCODE(0xF2)); }
+                        else
+                        {
+                            std::vector<uint8_t> result;
+                            result.clear();
+                            result.push_back(0x00);
+                            result.push_back(0xFF);
+                            std::vector<uint64_t> code = sens->getSENS_ROMCODE();
+                            for(uint i = 0; i < code.size(); i++)
+                            {
+                                for(size_t len = 0; len < 64u; len++)
+                                {
+                                }
+                            }
+                            uart->writeSLIP_block(result);
+                        }
                     }
                     else
                     {
@@ -637,7 +676,22 @@ int main()
                 case pcabCMD::cmdCode::GetTMP_VAL:
                     if(modeBCM)
                     {
-
+                        if(cmd.argment.size() != 0) { uart->writeSLIP_block(retCODE(0xF2)); }
+                        else
+                        {
+                            std::vector<uint8_t> result;
+                            result.clear();
+                            result.push_back(0x00);
+                            result.push_back(0xFF);
+                            std::vector<int16_t> code = sens->readSENS();
+                            for(uint i = 0; i < code.size(); i++)
+                            {
+                                for(size_t len = 0; len < 64u; len++)
+                                {
+                                }
+                            }
+                            uart->writeSLIP_block(result);
+                        }
                     }
                     else
                     {
@@ -945,7 +999,21 @@ int main()
                 case pcabCMD::cmdCode::RST:
                     if(modeBCM)
                     {
-
+                        if(cmd.argment.size() != 0) { uart->writeSLIP_block(retCODE(0xF2)); }
+                        else
+                        {
+                            if(!readSTATE(15u, 0u, 0u))
+                            {
+                                for(uint i = 0; i < NUMBER_OF_SYSTEM; i++) { dpsBF[i] = 0u; dsaBF[i] = 8u; }
+                                dsaBF[NUMBER_OF_SYSTEM] = 0u;
+                                stbAMP = false;
+                                stbDRA = false;
+                                stbLNA = false;
+                                lowMODE = false;
+                            }
+                            writeNowSTATE();
+                            uart->writeSLIP_block(retCODE(0x00));
+                        }
                     }
                     else
                     {
