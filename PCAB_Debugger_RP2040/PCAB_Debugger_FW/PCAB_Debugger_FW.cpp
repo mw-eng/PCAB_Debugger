@@ -1046,6 +1046,9 @@ int main()
                         if(cmd.argment.size() != 4) { uart->writeSLIP_block(retCODE(0xF2)); }
                         else
                         {
+                            if(cmd.argment[2] & 0x0F != 0x00 || cmd.argment[3] != 0x00)
+                            { uart->writeSLIP_block(retCODE(0xFE)); }
+                            //flash->re
                             std::vector<uint8_t> result;
                             result.clear();
                             result.push_back(0x00);
