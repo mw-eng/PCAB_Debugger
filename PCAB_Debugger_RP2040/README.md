@@ -130,7 +130,7 @@ Command Code | Description
 0xD5 | Get LNA STBY.<br>The response data is in the same binary format as it was written.
 0xD6 | Get low power mode.<br>The response data is in the same binary format as it was written.
 0xE1 | Get all temperature sensor IDs.<br> 8byte * 15
-0xE2 | Get all temperature data.<br>The response data is 2 bytes of raw data.
+0xE2 | Get all temperature data.<br>The response data is 2 bytes * 15 of raw data.
 0xE3 | Get CPU Temperature(AD Value).<br>The response data is 2 bytes of raw data.
 0xE4 | Get Vd Value.<br>The response data is 2 bytes of raw data.
 0xE5 | Get Id Value.<br>The response data is 2 bytes of raw data.
@@ -138,7 +138,7 @@ Command Code | Description
 0xE7 | Get Pin Value.<br>The response data is 2 bytes of raw data.
 0xEA | Get Mode.<br>The response data is 1 bytes of raw data.
 0xEE | Get all Analog values.<br>The responce data is {Vd(2byte) + Id(2byte) + Vin(2byte) + Pin(2byte) + CPU Temp(2byte)} of raw data.
-0xEF | Get all senser values.<br>The responce data is {AnalogValues(10byte)+TempratureData(8byte * 15)}
+0xEF | Get all sensor values.<br>The responce data is {AnalogValues(10byte)+TempratureData(2byte * 15)}
 0xF0 | Get device identification character.
 0xFA | Restore factory default settings.<br>PS all 0<br>DSA all 2dB(No,0 = 0dB)<br>STB all 0(RUN MODE)<br>LPM 0(Full Power MODE)
 0xFB {Address} | Save state to memory(ROM).<br>However, whether or not it can be saved depends on the boot mode.<br>To save the default settings, set {Address} to 0x00 or leave it unspecified. ({Address} can be specified from 0x00 to 0x03.)<br>If you specify the sector number (4 bits), setting number (4 bits), and setting number (specified in one byte from 0x00 to 0x03), it will be written to the specified setting number. (Default is {0xE0}{0x00})

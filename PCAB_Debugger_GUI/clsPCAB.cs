@@ -8,55 +8,9 @@ using System.Collections.Generic;
 
 namespace PCAB_Debugger_GUI
 {
-    public class PCAB_SerialInterface
-    {
-        private SerialPort Serial;
-        private bool? _task;    //true:run / false:stop / null:Interrupt
-        private SerialPort _mod;
-        private bool _state;
-        public List<PCAB_UnitInterface> pcabUNITs { get; private set; }
+    
 
-        public PCAB_SerialInterface(string PortName, List<string> SNs)
-            : this(SNs, PortName, 3686400, 8, Parity.Even, StopBits.One, 4096, 5000, 5000) { }
-
-        public PCAB_SerialInterface(List<string> SNs, string PortName, 
-            int baudRate, int dataBits, Parity parity, StopBits stopbit, int readBufferSize, int writeTimeOut, int readTimeOut)
-        {
-            Serial = new SerialPort(PortName);
-            Serial.BaudRate = baudRate;
-            Serial.DataBits = dataBits;
-            Serial.Parity = parity;
-            Serial.StopBits = stopbit;
-            Serial.Handshake = Handshake.None;
-            Serial.DtrEnable = true;
-            Serial.Encoding = Encoding.ASCII;
-            Serial.NewLine = "\r\n";
-            Serial.ReadBufferSize = readBufferSize;
-            Serial.WriteTimeout = writeTimeOut;
-            Serial.ReadTimeout = readTimeOut;
-        }
-
-        ~PCAB_SerialInterface() { this.Close(); }
-
-        public void Close() { if (Serial?.IsOpen == true) { try { Serial.Close(); } catch { } } Serial = null; pcabUNITs.Clear(); }
-
-
-
-    }
-
-    public class PCAB_UnitInterface
-    {
-        private string _name;
-        private cntConfig _config;
-        private cntMonitor _monitor;
-
-        public PCAB_UnitInterface(string name, cntConfig config, cntMonitor monitor)
-        {
-            _name = name;
-            _config = config;
-            _monitor = monitor;
-        }
-    }
+    
 
     public class PCAB_CommandInterface
     {

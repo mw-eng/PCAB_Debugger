@@ -5,7 +5,7 @@ namespace PCAB_Debugger_GUI
 {
     public class clsSLIP
     {
-        static List<byte> EncodeSLIP(List<byte> data)
+        public static List<byte> EncodeSLIP(List<byte> data)
         {
             List<byte> result = new List<byte>();
             result.Clear();
@@ -30,7 +30,7 @@ namespace PCAB_Debugger_GUI
             return result;
         }
 
-        static List<byte> DecodeSLIP(List<byte> data)
+        public static List<byte> DecodeSLIP(List<byte> data)
         {
             List<byte> result = new List<byte>();
             result.Clear();

@@ -58,7 +58,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="clsPCAB_IO.cs" />
-    <Compile Include="clsSLPI.cs" />
+    <Compile Include="clsSLIP.cs" />
     <Compile Include="cntAUTO.xaml.cs">
       <DependentUpon>cntAUTO.xaml</DependentUpon>
     </Compile>
