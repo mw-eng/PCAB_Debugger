@@ -10,8 +10,38 @@ namespace PCAB_Debugger_GUI
 {
     public class PCAB_SerialInterface
     {
-        private SerialPort _serialport;
-        private List<PCAB_UnitInterface> pcabUNITs;
+        private SerialPort Serial;
+        private bool? _task;    //true:run / false:stop / null:Interrupt
+        private SerialPort _mod;
+        private bool _state;
+        public List<PCAB_UnitInterface> pcabUNITs { get; private set; }
+
+        public PCAB_SerialInterface(string PortName, List<string> SNs)
+            : this(SNs, PortName, 3686400, 8, Parity.Even, StopBits.One, 4096, 5000, 5000) { }
+
+        public PCAB_SerialInterface(List<string> SNs, string PortName, 
+            int baudRate, int dataBits, Parity parity, StopBits stopbit, int readBufferSize, int writeTimeOut, int readTimeOut)
+        {
+            Serial = new SerialPort(PortName);
+            Serial.BaudRate = baudRate;
+            Serial.DataBits = dataBits;
+            Serial.Parity = parity;
+            Serial.StopBits = stopbit;
+            Serial.Handshake = Handshake.None;
+            Serial.DtrEnable = true;
+            Serial.Encoding = Encoding.ASCII;
+            Serial.NewLine = "\r\n";
+            Serial.ReadBufferSize = readBufferSize;
+            Serial.WriteTimeout = writeTimeOut;
+            Serial.ReadTimeout = readTimeOut;
+        }
+
+        ~PCAB_SerialInterface() { this.Close(); }
+
+        public void Close() { if (Serial?.IsOpen == true) { try { Serial.Close(); } catch { } } Serial = null; pcabUNITs.Clear(); }
+
+
+
     }
 
     public class PCAB_UnitInterface
@@ -30,8 +60,6 @@ namespace PCAB_Debugger_GUI
 
     public class PCAB_CommandInterface
     {
-
-
     }
 
     public class PCAB
@@ -64,11 +92,9 @@ namespace PCAB_Debugger_GUI
             CondNOW = new condDAT();
             DAT = new List<condDAT>();
             //_mod.BaudRate = 9600;
-            //_mod.BaudRate = 115200;
-            _mod.BaudRate = 3686400;
+            _mod.BaudRate = 115200;
             _mod.DataBits = 8;
-            //_mod.Parity = Parity.None;
-            _mod.Parity = Parity.Even;
+            _mod.Parity = Parity.None;
             _mod.StopBits = StopBits.One;
             _mod.Handshake = Handshake.None;
             _mod.DtrEnable = true;
@@ -79,7 +105,7 @@ namespace PCAB_Debugger_GUI
             _mod.ReadTimeout = 5000;
         }
 
-        ~PCAB() { this.Close();  }
+        ~PCAB() { this.Close(); }
 
         public void Close() { if (_mod?.IsOpen == true) { try { _mod.Close(); } catch { } } _mod = null; DAT.Clear(); }
 
@@ -90,8 +116,9 @@ namespace PCAB_Debugger_GUI
             try
             {
                 _mod.WriteLine("");
-                foreach (string s in serialNum) { 
-                    _mod.WriteLine("#" + s + " CUI 0"); 
+                foreach (string s in serialNum)
+                {
+                    _mod.WriteLine("#" + s + " CUI 0");
                 }
                 Thread.Sleep(500);
                 _mod.DiscardInBuffer();
@@ -101,12 +128,12 @@ namespace PCAB_Debugger_GUI
                     _mod.WriteLine("#" + s + " GetIDN");
                     string[] arrBf = _mod.ReadLine().Split(',');
                     if (arrBf.Length != 4) { _mod.Close(); return false; }
-                    if (arrBf[0] == "Orient Microwave Corp." && arrBf[1] == "LX00-0004-00" && arrBf[3].Substring(0,4) == "1.3." && (arrBf[2] == s || "*" == s))
+                    if (arrBf[0] == "Orient Microwave Corp." && arrBf[1] == "LX00-0004-00" && arrBf[3].Substring(0, 4) == "1.3." && (arrBf[2] == s || "*" == s))
                     {
                         DAT.Add(new condDAT(s.Replace(" ", ""), "", "", "", "", "", ""));
                     }
                 }
-                if(DAT.Count < 1) { _mod.Close(); return false; }
+                if (DAT.Count < 1) { _mod.Close(); return false; }
             }
             catch { OnError?.Invoke(this, new PCABEventArgs(new condDAT(), "Serial Connect Error.")); return false; }
 
@@ -145,11 +172,11 @@ namespace PCAB_Debugger_GUI
             }
         }
 
-        public string PCAB_CMD(string serialNum, string cmd,int readLine)
+        public string PCAB_CMD(string serialNum, string cmd, int readLine)
         {
             if (!autoOpen()) { return "ERR"; }
             _task = null;
-            while (_state) {Thread.Sleep(59);}
+            while (_state) { Thread.Sleep(59); }
             _state = true;
             try
             {
@@ -160,14 +187,14 @@ namespace PCAB_Debugger_GUI
                 _task = true;
                 return ret;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 OnError?.Invoke(this, new PCABEventArgs(new condDAT(), e.Message));
                 return "ERR\n";
             }
         }
 
-        public void DiscardInBuffer(){ _mod.DiscardInBuffer(); }
+        public void DiscardInBuffer() { _mod.DiscardInBuffer(); }
 
         private void PCAB_Task(UInt32 waiteTime)
         {
@@ -183,7 +210,7 @@ namespace PCAB_Debugger_GUI
                         foreach (condDAT cdat in DAT)
                         {
                             _mod.DiscardInBuffer();
-                            _mod.WriteLine("#" +  cdat.SN + " GetId");
+                            _mod.WriteLine("#" + cdat.SN + " GetId");
                             string id = _mod.ReadLine();
                             _mod.WriteLine("#" + cdat.SN + " GetVd");
                             string vd = _mod.ReadLine();
@@ -205,7 +232,8 @@ namespace PCAB_Debugger_GUI
                     }
                 } while (_task != false);
                 _mod?.Close();
-            }catch (Exception e)
+            }
+            catch (Exception e)
             {
                 OnError?.Invoke(this, new PCABEventArgs(new condDAT(), e.Message));
             }

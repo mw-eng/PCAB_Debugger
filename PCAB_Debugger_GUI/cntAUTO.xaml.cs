@@ -1,0 +1,383 @@
+﻿using MWComLibCS.ExternalControl;
+using System;
+using System.Text.RegularExpressions;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
+
+namespace PCAB_Debugger_GUI
+{
+    /// <summary>
+    /// cntAUTO.xaml の相互作用ロジック
+    /// </summary>
+    public partial class cntAUTO : UserControl
+    {
+        private int sesn;
+        public delegate void StartButtonClickEventHandler(object sender, RoutedEventArgs e, string dirPath);
+        public event StartButtonClickEventHandler ButtonClickEvent;
+
+        public cntAUTO() : this(VisaControlNI.NewResourceManager()) { }
+
+        public cntAUTO(int VISAresource)
+        {
+            InitializeComponent();
+            sesn = VISAresource;
+        }
+
+        private void VNALOOP_START_BUTTON_Click(object sender, RoutedEventArgs e)
+        {
+            string dirPath = "";
+            if (VNALOOP_SCRE_CHECKBOX.IsChecked == true ||
+                VNALOOP_TRA_CHECKBOX.IsChecked == true)
+            {
+                using (System.Windows.Forms.FolderBrowserDialog fbd = new System.Windows.Forms.FolderBrowserDialog())
+                {
+                    fbd.Description = "Please Select Folder";
+                    fbd.RootFolder = Environment.SpecialFolder.Desktop;
+                    fbd.ShowNewFolderButton = true;
+                    if (fbd.ShowDialog() != System.Windows.Forms.DialogResult.OK)
+                    {
+                        return;
+                    }
+                    dirPath = fbd.SelectedPath;
+                }
+            }
+            ButtonClickEvent?.Invoke(sender, e, dirPath);
+        }
+
+        private void VNALOOP_VISA_CONNECT_CHECK_BUTTON_Click(object sender, RoutedEventArgs e)
+        {
+            string strBF = VNALOOP_VISAADDR_TEXTBOX.Text;
+            try
+            {
+                IEEE488 instr;
+                instr = new IEEE488(new VisaControlNI(sesn, strBF));
+                instr.IEEE488_VisaControl.SetTimeout(uint.Parse(VNALOOP_TIMEOUT_TEXTBOX.Text));
+                IEEE488_IDN idn = instr.IDN();
+                instr.Dispose();
+                MessageBox.Show("Vender\t\t: " + idn.Vender +
+                              "\nModel Number\t: " + idn.ModelNumber +
+                              "\nRevision Code\t: " + idn.RevisionCode +
+                              "\nSerial Number\t: " + idn.SerialNumber, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception err)
+            {
+                MessageBox.Show(err.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void VNALOOP_CH_Click(object sender, RoutedEventArgs e)
+        {
+            if (((RadioButton)sender).Name == "VNALOOP_CH_ALL")
+            {
+                VNALOOP_CHANNEL_COMBOBOX.IsEnabled = false;
+                VNALOOP_CH_SEL.IsChecked = false;
+            }
+            else
+            {
+                VNALOOP_CHANNEL_COMBOBOX.IsEnabled = true;
+                VNALOOP_CH_ALL.IsChecked = false;
+                VNALOOP_CHANNEL_COMBOBOX.Items.Clear();
+                try
+                {
+                    agPNA835x pna = new agPNA835x(new IEEE488(new VisaControlNI(sesn, VNALOOP_VISAADDR_TEXTBOX.Text)));
+                    foreach (uint i in pna.getChannelCatalog())
+                    {
+                        VNALOOP_CHANNEL_COMBOBOX.Items.Add(i.ToString());
+                    }
+                    pna.Instrument.Dispose();
+                    pna = null;
+                }
+                catch (Exception err)
+                {
+                    MessageBox.Show(err.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    VNALOOP_CHANNEL_COMBOBOX.IsEnabled = false;
+                    VNALOOP_CH_SEL.IsChecked = false;
+                    VNALOOP_CH_ALL.IsChecked = true;
+                }
+            }
+        }
+
+        private void DPS_VnaLoopEnable_Checked(object sender, RoutedEventArgs e)
+        {
+            VNALOOP_DPSstep_COMBOBOX.IsEnabled = true;
+            DPS_VNALOOP_GRID.IsEnabled = true;
+            foreach (object objBF in DPS_VNALOOP_GRID.Children)
+            {
+                if (typeof(CheckBox) == objBF.GetType())
+                {
+                    if (((CheckBox)objBF).IsChecked == true)
+                    {
+                        VNALOOP_CONF_GRID.IsEnabled = true;
+                    }
+                }
+            }
+        }
+
+        private void DPS_VnaLoopEnable_Unchecked(object sender, RoutedEventArgs e)
+        {
+            VNALOOP_DPSstep_COMBOBOX.IsEnabled = false;
+            DPS_VNALOOP_GRID.IsEnabled = false;
+            if (VNALOOP_SCRE_CHECKBOX.IsChecked != true &&
+                VNALOOP_TRA_CHECKBOX.IsChecked != true)
+            {
+                if (DSA_VnaLoopEnable.IsChecked != true)
+                {
+                    VNALOOP_CONF_GRID.IsEnabled = false;
+                }
+                else
+                {
+                    foreach (object objBF in DSA_VNALOOP_GRID.Children)
+                    {
+                        if (typeof(CheckBox) == objBF.GetType())
+                        {
+                            if (((CheckBox)objBF).IsChecked == true)
+                            {
+                                return;
+                            }
+                        }
+                    }
+                    VNALOOP_CONF_GRID.IsEnabled = false;
+                }
+            }
+        }
+
+        private void DSA_VnaLoopEnable_Checked(object sender, RoutedEventArgs e)
+        {
+            VNALOOP_DSAstep_COMBOBOX.IsEnabled = true;
+            DSA_VNALOOP_GRID.IsEnabled = true;
+            foreach (object objBF in DSA_VNALOOP_GRID.Children)
+            {
+                if (typeof(CheckBox) == objBF.GetType())
+                {
+                    if (((CheckBox)objBF).IsChecked == true)
+                    {
+                        VNALOOP_CONF_GRID.IsEnabled = true;
+                    }
+                }
+            }
+        }
+
+        private void DSA_VnaLoopEnable_Unchecked(object sender, RoutedEventArgs e)
+        {
+            VNALOOP_DSAstep_COMBOBOX.IsEnabled = false;
+            DSA_VNALOOP_GRID.IsEnabled = false;
+            if (VNALOOP_SCRE_CHECKBOX.IsChecked != true &&
+                VNALOOP_TRA_CHECKBOX.IsChecked != true)
+            {
+                if (DPS_VnaLoopEnable.IsChecked != true)
+                {
+                    VNALOOP_CONF_GRID.IsEnabled = false;
+                }
+                else
+                {
+                    foreach (object objBF in DPS_VNALOOP_GRID.Children)
+                    {
+                        if (typeof(CheckBox) == objBF.GetType())
+                        {
+                            if (((CheckBox)objBF).IsChecked == true)
+                            {
+                                return;
+                            }
+                        }
+                    }
+                    VNALOOP_CONF_GRID.IsEnabled = false;
+                }
+            }
+        }
+
+        private void DPSn_CheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            VNALOOP_CONF_GRID.IsEnabled = true;
+        }
+
+        private void DPSn_CheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            foreach (object objBF in DPS_VNALOOP_GRID.Children)
+            {
+                if (typeof(CheckBox) == objBF.GetType())
+                {
+                    if (((CheckBox)objBF).IsChecked == true)
+                    {
+                        return;
+                    }
+                }
+            }
+            if (VNALOOP_SCRE_CHECKBOX.IsChecked != true &&
+                VNALOOP_TRA_CHECKBOX.IsChecked != true)
+            {
+                if (DSA_VnaLoopEnable.IsChecked != true)
+                {
+                    VNALOOP_CONF_GRID.IsEnabled = false;
+                }
+                else
+                {
+                    foreach (object objBF in DSA_VNALOOP_GRID.Children)
+                    {
+                        if (typeof(CheckBox) == objBF.GetType())
+                        {
+                            if (((CheckBox)objBF).IsChecked == true)
+                            {
+                                return;
+                            }
+                        }
+                    }
+                    VNALOOP_CONF_GRID.IsEnabled = false;
+                }
+            }
+        }
+
+        private void DSAn_CheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            VNALOOP_CONF_GRID.IsEnabled = true;
+        }
+
+        private void DSAn_CheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            foreach (object objBF in DSA_VNALOOP_GRID.Children)
+            {
+                if (typeof(CheckBox) == objBF.GetType())
+                {
+                    if (((CheckBox)objBF).IsChecked == true)
+                    {
+                        return;
+                    }
+                }
+            }
+            if (VNALOOP_SCRE_CHECKBOX.IsChecked != true &&
+                VNALOOP_TRA_CHECKBOX.IsChecked != true)
+            {
+                if (DPS_VnaLoopEnable.IsChecked != true)
+                {
+                    VNALOOP_CONF_GRID.IsEnabled = false;
+                }
+                else
+                {
+                    foreach (object objBF in DPS_VNALOOP_GRID.Children)
+                    {
+                        if (typeof(CheckBox) == objBF.GetType())
+                        {
+                            if (((CheckBox)objBF).IsChecked == true)
+                            {
+                                return;
+                            }
+                        }
+                    }
+                    VNALOOP_CONF_GRID.IsEnabled = false;
+                }
+            }
+        }
+
+        private void VNALOOP_SaveTarget_CHECKBOX_Checked(object sender, RoutedEventArgs e)
+        {
+            VNALOOP_CONF_GRID.IsEnabled = true;
+        }
+
+        private void VNALOOP_SaveTarget_CHECKBOX_Unchecked(object sender, RoutedEventArgs e)
+        {
+            if (VNALOOP_SCRE_CHECKBOX.IsChecked != true &&
+                VNALOOP_TRA_CHECKBOX.IsChecked != true)
+            {
+                if (DPS_VnaLoopEnable.IsChecked == true)
+                {
+                    foreach (object objBF in DPS_VNALOOP_GRID.Children)
+                    {
+                        if (typeof(CheckBox) == objBF.GetType())
+                        {
+                            if (((CheckBox)objBF).IsChecked == true)
+                            {
+                                return;
+                            }
+                        }
+                    }
+                }
+                if (DSA_VnaLoopEnable.IsChecked == true)
+                {
+                    foreach (object objBF in DSA_VNALOOP_GRID.Children)
+                    {
+                        if (typeof(CheckBox) == objBF.GetType())
+                        {
+                            if (((CheckBox)objBF).IsChecked == true)
+                            {
+                                return;
+                            }
+                        }
+                    }
+                }
+                VNALOOP_CONF_GRID.IsEnabled = false;
+            }
+        }
+
+        private void DPS_CHECK_ALL_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (object objBF in DPS_VNALOOP_GRID.Children)
+            {
+                if (typeof(CheckBox) == objBF.GetType()) { ((CheckBox)objBF).IsChecked = true; }
+            }
+        }
+
+        private void DPS_UNCHECK_ALL_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (object objBF in DPS_VNALOOP_GRID.Children)
+            {
+                if (typeof(CheckBox) == objBF.GetType()) { ((CheckBox)objBF).IsChecked = false; }
+            }
+        }
+
+        private void DSA_CHECK_ALL_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (object objBF in DSA_VNALOOP_GRID.Children)
+            {
+                if (typeof(CheckBox) == objBF.GetType()) { ((CheckBox)objBF).IsChecked = true; }
+            }
+        }
+
+        private void DSA_UNCHECK_ALL_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (object objBF in DSA_VNALOOP_GRID.Children)
+            {
+                if (typeof(CheckBox) == objBF.GetType()) { ((CheckBox)objBF).IsChecked = false; }
+            }
+        }
+
+        private void DEC_TextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            // 0-9のみ
+            e.Handled = !new Regex("[0-9]").IsMatch(e.Text);
+        }
+
+        private void DEC_TextBox_PreviewExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            // 貼付け場合
+            if (e.Command == ApplicationCommands.Paste)
+            {
+                string strTXT = Clipboard.GetText();
+                for (int cnt = 0; cnt < strTXT.Length; cnt++)
+                {
+                    if (!new Regex("[0-9]|[ ]").IsMatch(strTXT[cnt].ToString()))
+                    {
+                        // 処理済み
+                        e.Handled = true;
+                        break;
+                    }
+                }
+            }
+        }
+
+        private void DEC_TextBox_PreviewLostKeyboardForcus(object sender, KeyboardFocusChangedEventArgs e)
+        {
+            try
+            {
+                uint uintVal = Convert.ToUInt32(((TextBox)sender).Text);
+                if (0 <= uintVal && uintVal <= 65535) { return; }
+                MessageBox.Show("Enter in the range 0 to 65535");
+                e.Handled = true;
+            }
+            catch
+            {
+                MessageBox.Show("Enter in the range 0 to 65535");
+                e.Handled = true;
+            }
+        }
+    }
+}

@@ -39,22 +39,30 @@ pcabCMD::CommandLine pcabCMD::readCMD(bool echo, bool slpi)
         std::string serialNum;
         std::string romID = "";
         size_t cnt = 0;
-        for(size_t s = 0; s < datBF.size(); ++s)
+        if(datBF.size() == 0){ return pcabCMD::CommandLine("", "", cmdCode::NUL, NULL, 0); }
+        if(datBF[0] == 0x23)
         {
-            if(datBF[s]==0xFF) { cnt = s; break; }
-        }
-        if(cnt == 0 || datBF.size() <= cnt + 1){ return pcabCMD::CommandLine("", "", cmdCode::NUL, NULL, 0); }
-        std::string strBF = std::string(datBF.begin(), datBF.begin() + cnt);
-        if(strBF.size() > 0)
-        {
-            if(String::strCompare(strBF.substr(0, 1), "#", true))
+            for(size_t s = 0; s < datBF.size(); ++s)
             {
-                serialNum = strBF.substr(1);
-            }else if(String::strCompare(strBF.substr(0, 1), "$", true))
-            {
-                romID = strBF.substr(1);
+                if(datBF[s]==0xFF) { cnt = s; break; }
             }
-        }
+            if(cnt == 0 || datBF.size() <= cnt + 1){ return pcabCMD::CommandLine("", "", cmdCode::NUL, NULL, 0); }
+            std::string strBF = std::string(datBF.begin(), datBF.begin() + cnt);
+            serialNum = strBF.substr(1);
+        }else if(datBF[0] == 0x24)
+        {
+            if(datBF.size() <= 9) { return pcabCMD::CommandLine("", "", cmdCode::NUL, NULL, 0); }
+            romID = Convert::ToString(datBF[1], 16, 2);
+            romID = Convert::ToString(datBF[2], 16, 2);
+            romID = Convert::ToString(datBF[3], 16, 2);
+            romID = Convert::ToString(datBF[4], 16, 2);
+            romID = Convert::ToString(datBF[5], 16, 2);
+            romID = Convert::ToString(datBF[6], 16, 2);
+            romID = Convert::ToString(datBF[7], 16, 2);
+            romID = Convert::ToString(datBF[8], 16, 2);
+            cnt = 8;
+        } else { return pcabCMD::CommandLine("", "", cmdCode::NUL, NULL, 0); }
+
         std::vector<uint8_t> arg = std::vector<uint8_t>(datBF.size() - cnt - 2);
         copy(datBF.begin() + cnt + 2, datBF.end(), arg.begin());
         

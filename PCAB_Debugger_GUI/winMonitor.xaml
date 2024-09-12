@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PCAB_Debugger_GUI"
         mc:Ignorable="d"
-        Title="winMonitor" Height="450" Width="800">
+        Title="PCAB Debugger Monitor" Height="450" Width="800" Closing="Window_Closing"
+        SourceInitialized="Window_SourceInitialized">
     <Grid x:Name="GRID_MAIN">
         <local:cntMonitor/>
     </Grid>

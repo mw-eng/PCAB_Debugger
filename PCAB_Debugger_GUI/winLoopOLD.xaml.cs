@@ -14,9 +14,9 @@ namespace PCAB_Debugger_GUI
     /// <summary>
     /// winLoop.xaml の相互作用ロジック
     /// </summary>
-    public partial class winLoop : Window
+    public partial class winLoopOLD : Window
     {
-        winMain owner;
+        winMainOLD owner;
         bool runTASK = true;
         string sn;
         string dirPath;
@@ -33,7 +33,7 @@ namespace PCAB_Debugger_GUI
         PCAB _mod;
         agPNA835x instr;
 
-        public winLoop(winMain WINowner, string DirPATH)
+        public winLoopOLD(winMainOLD WINowner, string DirPATH)
         {
             InitializeComponent();
             owner = WINowner;
@@ -47,6 +47,163 @@ namespace PCAB_Debugger_GUI
             uint stepDSA = 0;
             int waitTIME = -1;
             //Get Configuration
+            _mod = owner._mod;
+            sn = owner.SERIAL_NUMBERS_COMBOBOX.Text;
+            fileHeader = owner.VNALOOP_FILEHEADER_TEXTBOX.Text;
+            _mod.PCAB_CMD(sn, "CUI 0", 1);
+            _mod.DiscardInBuffer();
+            dps.Clear();
+            dsa.Clear();
+            waitTIME = int.Parse(owner.VNALOOP_WAITTIME_TEXTBOX.Text);
+            if (owner.DPS_VnaLoopEnable.IsChecked == true)
+            {
+                foreach (object objBF in owner.DPS_VNALOOP_GRID.Children)
+                {
+                    if (typeof(CheckBox) == objBF.GetType())
+                    {
+                        if (((CheckBox)objBF).IsChecked == true)
+                        {
+                            dps.Add(int.Parse(((CheckBox)objBF).Content.ToString().Substring(3)));
+                        }
+                    }
+                }
+                if (dps.Count > 0) { stepDPS = (uint)Math.Pow(2, (double)owner.VNALOOP_DPSstep_COMBOBOX.SelectedIndex); }
+            }
+            if (owner.DSA_VnaLoopEnable.IsChecked == true)
+            {
+                foreach (object objBF in owner.DSA_VNALOOP_GRID.Children)
+                {
+                    if (typeof(CheckBox) == objBF.GetType())
+                    {
+                        if (((CheckBox)objBF).IsChecked == true)
+                        {
+                            dsa.Add(int.Parse(((CheckBox)objBF).Content.ToString().Substring(3)));
+                        }
+                    }
+                }
+                if (dsa.Count > 0) { stepDSA = (uint)Math.Pow(2, (double)owner.VNALOOP_DSAstep_COMBOBOX.SelectedIndex); }
+            }
+            loops.Clear();
+            loopCONF loopCONFBF = new loopCONF();
+            if (stepDPS > 0 && stepDSA > 0)
+            {
+                for (int cntDPS = 0; cntDPS < 64; cntDPS += (int)stepDPS)
+                {
+                    for (int cntDSA = 0; cntDSA < 64; cntDSA += (int)stepDSA)
+                    {
+                        loopCONFBF.dps = cntDPS;
+                        loopCONFBF.dsa = cntDSA;
+                        loops.Add(loopCONFBF);
+                    }
+                }
+            }
+            else if (stepDPS > 0)
+            {
+                for (int cntDPS = 0; cntDPS < 64; cntDPS += (int)stepDPS)
+                {
+                    loopCONFBF.dps = cntDPS;
+                    loopCONFBF.dsa = -1;
+                    loops.Add(loopCONFBF);
+                }
+            }
+            else if (stepDSA > 0)
+            {
+                for (int cntDSA = 0; cntDSA < 64; cntDSA += (int)stepDSA)
+                {
+                    loopCONFBF.dps = -1;
+                    loopCONFBF.dsa = cntDSA;
+                    loops.Add(loopCONFBF);
+                }
+            }
+            else
+            {
+                loopCONFBF.dps = -1;
+                loopCONFBF.dsa = -1;
+                loops.Add(loopCONFBF);
+            }
+            if (owner.VNALOOP_SCRE_CHECKBOX.IsChecked == true ||
+                owner.VNALOOP_TRA_CHECKBOX.IsChecked == true)
+            {
+                if (owner.VNALOOP_SCRE_CHECKBOX.IsChecked == true) { saveSCR = true; }
+                if (owner.VNALOOP_TRA_CHECKBOX.IsChecked == true) { saveTRA = true; }
+                instr = new agPNA835x(new IEEE488(new VisaControlNI(owner.sesn, owner.VNALOOP_VISAADDR_TEXTBOX.Text)));
+                instr.Instrument.IEEE488_VisaControl.SetTimeout(uint.Parse(owner.VNALOOP_TIMEOUT_TEXTBOX.Text));
+                //Get instrument configure
+                try
+                {
+                    IEEE488_IDN idn = instr.Instrument.IDN();
+                    channels.Clear();
+                    if (owner.VNALOOP_CH_ALL.IsChecked == true)
+                    {
+                        foreach (uint i in instr.getChannelCatalog())
+                        {
+                            channels.Add(i);
+                        }
+                    }
+                    else
+                    {
+                        channels.Add(uint.Parse(owner.VNALOOP_CHANNEL_COMBOBOX.Text));
+                    }
+                    trig.Clear();
+                    if (owner.VNALOOP_SING_CHECKBOX.IsChecked == true)
+                    {
+                        singTRIG = true;
+                        foreach (uint ch in channels)
+                        {
+                            trig.Add(instr.getTriggerMode(ch));
+                        }
+                    }
+                    sheets.Clear();
+                    foreach (uint i in instr.getSheetsCatalog())
+                    {
+                        sheets.Add(i);
+                    }
+                }
+                catch
+                {
+                    MessageBox.Show("GPIB Connection Error.", "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+                    ExitErrTASK();
+                    return;
+                }
+                //check file path
+                if (owner.VNALOOP_SCRE_CHECKBOX.IsChecked == true)
+                {
+                    foreach (uint sh in sheets)
+                    {
+                        foreach (loopCONF cnf in loops)
+                        {
+                            string filePath = dirPath + "\\" + fileHeader;
+                            if (cnf.dps >= 0) { filePath += "_DPS" + cnf.dps.ToString("00"); }
+                            if (cnf.dsa >= 0) { filePath += "_DSA" + cnf.dsa.ToString("00"); }
+                            filePath += "_Sheet" + sh.ToString() + ".png";
+                            if (System.IO.File.Exists(filePath)) { fileFLG = true; break; }
+                        }
+                        if (fileFLG) { break; }
+                    }
+                }
+                if (owner.VNALOOP_TRA_CHECKBOX.IsChecked == true && fileFLG == false)
+                {
+                    foreach (uint sh in sheets)
+                    {
+                        foreach (loopCONF cnf in loops)
+                        {
+                            string filePath = dirPath + "\\" + fileHeader;
+                            if (cnf.dps >= 0) { filePath += "_DPS" + cnf.dps.ToString("00"); }
+                            if (cnf.dsa >= 0) { filePath += "_DSA" + cnf.dsa.ToString("00"); }
+                            filePath += "_Sheet" + sh.ToString() + ".csv";
+                            if (System.IO.File.Exists(filePath)) { fileFLG = true; break; }
+                        }
+                        if (fileFLG) { break; }
+                    }
+                }
+                if (fileFLG)
+                {
+                    if (MessageBox.Show("The file exists in the specified folder.\nDo you want to overwrite?",
+                        "Warning", MessageBoxButton.OKCancel, MessageBoxImage.Warning) == MessageBoxResult.Cancel) { runTASK = false; }
+                }
+
+            }
+            Task task = Task.Factory.StartNew(() => { LOOP_Task(waitTIME); });
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e)

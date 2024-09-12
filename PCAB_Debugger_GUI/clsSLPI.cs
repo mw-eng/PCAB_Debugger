@@ -26,6 +26,7 @@ namespace PCAB_Debugger_GUI
                         break;
                 }
             }
+            result.Add(0xC0);
             return result;
         }
 

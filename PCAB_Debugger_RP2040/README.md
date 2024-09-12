@@ -14,7 +14,7 @@ Send commands in the order of *${ROM ID}*, *{COMMAND}*, *{ARGUMENTS}*, and *{EXI
 *Support with v1.3.3 or later*<br>
 Send commands in the order of *#{SERIAL NUMBER}*, *{COMMAND and ARGUMENT}*, and *{EXIT CODE}*, *#{SERIAL NUMBER}* and *{COMMAND and ARGUMENT}* separated by *0xFF*.<br>
 or<br>
-Send commands in the order of *${ROM ID}*, *{COMMAND and ARGUMENT}*, and *{EXIT CODE}*, *${ROM ID}* and *{COMMAND and ARGUMENT}* separated by *0xFF*.<br>
+Send commands in the order of *0x24{ROM ID(8byte)}*, *{COMMAND and ARGUMENT}*, and *{EXIT CODE}*.<br>
 
 <details>
 <summary>Description</summary>
@@ -114,7 +114,7 @@ OROM {x-yz} {HEX} | Overwrite sector data to ROM.<br>{x-yz} : Specify the *block
 Command Code | Description
 :--|:--
 0xC0 | Frame end code.
-0xFF | Command separator code.
+0xFF | SerialNumber separator code.
 0xB0 {Byte} | Write Byte data to the input attenuator.
 0xC1 {Binary} | Write binary data to the digital step attenuator.<br>The binary data must be specified in the order of DSA numbers 1 to 15, and each DSA setting must be specified in 8 bits ( i.e. 15 bytes of data ).
 0xC2 {Binary} | Write binary data to the digital phase sifter.<br>The binary data must be specified in the order of DPS numbers 1 to 15, and each DPS setting must be specified in 8 bits ( i.e. 15 bytes of data ).

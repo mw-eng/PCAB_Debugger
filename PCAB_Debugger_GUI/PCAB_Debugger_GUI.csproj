@@ -57,10 +57,31 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="clsPCAB_IO.cs" />
     <Compile Include="clsSLPI.cs" />
+    <Compile Include="cntAUTO.xaml.cs">
+      <DependentUpon>cntAUTO.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="cntBOARD.xaml.cs">
+      <DependentUpon>cntBOARD.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="winMainOLD.xaml.cs">
+      <DependentUpon>winMainOLD.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="winLoopOLD.xaml.cs">
+      <DependentUpon>winLoopOLD.xaml</DependentUpon>
+    </Compile>
     <Compile Include="winMonitor.xaml.cs">
       <DependentUpon>winMonitor.xaml</DependentUpon>
     </Compile>
+    <Page Include="cntAUTO.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="cntBOARD.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="cntConfig.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -81,9 +102,17 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="winLoopOLD.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="winLoop.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="winMainOLD.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="winMain.xaml">
       <Generator>MSBuild:Compile</Generator>

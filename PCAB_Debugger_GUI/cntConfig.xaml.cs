@@ -9,7 +9,6 @@ namespace PCAB_Debugger_GUI
     /// </summary>
     public partial class cntConfig : UserControl
     {
-        public uint ID { get; set; }
         public enum ButtonCategory
         {
             LOADMEM,
@@ -23,11 +22,9 @@ namespace PCAB_Debugger_GUI
         }
         public delegate void ButtonClickEventHandler(object sender, RoutedEventArgs e, ButtonCategory category);
         public event ButtonClickEventHandler ButtonClickEvent;
-        public cntConfig() : this(0) { }
-        public cntConfig(uint iD)
+        public cntConfig()
         {
             InitializeComponent();
-            ID = iD;
         }
 
         private void SAVEADDRESS_COMBOBOX_DropDownClosed(object sender, EventArgs e)
