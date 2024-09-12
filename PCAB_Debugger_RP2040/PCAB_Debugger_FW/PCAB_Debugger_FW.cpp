@@ -582,6 +582,7 @@ int main()
                             std::vector<uint8_t> result;
                             result.clear();
                             std::vector<uint64_t> code = sens->getSENS_ROMCODE();
+                            if(code.size() == 0){result.push_back(0xFE);}
                             for(uint i = 0; i < code.size(); i++)
                             {
                                 result.push_back((uint8_t)((code[i] & 0xFF00000000000000) >> 56));
@@ -650,6 +651,7 @@ int main()
                             std::vector<uint8_t> result;
                             result.clear();
                             std::vector<uint16_t> code = sens->readSENS();
+                            if(code.size() == 0){result.push_back(0xFE);}
                             for(uint i = 0; i < code.size(); i++)
                             {
                                 result.push_back((uint8_t)((code[i] & 0xFF00) >> 8));

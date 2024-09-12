@@ -4,15 +4,100 @@ using System.IO.Ports;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
+using static PCAB_Debugger_GUI.PCAB;
 
 namespace PCAB_Debugger_GUI
 {
     public class PCAB_TASK
     {
         private PCAB_SerialInterface serialInterface;
-        public List<PCAB_SerialInterface.PCAB_UnitInterface> UNITs { get { return serialInterface.pcabUNITs; } }
-        public PCAB_TASK() { }
+        private bool? _task;    //true:run / false:stop / null:Interrupt
+        private bool _state;
+        public event EventHandler<PCABEventArgs> OnUpdateDAT;
+        public event EventHandler<PCABEventArgs> OnError;
+        public List<PCAB_SerialInterface.PCAB_UnitInterface> UNITs { get { return serialInterface?.pcabUNITs; } }
+
+        public PCAB_TASK(string PortName) { serialInterface = new PCAB_SerialInterface(PortName); }
+        public PCAB_TASK(SerialPort serialPort) { serialInterface = new PCAB_SerialInterface(serialPort); }
+
+        public void Close()
+        {
+            try { serialInterface?.Close(); } catch { }
+            serialInterface = null;
+        }
+
+        public bool PCAB_AutoTaskStart(UInt32 waiteTime, string[] serialNum)
+        {
+            if (serialInterface.SerialOpen) { serialInterface.Close(); }
+            return serialInterface.Open(serialNum);
+            Task.Factory.StartNew(() => { PCAB_Task(waiteTime); });
+            return true;
+        }
+
+        private void PCAB_Task(UInt32 waiteTime)
+        {
+            try
+            {
+                do
+                {
+                    Thread.Sleep((int)waiteTime);
+                    if (_task == true)
+                    {
+                        while (_state) { Thread.Sleep(53); }
+                        _state = true;
+                        bool updateFLG = false;
+                        foreach (PCAB_SerialInterface.PCAB_UnitInterface unit in serialInterface.pcabUNITs)
+                        {
+                            serialInterface.DiscardInBuffer();
+                            PCAB_SerialInterface.SensorValues values = serialInterface.GetSensorValue(unit);
+                            if (
+                                values.Analog.Vd != unit.SensorValuesNOW.Analog.Vd ||
+                                values.Analog.Id != unit.SensorValuesNOW.Analog.Id ||
+                                values.Analog.Vin != unit.SensorValuesNOW.Analog.Vin ||
+                                values.Analog.Pin != unit.SensorValuesNOW.Analog.Pin ||
+                                values.Analog.CPU_Temprature != unit.SensorValuesNOW.Analog.CPU_Temprature ||
+                                values.Temprature.Values != unit.SensorValuesNOW.Temprature.Values)
+                            { updateFLG = true; unit.SensorValuesNOW = values; }
+                        }
+                        if (updateFLG)
+                        {
+                            OnUpdateDAT?.Invoke(null, null);
+                        }
+                        _state = false;
+                    }
+                } while (_task != false);
+                serialInterface?.Close();
+            }
+            catch (Exception e)
+            {
+                OnError?.Invoke(this, new PCABEventArgs(null, e.Message));
+            }
+        }
+
+        public void PCAB_AutoTaskStop() { _task = false; }
+
+        public bool PCAB_PRESET(PCAB_SerialInterface.PCAB_UnitInterface unit)
+        {
+            _task = null;
+            while (_state) { Thread.Sleep(59); }
+            _state = true;
+
+        }
+
+        public class PCABEventArgs : EventArgs
+        {
+            private string msg;
+            private List<PCAB_SerialInterface.PCAB_UnitInterface> dat;
+
+            public PCABEventArgs(List<PCAB_SerialInterface.PCAB_UnitInterface> ReceiveDAT, string Message) { dat = ReceiveDAT; msg = Message; }
+
+            public string Message { get { return msg; } }
+
+            public List<PCAB_SerialInterface.PCAB_UnitInterface> ReceiveDAT { get { return dat; } }
+
+        }
     }
 
     public class PCAB_SerialInterface
@@ -44,7 +129,9 @@ namespace PCAB_Debugger_GUI
             _serialPort.ReadTimeout = readTimeOut;
         }
 
-        ~PCAB_SerialInterface() { this.Close(); }
+        public PCAB_SerialInterface(SerialPort serialPort) {  _serialPort = serialPort; }
+
+        ~PCAB_SerialInterface() { this.Close(); _serialPort = null; }
 
         public void Close()
         {
@@ -66,7 +153,6 @@ namespace PCAB_Debugger_GUI
                 }
                 catch { }
             }
-            _serialPort = null;
             pcabUNITs.Clear();
         }
 
@@ -139,17 +225,17 @@ namespace PCAB_Debugger_GUI
             return true;
         }
 
-        private void DiscardInBuffer()
+        public void DiscardInBuffer()
         {
             _serialPort.DiscardInBuffer();
             serialBF.Clear();
         }
-        private void WriteSLIP(List<byte> dat)
+        public void WriteSLIP(List<byte> dat)
         {
             _serialPort.Write(clsSLIP.EncodeSLIP(dat).ToArray(), 0, dat.Count);
         }
-        private List<byte> ReadSLIP() { return ReadSLIP(_serialPort.ReadBufferSize); }
-        private List<byte> ReadSLIP(int bfLEN)
+        public List<byte> ReadSLIP() { return ReadSLIP(_serialPort.ReadBufferSize); }
+        public List<byte> ReadSLIP(int bfLEN)
         {
             List<byte> ret = new List<byte>();
             if (serialBF.Count != 0)
@@ -192,7 +278,7 @@ namespace PCAB_Debugger_GUI
             }
             catch (Exception ex) { throw; }
         }
-        private List<byte> WriteReadSLIP(List<byte> dat)
+        public List<byte> WriteReadSLIP(List<byte> dat)
         {
             WriteSLIP(dat);
             return ReadSLIP();
@@ -365,7 +451,7 @@ namespace PCAB_Debugger_GUI
             try
             {
                 List<byte> ret = WriteReadSLIP(unit.GetCommandCode(new List<byte> { 0xE1 }));
-                if (ret.Count == 8 * 15)
+                if (ret.Count % 8 == 0)
                 {
                     List<UInt64> result = new List<UInt64>();
                     for (int i = 0; i < ret.Count; i += 8)
@@ -391,8 +477,7 @@ namespace PCAB_Debugger_GUI
             try
             {
                 List<byte> ret = WriteReadSLIP(unit.GetCommandCode(new List<byte> { 0xE1 }));
-                if (ret.Count == 2 * 15) { return new TempratureValue(ret); }
-                else { throw new Exception("GetLowPowerMode Error"); }
+                return new TempratureValue(ret);
             }
             catch (Exception ex) { throw; }
         }
@@ -401,8 +486,7 @@ namespace PCAB_Debugger_GUI
             try
             {
                 List<byte> ret = WriteReadSLIP(unit.GetCommandCode(new List<byte> { 0xEE }));
-                if (ret.Count == 10) { return new AnalogValues(ret); }
-                else { throw new Exception("GetLowPowerMode Error"); }
+                return new AnalogValues(ret);
             }
             catch (Exception ex) { throw; }
         }
@@ -416,6 +500,7 @@ namespace PCAB_Debugger_GUI
             }
             catch (Exception ex) { throw; }
         }
+
         public byte GetMode(PCAB_UnitInterface unit)
         {
             try
@@ -432,10 +517,12 @@ namespace PCAB_Debugger_GUI
             private string _sn;
             public string SerialNumberASCII { get { return _sn; } }
             public byte[] SerialNumberBinary { get { return Encoding.ASCII.GetBytes(_sn); } }
+            public SensorValues SensorValuesNOW { get; set; }
 
             public PCAB_UnitInterface(string SerialNumber)
             {
                 _sn = SerialNumber;
+                SensorValuesNOW = new SensorValues();
             }
 
             public List<byte> GetCommandCode(List<byte> cmd)
@@ -447,25 +534,37 @@ namespace PCAB_Debugger_GUI
                 ret.AddRange(cmd);
                 return ret;
             }
+
         }
 
         public struct SensorValues
         {
             public AnalogValues Analog { get; private set; }
-            public AnalogValues Temprature { get; private set; }
+            public TempratureValue Temprature { get; private set; }
             public SensorValues(List<byte> dat)
             {
                 if (dat.Count == 10 + 2 * 15)
                 {
                     Analog = new AnalogValues(dat.Skip(0).Take(10).ToList());
-                    Temprature = new AnalogValues(dat.Skip(10).Take(2 * 15).ToList());
+                    Temprature = new TempratureValue(dat.Skip(10).Take(2 * 15).ToList());
+                }
+                else if (dat.Count == 10)
+                {
+                    Analog = new AnalogValues(dat);
+                    Temprature = new TempratureValue();
+                }
+                else if (dat.Count == 2 * 15)
+                {
+                    Analog = new AnalogValues();
+                    Temprature = new TempratureValue(dat);
                 }
                 else
                 {
                     Analog = new AnalogValues();
-                    Temprature = new AnalogValues();
+                    Temprature = new TempratureValue();
                 }
             }
+            public void Clear() { Analog.Clear(); Temprature.Clear(); }
         }
 
         public struct AnalogValues
@@ -487,23 +586,25 @@ namespace PCAB_Debugger_GUI
                 }
                 else { CPU_Temprature = float.NaN; Vd = float.NaN; Id = float.NaN; Vin = float.NaN; Pin = float.NaN; }
             }
+            public void Clear() { CPU_Temprature = float.NaN; Vd = float.NaN; Id = float.NaN; Vin = float.NaN; Pin = float.NaN; }
         }
 
         public struct TempratureValue
         {
-            public float[] Temprature { get; private set; }
+            public float[] Values { get; private set; }
             public TempratureValue(List<byte> dat)
             {
                 if (dat.Count == 2 * 15)
                 {
-                    Temprature = new float[15];
+                    Values = new float[15];
                     for(int i = 0; i < 16; i++)
                     {
-                        Temprature[i] = ((1u << 8) * (UInt16)dat[2 * i] + (UInt16)dat[2 * i + 1]) / 16.0f;
+                        Values[i] = ((1u << 8) * (UInt16)dat[2 * i] + (UInt16)dat[2 * i + 1]) / 16.0f;
                     }
                 }
-                else { Temprature = null; }
+                else { Values = null; }
             }
+            public void Clear() { Values = null; }
         }
     }
 
