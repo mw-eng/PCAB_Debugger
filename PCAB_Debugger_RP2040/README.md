@@ -140,10 +140,11 @@ Command Code | Description
 0xEE | Get all Analog values.<br>The responce data is {Vd(2byte) + Id(2byte) + Vin(2byte) + Pin(2byte) + CPU Temp(2byte)} of raw data.
 0xEF | Get all senser values.<br>The responce data is {AnalogValues(10byte)+TempratureData(8byte * 15)}
 0xFA | Restore factory default settings.<br>PS all 0<br>DSA all 2dB(No,0 = 0dB)<br>STB all 0(RUN MODE)<br>LPM 0(Full Power MODE)
-0xFB 0xFF {0x00/0x01/0x02/0x03} | Save state to memory(ROM).<br>However, whether or not it can be saved depends on the boot mode.<br>To save the default setting, specify 0x00.
-0xFC 0xFF {0x00/0x01/0x02/0x03} | Load state from memory(ROM).<br>Argument are the same as 0xFA.
-0xAA 0xFF {Address} | Read page data from ROM.<br>{Address(4byte)} : Specify the address to read (sector by sector)
-0xBB 0xFF {Address} {Binary} | Overwrite sector data to ROM.<br>{Address(4byte)} : Specify the address to write (sector by sector).<br>{Binary(4096byte)} * Specify the sector data to write.
+0xFB 0xFF {Address} | Save state to memory(ROM).<br>However, whether or not it can be saved depends on the boot mode.<br>To save the default settings, set {Address} to 0x00 or leave it unspecified. ({Address} can be specified from 0x00 to 0x03.)<br>If you specify the sector number (4 bits), setting number (4 bits), and setting number (specified in one byte from 0x00 to 0x03), it will be written to the specified setting number. (Default is {0xE0}{0x00})
+The range that can be specified is the same as for WR.
+0xFC 0xFF {Address} | Load state from memory(ROM).<br>Argument are the same as 0xFB.
+0xAA 0xFF {Address} | Read sector data from ROM.<br>{Address(3byte)} : Specify the address to read (sector by sector)
+0xBB 0xFF {Address} {Binary} | Overwrite sector data to ROM.<br>{Address(3byte)} : Specify the address to write (sector by sector).<br>{Binary(4096byte)} * Specify the sector data to write.
 0xFE | Switch to ASCII communication mode.
 
 Return Code | Description

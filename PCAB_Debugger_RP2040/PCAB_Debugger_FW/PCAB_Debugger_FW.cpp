@@ -971,12 +971,14 @@ int main()
                 case pcabCMD::cmdCode::SaveMEM:
                     if(modeBCM)
                     {
-                        if(cmd.argment.size() != 1) { uart->writeSLIP_block(retCODE(0xF2)); }
-                        else
-                        {
-                            if(!saveSTATE(14, 0, cmd.argment[0])) { uart->writeSLIP_block(retCODE(0xFE));}
-                            else { uart->writeSLIP_block(retCODE(0x00)); }
-                        }
+                        uint8_t sectorNum = 14;
+                        uint8_t pageNum = 0;
+                        uint8_t stateNum = 0;
+                        if(cmd.argment.size() == 1) { stateNum = cmd.argment[0]; }
+                        else if(cmd.argment.size() == 2) { sectorNum = ((cmd.argment[0] & 0xF0) >> 4); pageNum = cmd.argment[0] & 0x0F; stateNum = cmd.argment[1]; }
+                        else if(cmd.argment.size() != 0) { uart->writeSLIP_block(retCODE(0xF2)); }
+                        if(!saveSTATE(sectorNum, pageNum, cmd.argment[0])) { uart->writeSLIP_block(retCODE(0xFE));}
+                        else { uart->writeSLIP_block(retCODE(0x00)); }
                     }
                     else
                     {
@@ -1007,11 +1009,14 @@ int main()
                 case pcabCMD::cmdCode::LoadMEM:
                     if(modeBCM)
                     {
-                        if(cmd.argment.size() != 4) { uart->writeSLIP_block(retCODE(0xF2)); }
-                        else
-                        {
-                            uart->writeSLIP_block(retCODE(0x00));
-                        }
+                        uint8_t sectorNum = 14;
+                        uint8_t pageNum = 0;
+                        uint8_t stateNum = 0;
+                        if(cmd.argment.size() == 1) { stateNum = cmd.argment[0]; }
+                        else if(cmd.argment.size() == 2) { sectorNum = ((cmd.argment[0] & 0xF0) >> 4); pageNum = cmd.argment[0] & 0x0F; stateNum = cmd.argment[1]; }
+                        else if(cmd.argment.size() != 0) { uart->writeSLIP_block(retCODE(0xF2)); }
+                        if(!readSTATE(sectorNum, pageNum, cmd.argment[0])) { uart->writeSLIP_block(retCODE(0xFE));}
+                        else { uart->writeSLIP_block(retCODE(0x00)); }
                     }
                     else
                     {
@@ -1043,17 +1048,27 @@ int main()
                 case pcabCMD::cmdCode::ReadROM:
                     if(modeBCM)
                     {
-                        if(cmd.argment.size() != 4) { uart->writeSLIP_block(retCODE(0xF2)); }
+                        if(cmd.argment.size() != 2) { uart->writeSLIP_block(retCODE(0xF2)); }
                         else
                         {
-                            if(cmd.argment[2] & 0x0F != 0x00 || cmd.argment[3] != 0x00)
-                            { uart->writeSLIP_block(retCODE(0xFE)); }
-                            //flash->re
-                            std::vector<uint8_t> result;
-                            result.clear();
-                            result.push_back(0x00);
-                            result.push_back(0xFF);
-                            uart->writeSLIP_block(result);
+                            if(cmd.argment[2] & 0x0F != 0x00) { uart->writeSLIP_block(retCODE(0xFE)); }
+                            else
+                            {
+                                std::vector<uint8_t> result;
+                                result.clear();
+                                result.push_back(0x00);
+                                result.push_back(0xFF);
+                                uint16_t blockNum = (1u << 4) * cmd.argment[0] + cmd.argment[1];
+                                uint8_t sectorNum = cmd.argment[2];
+                                bool brkFLG = false;
+                                for(uint8_t page = 0 ; page < FLASH_SECTOR_SIZE / FLASH_PAGE_SIZE; page++)
+                                {
+                                    uint8_t romDAT[FLASH_PAGE_SIZE];
+                                    if(!flash::readROM(blockNum, sectorNum + page, romDAT)) { uart->writeSLIP_block(retCODE(0xFE)); brkFLG = true; break; }
+                                    for(uint16_t i = 0 ; i < FLASH_PAGE_SIZE ; i++ ) { result.push_back(romDAT[i]); }
+                                }
+                                if(!brkFLG) { uart->writeSLIP_block(result); }
+                            }
                         }
                     }
                     else
@@ -1120,10 +1135,24 @@ int main()
                 case pcabCMD::cmdCode::OverwriteROM:
                     if(modeBCM)
                     {
-                        if(cmd.argment.size() != (4 + 4096)) { uart->writeSLIP_block(retCODE(0xF2)); }
+                        if(cmd.argment.size() != (3 + 4096)) { uart->writeSLIP_block(retCODE(0xF2)); }
                         else
                         {
-                            uart->writeSLIP_block(retCODE(0x00));
+                            if(cmd.argment[2] & 0x0F != 0x00) { uart->writeSLIP_block(retCODE(0xFE)); }
+                            else
+                            {
+                                uint16_t blockNum = (1u << 4) * cmd.argment[0] + cmd.argment[1];
+                                uint8_t sectorNum = cmd.argment[2];
+                                bool brkFLG = false;
+                                if(!flash::eraseROM(blockNum, sectorNum)) { uart->writeSLIP_block(retCODE(0xFE)); brkFLG = true; break; }
+                                for(uint8_t page = 0 ; page < FLASH_SECTOR_SIZE / FLASH_PAGE_SIZE; page++)
+                                {
+                                    uint8_t romDAT[FLASH_PAGE_SIZE];
+                                    std::copy(cmd.argment.begin() + 4 + page * FLASH_PAGE_SIZE, cmd.argment.begin() + 4 + (page + 1) * FLASH_PAGE_SIZE, romDAT);
+                                    if(!flash::writeROM(blockNum, sectorNum + page, romDAT)) { uart->writeSLIP_block(retCODE(0xFE)); brkFLG = true; break; }
+                                }
+                                if(!brkFLG) { uart->writeSLIP_block(retCODE(0x00));}
+                            }
                         }
                     }
                     else
