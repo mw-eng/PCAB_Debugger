@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using static PCAB_Debugger_GUI.PCAB;
+using static PCAB_Debugger_GUI.PCAB_SerialInterface;
 
 namespace PCAB_Debugger_GUI
 {
@@ -17,7 +17,7 @@ namespace PCAB_Debugger_GUI
         private bool _state;
         public event EventHandler<PCABEventArgs> OnUpdateDAT;
         public event EventHandler<PCABEventArgs> OnError;
-        public List<PCAB_SerialInterface.PCAB_UnitInterface> UNITs { get { return serialInterface?.pcabUNITs; } }
+        public List<PCAB_UnitInterface> UNITs { get { return serialInterface?.pcabUNITs; } }
 
         public PCAB_TASK(string PortName) { serialInterface = new PCAB_SerialInterface(PortName); }
         public PCAB_TASK(SerialPort serialPort) { serialInterface = new PCAB_SerialInterface(serialPort); }
@@ -48,10 +48,10 @@ namespace PCAB_Debugger_GUI
                         while (_state) { Thread.Sleep(53); }
                         _state = true;
                         bool updateFLG = false;
-                        foreach (PCAB_SerialInterface.PCAB_UnitInterface unit in serialInterface.pcabUNITs)
+                        foreach (PCAB_UnitInterface unit in serialInterface.pcabUNITs)
                         {
                             serialInterface.DiscardInBuffer();
-                            PCAB_SerialInterface.SensorValues values = serialInterface.GetSensorValue(unit);
+                            SensorValues values = serialInterface.GetSensorValue(unit);
                             if (
                                 values.Analog.Vd != unit.SensorValuesNOW.Analog.Vd ||
                                 values.Analog.Id != unit.SensorValuesNOW.Analog.Id ||
@@ -63,7 +63,7 @@ namespace PCAB_Debugger_GUI
                         }
                         if (updateFLG)
                         {
-                            OnUpdateDAT?.Invoke(null, null);
+                            OnUpdateDAT?.Invoke(this, new PCABEventArgs(serialInterface.pcabUNITs, null));
                         }
                         _state = false;
                     }
@@ -72,30 +72,485 @@ namespace PCAB_Debugger_GUI
             }
             catch (Exception e)
             {
+                foreach (PCAB_UnitInterface unit in serialInterface.pcabUNITs)
+                {
+                    unit.SensorValuesNOW.Clear();
+                }
+                OnUpdateDAT?.Invoke(this, new PCABEventArgs(serialInterface.pcabUNITs, null));
                 OnError?.Invoke(this, new PCABEventArgs(null, e.Message));
             }
         }
 
         public void PCAB_AutoTaskStop() { _task = false; }
 
-        public bool PCAB_PRESET(PCAB_SerialInterface.PCAB_UnitInterface unit)
+        public bool PCAB_PRESET(PCAB_UnitInterface unit)
         {
             _task = null;
             while (_state) { Thread.Sleep(59); }
             _state = true;
+            try
+            {
+                bool result = serialInterface.LoadFactoryDefault(unit);
+                _state = false;
+                _task = true;
+                return result;
+            }
+            catch (Exception e)
+            {
+                OnError?.Invoke(this, new PCABEventArgs(null, e.Message));
+                return false;
+            }
+        }
+        public bool PCAB_WriteDSAin(PCAB_UnitInterface unit, uint config)
+        {
+            _task = null;
+            while (_state) { Thread.Sleep(59); }
+            _state = true;
+            try
+            {
+                bool result = serialInterface.WriteDSAin(unit, config);
+                _state = false;
+                _task = true;
+                return result;
+            }
+            catch (Exception e)
+            {
+                OnError?.Invoke(this, new PCABEventArgs(null, e.Message));
+                return false;
+            }
+        }
+        public bool PCAB_WriteDSA(PCAB_UnitInterface unit, List<uint> configs)
+        {
+            _task = null;
+            while (_state) { Thread.Sleep(59); }
+            _state = true;
+            try
+            {
+                bool result = serialInterface.WriteDSA(unit, configs);
+                _state = false;
+                _task = true;
+                return result;
+            }
+            catch (Exception e)
+            {
+                OnError?.Invoke(this, new PCABEventArgs(null, e.Message));
+                return false;
+            }
+        }
+        public bool PCAB_WriteDPS(PCAB_UnitInterface unit, List<uint> configs)
+        {
+            _task = null;
+            while (_state) { Thread.Sleep(59); }
+            _state = true;
+            try
+            {
+                bool result = serialInterface.WriteDPS(unit, configs);
+                _state = false;
+                _task = true;
+                return result;
+            }
+            catch (Exception e)
+            {
+                OnError?.Invoke(this, new PCABEventArgs(null, e.Message));
+                return false;
+            }
+        }
+        public bool PCAB_SetSTB_AMP(PCAB_UnitInterface unit, bool mode)
+        {
+            _task = null;
+            while (_state) { Thread.Sleep(59); }
+            _state = true;
+            try
+            {
+                bool result = serialInterface.SetSTB_AMP(unit, mode);
+                _state = false;
+                _task = true;
+                return result;
+            }
+            catch (Exception e)
+            {
+                OnError?.Invoke(this, new PCABEventArgs(null, e.Message));
+                return false;
+            }
+        }
+        public bool PCAB_SetSTB_DRA(PCAB_UnitInterface unit, bool mode)
+        {
+            _task = null;
+            while (_state) { Thread.Sleep(59); }
+            _state = true;
+            try
+            {
+                bool result = serialInterface.SetSTB_DRA(unit, mode);
+                _state = false;
+                _task = true;
+                return result;
+            }
+            catch (Exception e)
+            {
+                OnError?.Invoke(this, new PCABEventArgs(null, e.Message));
+                return false;
+            }
+        }
+        public bool PCAB_SetSTB_LNA(PCAB_UnitInterface unit, bool mode)
+        {
+            _task = null;
+            while (_state) { Thread.Sleep(59); }
+            _state = true;
+            try
+            {
+                bool result = serialInterface.SetSTB_LNA(unit, mode);
+                _state = false;
+                _task = true;
+                return result;
+            }
+            catch (Exception e)
+            {
+                OnError?.Invoke(this, new PCABEventArgs(null, e.Message));
+                return false;
+            }
+        }
+        public bool PCAB_SetLowPowerMode(PCAB_UnitInterface unit, bool mode)
+        {
+            _task = null;
+            while (_state) { Thread.Sleep(59); }
+            _state = true;
+            try
+            {
+                bool result = serialInterface.SetLowPowerMode(unit, mode);
+                _state = false;
+                _task = true;
+                return result;
+            }
+            catch (Exception e)
+            {
+                OnError?.Invoke(this, new PCABEventArgs(null, e.Message));
+                return false;
+            }
+        }
+        public int PCAB_GetDSAin(PCAB_UnitInterface unit)
+        {
+            _task = null;
+            while (_state) { Thread.Sleep(59); }
+            _state = true;
+            try
+            {
+                int result = serialInterface.GetDSAin(unit);
+                _state = false;
+                _task = true;
+                return result;
+            }
+            catch (Exception e)
+            {
+                OnError?.Invoke(this, new PCABEventArgs(null, e.Message));
+                return -1;
+            }
+        }
+        public List<int> PCAB_GetDSA(PCAB_UnitInterface unit)
+        {
+            _task = null;
+            while (_state) { Thread.Sleep(59); }
+            _state = true;
+            try
+            {
+                List<int> result = serialInterface.GetDSA(unit);
+                _state = false;
+                _task = true;
+                return result;
+            }
+            catch (Exception e)
+            {
+                OnError?.Invoke(this, new PCABEventArgs(null, e.Message));
+                return null;
+            }
+        }
+        public List<int> PCAB_GetDPS(PCAB_UnitInterface unit)
+        {
+            _task = null;
+            while (_state) { Thread.Sleep(59); }
+            _state = true;
+            try
+            {
+                List<int> result = serialInterface.GetDPS(unit);
+                _state = false;
+                _task = true;
+                return result;
+            }
+            catch (Exception e)
+            {
+                OnError?.Invoke(this, new PCABEventArgs(null, e.Message));
+                return null;
+            }
+        }
+        public bool? PCAB_GetSTB_AMP(PCAB_UnitInterface unit)
+        {
+            _task = null;
+            while (_state) { Thread.Sleep(59); }
+            _state = true;
+            try
+            {
+                bool result = serialInterface.GetSTB_AMP(unit);
+                _state = false;
+                _task = true;
+                return result;
+            }
+            catch (Exception e)
+            {
+                OnError?.Invoke(this, new PCABEventArgs(null, e.Message));
+                return null;
+            }
+        }
+        public bool? PCAB_GetSTB_DRA(PCAB_UnitInterface unit)
+        {
+            _task = null;
+            while (_state) { Thread.Sleep(59); }
+            _state = true;
+            try
+            {
+                bool result = serialInterface.GetSTB_DRA(unit);
+                _state = false;
+                _task = true;
+                return result;
+            }
+            catch (Exception e)
+            {
+                OnError?.Invoke(this, new PCABEventArgs(null, e.Message));
+                return null;
+            }
+        }
+        public bool? PCAB_GetSTB_LNA(PCAB_UnitInterface unit)
+        {
+            _task = null;
+            while (_state) { Thread.Sleep(59); }
+            _state = true;
+            try
+            {
+                bool result = serialInterface.GetSTB_LNA(unit);
+                _state = false;
+                _task = true;
+                return result;
+            }
+            catch (Exception e)
+            {
+                OnError?.Invoke(this, new PCABEventArgs(null, e.Message));
+                return null;
+            }
+        }
+        public bool? PCAB_GetLowPowerMode(PCAB_UnitInterface unit)
+        {
+            _task = null;
+            while (_state) { Thread.Sleep(59); }
+            _state = true;
+            try
+            {
+                bool result = serialInterface.GetLowPowerMode(unit);
+                _state = false;
+                _task = true;
+                return result;
+            }
+            catch (Exception e)
+            {
+                OnError?.Invoke(this, new PCABEventArgs(null, e.Message));
+                return null;
+            }
+        }
+        public List<UInt64> PCAB_GetTempID(PCAB_UnitInterface unit)
+        {
+            _task = null;
+            while (_state) { Thread.Sleep(59); }
+            _state = true;
+            try
+            {
+                List<UInt64> result = serialInterface.GetTempID(unit);
+                _state = false;
+                _task = true;
+                return result;
+            }
+            catch (Exception e)
+            {
+                OnError?.Invoke(this, new PCABEventArgs(null, e.Message));
+                return null;
+            }
+        }
+        public TempratureValue PCAB_GetTempValue(PCAB_UnitInterface unit)
+        {
+            _task = null;
+            while (_state) { Thread.Sleep(59); }
+            _state = true;
+            try
+            {
+                TempratureValue result = serialInterface.GetTempValue(unit);
+                _state = false;
+                _task = true;
+                return result;
+            }
+            catch (Exception e)
+            {
+                OnError?.Invoke(this, new PCABEventArgs(null, e.Message));
+                return new TempratureValue();
+            }
+        }
+        public byte PCAB_GetMode(PCAB_UnitInterface unit)
+        {
+            _task = null;
+            while (_state) { Thread.Sleep(59); }
+            _state = true;
+            try
+            {
+                byte result = serialInterface.GetMode(unit);
+                _state = false;
+                _task = true;
+                return result;
+            }
+            catch (Exception e)
+            {
+                OnError?.Invoke(this, new PCABEventArgs(null, e.Message));
+                return 0xFF;
+            }
+        }
+        public AnalogValues PCAB_GetAnalogValue(PCAB_UnitInterface unit)
+        {
+            _task = null;
+            while (_state) { Thread.Sleep(59); }
+            _state = true;
+            try
+            {
+                AnalogValues result = serialInterface.GetAnalogValue(unit);
+                _state = false;
+                _task = true;
+                return result;
+            }
+            catch (Exception e)
+            {
+                OnError?.Invoke(this, new PCABEventArgs(null, e.Message));
+                return new AnalogValues();
+            }
+        }
+        public SensorValues PCAB_GetSensorValue(PCAB_UnitInterface unit)
+        {
+            _task = null;
+            while (_state) { Thread.Sleep(59); }
+            _state = true;
+            try
+            {
+                SensorValues result = serialInterface.GetSensorValue(unit);
+                _state = false;
+                _task = true;
+                return result;
+            }
+            catch (Exception e)
+            {
+                OnError?.Invoke(this, new PCABEventArgs(null, e.Message));
+                return new SensorValues();
+            }
+        }
+        public string PCAB_GetIDN(PCAB_UnitInterface unit)
+        {
+            _task = null;
+            while (_state) { Thread.Sleep(59); }
+            _state = true;
+            try
+            {
+                string result = serialInterface.GetIDN(unit);
+                _state = false;
+                _task = true;
+                return result;
+            }
+            catch (Exception e)
+            {
+                OnError?.Invoke(this, new PCABEventArgs(null, e.Message));
+                return null;
+            }
+        }
+        public bool PCAB_LoadFactoryDefault(PCAB_UnitInterface unit)
+        { return PCAB_PRESET(unit); }
+        public bool? PCAB_SaveState(PCAB_UnitInterface unit, uint confNum)
+        { return PCAB_SaveState(unit, 14, 0, confNum); }
+        public bool? PCAB_SaveState(PCAB_UnitInterface unit, byte sectorNum, byte pageNum, uint confNum)
+        {
+            _task = null;
+            while (_state) { Thread.Sleep(59); }
+            _state = true;
+            try
+            {
+                bool result = serialInterface.SaveState(unit, sectorNum, pageNum, confNum);
+                _state = false;
+                _task = true;
+                return result;
+            }
+            catch (Exception e)
+            {
+                OnError?.Invoke(this, new PCABEventArgs(null, e.Message));
+                return null;
+            }
+        }
+        public bool? PCAB_LoadState(PCAB_UnitInterface unit, uint confNum)
+        { return PCAB_LoadState(unit, 14, 0, confNum); }
+        public bool? PCAB_LoadState(PCAB_UnitInterface unit, byte sectorNum, byte pageNum, uint confNum)
+        {
+            _task = null;
+            while (_state) { Thread.Sleep(59); }
+            _state = true;
+            try
+            {
+                bool result = serialInterface.LoadState(unit, sectorNum, pageNum, confNum);
+                _state = false;
+                _task = true;
+                return result;
+            }
+            catch (Exception e)
+            {
+                OnError?.Invoke(this, new PCABEventArgs(null, e.Message));
+                return null;
+            }
+        }
 
+        public List<byte> PCAB_ReadROM(PCAB_UnitInterface unit, UInt32 blockNum, byte sectorNum)
+        {
+            _task = null;
+            while (_state) { Thread.Sleep(59); }
+            _state = true;
+            try
+            {
+                List<byte> result = serialInterface.ReadROM(unit, blockNum, sectorNum);
+                _state = false;
+                _task = true;
+                return result;
+            }
+            catch (Exception e)
+            {
+                OnError?.Invoke(this, new PCABEventArgs(null, e.Message));
+                return null;
+            }
+        }
+        public bool? PCAB_OverWriteROM(PCAB_UnitInterface unit, UInt32 blockNum, byte sectorNum, List<byte> dat)
+        {
+            _task = null;
+            while (_state) { Thread.Sleep(59); }
+            _state = true;
+            try
+            {
+                bool result = serialInterface.OverWriteROM(unit, blockNum, sectorNum, dat);
+                _state = false;
+                _task = true;
+                return result;
+            }
+            catch (Exception e)
+            {
+                OnError?.Invoke(this, new PCABEventArgs(null, e.Message));
+                return null;
+            }
         }
 
         public class PCABEventArgs : EventArgs
         {
             private string msg;
-            private List<PCAB_SerialInterface.PCAB_UnitInterface> dat;
+            private List<PCAB_UnitInterface> dat;
 
-            public PCABEventArgs(List<PCAB_SerialInterface.PCAB_UnitInterface> ReceiveDAT, string Message) { dat = ReceiveDAT; msg = Message; }
+            public PCABEventArgs(List<PCAB_UnitInterface> ReceiveDAT, string Message) { dat = ReceiveDAT; msg = Message; }
 
             public string Message { get { return msg; } }
 
-            public List<PCAB_SerialInterface.PCAB_UnitInterface> ReceiveDAT { get { return dat; } }
+            public List<PCAB_UnitInterface> ReceiveDAT { get { return dat; } }
 
         }
     }
@@ -129,7 +584,7 @@ namespace PCAB_Debugger_GUI
             _serialPort.ReadTimeout = readTimeOut;
         }
 
-        public PCAB_SerialInterface(SerialPort serialPort) {  _serialPort = serialPort; }
+        public PCAB_SerialInterface(SerialPort serialPort) { _serialPort = serialPort; }
 
         ~PCAB_SerialInterface() { this.Close(); _serialPort = null; }
 
@@ -476,8 +931,18 @@ namespace PCAB_Debugger_GUI
         {
             try
             {
-                List<byte> ret = WriteReadSLIP(unit.GetCommandCode(new List<byte> { 0xE1 }));
+                List<byte> ret = WriteReadSLIP(unit.GetCommandCode(new List<byte> { 0xE2 }));
                 return new TempratureValue(ret);
+            }
+            catch (Exception ex) { throw; }
+        }
+        public byte GetMode(PCAB_UnitInterface unit)
+        {
+            try
+            {
+                List<byte> ret = WriteReadSLIP(unit.GetCommandCode(new List<byte> { 0xEA }));
+                if (ret[0] > 0x0F) { throw new Exception("GetMode Error"); }
+                else { return ret[0]; }
             }
             catch (Exception ex) { throw; }
         }
@@ -494,20 +959,111 @@ namespace PCAB_Debugger_GUI
         {
             try
             {
-                List<byte> ret = WriteReadSLIP(unit.GetCommandCode(new List<byte> { 0xEE }));
+                List<byte> ret = WriteReadSLIP(unit.GetCommandCode(new List<byte> { 0xEF }));
                 if (ret.Count == 10 + 2 * 15) { return new SensorValues(ret); }
                 else { throw new Exception("GetLowPowerMode Error"); }
             }
             catch (Exception ex) { throw; }
         }
 
-        public byte GetMode(PCAB_UnitInterface unit)
+        public string GetIDN(PCAB_UnitInterface unit)
         {
             try
             {
-                List<byte> ret = WriteReadSLIP(unit.GetCommandCode(new List<byte> { 0xEE }));
-                if (ret[0] > 0x0F) { throw new Exception("GetMode Error"); }
-                else { return ret[0]; }
+                List<byte> ret = WriteReadSLIP(unit.GetCommandCode(new List<byte> { 0xF0 }));
+                if (ret[0] == 0xF2) { return null; }
+                else { return Encoding.ASCII.GetString(ret.ToArray()); }
+            }
+            catch (Exception ex) { throw; }
+        }
+        public bool LoadFactoryDefault(PCAB_UnitInterface unit)
+        {
+            try
+            {
+                List<byte> ret = WriteReadSLIP(unit.GetCommandCode(new List<byte> { 0xFA }));
+                if (ret[0] == 0x00) { return true; }
+                else { return false; }
+            }
+            catch (Exception ex) { throw; }
+        }
+
+        public bool SaveState(PCAB_UnitInterface unit, uint confNum)
+        {
+            try
+            {
+                if (confNum > 3) { return false; }
+                List<byte> ret = WriteReadSLIP(unit.GetCommandCode(new List<byte> { 0xFB, (byte)confNum }));
+                if (ret[0] == 0x00) { return true; }
+                else { return false; }
+            }
+            catch (Exception ex) { throw; }
+        }
+        public bool SaveState(PCAB_UnitInterface unit, byte sectorNum, byte pageNum, uint confNum)
+        {
+            if (sectorNum > 0x0F) { return false; }
+            if (pageNum > 0x0F) { return false; }
+            if (confNum > 3) { return false; }
+            uint spNum = (1u << 4) * sectorNum + pageNum;
+            try
+            {
+                List<byte> ret = WriteReadSLIP(unit.GetCommandCode(new List<byte> { 0xFB, (byte)spNum, (byte)confNum }));
+                if (ret[0] == 0x00) { return true; }
+                else { return false; }
+            }
+            catch (Exception ex) { throw; }
+        }
+        public bool LoadState(PCAB_UnitInterface unit, uint confNum)
+        {
+            try
+            {
+                if (confNum > 3) { return false; }
+                List<byte> ret = WriteReadSLIP(unit.GetCommandCode(new List<byte> { 0xFC, (byte)confNum }));
+                if (ret[0] == 0x00) { return true; }
+                else { return false; }
+            }
+            catch (Exception ex) { throw; }
+        }
+        public bool LoadState(PCAB_UnitInterface unit, byte sectorNum, byte pageNum, uint confNum)
+        {
+            if (sectorNum > 0x0F) { return false; }
+            if (pageNum > 0x0F) { return false; }
+            if (confNum > 3) { return false; }
+            uint spNum = (1u << 4) * sectorNum + pageNum;
+            try
+            {
+                List<byte> ret = WriteReadSLIP(unit.GetCommandCode(new List<byte> { 0xFC, (byte)spNum, (byte)confNum }));
+                if (ret[0] == 0x00) { return true; }
+                else { return false; }
+            }
+            catch (Exception ex) { throw; }
+        }
+
+        public List<byte> ReadROM(PCAB_UnitInterface unit, UInt32 blockNum, byte sectorNum)
+        {
+            if (sectorNum > 0x0F) { return null; }
+            byte block1 = (byte)((blockNum & 0xFF00) >> 8);
+            byte block2 = (byte)((blockNum & 0x00FF));
+            uint spNum = (1u << 4) * sectorNum;
+            try
+            {
+                List<byte> ret = WriteReadSLIP(unit.GetCommandCode(new List<byte> { 0xFC, block1, block2, (byte)spNum }));
+                if (ret.Count != 4096) { return null; }
+                else { return ret; }
+            }
+            catch (Exception ex) { throw; }
+        }
+        public bool OverWriteROM(PCAB_UnitInterface unit, UInt32 blockNum, byte sectorNum, List<byte> dat)
+        {
+            if (sectorNum > 0x0F) { return false; }
+            if(dat.Count != 4096) { return false; }
+            byte block1 = (byte)((blockNum & 0xFF00) >> 8);
+            byte block2 = (byte)((blockNum & 0x00FF));
+            uint spNum = (1u << 4) * sectorNum;
+            try
+            {
+                List<byte> ret = WriteReadSLIP(unit.GetCommandCode(new List<byte> { 0xFC, block1, block2, (byte)spNum }.Concat(dat).ToList()));
+                if (ret[0] == 0x00) { return true; }
+                else { return false; }
             }
             catch (Exception ex) { throw; }
         }
@@ -597,7 +1153,7 @@ namespace PCAB_Debugger_GUI
                 if (dat.Count == 2 * 15)
                 {
                     Values = new float[15];
-                    for(int i = 0; i < 16; i++)
+                    for (int i = 0; i < 16; i++)
                     {
                         Values[i] = ((1u << 8) * (UInt16)dat[2 * i] + (UInt16)dat[2 * i + 1]) / 16.0f;
                     }
@@ -607,6 +1163,5 @@ namespace PCAB_Debugger_GUI
             public void Clear() { Values = null; }
         }
     }
-
 
 }
