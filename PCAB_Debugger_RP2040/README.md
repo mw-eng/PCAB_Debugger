@@ -12,9 +12,9 @@ or<br>
 Send commands in the order of *${ROM ID}*, *{COMMAND}*, *{ARGUMENTS}*, and *{EXIT CODE}*, separated by space.<br>
 ### Binary Communication Mode
 *Support with v1.3.3 or later*<br>
-Send commands in the order of *#{SERIAL NUMBER}*, *{COMMAND}*, *{ARGUMENT}*, and *{EXIT CODE}*, separated by *0xFF*.<br>
+Send commands in the order of *#{SERIAL NUMBER}*, *{COMMAND and ARGUMENT}*, and *{EXIT CODE}*, *#{SERIAL NUMBER}* and *{COMMAND and ARGUMENT}* separated by *0xFF*.<br>
 or<br>
-Send commands in the order of *${ROM ID}*, *{COMMAND}*, *{ARGUMENT}*, and *{EXIT CODE}*, separated by *0xFF*.<br>
+Send commands in the order of *${ROM ID}*, *{COMMAND and ARGUMENT}*, and *{EXIT CODE}*, *${ROM ID}* and *{COMMAND and ARGUMENT}* separated by *0xFF*.<br>
 
 <details>
 <summary>Description</summary>
@@ -115,13 +115,13 @@ Command Code | Description
 :--|:--
 0xC0 | Frame end code.
 0xFF | Command separator code.
-0xB0 0xFF {Byte} | Write Byte data to the input attenuator.
-0xC1 0xFF {Binary} | Write binary data to the digital step attenuator.<br>The binary data must be specified in the order of DSA numbers 1 to 15, and each DSA setting must be specified in 8 bits ( i.e. 15 bytes of data ).
-0xC2 0xFF {Binary} | Write binary data to the digital phase sifter.<br>The binary data must be specified in the order of DPS numbers 1 to 15, and each DPS setting must be specified in 8 bits ( i.e. 15 bytes of data ).
-0xC3 0xFF {0x00/0x01} | Set AMP STBY.<br>{0x00} : Run MODE<br>{0x01} : Standby MODE
-0xC4 0xFF {0x00/0x01} | Set DRA STBY.<br>{0x00} : Run MODE<br>{0x01} : Standby MODE
-0xC5 0xFF {0x00/0x01} | Set LNA STBY.<br>{0x00} : Run MODE<br>{0x01} : Standby MODE
-0xC6 0xFF {0x00/0x01} | Set low power mode.<br>{0x00} : Full Power MODE<br>{0x01} : Low Power MODE
+0xB0 {Byte} | Write Byte data to the input attenuator.
+0xC1 {Binary} | Write binary data to the digital step attenuator.<br>The binary data must be specified in the order of DSA numbers 1 to 15, and each DSA setting must be specified in 8 bits ( i.e. 15 bytes of data ).
+0xC2 {Binary} | Write binary data to the digital phase sifter.<br>The binary data must be specified in the order of DPS numbers 1 to 15, and each DPS setting must be specified in 8 bits ( i.e. 15 bytes of data ).
+0xC3 {0x00/0x01} | Set AMP STBY.<br>{0x00} : Run MODE<br>{0x01} : Standby MODE
+0xC4 {0x00/0x01} | Set DRA STBY.<br>{0x00} : Run MODE<br>{0x01} : Standby MODE
+0xC5 {0x00/0x01} | Set LNA STBY.<br>{0x00} : Run MODE<br>{0x01} : Standby MODE
+0xC6 {0x00/0x01} | Set low power mode.<br>{0x00} : Full Power MODE<br>{0x01} : Low Power MODE
 0xD0 | Get input attenuator settings.<br>The response data is in the same binary format as it was written.
 0xD1 | Get digital step attenuator settings.<br>The response data is in the same binary format as it was written.
 0xD2 | Get digital phase sifter settins.<br>The response data is in the same binary format as it was written.
@@ -139,24 +139,23 @@ Command Code | Description
 0xEA | Get Mode.<br>The response data is 1 bytes of raw data.
 0xEE | Get all Analog values.<br>The responce data is {Vd(2byte) + Id(2byte) + Vin(2byte) + Pin(2byte) + CPU Temp(2byte)} of raw data.
 0xEF | Get all senser values.<br>The responce data is {AnalogValues(10byte)+TempratureData(8byte * 15)}
+0xF0 | Get device identification character.
 0xFA | Restore factory default settings.<br>PS all 0<br>DSA all 2dB(No,0 = 0dB)<br>STB all 0(RUN MODE)<br>LPM 0(Full Power MODE)
-0xFB 0xFF {Address} | Save state to memory(ROM).<br>However, whether or not it can be saved depends on the boot mode.<br>To save the default settings, set {Address} to 0x00 or leave it unspecified. ({Address} can be specified from 0x00 to 0x03.)<br>If you specify the sector number (4 bits), setting number (4 bits), and setting number (specified in one byte from 0x00 to 0x03), it will be written to the specified setting number. (Default is {0xE0}{0x00})
+0xFB {Address} | Save state to memory(ROM).<br>However, whether or not it can be saved depends on the boot mode.<br>To save the default settings, set {Address} to 0x00 or leave it unspecified. ({Address} can be specified from 0x00 to 0x03.)<br>If you specify the sector number (4 bits), setting number (4 bits), and setting number (specified in one byte from 0x00 to 0x03), it will be written to the specified setting number. (Default is {0xE0}{0x00})
 The range that can be specified is the same as for WR.
-0xFC 0xFF {Address} | Load state from memory(ROM).<br>Argument are the same as 0xFB.
-0xAA 0xFF {Address} | Read sector data from ROM.<br>{Address(3byte)} : Specify the address to read (sector by sector)
-0xBB 0xFF {Address} {Binary} | Overwrite sector data to ROM.<br>{Address(3byte)} : Specify the address to write (sector by sector).<br>{Binary(4096byte)} * Specify the sector data to write.
+0xFC {Address} | Load state from memory(ROM).<br>Argument are the same as 0xFB.
+0xAA {Address} | Read sector data from ROM.<br>{Address(3byte)} : Specify the address to read (sector by sector)
+0xBB {Address} {Binary} | Overwrite sector data to ROM.<br>{Address(3byte)} : Specify the address to write (sector by sector).<br>{Binary(4096byte)} * Specify the sector data to write.
 0xFE | Switch to ASCII communication mode.
 
 Return Code | Description
 :--|:--
-0x0D | Frame end code.
-0xFF | Command separator code.
+0xC0 | Frame end code.
 0x00 | Successfull code.
-0x00 0xFF {binary} | Successfull code and binary data.
 0xF1 | Command not found error code.
 0xF2 | Data length error code.
 0xFE | Other errors code.
-
+{binary} | binary data.
 
 </details>
 

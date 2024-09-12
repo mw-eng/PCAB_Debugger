@@ -1,6 +1,6 @@
 //#define DEBUG_BOOT_MODE 0x03
 //#define DEBUG_BOOT_MODE 0x0A
-//#define DEBUG_BOOT_MODE 0x0F
+#define DEBUG_BOOT_MODE 0x0F
 #define DEBUG_RASPICO
 
 #include "PCAB_Debugger_FW.hpp"
@@ -165,12 +165,7 @@ int main()
                     {
                         std::vector<uint8_t> result;
                         result.clear();
-                        if(cmd.argment.size() == 0)
-                        {
-                            result.push_back(0x00);
-                            result.push_back(0xFF);
-                            for(uint16_t i= 0; i< NUMBER_OF_SYSTEM; i++) { result.push_back(dpsNOW[i - 1] & 0x3F); }
-                        }
+                        if(cmd.argment.size() == 0) { for(uint16_t i= 0; i< NUMBER_OF_SYSTEM; i++) { result.push_back(dpsNOW[i - 1] & 0x3F); } }
                         else { result.push_back(0xF2); }
                         uart->writeSLIP_block(result);
                     }
@@ -290,18 +285,8 @@ int main()
                     {
                         std::vector<uint8_t> result;
                         result.clear();
-                        if(cmd.argment.size() == 0)
-                        {
-                            result.push_back(0x00);
-                            result.push_back(0xFF);
-                            for(uint16_t i= 0; i< NUMBER_OF_SYSTEM; i++) { result.push_back(dsaNOW[i - 1] & 0x3F); }
-                        } 
-                        else if(cmd.argment.size() == 1)
-                        {
-                            result.push_back(0x00);
-                            result.push_back(0xFF);
-                            result.push_back(dsaNOW[NUMBER_OF_SYSTEM]);
-                        }
+                        if(cmd.argment.size() == 0) { for(uint16_t i= 0; i< NUMBER_OF_SYSTEM; i++) { result.push_back(dsaNOW[i - 1] & 0x3F); } } 
+                        else if(cmd.argment.size() == 1) { result.push_back(dsaNOW[NUMBER_OF_SYSTEM]); }
                         else { result.push_back(0xF2); }
                         uart->writeSLIP_block(result);
                     }
@@ -398,13 +383,8 @@ int main()
                         if(cmd.argment.size() != 0) { uart->writeSLIP_block(retCODE(0xF2)); }
                         else
                         {
-                            std::vector<uint8_t> result;
-                            result.clear();
-                            result.push_back(0x00);
-                            result.push_back(0xFF);
-                            if(stbAMP) { result.push_back(0x01); }
-                            else { result.push_back(0x00); }
-                            uart->writeSLIP_block(result);
+                            if(stbAMP) { uart->writeSLIP_block(retCODE(0x01)); }
+                            else { uart->writeSLIP_block(retCODE(0x00)); }
                         }
                     }
                     else
@@ -427,13 +407,8 @@ int main()
                         if(cmd.argment.size() != 0) { uart->writeSLIP_block(retCODE(0xF2)); }
                         else
                         {
-                            std::vector<uint8_t> result;
-                            result.clear();
-                            result.push_back(0x00);
-                            result.push_back(0xFF);
-                            if(stbDRA) { result.push_back(0x01); }
-                            else { result.push_back(0x00); }
-                            uart->writeSLIP_block(result);
+                            if(stbDRA) { uart->writeSLIP_block(retCODE(0x01)); }
+                            else { uart->writeSLIP_block(retCODE(0x00)); }
                         }
                     }
                     else
@@ -456,13 +431,8 @@ int main()
                         if(cmd.argment.size() != 0) { uart->writeSLIP_block(retCODE(0xF2)); }
                         else
                         {
-                            std::vector<uint8_t> result;
-                            result.clear();
-                            result.push_back(0x00);
-                            result.push_back(0xFF);
-                            if(stbLNA) { result.push_back(0x01); }
-                            else { result.push_back(0x00); }
-                            uart->writeSLIP_block(result);
+                            if(stbLNA) { uart->writeSLIP_block(retCODE(0x01)); }
+                            else { uart->writeSLIP_block(retCODE(0x00)); }
                         }
                     }
                     else
@@ -485,13 +455,8 @@ int main()
                         if(cmd.argment.size() != 0) { uart->writeSLIP_block(retCODE(0xF2)); }
                         else
                         {
-                            std::vector<uint8_t> result;
-                            result.clear();
-                            result.push_back(0x00);
-                            result.push_back(0xFF);
-                            if(lowMODE) { result.push_back(0x01); }
-                            else { result.push_back(0x00); }
-                            uart->writeSLIP_block(result);
+                            if(lowMODE) { uart->writeSLIP_block(retCODE(0x01)); }
+                            else { uart->writeSLIP_block(retCODE(0x00)); }
                         }
                     }
                     else
@@ -616,8 +581,6 @@ int main()
                         {
                             std::vector<uint8_t> result;
                             result.clear();
-                            result.push_back(0x00);
-                            result.push_back(0xFF);
                             std::vector<uint64_t> code = sens->getSENS_ROMCODE();
                             for(uint i = 0; i < code.size(); i++)
                             {
@@ -686,8 +649,6 @@ int main()
                         {
                             std::vector<uint8_t> result;
                             result.clear();
-                            result.push_back(0x00);
-                            result.push_back(0xFF);
                             std::vector<uint16_t> code = sens->readSENS();
                             for(uint i = 0; i < code.size(); i++)
                             {
@@ -752,8 +713,6 @@ int main()
                         {
                             std::vector<uint8_t> result;
                             result.clear();
-                            result.push_back(0x00);
-                            result.push_back(0xFF);
                             uint16_t tmp = analog->readADC4();
                             result.push_back((uint8_t)((tmp & 0xFF00) >> 8));
                             result.push_back((uint8_t)(tmp & 0x00FF) );
@@ -782,8 +741,6 @@ int main()
                         {
                             std::vector<uint8_t> result;
                             result.clear();
-                            result.push_back(0x00);
-                            result.push_back(0xFF);
                             uint16_t tmp = analog->readADC0();
                             result.push_back((uint8_t)((tmp & 0xFF00) >> 8));
                             result.push_back((uint8_t)(tmp & 0x00FF) );
@@ -812,8 +769,6 @@ int main()
                         {
                             std::vector<uint8_t> result;
                             result.clear();
-                            result.push_back(0x00);
-                            result.push_back(0xFF);
                             uint16_t tmp = analog->readADC1();
                             result.push_back((uint8_t)((tmp & 0xFF00) >> 8));
                             result.push_back((uint8_t)(tmp & 0x00FF) );
@@ -842,8 +797,6 @@ int main()
                         {
                             std::vector<uint8_t> result;
                             result.clear();
-                            result.push_back(0x00);
-                            result.push_back(0xFF);
                             uint16_t tmp = analog->readADC2();
                             result.push_back((uint8_t)((tmp & 0xFF00) >> 8));
                             result.push_back((uint8_t)(tmp & 0x00FF) );
@@ -872,8 +825,6 @@ int main()
                         {
                             std::vector<uint8_t> result;
                             result.clear();
-                            result.push_back(0x00);
-                            result.push_back(0xFF);
                             uint16_t tmp = analog->readADC3();
                             result.push_back((uint8_t)((tmp & 0xFF00) >> 8));
                             result.push_back((uint8_t)(tmp & 0x00FF) );
@@ -902,8 +853,6 @@ int main()
                         {
                             std::vector<uint8_t> result;
                             result.clear();
-                            result.push_back(0x00);
-                            result.push_back(0xFF);
                             uint16_t tmp;
                             tmp = analog->readADC0();
                             result.push_back((uint8_t)((tmp & 0xFF00) >> 8));
@@ -933,8 +882,6 @@ int main()
                         {
                             std::vector<uint8_t> result;
                             result.clear();
-                            result.push_back(0x00);
-                            result.push_back(0xFF);
                             uint16_t tmp;
                             tmp = analog->readADC0();
                             result.push_back((uint8_t)((tmp & 0xFF00) >> 8));
@@ -1048,7 +995,7 @@ int main()
                 case pcabCMD::cmdCode::ReadROM:
                     if(modeBCM)
                     {
-                        if(cmd.argment.size() != 2) { uart->writeSLIP_block(retCODE(0xF2)); }
+                        if(cmd.argment.size() != 3) { uart->writeSLIP_block(retCODE(0xF2)); }
                         else
                         {
                             if(cmd.argment[2] & 0x0F != 0x00) { uart->writeSLIP_block(retCODE(0xFE)); }
@@ -1056,9 +1003,7 @@ int main()
                             {
                                 std::vector<uint8_t> result;
                                 result.clear();
-                                result.push_back(0x00);
-                                result.push_back(0xFF);
-                                uint16_t blockNum = (1u << 4) * cmd.argment[0] + cmd.argment[1];
+                                uint16_t blockNum = (1u << 8) * cmd.argment[0] + cmd.argment[1];
                                 uint8_t sectorNum = cmd.argment[2];
                                 bool brkFLG = false;
                                 for(uint8_t page = 0 ; page < FLASH_SECTOR_SIZE / FLASH_PAGE_SIZE; page++)
@@ -1141,7 +1086,7 @@ int main()
                             if(cmd.argment[2] & 0x0F != 0x00) { uart->writeSLIP_block(retCODE(0xFE)); }
                             else
                             {
-                                uint16_t blockNum = (1u << 4) * cmd.argment[0] + cmd.argment[1];
+                                uint16_t blockNum = (1u << 8) * cmd.argment[0] + cmd.argment[1];
                                 uint8_t sectorNum = cmd.argment[2];
                                 bool brkFLG = false;
                                 if(!flash::eraseROM(blockNum, sectorNum)) { uart->writeSLIP_block(retCODE(0xFE)); brkFLG = true; break; }
@@ -1260,15 +1205,7 @@ int main()
                     if(modeBCM)
                     {
                         if(cmd.argment.size() != 0) { uart->writeSLIP_block(retCODE(0xF2)); }
-                        else
-                        {
-                            std::vector<uint8_t> result;
-                            result.clear();
-                            result.push_back(0x00);
-                            result.push_back(0xFF);
-                            result.push_back(bootMode);
-                            uart->writeSLIP_block(result);
-                        }
+                        else { uart->writeSLIP_block(retCODE(bootMode)); }
                     }
                     else
                     {
@@ -1281,16 +1218,25 @@ int main()
                     software_reset();
                     break;
                 case pcabCMD::cmdCode::GetIDN:
-                    if(cmd.argments.size() != 0) { uart->writeLine("ERR > Number of arguments does not match."); }
+                    if(modeBCM)
+                    {
+                        std::string str = FW_VENDOR + "," + FW_MODEL + "," + serialNum + "," + FW_REV;
+                        std::vector<uint8_t> result(std::begin(str), std::end(str));
+                        uart->writeSLIP_block(result);
+                    }
                     else
                     {
-                        if(modeCUI)
+                        if(cmd.argments.size() != 0) { uart->writeLine("ERR > Number of arguments does not match."); }
+                        else
                         {
-                            uart->writeLine("Vendor   > " + FW_VENDOR);
-                            uart->writeLine("Model    > " + FW_MODEL);
-                            uart->writeLine("SerialNo > " + serialNum);
-                            uart->writeLine("Revision > " + FW_REV);
-                        } else { uart->writeLine(FW_VENDOR + "," + FW_MODEL + "," + serialNum + "," + FW_REV); }
+                            if(modeCUI)
+                            {
+                                uart->writeLine("Vendor   > " + FW_VENDOR);
+                                uart->writeLine("Model    > " + FW_MODEL);
+                                uart->writeLine("SerialNo > " + serialNum);
+                                uart->writeLine("Revision > " + FW_REV);
+                            } else { uart->writeLine(FW_VENDOR + "," + FW_MODEL + "," + serialNum + "," + FW_REV); }
+                        }
                     }
                     break;
                 case pcabCMD::cmdCode::GetIDR:

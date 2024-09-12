@@ -38,15 +38,13 @@ pcabCMD::CommandLine pcabCMD::readCMD(bool echo, bool slpi)
         std::vector<uint8_t> datBF = readSLIP_block(echo);
         std::string serialNum;
         std::string romID = "";
-        std::vector<size_t> cnt = std::vector<size_t>();
-        cnt.clear();
+        size_t cnt = 0;
         for(size_t s = 0; s < datBF.size(); ++s)
         {
-            if(datBF[s]==0xFF) { cnt.push_back(s); }
+            if(datBF[s]==0xFF) { cnt = s; break; }
         }
-
-        if(cnt.size() < 1 || 2 < cnt.size()){ return pcabCMD::CommandLine("", "", cmdCode::NUL, NULL, 0); }
-        std::string strBF = std::string(datBF.begin(), datBF.begin() + cnt[0]);
+        if(cnt == 0 || datBF.size() <= cnt + 1){ return pcabCMD::CommandLine("", "", cmdCode::NUL, NULL, 0); }
+        std::string strBF = std::string(datBF.begin(), datBF.begin() + cnt);
         if(strBF.size() > 0)
         {
             if(String::strCompare(strBF.substr(0, 1), "#", true))
@@ -57,14 +55,10 @@ pcabCMD::CommandLine pcabCMD::readCMD(bool echo, bool slpi)
                 romID = strBF.substr(1);
             }
         }
-        std::vector<uint8_t> arg;
-        if(cnt.size() == 2 && cnt[1] + 1 <= datBF.size())
-        {
-            arg = std::vector<uint8_t>(datBF.size() - cnt[1] - 1);
-            copy(datBF.begin() + cnt[1] + 1, datBF.end(), arg.begin());
-        }
+        std::vector<uint8_t> arg = std::vector<uint8_t>(datBF.size() - cnt - 2);
+        copy(datBF.begin() + cnt + 2, datBF.end(), arg.begin());
         
-        switch (datBF[cnt[0] + 1])
+        switch (datBF[cnt + 1])
         {
         case 0xB0:
         case 0xC1: return pcabCMD::CommandLine(serialNum, romID, cmdCode::WrtDSA, arg);
@@ -90,6 +84,7 @@ pcabCMD::CommandLine pcabCMD::readCMD(bool echo, bool slpi)
         case 0xEA: return pcabCMD::CommandLine(serialNum, romID, cmdCode::GetMODE, arg);
         case 0xEE: return pcabCMD::CommandLine(serialNum, romID, cmdCode::GetAD, arg);
         case 0xEF: return pcabCMD::CommandLine(serialNum, romID, cmdCode::GetSENS, arg);
+        case 0xF0: return pcabCMD::CommandLine(serialNum, romID, cmdCode::GetIDN, arg);
         case 0xFA: return pcabCMD::CommandLine(serialNum, romID, cmdCode::RST, arg);
         case 0xFB: return pcabCMD::CommandLine(serialNum, romID, cmdCode::SaveMEM, arg);
         case 0xFC: return pcabCMD::CommandLine(serialNum, romID, cmdCode::LoadMEM, arg);
