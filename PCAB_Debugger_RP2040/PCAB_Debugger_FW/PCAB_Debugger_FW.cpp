@@ -900,18 +900,14 @@ int main()
                             tmp = analog->readADC4();
                             result.push_back((uint8_t)((tmp & 0xFF00) >> 8));
                             result.push_back((uint8_t)(tmp & 0x00FF) );
-                            std::vector<uint64_t> code = sens->getSENS_ROMCODE();
+                            std::vector<uint16_t> code = sens->readSENS();
+                            if(code.size() == 0){result.push_back(0xFE);}
                             for(uint i = 0; i < code.size(); i++)
                             {
-                                result.push_back((uint8_t)((code[i] & 0xFF00000000000000) >> 56));
-                                result.push_back((uint8_t)((code[i] & 0x00FF000000000000) >> 48));
-                                result.push_back((uint8_t)((code[i] & 0x0000FF0000000000) >> 40));
-                                result.push_back((uint8_t)((code[i] & 0x000000FF00000000) >> 32));
-                                result.push_back((uint8_t)((code[i] & 0x00000000FF000000) >> 24));
-                                result.push_back((uint8_t)((code[i] & 0x0000000000FF0000) >> 16));
-                                result.push_back((uint8_t)((code[i] & 0x000000000000FF00) >> 8));
-                                result.push_back((uint8_t)(code[i] & 0x00000000000000FF) );
+                                result.push_back((uint8_t)((code[i] & 0xFF00) >> 8));
+                                result.push_back((uint8_t)(code[i] & 0x00FF) );
                             }
+                            std::vector<uint64_t> code = sens->getSENS_ROMCODE();
                             uart->writeSLIP_block(result);
                         }
                     }
