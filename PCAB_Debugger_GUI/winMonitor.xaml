@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="PCAB Debugger Monitor" Height="450" Width="800" Closing="Window_Closing"
         SourceInitialized="Window_SourceInitialized">
-    <Grid x:Name="GRID_MAIN">
+    <Grid x:Name="MONITOR_GRID">
         <local:cntMonitor/>
     </Grid>
 </Window>

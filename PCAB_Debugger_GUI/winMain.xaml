@@ -66,10 +66,8 @@
                 </Grid>
             </Grid>
         </Grid>
-        <Grid Grid.Row="2">
-            <TabControl x:Name="BOARD_TAB" IsEnabled="False" FontSize="24" Margin="5">
-                <TabItem Header="SN"><local:cntBOARD/></TabItem>
-            </TabControl>
+        <Grid Grid.Row="2" x:Name="BOARD_GRID">
+            <local:cntBOARD/>
         </Grid>
     </Grid>
 </Window>

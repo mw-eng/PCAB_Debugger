@@ -13,6 +13,7 @@ namespace PCAB_Debugger_GUI
     public class PCAB_TASK
     {
         private PCAB_SerialInterface serialInterface;
+        public bool isOpen { get { return serialInterface.isOpen; } }
         private bool? _task;    //true:run / false:stop / null:Interrupt
         private bool _state;
         public event EventHandler<PCABEventArgs> OnUpdateDAT;
@@ -22,7 +23,7 @@ namespace PCAB_Debugger_GUI
         public PCAB_TASK(string PortName) { serialInterface = new PCAB_SerialInterface(PortName); }
         public PCAB_TASK(SerialPort serialPort) { serialInterface = new PCAB_SerialInterface(serialPort); }
 
-        public void Close()
+        private void Close()
         {
             try { serialInterface?.Close(); } catch { }
             serialInterface = null;
@@ -30,10 +31,14 @@ namespace PCAB_Debugger_GUI
 
         public bool PCAB_AutoTaskStart(UInt32 waiteTime, string[] serialNum)
         {
-            if (serialInterface.SerialOpen) { serialInterface.Close(); }
-            return serialInterface.Open(serialNum);
-            Task.Factory.StartNew(() => { PCAB_Task(waiteTime); });
-            return true;
+            if (serialInterface.isOpen) { serialInterface.Close(); }
+            if (serialInterface.Open(serialNum))
+            {
+                _task = true;
+                Task.Factory.StartNew(() => { PCAB_Task(waiteTime); });
+                return true;
+            }
+            else { return false; }
         }
 
         private void PCAB_Task(UInt32 waiteTime)
@@ -463,8 +468,8 @@ namespace PCAB_Debugger_GUI
     public class PCAB_SerialInterface
     {
         private SerialPort _serialPort;
-        public bool SerialOpen { get; private set; } = false;
-        public List<PCAB_UnitInterface> pcabUNITs { get; private set; }
+        public bool isOpen { get; private set; } = false;
+        public List<PCAB_UnitInterface> pcabUNITs { get; private set; } = new List<PCAB_UnitInterface>();
         private List<byte> serialBF = new List<byte>();
 
         /// <summary>Constructor</summary>
@@ -503,7 +508,7 @@ namespace PCAB_Debugger_GUI
                     {
                         try
                         {
-                            WriteSLIP(unit.GetCommandCode(new List<byte>(0xFE)));
+                            WriteSLIP(unit.GetCommandCode(new List<byte>() { 0xFE }));
                         }
                         catch { }
                         Thread.Sleep(500);
@@ -513,6 +518,7 @@ namespace PCAB_Debugger_GUI
                 }
                 catch { }
             }
+            isOpen = false;
             pcabUNITs.Clear();
         }
 
@@ -532,12 +538,27 @@ namespace PCAB_Debugger_GUI
             try
             {
                 DiscardInBuffer();
-                _serialPort.WriteLine("");
+                _serialPort.DiscardOutBuffer();
                 foreach (string s in SerialNumbers)
                 {
+                    List<byte> bf = new List<byte>();
+                    bf.AddRange(Encoding.ASCII.GetBytes("#"));
+                    bf.AddRange(Encoding.ASCII.GetBytes(s));
+                    bf.Add(0xFF);
+                    bf.Add(0xFE);
+                    WriteSLIP(bf);
+                    WriteSLIP(bf);
+                    WriteSLIP(bf);
+                    Thread.Sleep(50);
+                    _serialPort.WriteLine("");
+                    _serialPort.WriteLine("");
+                    _serialPort.WriteLine("");
                     _serialPort.WriteLine("#" + s + " CUI 0");
+                    _serialPort.WriteLine("#" + s + " CUI 0");
+                    DiscardInBuffer();
                 }
-                Thread.Sleep(500);
+                _serialPort.DiscardOutBuffer();
+                Thread.Sleep(100);
                 DiscardInBuffer();
                 int rTObf = _serialPort.ReadTimeout;
                 _serialPort.ReadTimeout = 100;
@@ -581,7 +602,7 @@ namespace PCAB_Debugger_GUI
             {
                 return false;
             }
-            SerialOpen = true;
+            isOpen = true;
             return true;
         }
 
@@ -592,7 +613,8 @@ namespace PCAB_Debugger_GUI
         }
         public void WriteSLIP(List<byte> dat)
         {
-            _serialPort.Write(clsSLIP.EncodeSLIP(dat).ToArray(), 0, dat.Count);
+            List<byte> tx = clsSLIP.EncodeSLIP(dat);
+            _serialPort.Write(tx.ToArray(), 0, tx.Count);
         }
         public List<byte> ReadSLIP() { return ReadSLIP(_serialPort.ReadBufferSize); }
         public List<byte> ReadSLIP(int bfLEN)
@@ -865,7 +887,7 @@ namespace PCAB_Debugger_GUI
             try
             {
                 List<byte> ret = WriteReadSLIP(unit.GetCommandCode(new List<byte> { 0xEF }));
-                if (ret.Count == 10 + 2 * 15) { return new SensorValues(ret); }
+                if (ret.Count == 10 + 2 * 15 || ret.Count == 10 || ret.Count == 2 * 15) { return new SensorValues(ret); }
                 else { throw new Exception("GetLowPowerMode Error"); }
             }
             catch (Exception ex) { throw; }
@@ -1044,6 +1066,10 @@ namespace PCAB_Debugger_GUI
                     Vin = ((1u << 8) * (UInt16)dat[4] + (UInt16)dat[5]) * 3.3f / (1 << 12);
                     Pin = ((1u << 8) * (UInt16)dat[6] + (UInt16)dat[7]) * 3.3f / (1 << 12);
                     CPU_Temprature = ((1u << 8) * (UInt16)dat[8] + (UInt16)dat[9]) * 3.3f / (1 << 12);
+                    Vd = Vd * 10.091f;
+                    Id = (Id - 0.08f) / 0.737f;
+                    Vin = Vin * 15.0f;
+                    CPU_Temprature = 27.0f - (CPU_Temprature - 0.706f) / 0.001721f;
                 }
                 else { CPU_Temprature = float.NaN; Vd = float.NaN; Id = float.NaN; Vin = float.NaN; Pin = float.NaN; }
             }

@@ -16,10 +16,8 @@ namespace PCAB_Debugger_GUI
     public partial class winMain : Window
     {
         SerialPortTable[] ports;
-        public PCAB _mod;
-        bool _state;
-        public int sesn;
-        private winMonitor monitor = new winMonitor();
+        public clsSerialIO _io;
+        private winMonitor monitor;
 
         public winMain()
         {
@@ -32,7 +30,7 @@ namespace PCAB_Debugger_GUI
 #if DEBUG
             //Settings.Default.Reset();
             this.Title += "_DEBUG MODE";
-            this.BOARD_TAB.IsEnabled = true;
+            this.BOARD_GRID.IsEnabled = true;
 #endif
         }
 
@@ -64,7 +62,34 @@ namespace PCAB_Debugger_GUI
 
         private void CONNECT_BUTTON_Click(object sender, RoutedEventArgs e)
         {
-            monitor.Show();
+            if (_io?.isOpen == true)
+            {
+                monitor.WindowClose();
+                _io.Close();
+            }
+            else
+            {
+                string[] sn = SERIAL_NUMBERS_TEXTBOX.Text.Replace(" ", "").Split(',');
+                _io = new clsSerialIO(ports[SERIAL_PORTS_COMBOBOX.SelectedIndex].Name, sn, uint.Parse(WAITE_TIME_TEXTBOX.Text));
+                if (_io.isOpen == true)
+                {
+                    monitor = new winMonitor();
+                    monitor.MONITOR_GRID.Children.Clear();
+                    monitor.MONITOR_GRID.RowDefinitions.Clear();
+                    monitor.MONITOR_GRID.ColumnDefinitions.Clear();
+                    foreach (cntMonitor mon in _io.PCAB_Monitors)
+                    {
+                        monitor.MONITOR_GRID.ColumnDefinitions.Add(new ColumnDefinition());
+                        mon.SetValue(Grid.ColumnProperty, 0);
+                        monitor.MONITOR_GRID.Children.Add(mon);
+                    }
+                    monitor.Show();
+                }
+                else
+                {
+                    //monitor.MONITOR_GRID.Children.Clear();
+                }
+            }
         }
 
         #endregion

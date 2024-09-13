@@ -42,10 +42,6 @@ namespace PCAB_Debugger_GUI
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            bool fileFLG = false;
-            uint stepDPS = 0;
-            uint stepDSA = 0;
-            int waitTIME = -1;
             //Get Configuration
         }
 
