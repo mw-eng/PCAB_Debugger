@@ -1086,7 +1086,7 @@ namespace PCAB_Debugger_GUI
                     Values = new float[15];
                     for (int i = 0; i < 16; i++)
                     {
-                        Values[i] = ((1u << 8) * (UInt16)dat[2 * i] + (UInt16)dat[2 * i + 1]) / 16.0f;
+                        Values[i] = (short)((1u << 8) * (UInt16)dat[2 * i] + (UInt16)dat[2 * i + 1]) / 16.0f;
                     }
                 }
                 else { Values = null; }
