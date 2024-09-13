@@ -1,12 +1,13 @@
-﻿using MWComLibCS.ExternalControl;
-using PCAB_Debugger_GUI.Properties;
-using System;
+﻿using System;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using static PCAB_Debugger_GUI.PCAB;
 using static PCAB_Debugger_GUI.ShowSerialPortName;
+using static PCAB_Debugger_GUI.PCAB_TASK;
+using static PCAB_Debugger_GUI.cntConfig;
+using MWComLibCS.ExternalControl;
+using static PCAB_Debugger_GUI.cntConfigSettings;
 
 namespace PCAB_Debugger_GUI
 {
@@ -18,6 +19,7 @@ namespace PCAB_Debugger_GUI
         SerialPortTable[] ports;
         public clsSerialIO _io;
         private winMonitor monitor;
+        private int visa32Resource;
 
         public winMain()
         {
@@ -30,8 +32,9 @@ namespace PCAB_Debugger_GUI
 #if DEBUG
             //Settings.Default.Reset();
             this.Title += "_DEBUG MODE";
-            this.BOARD_GRID.IsEnabled = true;
+            BOARD_GRID.IsEnabled = true;
 #endif
+            visa32Resource = VisaControlNI.NewResourceManager();
         }
 
         #region Serial EVENT
@@ -64,14 +67,25 @@ namespace PCAB_Debugger_GUI
         {
             if (_io?.isOpen == true)
             {
-                monitor.WindowClose();
-                _io.Close();
+                OnError(null, null);
             }
             else
             {
                 string[] sn = SERIAL_NUMBERS_TEXTBOX.Text.Replace(" ", "").Split(',');
-                _io = new clsSerialIO(ports[SERIAL_PORTS_COMBOBOX.SelectedIndex].Name, sn, uint.Parse(WAITE_TIME_TEXTBOX.Text));
-                if (_io.isOpen == true)
+                _io = new clsSerialIO(ports[SERIAL_PORTS_COMBOBOX.SelectedIndex].Name);
+                _io.OnError += OnError;
+                try
+                {
+                    _io.Open(sn, uint.Parse(WAITE_TIME_TEXTBOX.Text));
+                }
+                catch
+                {
+                    _io.Close();
+                    SERIAL_PORTS_COMBOBOX_RELOAD();
+                    SERIAL_PORTS_COMBOBOX_DropDownClosed(null, null);
+                    return;
+                }
+                if (_io?.isOpen == true)
                 {
                     monitor = new winMonitor();
                     monitor.MONITOR_GRID.Children.Clear();
@@ -84,10 +98,41 @@ namespace PCAB_Debugger_GUI
                         monitor.MONITOR_GRID.Children.Add(mon);
                     }
                     monitor.Show();
+                    BOARD_GRID.Children.Clear();
+                    if (_io.PCAB_Boards.Count == 1)
+                    {
+                        BOARD_GRID.Children.Add(_io.PCAB_Boards[0]);
+                        ((cntBOARD)BOARD_GRID.Children[0]).AUTO.setResourceManager = visa32Resource;
+                        ((cntBOARD)BOARD_GRID.Children[0]).AUTO.ButtonClickEvent += AUTO_ButtonClickEvent;
+                        ((cntBOARD)BOARD_GRID.Children[0]).CONFIG.ButtonClickEvent += CONFIG_ButtonClickEvent;
+                        ((cntBOARD)BOARD_GRID.Children[0]).CONFIG.CONFIG_SETTINGS.CheckboxClickEvent += CONFIG_CONFIG_SETTINGS_CheckboxClickEventHandler;
+                    }
+                    else
+                    {
+                        BOARD_GRID.Children.Add(new TabControl());
+                        for (int i = 0; i < _io.PCAB_Boards.Count; i++)
+                        {
+                            ((TabControl)BOARD_GRID.Children[0]).FontSize = 24;
+                            ((TabControl)BOARD_GRID.Children[0]).Margin = new Thickness(5);
+                            ((TabControl)BOARD_GRID.Children[0]).Items.Add(new TabItem());
+                            ((TabItem)((TabControl)BOARD_GRID.Children[0]).Items[i]).Header = "S/N, " + _io.PCAB_Boards[i].SerialNumber;
+                            ((TabItem)((TabControl)BOARD_GRID.Children[0]).Items[i]).Content = _io.PCAB_Boards[i];
+                            ((cntBOARD)((TabItem)((TabControl)BOARD_GRID.Children[0]).Items[i]).Content).AUTO.setResourceManager = visa32Resource;
+                            ((cntBOARD)((TabItem)((TabControl)BOARD_GRID.Children[0]).Items[i]).Content).AUTO.ButtonClickEvent += AUTO_ButtonClickEvent;
+                            ((cntBOARD)((TabItem)((TabControl)BOARD_GRID.Children[0]).Items[i]).Content).CONFIG.ButtonClickEvent += CONFIG_ButtonClickEvent;
+                            ((cntBOARD)((TabItem)((TabControl)BOARD_GRID.Children[0]).Items[i]).Content).CONFIG.CONFIG_SETTINGS.CheckboxClickEvent += CONFIG_CONFIG_SETTINGS_CheckboxClickEventHandler;
+
+                        }
+                    }
+                    SERIAL_PORTS_COMBOBOX.IsEnabled = false;
+                    SERIAL_CONFIG_GRID.IsEnabled = false;
+                    BOARD_GRID.IsEnabled = true;
+                    CONNECT_BUTTON_CONTENT.Text = "Disconnect";
                 }
                 else
                 {
-                    //monitor.MONITOR_GRID.Children.Clear();
+                    _io.Close();
+                    MessageBox.Show("No valid PCAB found.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }
@@ -191,7 +236,40 @@ namespace PCAB_Debugger_GUI
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            monitor.WindowClose();
+            if (_io?.isOpen == true)
+            {
+                OnError(null, null);
+            }
+        }
+        #endregion
+
+        #region Sub Function EVENT
+        private void CONFIG_ButtonClickEvent(object sender, RoutedEventArgs e, ButtonCategory category)
+        {
+            string strSN = ((cntConfig)sender).SerialNumber;
+        }
+        private void AUTO_ButtonClickEvent(object sender, RoutedEventArgs e, string dirPath)
+        {
+            string strSN = ((cntAUTO)sender).SerialNumber;
+        }
+        private void CONFIG_CONFIG_SETTINGS_CheckboxClickEventHandler(object sender, RoutedEventArgs e, CheckBoxCategory cat, bool? isChecked)
+        {
+            string strSN = ((cntConfigSettings)sender).SerialNumber;
+        }
+
+        private void OnError(object sender, PCABEventArgs e)
+        {
+            Dispatcher.BeginInvoke(new Action(() =>
+            {
+                monitor.WindowClose();
+                _io.Close();
+                BOARD_GRID.Children.Clear();
+                BOARD_GRID.Children.Add(new cntBOARD());
+                BOARD_GRID.IsEnabled = false;
+                SERIAL_PORTS_COMBOBOX.IsEnabled = true;
+                SERIAL_CONFIG_GRID.IsEnabled = true;
+                CONNECT_BUTTON_CONTENT.Text = "Connect";
+            }));
         }
         #endregion
     }

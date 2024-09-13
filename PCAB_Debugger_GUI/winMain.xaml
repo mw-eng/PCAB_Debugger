@@ -31,7 +31,7 @@
                 <ComboBox Grid.Column="1" x:Name="SERIAL_PORTS_COMBOBOX" Margin="5" FontSize="16" VerticalContentAlignment="Center" DropDownOpened="SERIAL_PORTS_COMBOBOX_DropDownOpened" DropDownClosed="SERIAL_PORTS_COMBOBOX_DropDownClosed"/>
                 <Button Grid.Column="2" x:Name="CONNECT_BUTTON" Margin="5" Click="CONNECT_BUTTON_Click" IsEnabled="False">
                     <Viewbox>
-                        <TextBlock>Connect</TextBlock>
+                        <TextBlock x:Name="CONNECT_BUTTON_CONTENT">Connect</TextBlock>
                     </Viewbox>
                 </Button>
             </Grid>
@@ -66,8 +66,6 @@
                 </Grid>
             </Grid>
         </Grid>
-        <Grid Grid.Row="2" x:Name="BOARD_GRID">
-            <local:cntBOARD/>
-        </Grid>
+        <Grid Grid.Row="2" x:Name="BOARD_GRID"><local:cntBOARD/></Grid>
     </Grid>
 </Window>

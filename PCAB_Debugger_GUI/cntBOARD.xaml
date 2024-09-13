@@ -7,9 +7,9 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <TabControl Grid.Column="0" FontSize="18" Margin="5">
-            <TabItem Header="CONTROL"><local:cntConfig x:Name="CONFIG"/></TabItem>
-            <TabItem Header="AUTO"><local:cntAUTO x:Name="AUTO"/></TabItem>
+        <TabControl Grid.Column="0" x:Name="TAB_CONTROL" FontSize="18" Margin="5">
+            <TabItem Header="CONTROL"><local:cntConfig/></TabItem>
+            <TabItem Header="AUTO"><local:cntAUTO/></TabItem>
         </TabControl>
 
     </Grid>

@@ -15,13 +15,15 @@ namespace PCAB_Debugger_GUI
         private int sesn;
         public delegate void StartButtonClickEventHandler(object sender, RoutedEventArgs e, string dirPath);
         public event StartButtonClickEventHandler ButtonClickEvent;
+        public int setResourceManager { set { sesn = value; } }
+        public string SerialNumber { get; private set; }
 
-        public cntAUTO() : this(VisaControlNI.NewResourceManager()) { }
-
-        public cntAUTO(int VISAresource)
+        public cntAUTO() : this("SN") { }
+        public cntAUTO(string SN)
         {
             InitializeComponent();
-            sesn = VISAresource;
+            SerialNumber = SN;
+            VNALOOP_CONF_GRID.IsEnabled = false;
         }
 
         private void VNALOOP_START_BUTTON_Click(object sender, RoutedEventArgs e)
@@ -42,7 +44,7 @@ namespace PCAB_Debugger_GUI
                     dirPath = fbd.SelectedPath;
                 }
             }
-            ButtonClickEvent?.Invoke(sender, e, dirPath);
+            ButtonClickEvent?.Invoke(this, e, dirPath);
         }
 
         private void VNALOOP_VISA_CONNECT_CHECK_BUTTON_Click(object sender, RoutedEventArgs e)

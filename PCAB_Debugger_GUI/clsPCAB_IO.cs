@@ -13,11 +13,11 @@ namespace PCAB_Debugger_GUI
     public class PCAB_TASK
     {
         private PCAB_SerialInterface serialInterface;
-        public bool isOpen { get { return serialInterface.isOpen; } }
+        public bool? isOpen { get { return serialInterface?.isOpen; } }
         private bool? _task;    //true:run / false:stop / null:Interrupt
         private bool _state;
         public event EventHandler<PCABEventArgs> OnUpdateDAT;
-        public event EventHandler<PCABEventArgs> OnError;
+        public event EventHandler<PCABEventArgs> OnTaskError;
         public List<PCAB_UnitInterface> UNITs { get { return serialInterface?.pcabUNITs; } }
 
         public PCAB_TASK(string PortName) { serialInterface = new PCAB_SerialInterface(PortName); }
@@ -81,12 +81,11 @@ namespace PCAB_Debugger_GUI
                 {
                     unit.SensorValuesNOW.Clear();
                 }
-                OnUpdateDAT?.Invoke(this, new PCABEventArgs(serialInterface.pcabUNITs, null));
-                OnError?.Invoke(this, new PCABEventArgs(null, e.Message));
+                OnTaskError?.Invoke(this, new PCABEventArgs(null, e.Message));
             }
         }
 
-        public void PCAB_AutoTaskStop() { _task = false; }
+        public void PCAB_AutoTaskStop() { _task = false; Close(); }
 
         public bool PCAB_PRESET(PCAB_UnitInterface unit)
         {
@@ -444,11 +443,6 @@ namespace PCAB_Debugger_GUI
                 return result;
             }
             catch (Exception e) { throw; }
-            //catch (Exception e)
-            //{
-            //    OnError?.Invoke(this, new PCABEventArgs(null, e.Message));
-            //    return null;
-            //}
         }
 
         public class PCABEventArgs : EventArgs
@@ -533,8 +527,8 @@ namespace PCAB_Debugger_GUI
             }
             if (_serialPort?.IsOpen == true) { return false; }
             try { _serialPort.Open(); }
-            catch (UnauthorizedAccessException) { MessageBox.Show("Serial port open Error.\nAlready used.\n", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return false; }
-            catch (Exception) { MessageBox.Show("Serial port open Error.\n{e.ToString()}\n", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return false; }
+            catch (UnauthorizedAccessException) { MessageBox.Show("Serial port open Error.\nAlready used.\n", "Error", MessageBoxButton.OK, MessageBoxImage.Error); throw; }
+            catch (Exception) { MessageBox.Show("Serial port open Error.\n{e.ToString()}\n", "Error", MessageBoxButton.OK, MessageBoxImage.Error); throw; }
             try
             {
                 DiscardInBuffer();
@@ -1084,7 +1078,7 @@ namespace PCAB_Debugger_GUI
                 if (dat.Count == 2 * 15)
                 {
                     Values = new float[15];
-                    for (int i = 0; i < 16; i++)
+                    for (int i = 0; i < 15; i++)
                     {
                         Values[i] = (short)((1u << 8) * (UInt16)dat[2 * i] + (UInt16)dat[2 * i + 1]) / 16.0f;
                     }

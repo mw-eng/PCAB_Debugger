@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows;
-using System.Windows.Threading;
 using static PCAB_Debugger_GUI.PCAB_TASK;
 
 namespace PCAB_Debugger_GUI
@@ -9,18 +8,26 @@ namespace PCAB_Debugger_GUI
     public class clsSerialIO
     {
         private PCAB_TASK _task;
-        public bool isOpen { get { return _task.isOpen; } }
+        public bool? isOpen { get { return _task?.isOpen; } }
         public List<cntBOARD> PCAB_Boards {  get; private set; } = new List<cntBOARD>();
         public List<cntMonitor> PCAB_Monitors { get; private set; } = new List<cntMonitor>();
-        public clsSerialIO(string SerialPortName, string[] SerialNumber,uint MonitorIntervalTime)
+        public event EventHandler<PCABEventArgs> OnError;
+        public clsSerialIO(string SerialPortName)
         {
             _task = new PCAB_TASK(SerialPortName);
             _task.OnUpdateDAT += OnUpdateDAT;
+            _task.OnTaskError += PCAB_TASK_OnError;
+        }
+
+        ~clsSerialIO() { }
+
+        public void Open(string[] SerialNumber, uint MonitorIntervalTime)
+        {
             if (_task.PCAB_AutoTaskStart(MonitorIntervalTime, SerialNumber))
             {
-                foreach(PCAB_SerialInterface.PCAB_UnitInterface unit in _task.UNITs)
+                foreach (PCAB_SerialInterface.PCAB_UnitInterface unit in _task.UNITs)
                 {
-                    PCAB_Boards.Add(new cntBOARD());
+                    PCAB_Boards.Add(new cntBOARD(unit.SerialNumberASCII));
                     PCAB_Monitors.Add(new cntMonitor());
                 }
                 for (int cnt = 0; cnt < _task.UNITs.Count; cnt++)
@@ -30,22 +37,18 @@ namespace PCAB_Debugger_GUI
             }
         }
 
-        ~clsSerialIO() { }
-
         public void Close()
         {
-            _task.PCAB_AutoTaskStop();
+            _task?.PCAB_AutoTaskStop();
             PCAB_Boards.Clear(); PCAB_Monitors.Clear();
         }
 
-        private void OnError(object sender, PCABEventArgs e)
+        private void PCAB_TASK_OnError(object sender, PCABEventArgs e)
         {
             _task.PCAB_AutoTaskStop();
-            MessageBox.Show(e.Message.ToString(), "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             _task = null;
-            //Dispatcher.BeginInvoke(new Action(() =>
-            //{
-            //}));
+            MessageBox.Show(e.Message.ToString(), "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            OnError?.Invoke(this, e);
         }
 
         private void OnUpdateDAT(object sender, PCABEventArgs e)
@@ -72,9 +75,6 @@ namespace PCAB_Debugger_GUI
                     }
                 }
             }
-            //Dispatcher.BeginInvoke(new Action(() =>
-            //{
-            //}));
         }
     }
 }

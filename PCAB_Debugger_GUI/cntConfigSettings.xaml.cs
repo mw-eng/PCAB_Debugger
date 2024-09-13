@@ -23,8 +23,8 @@ namespace PCAB_Debugger_GUI
         public bool? StandbyAMP
         {
             get { return STBAMP_CHECKBOX.IsChecked; }
-            set { 
-                switch (value) 
+            set {
+                switch (value)
                 {
                     case true:
                         CHECKBOX_Checked("STBAMP", null);
@@ -35,7 +35,7 @@ namespace PCAB_Debugger_GUI
                     default:
                         CHECKBOX_Indeterminate("STBAMP", null);
                         break;
-                } 
+                }
             }
         }
         public bool? StandbyDRA
@@ -152,7 +152,7 @@ namespace PCAB_Debugger_GUI
                     default:
                         throw new ArgumentException("A non-existent DSA number was specified.", "SetDSA[" + number + "]");
                 }
-                if(ALL_DSA_CHECKBOX.IsChecked == true) { ALL_DSA_CHECKBOX.IsChecked = false; }
+                if (ALL_DSA_CHECKBOX.IsChecked == true) { ALL_DSA_CHECKBOX.IsChecked = false; }
             }
             catch (Exception ex)
             {
@@ -298,10 +298,13 @@ namespace PCAB_Debugger_GUI
                     throw new ArgumentException("A non-existent DPS number was specified.", "GetDPS[" + number + "]");
             }
         }
+        public string SerialNumber { get; private set; }
 
-        public cntConfigSettings()
+        public cntConfigSettings() : this("SN") { }
+        public cntConfigSettings(string SN)
         {
             InitializeComponent();
+            SerialNumber = SN;
         }
 
         private void CHECKBOX_Checked(object sender, RoutedEventArgs e)
@@ -325,7 +328,7 @@ namespace PCAB_Debugger_GUI
                         break;
                     default: break;
                 }
-                CheckboxClickEvent?.Invoke(sender, e, cat, true);
+                CheckboxClickEvent?.Invoke(this, e, cat, true);
             }
             else
             {
@@ -369,7 +372,7 @@ namespace PCAB_Debugger_GUI
                         break;
                     default: break;
                 }
-                CheckboxClickEvent?.Invoke(sender, e, cat, false);
+                CheckboxClickEvent?.Invoke(this, e, cat, false);
             }
             else
             {
@@ -413,7 +416,7 @@ namespace PCAB_Debugger_GUI
                         break;
                     default: break;
                 }
-                CheckboxClickEvent?.Invoke(sender, e, cat, null);
+                CheckboxClickEvent?.Invoke(this, e, cat, null);
             }
             else
             {
