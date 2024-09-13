@@ -95,11 +95,7 @@ namespace PCAB_Debugger_GUI
                 _task = true;
                 return result;
             }
-            catch (Exception e)
-            {
-                OnError?.Invoke(this, new PCABEventArgs(null, e.Message));
-                return false;
-            }
+            catch (Exception e){ throw; }
         }
         public bool PCAB_WriteDSAin(PCAB_UnitInterface unit, uint config)
         {
@@ -113,11 +109,7 @@ namespace PCAB_Debugger_GUI
                 _task = true;
                 return result;
             }
-            catch (Exception e)
-            {
-                OnError?.Invoke(this, new PCABEventArgs(null, e.Message));
-                return false;
-            }
+            catch (Exception e) { throw; }
         }
         public bool PCAB_WriteDSA(PCAB_UnitInterface unit, List<uint> configs)
         {
@@ -131,11 +123,7 @@ namespace PCAB_Debugger_GUI
                 _task = true;
                 return result;
             }
-            catch (Exception e)
-            {
-                OnError?.Invoke(this, new PCABEventArgs(null, e.Message));
-                return false;
-            }
+            catch (Exception e) { throw; }
         }
         public bool PCAB_WriteDPS(PCAB_UnitInterface unit, List<uint> configs)
         {
@@ -149,11 +137,7 @@ namespace PCAB_Debugger_GUI
                 _task = true;
                 return result;
             }
-            catch (Exception e)
-            {
-                OnError?.Invoke(this, new PCABEventArgs(null, e.Message));
-                return false;
-            }
+            catch (Exception e) { throw; }
         }
         public bool PCAB_SetSTB_AMP(PCAB_UnitInterface unit, bool mode)
         {
@@ -167,11 +151,7 @@ namespace PCAB_Debugger_GUI
                 _task = true;
                 return result;
             }
-            catch (Exception e)
-            {
-                OnError?.Invoke(this, new PCABEventArgs(null, e.Message));
-                return false;
-            }
+            catch (Exception e) { throw; }
         }
         public bool PCAB_SetSTB_DRA(PCAB_UnitInterface unit, bool mode)
         {
@@ -185,11 +165,7 @@ namespace PCAB_Debugger_GUI
                 _task = true;
                 return result;
             }
-            catch (Exception e)
-            {
-                OnError?.Invoke(this, new PCABEventArgs(null, e.Message));
-                return false;
-            }
+            catch (Exception e) { throw; }
         }
         public bool PCAB_SetSTB_LNA(PCAB_UnitInterface unit, bool mode)
         {
@@ -203,11 +179,7 @@ namespace PCAB_Debugger_GUI
                 _task = true;
                 return result;
             }
-            catch (Exception e)
-            {
-                OnError?.Invoke(this, new PCABEventArgs(null, e.Message));
-                return false;
-            }
+            catch (Exception e) { throw; }
         }
         public bool PCAB_SetLowPowerMode(PCAB_UnitInterface unit, bool mode)
         {
@@ -221,11 +193,7 @@ namespace PCAB_Debugger_GUI
                 _task = true;
                 return result;
             }
-            catch (Exception e)
-            {
-                OnError?.Invoke(this, new PCABEventArgs(null, e.Message));
-                return false;
-            }
+            catch (Exception e) { throw; }
         }
         public int PCAB_GetDSAin(PCAB_UnitInterface unit)
         {
@@ -239,11 +207,7 @@ namespace PCAB_Debugger_GUI
                 _task = true;
                 return result;
             }
-            catch (Exception e)
-            {
-                OnError?.Invoke(this, new PCABEventArgs(null, e.Message));
-                return -1;
-            }
+            catch (Exception e) { throw; }
         }
         public List<int> PCAB_GetDSA(PCAB_UnitInterface unit)
         {
@@ -257,11 +221,7 @@ namespace PCAB_Debugger_GUI
                 _task = true;
                 return result;
             }
-            catch (Exception e)
-            {
-                OnError?.Invoke(this, new PCABEventArgs(null, e.Message));
-                return null;
-            }
+            catch (Exception e) { throw; }
         }
         public List<int> PCAB_GetDPS(PCAB_UnitInterface unit)
         {
@@ -275,11 +235,7 @@ namespace PCAB_Debugger_GUI
                 _task = true;
                 return result;
             }
-            catch (Exception e)
-            {
-                OnError?.Invoke(this, new PCABEventArgs(null, e.Message));
-                return null;
-            }
+            catch (Exception e) { throw; }
         }
         public bool? PCAB_GetSTB_AMP(PCAB_UnitInterface unit)
         {
@@ -293,11 +249,7 @@ namespace PCAB_Debugger_GUI
                 _task = true;
                 return result;
             }
-            catch (Exception e)
-            {
-                OnError?.Invoke(this, new PCABEventArgs(null, e.Message));
-                return null;
-            }
+            catch (Exception e) { throw; }
         }
         public bool? PCAB_GetSTB_DRA(PCAB_UnitInterface unit)
         {
@@ -311,11 +263,7 @@ namespace PCAB_Debugger_GUI
                 _task = true;
                 return result;
             }
-            catch (Exception e)
-            {
-                OnError?.Invoke(this, new PCABEventArgs(null, e.Message));
-                return null;
-            }
+            catch (Exception e) { throw; }
         }
         public bool? PCAB_GetSTB_LNA(PCAB_UnitInterface unit)
         {
@@ -329,11 +277,7 @@ namespace PCAB_Debugger_GUI
                 _task = true;
                 return result;
             }
-            catch (Exception e)
-            {
-                OnError?.Invoke(this, new PCABEventArgs(null, e.Message));
-                return null;
-            }
+            catch (Exception e) { throw; }
         }
         public bool? PCAB_GetLowPowerMode(PCAB_UnitInterface unit)
         {
@@ -347,11 +291,7 @@ namespace PCAB_Debugger_GUI
                 _task = true;
                 return result;
             }
-            catch (Exception e)
-            {
-                OnError?.Invoke(this, new PCABEventArgs(null, e.Message));
-                return null;
-            }
+            catch (Exception e) { throw; }
         }
         public List<UInt64> PCAB_GetTempID(PCAB_UnitInterface unit)
         {
@@ -365,11 +305,7 @@ namespace PCAB_Debugger_GUI
                 _task = true;
                 return result;
             }
-            catch (Exception e)
-            {
-                OnError?.Invoke(this, new PCABEventArgs(null, e.Message));
-                return null;
-            }
+            catch (Exception e) { throw; }
         }
         public TempratureValue PCAB_GetTempValue(PCAB_UnitInterface unit)
         {
@@ -383,11 +319,7 @@ namespace PCAB_Debugger_GUI
                 _task = true;
                 return result;
             }
-            catch (Exception e)
-            {
-                OnError?.Invoke(this, new PCABEventArgs(null, e.Message));
-                return new TempratureValue();
-            }
+            catch (Exception e) { throw; }
         }
         public byte PCAB_GetMode(PCAB_UnitInterface unit)
         {
@@ -401,11 +333,7 @@ namespace PCAB_Debugger_GUI
                 _task = true;
                 return result;
             }
-            catch (Exception e)
-            {
-                OnError?.Invoke(this, new PCABEventArgs(null, e.Message));
-                return 0xFF;
-            }
+            catch (Exception e) { throw; }
         }
         public AnalogValues PCAB_GetAnalogValue(PCAB_UnitInterface unit)
         {
@@ -419,11 +347,7 @@ namespace PCAB_Debugger_GUI
                 _task = true;
                 return result;
             }
-            catch (Exception e)
-            {
-                OnError?.Invoke(this, new PCABEventArgs(null, e.Message));
-                return new AnalogValues();
-            }
+            catch (Exception e) { throw; }
         }
         public SensorValues PCAB_GetSensorValue(PCAB_UnitInterface unit)
         {
@@ -437,11 +361,7 @@ namespace PCAB_Debugger_GUI
                 _task = true;
                 return result;
             }
-            catch (Exception e)
-            {
-                OnError?.Invoke(this, new PCABEventArgs(null, e.Message));
-                return new SensorValues();
-            }
+            catch (Exception e) { throw; }
         }
         public string PCAB_GetIDN(PCAB_UnitInterface unit)
         {
@@ -455,11 +375,7 @@ namespace PCAB_Debugger_GUI
                 _task = true;
                 return result;
             }
-            catch (Exception e)
-            {
-                OnError?.Invoke(this, new PCABEventArgs(null, e.Message));
-                return null;
-            }
+            catch (Exception e) { throw; }
         }
         public bool PCAB_LoadFactoryDefault(PCAB_UnitInterface unit)
         { return PCAB_PRESET(unit); }
@@ -477,11 +393,7 @@ namespace PCAB_Debugger_GUI
                 _task = true;
                 return result;
             }
-            catch (Exception e)
-            {
-                OnError?.Invoke(this, new PCABEventArgs(null, e.Message));
-                return null;
-            }
+            catch (Exception e) { throw; }
         }
         public bool? PCAB_LoadState(PCAB_UnitInterface unit, uint confNum)
         { return PCAB_LoadState(unit, 14, 0, confNum); }
@@ -497,11 +409,7 @@ namespace PCAB_Debugger_GUI
                 _task = true;
                 return result;
             }
-            catch (Exception e)
-            {
-                OnError?.Invoke(this, new PCABEventArgs(null, e.Message));
-                return null;
-            }
+            catch (Exception e) { throw; }
         }
 
         public List<byte> PCAB_ReadROM(PCAB_UnitInterface unit, UInt32 blockNum, byte sectorNum)
@@ -516,11 +424,7 @@ namespace PCAB_Debugger_GUI
                 _task = true;
                 return result;
             }
-            catch (Exception e)
-            {
-                OnError?.Invoke(this, new PCABEventArgs(null, e.Message));
-                return null;
-            }
+            catch (Exception e) { throw; }
         }
         public bool? PCAB_OverWriteROM(PCAB_UnitInterface unit, UInt32 blockNum, byte sectorNum, List<byte> dat)
         {
@@ -534,11 +438,12 @@ namespace PCAB_Debugger_GUI
                 _task = true;
                 return result;
             }
-            catch (Exception e)
-            {
-                OnError?.Invoke(this, new PCABEventArgs(null, e.Message));
-                return null;
-            }
+            catch (Exception e) { throw; }
+            //catch (Exception e)
+            //{
+            //    OnError?.Invoke(this, new PCABEventArgs(null, e.Message));
+            //    return null;
+            //}
         }
 
         public class PCABEventArgs : EventArgs

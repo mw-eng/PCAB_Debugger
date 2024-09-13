@@ -57,6 +57,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="clsIO.cs" />
     <Compile Include="clsPCAB_IO.cs" />
     <Compile Include="clsSLIP.cs" />
     <Compile Include="cntAUTO.xaml.cs">

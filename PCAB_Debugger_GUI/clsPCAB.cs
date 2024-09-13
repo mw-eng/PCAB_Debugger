@@ -8,14 +8,6 @@ using System.Collections.Generic;
 
 namespace PCAB_Debugger_GUI
 {
-    
-
-    
-
-    public class PCAB_CommandInterface
-    {
-    }
-
     public class PCAB
     {
         private bool? _task;    //true:run / false:stop / null:Interrupt
