@@ -508,7 +508,7 @@ namespace PCAB_Debugger_GUI
                     {
                         try
                         {
-                            WriteSLIP(unit.GetCommandCode(new List<byte>() { 0xFE }));
+                            WriteSLIP(unit.GetCommandCode(new List<byte> { 0xFE }));
                         }
                         catch { }
                         Thread.Sleep(500);
