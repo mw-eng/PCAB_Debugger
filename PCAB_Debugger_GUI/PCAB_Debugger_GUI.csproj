@@ -109,7 +109,6 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="clsPCAB.cs" />
     <Compile Include="clsPNA835x.cs" />
     <Compile Include="clsSERIAL.cs" />
     <Compile Include="cntConfig.xaml.cs">
