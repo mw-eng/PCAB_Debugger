@@ -1,6 +1,11 @@
 ﻿using System;
+using System.Reflection.Emit;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
+using static PCAB_Debugger_GUI.cntConfig;
+using static PCAB_Debugger_GUI.CommandControl;
+using static PCAB_Debugger_GUI.CommandControl.Command;
 
 namespace PCAB_Debugger_GUI
 {
@@ -33,6 +38,9 @@ namespace PCAB_Debugger_GUI
             CS_GRID.Children.Clear();
             CONFIG_SETTINGS = new cntConfigSettings(SN);
             CS_GRID.Children.Add(CONFIG_SETTINGS);
+            CommandControl cmd = new CommandControl();
+            cmd.CommandEvent += CommandEvent;
+            this.DataContext = cmd;
 
         }
 
@@ -81,11 +89,68 @@ namespace PCAB_Debugger_GUI
             ButtonClickEvent?.Invoke(this, e, ButtonCategory.READ);
         }
 
-        public struct MemoryAddress
+        private void CommandEvent(object sender, CommandCode code)
         {
-            public byte SectorPageNumber { get; set; }
-            public byte StateNumber { get; set; }
-            public string Name { get; set; }
+            switch (code)
+            {
+                case CommandCode.SetATT:
+                    ButtonClickEvent?.Invoke(this, null, ButtonCategory.WRITEDSA);
+                    break;
+                case CommandCode.SetPhase:
+                    ButtonClickEvent?.Invoke(this, null, ButtonCategory.WRITEDPS);
+                    break;
+                case CommandCode.SetConfig:
+                    ButtonClickEvent?.Invoke(this, null, ButtonCategory.WRITE);
+                    break;
+                case CommandCode.ReadConfig:
+                    ButtonClickEvent?.Invoke(this, null, ButtonCategory.READ);
+                    break;
+            }
+        }
+    }
+
+    public class CommandControl
+    {
+        public delegate void CommandEventHandler(object sender, CommandCode code);
+        public event CommandEventHandler CommandEvent;
+        public class Command : ICommand
+        {
+            public bool CanExecute(object parameter) { return true; }
+            public event EventHandler CanExecuteChanged;
+            public event CommandEventHandler CommandEvent;
+            private CommandCode _code;
+            public Command(CommandCode code) { _code = code; }
+            public void Execute(object parameter)
+            {
+                CommandEvent?.Invoke(this, _code);
+            }
+        }
+
+        public Command SetATTCommand { get; private set; }
+        public Command SetPhaseCommand { get; private set; }
+        public Command SetConfigCommand { get; private set; }
+        public Command ReadConfigCommand { get; private set; }
+        public CommandControl()
+        {
+            this.SetATTCommand = new Command(CommandCode.SetATT);
+            this.SetATTCommand.CommandEvent += cmdEvent;
+            this.SetPhaseCommand = new Command(CommandCode.SetPhase);
+            this.SetPhaseCommand.CommandEvent += cmdEvent;
+            this.SetConfigCommand = new Command(CommandCode.SetConfig);
+            this.SetConfigCommand.CommandEvent += cmdEvent;
+            this.ReadConfigCommand = new Command(CommandCode.ReadConfig);
+            this.ReadConfigCommand.CommandEvent += cmdEvent;
+        }
+        private void cmdEvent(object sender, CommandCode code)
+        {
+            CommandEvent?.Invoke(this, code);
+        }
+        public enum CommandCode
+        {
+            SetATT,
+            SetPhase,
+            SetConfig,
+            ReadConfig
         }
     }
 }

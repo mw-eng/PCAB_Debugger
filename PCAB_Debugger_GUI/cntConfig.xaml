@@ -6,6 +6,12 @@
              xmlns:local="clr-namespace:PCAB_Debugger_GUI"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.InputBindings>
+        <KeyBinding Gesture="Ctrl+Shift+W" Command="{Binding Path = SetATTCommand}"/>
+        <KeyBinding Gesture="Ctrl+Shift+P" Command="{Binding Path = SetPhaseCommand}"/>
+        <KeyBinding Key="F2" Command="{Binding Path = SetConfigCommand}"/>
+        <KeyBinding Key="F5" Command="{Binding Path = ReadConfigCommand}"/>
+    </UserControl.InputBindings>
     <UserControl.Resources>
         <ResourceDictionary>
             <Style TargetType="{x:Type ComboBox}" x:Key="COMBOBOX_CONTENT_CENTER">

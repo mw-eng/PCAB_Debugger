@@ -961,7 +961,7 @@ int main()
                         else if(cmd.argment.size() == 2) { sectorNum = ((cmd.argment[0] & 0xF0) >> 4); pageNum = cmd.argment[0] & 0x0F; stateNum = cmd.argment[1]; }
                         else if(cmd.argment.size() != 0) { uart->writeSLIP_block(retCODE(0xF2)); }
                         if(!readSTATE(sectorNum, pageNum, stateNum)) { uart->writeSLIP_block(retCODE(0xFE));}
-                        else { uart->writeSLIP_block(retCODE(0x00)); }
+                        else { writeNowSTATE(); uart->writeSLIP_block(retCODE(0x00)); }
                     }
                     else
                     {
