@@ -1,6 +1,7 @@
 ﻿using MWComLibCS.ExternalControl;
 using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
@@ -256,6 +257,10 @@ namespace PCAB_Debugger_GUI
         private void CONFIG_ButtonClickEvent(object sender, RoutedEventArgs e, ButtonCategory category)
         {
             string strSN = ((cntConfig)sender).SerialNumber;
+            uint sectorPage = 14;
+            uint stateNum = 0;
+            string strBF = ((cntConfig)sender).SAVEADDRESS_COMBOBOX.Text;
+            string[] strARR = strBF.Split('-');
             try
             {
                 switch (category)
@@ -338,8 +343,49 @@ namespace PCAB_Debugger_GUI
                         }
                         break;
                     case ButtonCategory.LOADMEM:
+                        if (MessageBox.Show("Load configuration from memory."
+                            , "Warning", MessageBoxButton.OKCancel, MessageBoxImage.Warning) != MessageBoxResult.OK) { return; }
+                        if (strARR.Length == 1)
+                        {
+                            if (!uint.TryParse(strARR[0].Trim(), out stateNum))
+                            { MessageBox.Show("The setting number is invalid", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
+                        }
+                        else if (strARR.Length == 2)
+                        {
+                            if (!uint.TryParse(strARR[0].Trim().StartsWith("0x") ? strARR[0].Trim().Substring(2) : strARR[0], System.Globalization.NumberStyles.HexNumber, null, out sectorPage))
+                            { MessageBox.Show("The setting number is invalid", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
+                            if (!uint.TryParse(strARR[1].Trim(), out stateNum))
+                            { MessageBox.Show("The setting number is invalid", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
+                        }
+                        if (_io.serial.PCAB_LoadState(new PCAB_UnitInterface(strSN), (byte)sectorPage, stateNum) == false)
+                        { MessageBox.Show("Load memory error.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
+                        if (readConfig(((cntConfig)sender).CONFIG_SETTINGS))
+                        { MessageBox.Show("Load memory done.", "Success", MessageBoxButton.OK, MessageBoxImage.Information); }
+                        else
+                        { MessageBox.Show("Config read error.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
                         break;
                     case ButtonCategory.SAVEMEM:
+                        if (MessageBox.Show("Save configuration from memory."
+                            , "Warning", MessageBoxButton.OKCancel, MessageBoxImage.Warning) != MessageBoxResult.OK) { return; }
+                        if (strARR.Length == 1)
+                        {
+                            if (!uint.TryParse(strARR[0].Trim(), out stateNum))
+                            { MessageBox.Show("The setting number is invalid", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
+                        }
+                        else if (strARR.Length == 2)
+                        {
+                            if (!uint.TryParse(strARR[0].Trim().StartsWith("0x") ? strARR[0].Trim().Substring(2) : strARR[0], System.Globalization.NumberStyles.HexNumber, null, out sectorPage))
+                            { MessageBox.Show("The setting number is invalid", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
+                            if (!uint.TryParse(strARR[1].Trim(), out stateNum))
+                            { MessageBox.Show("The setting number is invalid", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
+                        }
+                        if (_io.serial.PCAB_SaveState(new PCAB_UnitInterface(strSN), (byte)sectorPage, stateNum) == false)
+                        { MessageBox.Show("Save memory error.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
+                        if (readConfig(((cntConfig)sender).CONFIG_SETTINGS))
+                        { MessageBox.Show("Save memory done.", "Success", MessageBoxButton.OK, MessageBoxImage.Information); }
+                        else
+                        { MessageBox.Show("Config read error.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
+                        break;
                         break;
                     case ButtonCategory.RESET:
                         if (MessageBox.Show("Restore default settins."

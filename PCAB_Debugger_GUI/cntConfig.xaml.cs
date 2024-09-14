@@ -80,5 +80,12 @@ namespace PCAB_Debugger_GUI
         {
             ButtonClickEvent?.Invoke(this, e, ButtonCategory.READ);
         }
+
+        public struct MemoryAddress
+        {
+            public byte SectorPageNumber { get; set; }
+            public byte StateNumber { get; set; }
+            public string Name { get; set; }
+        }
     }
 }

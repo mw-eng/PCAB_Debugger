@@ -399,6 +399,20 @@ namespace PCAB_Debugger_GUI
             }
             catch (Exception e) { throw; }
         }
+        public bool? PCAB_SaveState(PCAB_UnitInterface unit, byte sectorPageNum, uint confNum)
+        {
+            _task = null;
+            while (_state) { Thread.Sleep(59); }
+            _state = true;
+            try
+            {
+                bool result = serialInterface.SaveState(unit, sectorPageNum, confNum);
+                _state = false;
+                _task = true;
+                return result;
+            }
+            catch (Exception e) { throw; }
+        }
         public bool? PCAB_LoadState(PCAB_UnitInterface unit, uint confNum)
         { return PCAB_LoadState(unit, 14, 0, confNum); }
         public bool? PCAB_LoadState(PCAB_UnitInterface unit, byte sectorNum, byte pageNum, uint confNum)
@@ -409,6 +423,20 @@ namespace PCAB_Debugger_GUI
             try
             {
                 bool result = serialInterface.LoadState(unit, sectorNum, pageNum, confNum);
+                _state = false;
+                _task = true;
+                return result;
+            }
+            catch (Exception e) { throw; }
+        }
+        public bool? PCAB_LoadState(PCAB_UnitInterface unit, byte sectorPageNum, uint confNum)
+        {
+            _task = null;
+            while (_state) { Thread.Sleep(59); }
+            _state = true;
+            try
+            {
+                bool result = serialInterface.LoadState(unit, sectorPageNum, confNum);
                 _state = false;
                 _task = true;
                 return result;
@@ -923,11 +951,15 @@ namespace PCAB_Debugger_GUI
         {
             if (sectorNum > 0x0F) { return false; }
             if (pageNum > 0x0F) { return false; }
-            if (confNum > 3) { return false; }
             uint spNum = (1u << 4) * sectorNum + pageNum;
+            return SaveState(unit, (byte)spNum, confNum);
+        }
+        public bool SaveState(PCAB_UnitInterface unit, byte sectorPageNum, uint confNum)
+        {
+            if (confNum > 3) { return false; }
             try
             {
-                List<byte> ret = WriteReadSLIP(unit.GetCommandCode(new List<byte> { 0xFB, (byte)spNum, (byte)confNum }));
+                List<byte> ret = WriteReadSLIP(unit.GetCommandCode(new List<byte> { 0xFB, sectorPageNum, (byte)confNum }));
                 if (ret[0] == 0x00) { return true; }
                 else { return false; }
             }
@@ -948,11 +980,15 @@ namespace PCAB_Debugger_GUI
         {
             if (sectorNum > 0x0F) { return false; }
             if (pageNum > 0x0F) { return false; }
-            if (confNum > 3) { return false; }
             uint spNum = (1u << 4) * sectorNum + pageNum;
+            return LoadState(unit, (byte)spNum, confNum);
+        }
+        public bool LoadState(PCAB_UnitInterface unit, byte sectorPageNum, uint confNum)
+        {
+            if (confNum > 3) { return false; }
             try
             {
-                List<byte> ret = WriteReadSLIP(unit.GetCommandCode(new List<byte> { 0xFC, (byte)spNum, (byte)confNum }));
+                List<byte> ret = WriteReadSLIP(unit.GetCommandCode(new List<byte> { 0xFC, sectorPageNum, (byte)confNum }));
                 if (ret[0] == 0x00) { return true; }
                 else { return false; }
             }

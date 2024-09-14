@@ -117,10 +117,12 @@ void setup()
     stbDRA = false;
     stbLNA = false;
     lowMODE = false;
+    //Read Factory State
+    readSTATE(15u, 0u, 0u);
+
     if(bootMode == 0x01 || bootMode == 0x03) { readSTATE(14u, 0u, 0u); }
-    // Write now state.
-    if(bootMode == 0x0A){ readSTATE(15u, 0u, 0u); writeNowSTATE(); saveSTATE(14u, 0u, 0u); }
-    else { writeNowSTATE(); }
+    writeNowSTATE();
+    if(bootMode == 0x0A) { saveSTATE(14u, 0u, 0u); }
 }
 
 int main()
@@ -920,7 +922,7 @@ int main()
                         if(cmd.argment.size() == 1) { stateNum = cmd.argment[0]; }
                         else if(cmd.argment.size() == 2) { sectorNum = ((cmd.argment[0] & 0xF0) >> 4); pageNum = cmd.argment[0] & 0x0F; stateNum = cmd.argment[1]; }
                         else if(cmd.argment.size() != 0) { uart->writeSLIP_block(retCODE(0xF2)); }
-                        if(!saveSTATE(sectorNum, pageNum, cmd.argment[0])) { uart->writeSLIP_block(retCODE(0xFE));}
+                        if(!saveSTATE(sectorNum, pageNum, stateNum)) { uart->writeSLIP_block(retCODE(0xFE));}
                         else { uart->writeSLIP_block(retCODE(0x00)); }
                     }
                     else
@@ -958,7 +960,7 @@ int main()
                         if(cmd.argment.size() == 1) { stateNum = cmd.argment[0]; }
                         else if(cmd.argment.size() == 2) { sectorNum = ((cmd.argment[0] & 0xF0) >> 4); pageNum = cmd.argment[0] & 0x0F; stateNum = cmd.argment[1]; }
                         else if(cmd.argment.size() != 0) { uart->writeSLIP_block(retCODE(0xF2)); }
-                        if(!readSTATE(sectorNum, pageNum, cmd.argment[0])) { uart->writeSLIP_block(retCODE(0xFE));}
+                        if(!readSTATE(sectorNum, pageNum, stateNum)) { uart->writeSLIP_block(retCODE(0xFE));}
                         else { uart->writeSLIP_block(retCODE(0x00)); }
                     }
                     else
