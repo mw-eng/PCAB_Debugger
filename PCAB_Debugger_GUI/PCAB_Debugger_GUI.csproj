@@ -66,15 +66,6 @@
     <Compile Include="cntBOARD.xaml.cs">
       <DependentUpon>cntBOARD.xaml</DependentUpon>
     </Compile>
-    <Compile Include="winEditorOLD.xaml.cs">
-      <DependentUpon>winEditorOLD.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="winMainOLD.xaml.cs">
-      <DependentUpon>winMainOLD.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="winLoopOLD.xaml.cs">
-      <DependentUpon>winLoopOLD.xaml</DependentUpon>
-    </Compile>
     <Compile Include="winMonitor.xaml.cs">
       <DependentUpon>winMonitor.xaml</DependentUpon>
     </Compile>
@@ -102,25 +93,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="winEditorOLD.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="winEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="winLoopOLD.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="winLoop.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="winMainOLD.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
     <Page Include="winMain.xaml">
       <Generator>MSBuild:Compile</Generator>
