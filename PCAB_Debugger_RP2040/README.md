@@ -15,7 +15,7 @@ Send commands in the order of *${ROM ID}*, *{COMMAND}*, *{ARGUMENTS}*, and *{EXI
 Send commands in the order of *#{SERIAL NUMBER}*, *{COMMAND and ARGUMENT}*, and *{EXIT CODE}*, *#{SERIAL NUMBER}* and *{COMMAND and ARGUMENT}* separated by *0xFF*.<br>
 or<br>
 Send commands in the order of *0x24{ROM ID(8byte)}*, *{COMMAND and ARGUMENT}*, and *{EXIT CODE}*.<br>
-
+Packets sent and received in this mode must be [SLIP](https://en.wikipedia.org/wiki/Serial_Line_Internet_Protocol) *(Serial Line Internet Protocol)* compliant.<br>
 <details>
 <summary>Description</summary>
 
