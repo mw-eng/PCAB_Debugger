@@ -143,14 +143,28 @@ namespace PCAB_Debugger_GUI
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            UInt32 block = 0;
+            UInt32 block = 1;
             List<byte> datBF = _serial.PCAB_ReadROM(serialNum, block, 0);
-            BLOCK_COMBOBOX.Items.Clear();
             while (datBF != null)
             {
-                BLOCK_COMBOBOX.Items.Add(block.ToString("X4"));
-                block++;
+                block *= 2u;
                 datBF = _serial.PCAB_ReadROM(serialNum, block, 0);
+            }
+            block--;
+            datBF = _serial.PCAB_ReadROM(serialNum, block, 0);
+            BLOCK_COMBOBOX.Items.Clear();
+            if (datBF != null)
+            {
+                for(UInt32 cnt = 0; cnt <= block; cnt++) { BLOCK_COMBOBOX.Items.Add(cnt.ToString("X4")); }
+            }
+            else
+            {
+                while (datBF != null)
+                {
+                    BLOCK_COMBOBOX.Items.Add(block.ToString("X4"));
+                    block++;
+                    datBF = _serial.PCAB_ReadROM(serialNum, block, 0);
+                }
             }
             SECTOR_COMBOBOX.Items.Clear();
             for(uint i = 0; i < 0x10u; i++) { SECTOR_COMBOBOX.Items.Add((i * 0x10u).ToString("X2")); }
