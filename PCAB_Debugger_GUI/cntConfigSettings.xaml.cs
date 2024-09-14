@@ -95,7 +95,7 @@ namespace PCAB_Debugger_GUI
                 }
             }
         }
-        public void SetDSA(uint number, uint value)
+        public void SetDSA(uint number, int value)
         {
             try
             {
@@ -199,7 +199,7 @@ namespace PCAB_Debugger_GUI
                     throw new ArgumentException("A non-existent DSA number was specified.", "GetDSA[" + number + "]");
             }
         }
-        public void SetDPS(uint number, uint value)
+        public void SetDPS(uint number, int value)
         {
             try
             {

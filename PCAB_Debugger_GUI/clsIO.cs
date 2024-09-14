@@ -12,6 +12,7 @@ namespace PCAB_Debugger_GUI
         public List<cntBOARD> PCAB_Boards {  get; private set; } = new List<cntBOARD>();
         public List<cntMonitor> PCAB_Monitors { get; private set; } = new List<cntMonitor>();
         public event EventHandler<PCABEventArgs> OnError;
+        public PCAB_TASK serial { get { return _task; } }
         public clsSerialIO(string SerialPortName)
         {
             _task = new PCAB_TASK(SerialPortName);

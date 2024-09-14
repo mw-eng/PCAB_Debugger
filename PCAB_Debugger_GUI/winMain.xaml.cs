@@ -1,13 +1,15 @@
-﻿using System;
+﻿using MWComLibCS.ExternalControl;
+using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using static PCAB_Debugger_GUI.ShowSerialPortName;
-using static PCAB_Debugger_GUI.PCAB_TASK;
 using static PCAB_Debugger_GUI.cntConfig;
-using MWComLibCS.ExternalControl;
 using static PCAB_Debugger_GUI.cntConfigSettings;
+using static PCAB_Debugger_GUI.PCAB_SerialInterface;
+using static PCAB_Debugger_GUI.PCAB_TASK;
+using static PCAB_Debugger_GUI.ShowSerialPortName;
 
 namespace PCAB_Debugger_GUI
 {
@@ -106,6 +108,10 @@ namespace PCAB_Debugger_GUI
                         ((cntBOARD)BOARD_GRID.Children[0]).AUTO.ButtonClickEvent += AUTO_ButtonClickEvent;
                         ((cntBOARD)BOARD_GRID.Children[0]).CONFIG.ButtonClickEvent += CONFIG_ButtonClickEvent;
                         ((cntBOARD)BOARD_GRID.Children[0]).CONFIG.CONFIG_SETTINGS.CheckboxClickEvent += CONFIG_CONFIG_SETTINGS_CheckboxClickEventHandler;
+                        if (!readConfig(((cntBOARD)BOARD_GRID.Children[0]).CONFIG.CONFIG_SETTINGS))
+                        {
+                            MessageBox.Show("Config read error.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        }
                     }
                     else
                     {
@@ -121,7 +127,10 @@ namespace PCAB_Debugger_GUI
                             ((cntBOARD)((TabItem)((TabControl)BOARD_GRID.Children[0]).Items[i]).Content).AUTO.ButtonClickEvent += AUTO_ButtonClickEvent;
                             ((cntBOARD)((TabItem)((TabControl)BOARD_GRID.Children[0]).Items[i]).Content).CONFIG.ButtonClickEvent += CONFIG_ButtonClickEvent;
                             ((cntBOARD)((TabItem)((TabControl)BOARD_GRID.Children[0]).Items[i]).Content).CONFIG.CONFIG_SETTINGS.CheckboxClickEvent += CONFIG_CONFIG_SETTINGS_CheckboxClickEventHandler;
-
+                            if (!readConfig(((cntBOARD)((TabItem)((TabControl)BOARD_GRID.Children[0]).Items[i]).Content).CONFIG.CONFIG_SETTINGS))
+                            {
+                                MessageBox.Show("Config read error.\nS/N, " + _io.PCAB_Boards[i].SerialNumber, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                            }
                         }
                     }
                     SERIAL_PORTS_COMBOBOX.IsEnabled = false;
@@ -247,6 +256,113 @@ namespace PCAB_Debugger_GUI
         private void CONFIG_ButtonClickEvent(object sender, RoutedEventArgs e, ButtonCategory category)
         {
             string strSN = ((cntConfig)sender).SerialNumber;
+            try
+            {
+                switch (category)
+                {
+                    case ButtonCategory.WRITEDSA:
+                    case ButtonCategory.WRITEDPS:
+                    case ButtonCategory.WRITE:
+                        int dsaIN = -1;
+                        List<uint> dsa = new List<uint>();
+                        List<uint> dps = new List<uint>();
+                        if (category == ButtonCategory.WRITE || category == ButtonCategory.WRITEDSA)
+                        {
+                            for (uint i = 0; i < 15; i++)
+                            {
+                                int d = ((cntConfig)sender).CONFIG_SETTINGS.GetDSA(i + 1);
+                                if (0 <= d && d < 64) { dsa.Add((uint)d); }
+                            }
+                            dsaIN = ((cntConfig)sender).CONFIG_SETTINGS.GetDSA(0);
+                            if (dsa.Count != 15 || dsaIN < 0 || dsaIN > 31)
+                            {
+                                MessageBox.Show("ATT config error.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                                return;
+                            }
+                        }
+                        if (category == ButtonCategory.WRITE || category == ButtonCategory.WRITEDPS)
+                        {
+                            for (uint i = 0; i < 15; i++)
+                            {
+                                int d = ((cntConfig)sender).CONFIG_SETTINGS.GetDPS(i + 1);
+                                if (0 <= d && d < 64) { dps.Add((uint)d); }
+                            }
+                            if (dps.Count != 15)
+                            {
+                                MessageBox.Show("Phase config error.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                                return;
+                            }
+                        }
+                        if (category == ButtonCategory.WRITE || category == ButtonCategory.WRITEDSA)
+                        {
+                            if (!_io.serial.PCAB_WriteDSAin(new PCAB_UnitInterface(strSN), (uint)dsaIN))
+                            {
+                                MessageBox.Show("J1 in ATT config write error.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                                return;
+                            }
+                            if (!_io.serial.PCAB_WriteDSA(new PCAB_UnitInterface(strSN), dsa))
+                            {
+                                MessageBox.Show("ATT config write error.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                                return;
+                            }
+                        }
+                        if (category == ButtonCategory.WRITE || category == ButtonCategory.WRITEDPS)
+                        {
+                            if (!_io.serial.PCAB_WriteDPS(new PCAB_UnitInterface(strSN), dps))
+                            {
+                                MessageBox.Show("Phase config write error.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                                return;
+                            }
+                        }
+                        if (category == ButtonCategory.WRITEDSA)
+                        {
+                            MessageBox.Show("ATT config write done.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                        }
+                        else if (category == ButtonCategory.WRITEDPS)
+                        {
+                            MessageBox.Show("Phase config write done.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                        }
+                        else if (category == ButtonCategory.WRITE)
+                        {
+                            MessageBox.Show("Config write done.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                        }
+                        break;
+                    case ButtonCategory.READ:
+                        if (readConfig(((cntConfig)sender).CONFIG_SETTINGS))
+                        {
+                            MessageBox.Show("Config read done.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                        }
+                        else
+                        {
+                            MessageBox.Show("Config read error.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        }
+                        break;
+                    case ButtonCategory.LOADMEM:
+                        break;
+                    case ButtonCategory.SAVEMEM:
+                        break;
+                    case ButtonCategory.RESET:
+                        if (MessageBox.Show("Restore default settins."
+                            , "Warning", MessageBoxButton.OKCancel, MessageBoxImage.Warning) != MessageBoxResult.OK) { return; }
+                        if (_io.serial.PCAB_PRESET(new PCAB_UnitInterface(strSN)))
+                        {
+                            MessageBox.Show("Preset done.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                            if (!readConfig(((cntConfig)sender).CONFIG_SETTINGS))
+                            {
+                                MessageBox.Show("Config read error.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                            }
+                        }
+                        else
+                        {
+                            MessageBox.Show("Reset error.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        }
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
         private void AUTO_ButtonClickEvent(object sender, RoutedEventArgs e, string dirPath)
         {
@@ -272,5 +388,30 @@ namespace PCAB_Debugger_GUI
             }));
         }
         #endregion
+
+        private bool readConfig(cntConfigSettings conf)
+        {
+            try
+            {
+                List<uint> dsa = _io.serial.PCAB_GetDSA(new PCAB_UnitInterface(conf.SerialNumber));
+                int dsaIN = _io.serial.PCAB_GetDSAin(new PCAB_UnitInterface(conf.SerialNumber));
+                List<uint> dps = _io.serial.PCAB_GetDPS(new PCAB_UnitInterface(conf.SerialNumber));
+                if (dsa.Count != dps.Count || dsa.Count != 15) { return false; }
+                conf.STBAMP_CHECKBOX.IsChecked = _io.serial.PCAB_GetSTB_AMP(new PCAB_UnitInterface(conf.SerialNumber));
+                conf.STBDRA_CHECKBOX.IsChecked = _io.serial.PCAB_GetSTB_DRA(new PCAB_UnitInterface(conf.SerialNumber));
+                conf.SETLPM_CHECKBOX.IsChecked = _io.serial.PCAB_GetLowPowerMode(new PCAB_UnitInterface(conf.SerialNumber));
+                conf.STBLNA_CHECKBOX.IsChecked = _io.serial.PCAB_GetSTB_LNA(new PCAB_UnitInterface(conf.SerialNumber));
+                conf.ALL_DPS_CHECKBOX.IsChecked = false;
+                conf.ALL_DSA_CHECKBOX.IsChecked = false;
+                conf.SetDSA(0, dsaIN);
+                for(int i = 0; i < dsa.Count; i++)
+                {
+                    conf.SetDSA((uint)(i + 1), (int)dsa[i]);
+                    conf.SetDPS((uint)(i + 1), (int)dps[i]);
+                }
+                return true;
+            }
+            catch { return false; }
+        }
     }
 }

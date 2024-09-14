@@ -213,28 +213,28 @@ namespace PCAB_Debugger_GUI
             }
             catch (Exception e) { throw; }
         }
-        public List<int> PCAB_GetDSA(PCAB_UnitInterface unit)
+        public List<uint> PCAB_GetDSA(PCAB_UnitInterface unit)
         {
             _task = null;
             while (_state) { Thread.Sleep(59); }
             _state = true;
             try
             {
-                List<int> result = serialInterface.GetDSA(unit);
+                List<uint> result = serialInterface.GetDSA(unit);
                 _state = false;
                 _task = true;
                 return result;
             }
             catch (Exception e) { throw; }
         }
-        public List<int> PCAB_GetDPS(PCAB_UnitInterface unit)
+        public List<uint> PCAB_GetDPS(PCAB_UnitInterface unit)
         {
             _task = null;
             while (_state) { Thread.Sleep(59); }
             _state = true;
             try
             {
-                List<int> result = serialInterface.GetDPS(unit);
+                List<uint> result = serialInterface.GetDPS(unit);
                 _state = false;
                 _task = true;
                 return result;
@@ -758,22 +758,22 @@ namespace PCAB_Debugger_GUI
             }
             catch (Exception ex) { throw; }
         }
-        public List<int> GetDSA(PCAB_UnitInterface unit)
+        public List<uint> GetDSA(PCAB_UnitInterface unit)
         {
             try
             {
                 List<byte> ret = WriteReadSLIP(unit.GetCommandCode(new List<byte> { 0xD1 }));
-                if (ret.Count == 15) { return ret.ConvertAll(x => (int)x); }
+                if (ret.Count == 15) { return ret.ConvertAll(x => (uint)x); }
                 else { throw new Exception("GetDSA Error"); }
             }
             catch (Exception ex) { throw; }
         }
-        public List<int> GetDPS(PCAB_UnitInterface unit)
+        public List<uint> GetDPS(PCAB_UnitInterface unit)
         {
             try
             {
                 List<byte> ret = WriteReadSLIP(unit.GetCommandCode(new List<byte> { 0xD2 }));
-                if (ret.Count == 15) { return ret.ConvertAll(x => (int)x); }
+                if (ret.Count == 15) { return ret.ConvertAll(x => (uint)x); }
                 else { throw new Exception("GetDSA Error"); }
             }
             catch (Exception ex) { throw; }
@@ -844,7 +844,7 @@ namespace PCAB_Debugger_GUI
                     }
                     return result;
                 }
-                else { throw new Exception("GetLowPowerMode Error"); }
+                else { throw new Exception("GetTempID Error"); }
             }
             catch (Exception ex) { throw; }
         }
@@ -882,7 +882,7 @@ namespace PCAB_Debugger_GUI
             {
                 List<byte> ret = WriteReadSLIP(unit.GetCommandCode(new List<byte> { 0xEF }));
                 if (ret.Count == 10 + 2 * 15 || ret.Count == 10 || ret.Count == 2 * 15) { return new SensorValues(ret); }
-                else { throw new Exception("GetLowPowerMode Error"); }
+                else { throw new Exception("GetSensorValue Error"); }
             }
             catch (Exception ex) { throw; }
         }

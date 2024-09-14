@@ -165,7 +165,7 @@ int main()
                     {
                         std::vector<uint8_t> result;
                         result.clear();
-                        if(cmd.argment.size() == 0) { for(uint16_t i= 0; i< NUMBER_OF_SYSTEM; i++) { result.push_back(dpsNOW[i - 1] & 0x3F); } }
+                        if(cmd.argment.size() == 0) { for(uint16_t i= 0; i< NUMBER_OF_SYSTEM; i++) { result.push_back(dpsNOW[i] & 0x3F); } }
                         else { result.push_back(0xF2); }
                         uart->writeSLIP_block(result);
                     }
@@ -285,7 +285,7 @@ int main()
                     {
                         std::vector<uint8_t> result;
                         result.clear();
-                        if(cmd.argment.size() == 0) { for(uint16_t i= 0; i< NUMBER_OF_SYSTEM; i++) { result.push_back(dsaNOW[i - 1] & 0x3F); } } 
+                        if(cmd.argment.size() == 0) { for(uint16_t i= 0; i< NUMBER_OF_SYSTEM; i++) { result.push_back(dsaNOW[i] & 0x3F); } } 
                         else if(cmd.argment.size() == 1) { result.push_back(dsaNOW[NUMBER_OF_SYSTEM]); }
                         else { result.push_back(0xF2); }
                         uart->writeSLIP_block(result);
@@ -901,13 +901,11 @@ int main()
                             result.push_back((uint8_t)((tmp & 0xFF00) >> 8));
                             result.push_back((uint8_t)(tmp & 0x00FF) );
                             std::vector<uint16_t> code = sens->readSENS();
-                            if(code.size() == 0){result.push_back(0xFE);}
                             for(uint i = 0; i < code.size(); i++)
                             {
                                 result.push_back((uint8_t)((code[i] & 0xFF00) >> 8));
                                 result.push_back((uint8_t)(code[i] & 0x00FF) );
                             }
-                            std::vector<uint64_t> code = sens->getSENS_ROMCODE();
                             uart->writeSLIP_block(result);
                         }
                     }
