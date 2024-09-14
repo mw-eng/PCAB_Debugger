@@ -1,5 +1,4 @@
 ﻿using MWComLibCS.ExternalControl;
-using System;
 using System.Collections.Generic;
 using System.IO;
 

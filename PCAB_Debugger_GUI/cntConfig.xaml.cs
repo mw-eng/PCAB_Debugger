@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Reflection.Emit;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using static PCAB_Debugger_GUI.cntConfig;
 using static PCAB_Debugger_GUI.CommandControl;
-using static PCAB_Debugger_GUI.CommandControl.Command;
 
 namespace PCAB_Debugger_GUI
 {
