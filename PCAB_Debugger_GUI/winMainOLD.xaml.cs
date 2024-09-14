@@ -120,7 +120,7 @@ namespace PCAB_Debugger_GUI
                         if (MessageBox.Show("Do you want to launch a binary editor?", "Binary editor", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                         {
                             this.Hide();
-                            Window win = new winEditor(_mod);
+                            Window win = new winEditorOLD(_mod);
                             win.ShowDialog();
                             this.Show();
                         }

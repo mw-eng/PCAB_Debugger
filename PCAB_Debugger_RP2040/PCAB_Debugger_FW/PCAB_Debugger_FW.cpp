@@ -1086,15 +1086,8 @@ int main()
                             {
                                 uint16_t blockNum = (1u << 8) * cmd.argment[0] + cmd.argment[1];
                                 uint8_t sectorNum = cmd.argment[2];
-                                bool brkFLG = false;
-                                if(!flash::eraseROM(blockNum, sectorNum)) { uart->writeSLIP_block(retCODE(0xFE)); brkFLG = true; break; }
-                                for(uint8_t page = 0 ; page < FLASH_SECTOR_SIZE / FLASH_PAGE_SIZE; page++)
-                                {
-                                    uint8_t romDAT[FLASH_PAGE_SIZE];
-                                    std::copy(cmd.argment.begin() + 4 + page * FLASH_PAGE_SIZE, cmd.argment.begin() + 4 + (page + 1) * FLASH_PAGE_SIZE, romDAT);
-                                    if(!flash::writeROM(blockNum, sectorNum + page, romDAT)) { uart->writeSLIP_block(retCODE(0xFE)); brkFLG = true; break; }
-                                }
-                                if(!brkFLG) { uart->writeSLIP_block(retCODE(0x00));}
+                                if(!flash::overwriteROMsector(blockNum, sectorNum / 0x10u, &cmd.argment[3])) { uart->writeSLIP_block(retCODE(0xFE)); }
+                                uart->writeSLIP_block(retCODE(0x00));
                             }
                         }
                     }

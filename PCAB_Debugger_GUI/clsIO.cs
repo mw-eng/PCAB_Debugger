@@ -29,7 +29,7 @@ namespace PCAB_Debugger_GUI
                 foreach (PCAB_SerialInterface.PCAB_UnitInterface unit in _task.UNITs)
                 {
                     PCAB_Boards.Add(new cntBOARD(unit.SerialNumberASCII));
-                    PCAB_Monitors.Add(new cntMonitor());
+                    PCAB_Monitors.Add(new cntMonitor(unit.SerialNumberASCII));
                 }
                 for (int cnt = 0; cnt < _task.UNITs.Count; cnt++)
                 {

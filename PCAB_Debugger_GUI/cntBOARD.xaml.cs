@@ -30,6 +30,7 @@ namespace PCAB_Debugger_GUI
             TAB_CONTROL.Items.Clear();
             CONFIG = new cntConfig(SN);
             AUTO = new cntAUTO(SN);
+            SerialNumber = SN;
             TabItem control = new TabItem();
             TabItem auto = new TabItem();
             control.Header = "CONTROL";

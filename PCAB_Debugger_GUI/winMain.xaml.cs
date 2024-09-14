@@ -1,7 +1,6 @@
 ﻿using MWComLibCS.ExternalControl;
 using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
@@ -138,6 +137,18 @@ namespace PCAB_Debugger_GUI
                     SERIAL_CONFIG_GRID.IsEnabled = false;
                     BOARD_GRID.IsEnabled = true;
                     CONNECT_BUTTON_CONTENT.Text = "Disconnect";
+
+                    if(_io.PCAB_Boards.Count == 1 && _io.PCAB_Boards[0].SerialNumber == "*" &&
+                        _io.serial.PCAB_GetMode(new PCAB_UnitInterface(_io.PCAB_Boards[0].SerialNumber)) == 0x0F)
+                    {
+                        if (MessageBox.Show("Do you want to launch a binary editor?", "Binary editor", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                        {
+                            this.Hide();
+                            Window win = new winEditor(_io.serial, new PCAB_UnitInterface(_io.PCAB_Boards[0].SerialNumber));
+                            win.ShowDialog();
+                            this.Show();
+                        }
+                    }
                 }
                 else
                 {
@@ -254,10 +265,14 @@ namespace PCAB_Debugger_GUI
         #endregion
 
         #region Sub Function EVENT
+        private void AUTO_ButtonClickEvent(object sender, RoutedEventArgs e, string dirPath)
+        {
+            string strSN = ((cntAUTO)sender).SerialNumber;
+        }
         private void CONFIG_ButtonClickEvent(object sender, RoutedEventArgs e, ButtonCategory category)
         {
             string strSN = ((cntConfig)sender).SerialNumber;
-            uint sectorPage = 14;
+            uint sectorPage = 0xE0;
             uint stateNum = 0;
             string strBF = ((cntConfig)sender).SAVEADDRESS_COMBOBOX.Text;
             string[] strARR = strBF.Split('-');
@@ -410,13 +425,39 @@ namespace PCAB_Debugger_GUI
                 MessageBox.Show(ex.ToString(), "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-        private void AUTO_ButtonClickEvent(object sender, RoutedEventArgs e, string dirPath)
-        {
-            string strSN = ((cntAUTO)sender).SerialNumber;
-        }
-        private void CONFIG_CONFIG_SETTINGS_CheckboxClickEventHandler(object sender, RoutedEventArgs e, CheckBoxCategory cat, bool? isChecked)
+        private void CONFIG_CONFIG_SETTINGS_CheckboxClickEventHandler(object sender, RoutedEventArgs e, CheckBoxCategory category, bool? isChecked)
         {
             string strSN = ((cntConfigSettings)sender).SerialNumber;
+            bool ch;
+            bool? result;
+            if (isChecked == false) { ch = false; }
+            else { ch = true; }
+            try
+            {
+                switch (category)
+                {
+                    case CheckBoxCategory.StandbyAMP:
+                        result = _io.serial.PCAB_SetSTB_AMP(new PCAB_UnitInterface(strSN), ch);
+                        if (result != true) { ((cntConfigSettings)sender).CHECKBOX_Indeterminate("STBAMP", null); }
+                        break;
+                    case CheckBoxCategory.StandbyDRA:
+                        result = _io.serial.PCAB_SetSTB_DRA(new PCAB_UnitInterface(strSN), ch);
+                        if (result != true) { ((cntConfigSettings)sender).CHECKBOX_Indeterminate("STBDRA", null); }
+                        break;
+                    case CheckBoxCategory.StandbyLNA:
+                        result = _io.serial.PCAB_SetSTB_LNA(new PCAB_UnitInterface(strSN), ch);
+                        if (result != true) { ((cntConfigSettings)sender).CHECKBOX_Indeterminate("STBLNA", null); }
+                        break;
+                    case CheckBoxCategory.LowPowerMode:
+                        result = _io.serial.PCAB_SetLowPowerMode(new PCAB_UnitInterface(strSN), ch);
+                        if (result != true) { ((cntConfigSettings)sender).CHECKBOX_Indeterminate("LPM", null); }
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void OnError(object sender, PCABEventArgs e)
@@ -443,10 +484,59 @@ namespace PCAB_Debugger_GUI
                 int dsaIN = _io.serial.PCAB_GetDSAin(new PCAB_UnitInterface(conf.SerialNumber));
                 List<uint> dps = _io.serial.PCAB_GetDPS(new PCAB_UnitInterface(conf.SerialNumber));
                 if (dsa.Count != dps.Count || dsa.Count != 15) { return false; }
-                conf.STBAMP_CHECKBOX.IsChecked = _io.serial.PCAB_GetSTB_AMP(new PCAB_UnitInterface(conf.SerialNumber));
-                conf.STBDRA_CHECKBOX.IsChecked = _io.serial.PCAB_GetSTB_DRA(new PCAB_UnitInterface(conf.SerialNumber));
-                conf.SETLPM_CHECKBOX.IsChecked = _io.serial.PCAB_GetLowPowerMode(new PCAB_UnitInterface(conf.SerialNumber));
-                conf.STBLNA_CHECKBOX.IsChecked = _io.serial.PCAB_GetSTB_LNA(new PCAB_UnitInterface(conf.SerialNumber));
+                bool? result;
+                result = _io.serial.PCAB_GetSTB_AMP(new PCAB_UnitInterface(conf.SerialNumber));
+                switch (result)
+                {
+                    case true:
+                        conf.CHECKBOX_Checked("STBAMP", null);
+                        break;
+                    case false:
+                        conf.CHECKBOX_Unchecked("STBAMP", null);
+                        break;
+                    default:
+                        conf.CHECKBOX_Indeterminate("STBAMP", null);
+                        break;
+                }
+                result = _io.serial.PCAB_GetSTB_DRA(new PCAB_UnitInterface(conf.SerialNumber));
+                switch (result)
+                {
+                    case true:
+                        conf.CHECKBOX_Checked("STBDRA", null);
+                        break;
+                    case false:
+                        conf.CHECKBOX_Unchecked("STBDRA", null);
+                        break;
+                    default:
+                        conf.CHECKBOX_Indeterminate("STBDRA", null);
+                        break;
+                }
+                result = _io.serial.PCAB_GetLowPowerMode(new PCAB_UnitInterface(conf.SerialNumber));
+                switch (result)
+                {
+                    case true:
+                        conf.CHECKBOX_Checked("LPM", null);
+                        break;
+                    case false:
+                        conf.CHECKBOX_Unchecked("LPM", null);
+                        break;
+                    default:
+                        conf.CHECKBOX_Indeterminate("LPM", null);
+                        break;
+                }
+                result = _io.serial.PCAB_GetSTB_LNA(new PCAB_UnitInterface(conf.SerialNumber));
+                switch (result)
+                {
+                    case true:
+                        conf.CHECKBOX_Checked("STBLNA", null);
+                        break;
+                    case false:
+                        conf.CHECKBOX_Unchecked("STBLNA", null);
+                        break;
+                    default:
+                        conf.CHECKBOX_Indeterminate("STBLNA", null);
+                        break;
+                }
                 conf.ALL_DPS_CHECKBOX.IsChecked = false;
                 conf.ALL_DSA_CHECKBOX.IsChecked = false;
                 conf.SetDSA(0, dsaIN);

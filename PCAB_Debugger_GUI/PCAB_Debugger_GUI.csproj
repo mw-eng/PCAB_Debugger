@@ -66,6 +66,9 @@
     <Compile Include="cntBOARD.xaml.cs">
       <DependentUpon>cntBOARD.xaml</DependentUpon>
     </Compile>
+    <Compile Include="winEditorOLD.xaml.cs">
+      <DependentUpon>winEditorOLD.xaml</DependentUpon>
+    </Compile>
     <Compile Include="winMainOLD.xaml.cs">
       <DependentUpon>winMainOLD.xaml</DependentUpon>
     </Compile>
@@ -96,6 +99,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Style.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="winEditorOLD.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

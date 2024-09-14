@@ -10,6 +10,7 @@ namespace PCAB_Debugger_GUI
     public partial class cntMonitor : UserControl
     {
         #region Property
+        public string SerialNumber { get; private set; }
         public string TEMPcpu
         {
             get { return SNS_CPU_TEMP_LABEL.Content.ToString(); }
@@ -457,7 +458,8 @@ namespace PCAB_Debugger_GUI
             }
         }
         #endregion
-        public cntMonitor()
+        public cntMonitor() : this("SN") { }
+        public cntMonitor(string SN)
         {
             InitializeComponent();
             TEMPcpu = "---";
@@ -466,6 +468,7 @@ namespace PCAB_Debugger_GUI
             SNSvd = "---";
             SNSid = "---";
             TITLE = "";
+            SerialNumber = SN;
             for (uint i = 1; i < 16; i++)
             {
                 SetTempID(i, "ND");

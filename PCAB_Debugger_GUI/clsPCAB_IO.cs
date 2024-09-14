@@ -497,8 +497,9 @@ namespace PCAB_Debugger_GUI
         /// <summary>Constructor</summary>
         /// <param name="PortName">Serial Port Name</param>
         public PCAB_SerialInterface(string PortName)
-            : this(PortName, 3686400, 8, Parity.Even, StopBits.One, 4096, 5000, 5000) { }
-
+            : this(PortName, 115200, 8, Parity.None, StopBits.One, 4096, 5000, 5000) { }
+        //public PCAB_SerialInterface(string PortName)
+        //    : this(PortName, 3686400, 8, Parity.Even, StopBits.One, 4096, 5000, 5000) { }
         public PCAB_SerialInterface(string PortName,
             int baudRate, int dataBits, Parity parity, StopBits stopbit, int readBufferSize, int writeTimeOut, int readTimeOut)
         {
@@ -1003,7 +1004,7 @@ namespace PCAB_Debugger_GUI
             uint spNum = (1u << 4) * sectorNum;
             try
             {
-                List<byte> ret = WriteReadSLIP(unit.GetCommandCode(new List<byte> { 0xFC, block1, block2, (byte)spNum }));
+                List<byte> ret = WriteReadSLIP(unit.GetCommandCode(new List<byte> { 0xAA, block1, block2, (byte)spNum }));
                 if (ret.Count != 4096) { return null; }
                 else { return ret; }
             }
@@ -1018,7 +1019,7 @@ namespace PCAB_Debugger_GUI
             uint spNum = (1u << 4) * sectorNum;
             try
             {
-                List<byte> ret = WriteReadSLIP(unit.GetCommandCode(new List<byte> { 0xFC, block1, block2, (byte)spNum }.Concat(dat).ToList()));
+                List<byte> ret = WriteReadSLIP(unit.GetCommandCode(new List<byte> { 0xBB, block1, block2, (byte)spNum }.Concat(dat).ToList()));
                 if (ret[0] == 0x00) { return true; }
                 else { return false; }
             }

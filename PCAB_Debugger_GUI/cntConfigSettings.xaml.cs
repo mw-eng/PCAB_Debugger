@@ -18,7 +18,7 @@ namespace PCAB_Debugger_GUI
             NULL
         }
 
-        public delegate void CheckboxClickEventHandler(object sender, RoutedEventArgs e, CheckBoxCategory cat, bool? isChecked);
+        public delegate void CheckboxClickEventHandler(object sender, RoutedEventArgs e, CheckBoxCategory category, bool? isChecked);
         public event CheckboxClickEventHandler CheckboxClickEvent;
         public bool? StandbyAMP
         {
@@ -307,7 +307,7 @@ namespace PCAB_Debugger_GUI
             SerialNumber = SN;
         }
 
-        private void CHECKBOX_Checked(object sender, RoutedEventArgs e)
+        public void CHECKBOX_Checked(object sender, RoutedEventArgs e)
         {
             if (typeof(CheckBox) == sender.GetType())
             {
@@ -351,7 +351,7 @@ namespace PCAB_Debugger_GUI
             }
         }
 
-        private void CHECKBOX_Unchecked(object sender, RoutedEventArgs e)
+        public void CHECKBOX_Unchecked(object sender, RoutedEventArgs e)
         {
             if (typeof(CheckBox) == sender.GetType())
             {
@@ -379,23 +379,23 @@ namespace PCAB_Debugger_GUI
                 switch ((string)sender)
                 {
                     case "STBAMP":
-                        STBAMP_CHECKBOX.IsChecked = true;
+                        STBAMP_CHECKBOX.IsChecked = false;
                         break;
                     case "STBDRA":
-                        STBDRA_CHECKBOX.IsChecked = true;
+                        STBDRA_CHECKBOX.IsChecked = false;
                         break;
                     case "STBLNA":
-                        STBLNA_CHECKBOX.IsChecked = true;
+                        STBLNA_CHECKBOX.IsChecked = false;
                         break;
                     case "LPM":
-                        SETLPM_CHECKBOX.IsChecked = true;
+                        SETLPM_CHECKBOX.IsChecked = false;
                         break;
                     default: break;
                 }
             }
         }
 
-        private void CHECKBOX_Indeterminate(object sender, RoutedEventArgs e)
+        public void CHECKBOX_Indeterminate(object sender, RoutedEventArgs e)
         {
             if (typeof(CheckBox) == sender.GetType())
             {
