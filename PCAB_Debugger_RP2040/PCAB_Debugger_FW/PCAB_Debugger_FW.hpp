@@ -52,6 +52,8 @@
 #define UART_STOP_BIT 1
 #define UART_DATA_BITS 8
 //#define UART_PARITY_ENABLE
+#define RS485_DE_ENB_WAITE_TIME 5
+#define RS485_DE_WAITE_TIME 2
 
 // SPI Configure
 #define SPI_MODE 3

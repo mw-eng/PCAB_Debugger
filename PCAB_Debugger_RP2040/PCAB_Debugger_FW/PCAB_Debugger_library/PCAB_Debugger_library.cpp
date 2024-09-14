@@ -3,31 +3,32 @@
 
 #pragma region pcabCMD Class
 
-pcabCMD::pcabCMD(uartSYNC uart, uint rs485de_gpio) : uart(uart), de_gpio(rs485de_gpio), de_mode(false)
+pcabCMD::pcabCMD(uartSYNC uart, uint rs485de_gpio, uint32_t rs485_WaitEnable, uint32_t rs485_Waite)
+: uart(uart), de_gpio(rs485de_gpio), de_mode(false), waitBeforEN(rs485_WaitEnable), waitEN(rs485_Waite)
 {
     gpio_init(rs485de_gpio);
     gpio_set_dir(rs485de_gpio ,GPIO_OUT);
     rs485disable();
 }
 
-pcabCMD::pcabCMD(uart_inst_t *uartID, uint tx_gpio, uint rx_gpio, uint baud_ratio, uint data_bits, uint stop_bits, uart_parity_t parity, bool cts, bool rts, std::string nlcode, uint rs485de_gpio)
-: uart(uartSYNC(uartID, tx_gpio, rx_gpio, baud_ratio, data_bits, stop_bits, parity, cts, rts, nlcode)), de_gpio(rs485de_gpio), de_mode(false)
+pcabCMD::pcabCMD(uart_inst_t *uartID, uint tx_gpio, uint rx_gpio, uint baud_ratio, uint data_bits, uint stop_bits, uart_parity_t parity, bool cts, bool rts, std::string nlcode, uint rs485de_gpio, uint32_t rs485_WaitEnable, uint32_t rs485_Waite)
+: uart(uartSYNC(uartID, tx_gpio, rx_gpio, baud_ratio, data_bits, stop_bits, parity, cts, rts, nlcode)), de_gpio(rs485de_gpio), de_mode(false), waitBeforEN(rs485_WaitEnable), waitEN(rs485_Waite)
 {
     gpio_init(rs485de_gpio);
     gpio_set_dir(rs485de_gpio ,GPIO_OUT);
     rs485disable();
 }
 
-pcabCMD::pcabCMD(uart_inst_t *uartID, uint tx_gpio, uint rx_gpio, uint baud_ratio, std::string nlcode, uint rs485de_gpio)
-: pcabCMD(uartID, tx_gpio, rx_gpio, baud_ratio, 8, 1, UART_PARITY_NONE, false, false, nlcode, rs485de_gpio){}
+pcabCMD::pcabCMD(uart_inst_t *uartID, uint tx_gpio, uint rx_gpio, uint baud_ratio, std::string nlcode, uint rs485de_gpio, uint32_t rs485_WaitEnable, uint32_t rs485_Waite)
+: pcabCMD(uartID, tx_gpio, rx_gpio, baud_ratio, 8, 1, UART_PARITY_NONE, false, false, nlcode, rs485de_gpio, rs485_WaitEnable, rs485_Waite){}
 
-pcabCMD::pcabCMD(uint tx_gpio, uint rx_gpio, uint baud_ratio, std::string nlcode, uint rs485de_gpio)
-: pcabCMD(uart0, tx_gpio, rx_gpio, baud_ratio, nlcode, rs485de_gpio){}
+pcabCMD::pcabCMD(uint tx_gpio, uint rx_gpio, uint baud_ratio, std::string nlcode, uint rs485de_gpio, uint32_t rs485_WaitEnable, uint32_t rs485_Waite)
+: pcabCMD(uart0, tx_gpio, rx_gpio, baud_ratio, nlcode, rs485de_gpio, rs485_WaitEnable, rs485_Waite){}
 
-pcabCMD::pcabCMD(uint tx_gpio, uint rx_gpio, uint baud_ratio, uint rs485de_gpio)
-: pcabCMD(uart0, tx_gpio, rx_gpio, baud_ratio, "\r\n", rs485de_gpio){}
+pcabCMD::pcabCMD(uint tx_gpio, uint rx_gpio, uint baud_ratio, uint rs485de_gpio, uint32_t rs485_WaitEnable, uint32_t rs485_Waite)
+: pcabCMD(uart0, tx_gpio, rx_gpio, baud_ratio, "\r\n", rs485de_gpio, rs485_WaitEnable, rs485_Waite){}
 
-pcabCMD::pcabCMD() : pcabCMD(0, 1, 9600, 2){}
+pcabCMD::pcabCMD() : pcabCMD(0, 1, 9600, 2, 20, 10){}
 
 pcabCMD::~pcabCMD() {}
 
@@ -179,25 +180,25 @@ pcabCMD::CommandLine pcabCMD::readCMD(bool echo, bool slpi)
 
 void pcabCMD::writeSLIP_block(std::vector<uint8_t> dat)
 {
-    if(!de_mode){rs485enable(); sleep_ms(10);}
+    if(!de_mode){sleep_ms(waitBeforEN); rs485enable(); sleep_ms(waitEN);}
     uart.writeSLIP_block(dat);
-    sleep_ms(10);
+    sleep_ms(waitEN);
     rs485disable();
 }
 
 void pcabCMD::write(std::string str)
 {
-    if(!de_mode){rs485enable(); sleep_ms(10);}
+    if(!de_mode){sleep_ms(waitBeforEN); rs485enable(); sleep_ms(waitEN);}
     uart.write(str);
-    sleep_ms(10);
+    sleep_ms(waitEN);
     rs485disable();
 }
 
 void pcabCMD::writeLine(std::string str)
 {
-    if(!de_mode){rs485enable(); sleep_ms(10);}
+    if(!de_mode){sleep_ms(waitBeforEN); rs485enable(); sleep_ms(waitEN);}
     uart.writeLine(str);
-    sleep_ms(10);
+    sleep_ms(waitEN);
     rs485disable();
 }
 

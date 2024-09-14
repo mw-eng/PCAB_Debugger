@@ -8,6 +8,8 @@ class pcabCMD : uartSYNC
     uint de_gpio;
     bool de_mode;
     uartSYNC uart;
+    uint32_t waitBeforEN;
+    uint32_t waitEN;
 
     public:
 
@@ -86,7 +88,9 @@ class pcabCMD : uartSYNC
     /// @brief Constructor (UART ID = uart0 / Data bits = 8 / Stop Bits = 1 / UART_PARITY_NONE / CTS = false / RTS = false)
     /// @param uart UART CLASS
     /// @param rs485de_gpio RS485 DE gpio pin number.
-    pcabCMD(uartSYNC uart, uint rs485de_gpio);
+    /// @param rs485_WaitEnable Waite time befor RS485 DE Enable.
+    /// @param rs485_Waite Waite time after RS485 DE change.
+    pcabCMD(uartSYNC uart, uint rs485de_gpio, uint32_t rs485_WaitEnable, uint32_t rs485_Waite);
 
     /// @brief Constructor
     /// @param uartID UART ID (uart0 or uart1)
@@ -100,7 +104,9 @@ class pcabCMD : uartSYNC
     /// @param rts RTX
     /// @param nlcode New Line string.
     /// @param rs485de_gpio RS485 DE gpio pin number.
-    pcabCMD(uart_inst_t *uartID, uint tx_gpio, uint rx_gpio, uint baud_ratio, uint data_bits, uint stop_bits, uart_parity_t parity, bool cts, bool rts, std::string nlcode, uint rs485de_gpio);
+    /// @param rs485_WaitEnable Waite time befor RS485 DE Enable.
+    /// @param rs485_Waite Waite time after RS485 DE change.
+    pcabCMD(uart_inst_t *uartID, uint tx_gpio, uint rx_gpio, uint baud_ratio, uint data_bits, uint stop_bits, uart_parity_t parity, bool cts, bool rts, std::string nlcode, uint rs485de_gpio, uint32_t rs485_WaitEnable, uint32_t rs485_Waite);
 
     /// @brief Constructor (Data bits = 8 / Stop Bits = 1 / UART_PARITY_NONE / CTS = false / RTS = false)
     /// @param uartID UART ID (uart0 or uart1)
@@ -109,7 +115,9 @@ class pcabCMD : uartSYNC
     /// @param baud_ratio Baud ratio.
     /// @param nlcode New Line string.
     /// @param rs485de_gpio RS485 DE gpio pin number.
-    pcabCMD(uart_inst_t *uartID, uint tx_gpio, uint rx_gpio, uint baud_ratio, std::string nlcode, uint rs485de_gpio);
+    /// @param rs485_WaitEnable Waite time befor RS485 DE Enable.
+    /// @param rs485_Waite Waite time after RS485 DE change.
+    pcabCMD(uart_inst_t *uartID, uint tx_gpio, uint rx_gpio, uint baud_ratio, std::string nlcode, uint rs485de_gpio, uint32_t rs485_WaitEnable, uint32_t rs485_Waite);
 
     /// @brief Constructor (UART ID = uart0 / Data bits = 8 / Stop Bits = 1 / UART_PARITY_NONE / CTS = false / RTS = false)
     /// @param tx_gpio Tx gpio pin number.
@@ -117,14 +125,18 @@ class pcabCMD : uartSYNC
     /// @param baud_ratio Baud ratio.
     /// @param nlcode New Line string.
     /// @param rs485de_gpio RS485 DE gpio pin number.
-    pcabCMD(uint tx_gpio, uint rx_gpio, uint baud_ratio, std::string nlcode, uint rs485de_gpio);
+    /// @param rs485_WaitEnable Waite time befor RS485 DE Enable.
+    /// @param rs485_Waite Waite time after RS485 DE change.
+    pcabCMD(uint tx_gpio, uint rx_gpio, uint baud_ratio, std::string nlcode, uint rs485de_gpio, uint32_t rs485_WaitEnable, uint32_t rs485_Waite);
 
     /// @brief Constructor (UART ID = uart0 / Data bits = 8 / Stop Bits = 1 / UART_PARITY_NONE / CTS = false / RTS = false)
     /// @param tx_gpio Tx gpio pin number.
     /// @param rx_gpio Rx gpio pin number.
     /// @param baud_ratio Baud ratio.
     /// @param rs485de_gpio RS485 DE gpio pin number.
-    pcabCMD(uint tx_gpio, uint rx_gpio, uint baud_ratio, uint rs485de_gpio);
+    /// @param rs485_WaitEnable Waite time befor RS485 DE Enable.
+    /// @param rs485_Waite Waite time after RS485 DE change.
+    pcabCMD(uint tx_gpio, uint rx_gpio, uint baud_ratio, uint rs485de_gpio, uint32_t rs485_WaitEnable, uint32_t rs485_Waite);
 
     /// @brief Constructor (UART ID = uart0 / Data bits = 8 / Stop Bits = 1 / UART_PARITY_NONE / CTS = false / RTS = false)
     pcabCMD();
