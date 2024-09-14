@@ -8,7 +8,7 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
         <Style TargetType="{x:Type CheckBox}" x:Key="CHECKBOX_CONTENT_CENTER">
-            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
         </Style>
         <Style TargetType="{x:Type ComboBox}" x:Key="COMBOBOX_CONTENT_CENTER">
@@ -128,26 +128,26 @@
             <Grid Grid.Row="0" Grid.Column="0" Margin="5">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="2*"/>
-                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="3*"/>
                 </Grid.ColumnDefinitions>
                 <CheckBox x:Name="DPS_VnaLoopEnable" Content="DPS Loop" Margin="5" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" Checked="DPS_VnaLoopEnable_Checked" Unchecked="DPS_VnaLoopEnable_Unchecked"/>
                 <Viewbox Grid.Column="1" Margin="5" HorizontalAlignment="Right">
                     <Label Content="DPS step"/>
                 </Viewbox>
-                <ComboBox Grid.Column="2" SelectedIndex="0" x:Name="VNALOOP_DPSstep_COMBOBOX" ItemsSource="{StaticResource DPS_StepList}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}" Margin="5"/>
+                <Viewbox Grid.Column="2" Margin="5"><ComboBox SelectedIndex="0" x:Name="VNALOOP_DPSstep_COMBOBOX" ItemsSource="{StaticResource DPS_StepList}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/></Viewbox>
             </Grid>
             <Grid Grid.Row="0" Grid.Column="1" Margin="5">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="2*"/>
-                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="3*"/>
                 </Grid.ColumnDefinitions>
                 <CheckBox x:Name="DSA_VnaLoopEnable" Content="DSA Loop" Margin="5" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" Checked="DSA_VnaLoopEnable_Checked" Unchecked="DSA_VnaLoopEnable_Unchecked"/>
                 <Viewbox Grid.Column="1" Margin="5" HorizontalAlignment="Right">
                     <Label Content="DSA step"/>
                 </Viewbox>
-                <ComboBox Grid.Column="2" SelectedIndex="0" x:Name="VNALOOP_DSAstep_COMBOBOX" ItemsSource="{StaticResource DSA_StepList}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}" Margin="5"/>
+                <Viewbox Grid.Column="2" Margin="5"><ComboBox SelectedIndex="0" x:Name="VNALOOP_DSAstep_COMBOBOX" ItemsSource="{StaticResource DSA_StepList}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/></Viewbox>
             </Grid>
             <Grid x:Name="DPS_VNALOOP_GRID" Grid.Row="1" Grid.Column="0" Margin="5">
                 <Grid.RowDefinitions>

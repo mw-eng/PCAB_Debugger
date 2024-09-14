@@ -15,7 +15,7 @@ namespace PCAB_Debugger_GUI
         private int sesn;
         public delegate void StartButtonClickEventHandler(object sender, RoutedEventArgs e, string dirPath);
         public event StartButtonClickEventHandler ButtonClickEvent;
-        public int setResourceManager { set { sesn = value; } }
+        public int setResourceManager { get { return sesn; } set { sesn = value; } }
         public string SerialNumber { get; private set; }
 
         public cntAUTO() : this("SN") { }
@@ -23,6 +23,10 @@ namespace PCAB_Debugger_GUI
         {
             InitializeComponent();
             SerialNumber = SN;
+            VNALOOP_DPSstep_COMBOBOX.IsEnabled = false;
+            VNALOOP_DSAstep_COMBOBOX.IsEnabled = false;
+            DPS_VNALOOP_GRID.IsEnabled = false;
+            DSA_VNALOOP_GRID.IsEnabled = false;
             VNALOOP_CONF_GRID.IsEnabled = false;
         }
 

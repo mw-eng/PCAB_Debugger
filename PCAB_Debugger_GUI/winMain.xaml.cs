@@ -268,6 +268,18 @@ namespace PCAB_Debugger_GUI
         private void AUTO_ButtonClickEvent(object sender, RoutedEventArgs e, string dirPath)
         {
             string strSN = ((cntAUTO)sender).SerialNumber;
+            bool detFLG = false;
+            cntConfig conf = new cntConfig();
+            foreach (cntBOARD board in _io.PCAB_Boards)
+            {
+                if (board.SerialNumber == strSN)
+                { conf = board.CONFIG; detFLG = true; break; }
+            }
+            if (!detFLG) { return; }
+            readConfig(conf.CONFIG_SETTINGS);
+            winLoop win = new winLoop((cntAUTO)sender, _io.serial, new PCAB_UnitInterface(strSN), dirPath);
+            win.ShowDialog();
+            CONFIG_ButtonClickEvent(conf, null, ButtonCategory.WRITE);
         }
         private void CONFIG_ButtonClickEvent(object sender, RoutedEventArgs e, ButtonCategory category)
         {

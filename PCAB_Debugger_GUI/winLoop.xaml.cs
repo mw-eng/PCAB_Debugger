@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using static PCAB_Debugger_GUI.agPNA835x;
+using static PCAB_Debugger_GUI.PCAB_TASK;
+using System.Linq;
 
 namespace PCAB_Debugger_GUI
 {
@@ -16,33 +18,194 @@ namespace PCAB_Debugger_GUI
     /// </summary>
     public partial class winLoop : Window
     {
-        winMain owner;
-        bool runTASK = true;
-        string sn;
-        string dirPath;
-        string fileHeader;
-        bool singTRIG = false;
-        bool saveSCR = false;
-        bool saveTRA = false;
-        List<int> dps = new List<int>();
-        List<int> dsa = new List<int>();
-        List<uint> channels = new List<uint>();
-        List<uint> sheets = new List<uint>();
-        List<loopCONF> loops = new List<loopCONF>();
-        List<SweepMode> trig = new List<SweepMode>();
-        PCAB _mod;
-        agPNA835x instr;
+        private bool runTASK = true;
+        private string sn;
+        private string dirPath;
+        private string fileHeader;
+        private bool singTRIG = false;
+        private bool saveSCR = false;
+        private bool saveTRA = false;
+        private List<int> dps = new List<int>();
+        private List<int> dsa = new List<int>();
+        private List<uint> channels = new List<uint>();
+        private List<uint> sheets = new List<uint>();
+        private List<loopCONF> loops = new List<loopCONF>();
+        private List<SweepMode> trig = new List<SweepMode>();
+        private PCAB_SerialInterface.PCAB_UnitInterface serialNum;
+        private PCAB_TASK _serial;
+        private agPNA835x instr;
+        private cntAUTO owner;
 
-        public winLoop(winMain WINowner, string DirPATH)
+        public winLoop(cntAUTO WinOwner, PCAB_TASK serial, PCAB_SerialInterface.PCAB_UnitInterface SN, string DirPATH)
         {
             InitializeComponent();
-            owner = WINowner;
+            _serial = serial;
+            serialNum = SN;
             dirPath = DirPATH;
+            owner = WinOwner;
+            _serial.OnTaskError += OnError;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            bool fileFLG = false;
+            uint stepDPS = 0;
+            uint stepDSA = 0;
+            int waitTIME = -1;
             //Get Configuration
+            fileHeader = owner.VNALOOP_FILEHEADER_TEXTBOX.Text;
+            dps.Clear();
+            dsa.Clear();
+            waitTIME = int.Parse(owner.VNALOOP_WAITTIME_TEXTBOX.Text);
+            if (owner.DPS_VnaLoopEnable.IsChecked == true)
+            {
+                foreach (object objBF in owner.DPS_VNALOOP_GRID.Children)
+                {
+                    if (typeof(CheckBox) == objBF.GetType())
+                    {
+                        if (((CheckBox)objBF).IsChecked == true)
+                        {
+                            dps.Add(int.Parse(((CheckBox)objBF).Content.ToString().Substring(3)));
+                        }
+                    }
+                }
+                if (dps.Count > 0) { stepDPS = (uint)Math.Pow(2, (double)owner.VNALOOP_DPSstep_COMBOBOX.SelectedIndex); }
+            }
+            if (owner.DSA_VnaLoopEnable.IsChecked == true)
+            {
+                foreach (object objBF in owner.DSA_VNALOOP_GRID.Children)
+                {
+                    if (typeof(CheckBox) == objBF.GetType())
+                    {
+                        if (((CheckBox)objBF).IsChecked == true)
+                        {
+                            dsa.Add(int.Parse(((CheckBox)objBF).Content.ToString().Substring(3)));
+                        }
+                    }
+                }
+                if (dsa.Count > 0) { stepDSA = (uint)Math.Pow(2, (double)owner.VNALOOP_DSAstep_COMBOBOX.SelectedIndex); }
+            }
+            loops.Clear();
+            loopCONF loopCONFBF = new loopCONF();
+            if (stepDPS > 0 && stepDSA > 0)
+            {
+                for (int cntDPS = 0; cntDPS < 64; cntDPS += (int)stepDPS)
+                {
+                    for (int cntDSA = 0; cntDSA < 64; cntDSA += (int)stepDSA)
+                    {
+                        loopCONFBF.dps = cntDPS;
+                        loopCONFBF.dsa = cntDSA;
+                        loops.Add(loopCONFBF);
+                    }
+                }
+            }
+            else if (stepDPS > 0)
+            {
+                for (int cntDPS = 0; cntDPS < 64; cntDPS += (int)stepDPS)
+                {
+                    loopCONFBF.dps = cntDPS;
+                    loopCONFBF.dsa = -1;
+                    loops.Add(loopCONFBF);
+                }
+            }
+            else if (stepDSA > 0)
+            {
+                for (int cntDSA = 0; cntDSA < 64; cntDSA += (int)stepDSA)
+                {
+                    loopCONFBF.dps = -1;
+                    loopCONFBF.dsa = cntDSA;
+                    loops.Add(loopCONFBF);
+                }
+            }
+            else
+            {
+                loopCONFBF.dps = -1;
+                loopCONFBF.dsa = -1;
+                loops.Add(loopCONFBF);
+            }
+            if (owner.VNALOOP_SCRE_CHECKBOX.IsChecked == true ||
+                owner.VNALOOP_TRA_CHECKBOX.IsChecked == true)
+            {
+                if (owner.VNALOOP_SCRE_CHECKBOX.IsChecked == true) { saveSCR = true; }
+                if (owner.VNALOOP_TRA_CHECKBOX.IsChecked == true) { saveTRA = true; }
+                instr = new agPNA835x(new IEEE488(new VisaControlNI(owner.setResourceManager, owner.VNALOOP_VISAADDR_TEXTBOX.Text)));
+                instr.Instrument.IEEE488_VisaControl.SetTimeout(uint.Parse(owner.VNALOOP_TIMEOUT_TEXTBOX.Text));
+                //Get instrument configure
+                try
+                {
+                    IEEE488_IDN idn = instr.Instrument.IDN();
+                    channels.Clear();
+                    if (owner.VNALOOP_CH_ALL.IsChecked == true)
+                    {
+                        foreach (uint i in instr.getChannelCatalog())
+                        {
+                            channels.Add(i);
+                        }
+                    }
+                    else
+                    {
+                        channels.Add(uint.Parse(owner.VNALOOP_CHANNEL_COMBOBOX.Text));
+                    }
+                    trig.Clear();
+                    if (owner.VNALOOP_SING_CHECKBOX.IsChecked == true)
+                    {
+                        singTRIG = true;
+                        foreach (uint ch in channels)
+                        {
+                            trig.Add(instr.getTriggerMode(ch));
+                        }
+                    }
+                    sheets.Clear();
+                    foreach (uint i in instr.getSheetsCatalog())
+                    {
+                        sheets.Add(i);
+                    }
+                }
+                catch
+                {
+                    MessageBox.Show("GPIB Connection Error.", "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+                    ExitErrTASK();
+                    return;
+                }
+                //check file path
+                if (owner.VNALOOP_SCRE_CHECKBOX.IsChecked == true)
+                {
+                    foreach (uint sh in sheets)
+                    {
+                        foreach (loopCONF cnf in loops)
+                        {
+                            string filePath = dirPath + "\\" + fileHeader;
+                            if (cnf.dps >= 0) { filePath += "_DPS" + cnf.dps.ToString("00"); }
+                            if (cnf.dsa >= 0) { filePath += "_DSA" + cnf.dsa.ToString("00"); }
+                            filePath += "_Sheet" + sh.ToString() + ".png";
+                            if (System.IO.File.Exists(filePath)) { fileFLG = true; break; }
+                        }
+                        if (fileFLG) { break; }
+                    }
+                }
+                if (owner.VNALOOP_TRA_CHECKBOX.IsChecked == true && fileFLG == false)
+                {
+                    foreach (uint sh in sheets)
+                    {
+                        foreach (loopCONF cnf in loops)
+                        {
+                            string filePath = dirPath + "\\" + fileHeader;
+                            if (cnf.dps >= 0) { filePath += "_DPS" + cnf.dps.ToString("00"); }
+                            if (cnf.dsa >= 0) { filePath += "_DSA" + cnf.dsa.ToString("00"); }
+                            filePath += "_Sheet" + sh.ToString() + ".csv";
+                            if (System.IO.File.Exists(filePath)) { fileFLG = true; break; }
+                        }
+                        if (fileFLG) { break; }
+                    }
+                }
+                if (fileFLG)
+                {
+                    if (MessageBox.Show("The file exists in the specified folder.\nDo you want to overwrite?",
+                        "Warning", MessageBoxButton.OKCancel, MessageBoxImage.Warning) == MessageBoxResult.Cancel) { runTASK = false; }
+                }
+
+            }
+            Task task = Task.Factory.StartNew(() => { LOOP_Task(waitTIME); });
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e)
@@ -57,6 +220,8 @@ namespace PCAB_Debugger_GUI
             try
             {
                 OnUpdateDAT(loopCNT);
+                uint[] dpsNOW = _serial.PCAB_GetDPS(serialNum).ToArray();
+                uint[] dsaNOW = _serial.PCAB_GetDSA(serialNum).ToArray();
                 if (runTASK)
                 {
                     foreach (loopCONF cnf in loops)
@@ -67,21 +232,19 @@ namespace PCAB_Debugger_GUI
                         {
                             foreach (int p in dps)
                             {
-                                //Write Phase State
-                                if (_mod.PCAB_CMD(sn, "SetDPS " + p.ToString("0") + " " + cnf.dps.ToString("0"), 1).Substring(0, 4) != "DONE") { ExitErrTASK(); return; }
+                                dpsNOW[p] = (uint)cnf.dps;
                             }
-                            if (_mod.PCAB_CMD(sn, "WrtDPS", 1).Substring(0, 4) != "DONE") { ExitErrTASK(); return; }
+                            if (!_serial.PCAB_WriteDPS(serialNum, dpsNOW.ToList())) { ExitErrTASK(); return; }
                             filePath += "_DPS" + cnf.dps.ToString("00");
                         }
                         if (!runTASK) { ExitCancelTASK(); return; }
                         if (cnf.dsa >= 0)
                         {
-                            foreach (int a in dsa)
+                            foreach (int p in dps)
                             {
-                                //Write ATT State
-                                if (_mod.PCAB_CMD(sn, "SetDSA " + a.ToString("0") + " " + cnf.dsa.ToString("0"), 1).Substring(0, 4) != "DONE") { ExitErrTASK(); return; }
+                                dsaNOW[p] = (uint)cnf.dps;
                             }
-                            if (_mod.PCAB_CMD(sn, "WrtDSA", 1).Substring(0, 4) != "DONE") { ExitErrTASK(); return; }
+                            if (!_serial.PCAB_WriteDSA(serialNum, dsaNOW.ToList())) { ExitErrTASK(); return; }
                             filePath += "_DSA" + cnf.dsa.ToString("00");
                         }
                         if (!runTASK) { ExitCancelTASK(); return; }
@@ -325,6 +488,20 @@ namespace PCAB_Debugger_GUI
             {
                 MessageLabel.Content = "Sweep... " + Progress.Value.ToString() + "%";
             }));
+        }
+
+        private void OnError(object sender, PCABEventArgs e)
+        {
+            Dispatcher.BeginInvoke(new Action(() =>
+            {
+                this.DialogResult = false;
+                this.Close();
+            }));
+        }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            _serial.OnTaskError -= OnError;
         }
 
         #region Structure
