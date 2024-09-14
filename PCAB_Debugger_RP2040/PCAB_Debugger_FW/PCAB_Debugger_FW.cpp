@@ -1,7 +1,7 @@
 //#define DEBUG_BOOT_MODE 0x03
 //#define DEBUG_BOOT_MODE 0x0A
-#define DEBUG_BOOT_MODE 0x0F
-#define DEBUG_RASPICO
+//#define DEBUG_BOOT_MODE 0x0F
+//#define DEBUG_RASPICO
 
 #include "PCAB_Debugger_FW.hpp"
 #define SNPRINTF_BUFFER_LEN 50
