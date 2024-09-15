@@ -11,8 +11,8 @@ Control GUI program.
 
 ### Main window
 This is how to use it when communicating one-to-one.<br>
-When communicating one-to-many, each SN is displayed in a tab and the receiving monitor is displayed in a list.<br>
-
+When communicating one-to-many, each SN is displayed in a tab.<br>
+<br>
 <img src="https://github.com/mw-eng/PCAB_Debugger/blob/master/PCAB_Debugger_GUI/assets/UI1.png?raw=true" width="600px"><br>
 <br>
 ${\color{Aqua} 1. \space Settings \space before \space connection}$<br>
@@ -61,6 +61,10 @@ ${\color{LightSkyBlue} 3. \space AUTO \space TAB \space}$ Automatic measurement 
 |3-15|START Button		|Automatic loop control execution button.|
 
 
+### Display window
+This is the display for one-to-one communication.<br>
+For one-to-many communication, it is displayed as a list.<br>
+<br>
 <br><img src="https://github.com/mw-eng/PCAB_Debugger/blob/master/PCAB_Debugger_GUI/assets/UI3.png?raw=true" width="600px"><br>
 <br>
 ${\color{Magenta} 4. \space Sensor \space display \space Window}$<br>
