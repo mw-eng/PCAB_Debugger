@@ -489,6 +489,8 @@ namespace PCAB_Debugger_GUI
 
     public class PCAB_SerialInterface
     {
+        private const int BAUD_RATE = 3686400;
+        private const string REVISION_CHECK_STRING = "1.4.";
         private SerialPort _serialPort;
         public bool isOpen { get; private set; } = false;
         public List<PCAB_UnitInterface> pcabUNITs { get; private set; } = new List<PCAB_UnitInterface>();
@@ -497,9 +499,7 @@ namespace PCAB_Debugger_GUI
         /// <summary>Constructor</summary>
         /// <param name="PortName">Serial Port Name</param>
         public PCAB_SerialInterface(string PortName)
-            : this(PortName, 115200, 8, Parity.None, StopBits.One, 4096, 5000, 5000) { }
-        //public PCAB_SerialInterface(string PortName)
-        //    : this(PortName, 3686400, 8, Parity.Even, StopBits.One, 4096, 5000, 5000) { }
+            : this(PortName, BAUD_RATE, 8, Parity.Even, StopBits.One, 4096, 5000, 5000) { }
         public PCAB_SerialInterface(string PortName,
             int baudRate, int dataBits, Parity parity, StopBits stopbit, int readBufferSize, int writeTimeOut, int readTimeOut)
         {
@@ -594,7 +594,7 @@ namespace PCAB_Debugger_GUI
                         if (arrBf.Length != 4) { _serialPort.Close(); return false; }
                         if (arrBf.Length == 4)
                         {
-                            if (arrBf[0] == "Orient Microwave Corp." && arrBf[1] == "LX00-0004-00" && arrBf[3].Substring(0, 5) == "1.3.3" && (arrBf[2] == s || "*" == s))
+                            if (arrBf[0] == "Orient Microwave Corp." && arrBf[1] == "LX00-0004-00" && arrBf[3].Substring(0, REVISION_CHECK_STRING.Length) == REVISION_CHECK_STRING && (arrBf[2] == s || "*" == s))
                             {
                                 pcabUNITs.Add(new PCAB_UnitInterface(s));
                             }
