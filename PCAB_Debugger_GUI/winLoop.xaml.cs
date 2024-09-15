@@ -232,7 +232,7 @@ namespace PCAB_Debugger_GUI
                         {
                             foreach (int p in dps)
                             {
-                                dpsNOW[p] = (uint)cnf.dps;
+                                dpsNOW[p - 1] = (uint)cnf.dps;
                             }
                             if (!_serial.PCAB_WriteDPS(serialNum, dpsNOW.ToList())) { ExitErrTASK(); return; }
                             filePath += "_DPS" + cnf.dps.ToString("00");
@@ -240,9 +240,9 @@ namespace PCAB_Debugger_GUI
                         if (!runTASK) { ExitCancelTASK(); return; }
                         if (cnf.dsa >= 0)
                         {
-                            foreach (int p in dps)
+                            foreach (int p in dsa)
                             {
-                                dsaNOW[p] = (uint)cnf.dps;
+                                dsaNOW[p -1] = (uint)cnf.dsa;
                             }
                             if (!_serial.PCAB_WriteDSA(serialNum, dsaNOW.ToList())) { ExitErrTASK(); return; }
                             filePath += "_DSA" + cnf.dsa.ToString("00");
