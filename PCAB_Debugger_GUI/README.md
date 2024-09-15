@@ -10,6 +10,9 @@ Control GUI program.
 ## How to use
 
 ### Main window
+This is how to use it when communicating one-to-one.<br>
+When communicating one-to-many, each SN is displayed in a tab and the receiving monitor is displayed in a list.<br>
+
 <img src="https://github.com/mw-eng/PCAB_Debugger/blob/master/PCAB_Debugger_GUI/assets/UI1.png?raw=true" width="600px"><br>
 <br>
 ${\color{Aqua} 1. \space Settings \space before \space connection}$<br>
@@ -19,54 +22,54 @@ ${\color{Aqua} 1. \space Settings \space before \space connection}$<br>
 |1-2|Monitor loop inberval	|Specifies the acquisition interval for monitors (temperature, etc.) in milliseconds.|
 |1-3|Serial Numbers			|Enter the serial number of the connect target (separate with "," when connecting multiple units).|
 
-${\color{Magenta} 2. \space Control \space and \space Receive}$<br>
+${\color{Gold} 2. \space CONTROL \space TAB}$<br>
 |No|Item|Description|
 |:--|:--|:--|
-|2-1|Serial Number|Select serial numbers to send and receive.|
-|2-2|CPU TMP      |CPU internal temperature value [degreeC].|
-|2-3|SNS Vin      |Vin voltage value [V].|
-|2-4|SNS Pin      |PreAMP Detector voltage value [V].|
-|2-5|SNS Id       |Id current value [A].|
-|2-6|SNS Vd       |Vd voltage value [V].|
-|2-7|Tempurature  |1-wire sensor temperature value [degreeC].|
-
-${\color{Gold} 3. \space CONTROL \space TAB}$<br>
-|No|Item|Description|
-|:--|:--|:--|
-|3-1|Standby AMP			|If checked, it will go into standby mode.|
-|3-2|Standby DRA			|If checked, it will go into standby mode.|
-|3-3|Low Power Mode			|If checked, it will go into low power mode.|
-|3-4|Phase and ATT Config	|Setting the phase delay and attenation.|
-|3-5|Standby LNA			|If checked, it will go into standby mode.|
-|3-6|Set ATT Config			|Write attenation config.|
-|3-7|Set Phase Config		|Write phase delay config.|
-|3-8|Set Config				|Write phase delay and attnation config.|
-|3-9|Save and Load Target	|Memory number to save and load.|
-|3-10|Load Memory			|Load state to memory(ROM).|
-|3-11|Save Memory			|Save state to memory(ROM).|
-|3-12|Preset Config			|Preset config.|
+|2-1|Standby AMP			|If checked, it will go into standby mode.|
+|2-2|Standby DRA			|If checked, it will go into standby mode.|
+|2-3|Low Power Mode			|If checked, it will go into low power mode.|
+|2-4|Phase and ATT Config	|Setting the phase delay and attenation.|
+|2-5|Standby LNA			|If checked, it will go into standby mode.|
+|2-6|Set ATT Config			|Write attenation config.|
+|2-7|Set Phase Config		|Write phase delay config.|
+|2-8|Set Config				|Write phase delay and attnation config.|
+|2-8|Read Config			|Read the currently set state.|
+|2-9|Save and Load Target	|Memory number to save and load. <br>0 specifies the autoload region {0xE0 - 0}.|
+|2-10|Load Memory			|Load state to memory(ROM).|
+|2-11|Save Memory			|Save state to memory(ROM).|
+|2-12|Preset Config			|Preset config load.(Load factory defaults.)|
 
 
 <br><img src="https://github.com/mw-eng/PCAB_Debugger/blob/master/PCAB_Debugger_GUI/assets/UI2.png?raw=true" width="600px"><br>
 <br>
-${\color{LightSkyBlue} 4. \space AUTO \space TAB \space}$ Automatic measurement control<br>
+${\color{LightSkyBlue} 3. \space AUTO \space TAB \space}$ Automatic measurement control<br>
 |No|Item|Description|
 |:--|:--|:--|
-|4-1|VISA Address		|Instrument visa address.|
-|4-2|Check Button		|Instrument communication check.|
-|4-3|Channel			|Config collection channels.|
-|4-4|Mode Settings		|Automatic trigger settings.|
-|4-5|Save target		|Select save target.|
-|4-7|File Name Header	|Save file name header.|
-|4-8|DPS Loop 			|Enable the phase delay step loop.|
-|4-9|DPS step			|Select the phase delay step interval.|
-|4-0|DPSn				|Select loop target.|
-|4-11|DSA Loop 			|Enable the attenation step loop.|
-|4-12|DSA step			|Select the attenation step interval.|
-|4-13|DSAn				|Select loop target.|
-|4-14|Waite Time		|Waite time befor next step.|
-|4-15|START Button		|Automatic loop control execution button.|
+|3-1|VISA Address		|Instrument visa address.|
+|3-2|Check Button		|Instrument communication check.|
+|3-3|Channel			|Config collection channels.|
+|3-4|Mode Settings		|Automatic trigger settings.|
+|3-5|Save target		|Select save target.|
+|3-7|File Name Header	|Save file name header.|
+|3-8|DPS Loop 			|Enable the phase delay step loop.|
+|3-9|DPS step			|Select the phase delay step interval.|
+|3-0|DPSn				|Select loop target.|
+|3-11|DSA Loop 			|Enable the attenation step loop.|
+|3-12|DSA step			|Select the attenation step interval.|
+|3-13|DSAn				|Select loop target.|
+|3-14|Waite Time		|Waite time befor next step.|
+|3-15|START Button		|Automatic loop control execution button.|
 
 
 <br><img src="https://github.com/mw-eng/PCAB_Debugger/blob/master/PCAB_Debugger_GUI/assets/UI3.png?raw=true" width="600px"><br>
 <br>
+${\color{Magenta} 4. \space Sensor \space display \space Window}$<br>
+|No|Item|Description|
+|:--|:--|:--|
+|4-2|CPU TMP      |CPU internal temperature value [degreeC].|
+|4-3|SNS Vin      |Vin voltage value [V].|
+|4-4|SNS Pin      |PreAMP Detector voltage value [V].|
+|4-5|SNS Id       |Id current value [A].|
+|4-6|SNS Vd       |Vd voltage value [V].|
+|4-7|Tempurature  |1-wire sensor temperature value [degreeC].|
+
