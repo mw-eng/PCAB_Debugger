@@ -60,8 +60,9 @@ ${\color{LightSkyBlue} 3. \space AUTO \space TAB \space}$ Automatic measurement 
 |3-14|Waite Time		|Waite time befor next step.|
 |3-15|START Button		|Automatic loop control execution button.|
 
+<br><br>
 
-### Display window
+### Monitor window
 This is the display for one-to-one communication.<br>
 For one-to-many communication, it is displayed as a list.<br>
 <br>
