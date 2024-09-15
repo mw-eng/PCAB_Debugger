@@ -40,13 +40,8 @@
 #define SW_4_PIN 11
 
 // UART Configure
-<<<<<<< HEAD
 //#define UART_BAUD_RATE 9600
 #define UART_BAUD_RATE 115200
-=======
-#define UART_BAUD_RATE 9600
-//#define UART_BAUD_RATE 115200
->>>>>>> bb4f5843e387c91bd05cb1453fd3297d302d3ded
 //#define UART_BAUD_RATE 230400
 //#define UART_BAUD_RATE 460800
 //#define UART_BAUD_RATE 921600
