@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PCAB_Debugger_GUI.Properties;
+using System;
 using System.Runtime.InteropServices;
 using System.Windows;
 
@@ -20,6 +21,28 @@ namespace PCAB_Debugger_GUI
         public winMonitor()
         {
             InitializeComponent();
+            if (Settings.Default.winMonitorTop >= 0 &&
+                (Settings.Default.winMonitorTop + Settings.Default.winMonitorHeight) <
+                SystemParameters.VirtualScreenHeight)
+            {
+                this.Top = Settings.Default.winMonitorTop;
+            }
+            if (Settings.Default.winMonitorLeft >= 0 &&
+                (Settings.Default.winMonitorLeft + Settings.Default.winMonitorWidth) <
+                SystemParameters.VirtualScreenHeight)
+            {
+                this.Left = Settings.Default.winMonitorLeft;
+            }
+            if (Settings.Default.winMonitorWidth > 0 &&
+                Settings.Default.winMonitorWidth < SystemParameters.WorkArea.Width)
+            {
+                this.Width = Settings.Default.winMonitorWidth;
+            }
+            if (Settings.Default.winMonitorHeight > 0 &&
+                Settings.Default.winMonitorHeight < SystemParameters.WorkArea.Height)
+            {
+                this.Height = Settings.Default.winMonitorHeight;
+            }
         }
 
         private void Window_SourceInitialized(object sender, EventArgs e)
@@ -36,6 +59,10 @@ namespace PCAB_Debugger_GUI
 
         public void WindowClose()
         {
+            Settings.Default.winMonitorTop = this.Top;
+            Settings.Default.winMonitorLeft = this.Left;
+            Settings.Default.winMonitorHeight = this.Height;
+            Settings.Default.winMonitorWidth = this.Width;
             closeFLG = true;
             Close();
         }

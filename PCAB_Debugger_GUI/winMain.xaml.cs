@@ -1,4 +1,5 @@
 ﻿using MWComLibCS.ExternalControl;
+using PCAB_Debugger_GUI.Properties;
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
@@ -38,6 +39,33 @@ namespace PCAB_Debugger_GUI
             BOARD_GRID.IsEnabled = true;
 #endif
             visa32Resource = VisaControlNI.NewResourceManager();
+            SERIAL_PORTS_COMBOBOX_RELOAD();
+            if (SERIAL_PORTS_COMBOBOX.Items.Count > 0) { SERIAL_PORTS_COMBOBOX.SelectedIndex = 0; CONNECT_BUTTON.IsEnabled = true; }
+            if (ports != null) { for (int i = 0; i < ports.Length; i++) { if (Settings.Default.spCaption == ports[i].Caption) { SERIAL_PORTS_COMBOBOX.SelectedIndex = i; break; } } }
+            WAITE_TIME_TEXTBOX.Text = Settings.Default.mli.ToString("0");
+            SERIAL_NUMBERS_TEXTBOX.Text = Settings.Default.sn;
+            if (Settings.Default.winMainTop >= 0 &&
+                (Settings.Default.winMainTop + Settings.Default.winMainHeight) <
+                SystemParameters.VirtualScreenHeight)
+            {
+                this.Top = Settings.Default.winMainTop;
+            }
+            if (Settings.Default.winMainLeft >= 0 &&
+                (Settings.Default.winMainLeft + Settings.Default.winMainWidth) <
+                SystemParameters.VirtualScreenHeight)
+            {
+                this.Left = Settings.Default.winMainLeft;
+            }
+            if (Settings.Default.winMainWidth > 0 &&
+                Settings.Default.winMainWidth < SystemParameters.WorkArea.Width)
+            {
+                this.Width = Settings.Default.winMainWidth;
+            }
+            if (Settings.Default.winMainHeight > 0 &&
+                Settings.Default.winMainHeight < SystemParameters.WorkArea.Height)
+            {
+                this.Height = Settings.Default.winMainHeight;
+            }
         }
 
         #region Serial EVENT
@@ -261,8 +289,23 @@ namespace PCAB_Debugger_GUI
         {
             if (_io?.isOpen == true)
             {
-                OnError(null, null);
+                Settings.Default.visaAddr = _io.PCAB_Boards[0].AUTO.VNALOOP_VISAADDR_TEXTBOX.Text;
+                Settings.Default.visaTO = long.Parse(_io.PCAB_Boards[0].AUTO.VNALOOP_TIMEOUT_TEXTBOX.Text);
+                Settings.Default.fnHeader = _io.PCAB_Boards[0].AUTO.VNALOOP_FILEHEADER_TEXTBOX.Text;
+                if (MessageBox.Show("Communication with PCAB\nDo you want to disconnect and exit?", "Worning", MessageBoxButton.OKCancel, MessageBoxImage.Warning) == MessageBoxResult.OK)
+                {
+                    OnError(null, null);
+                }
+                else { e.Cancel = true; }
             }
+            Settings.Default.spCaption = SERIAL_PORTS_COMBOBOX.Text;
+            Settings.Default.mli = long.Parse(WAITE_TIME_TEXTBOX.Text);
+            Settings.Default.sn = SERIAL_NUMBERS_TEXTBOX.Text;
+            Settings.Default.winMainTop = this.Top;
+            Settings.Default.winMainLeft = this.Left;
+            Settings.Default.winMainHeight = this.Height;
+            Settings.Default.winMainWidth = this.Width;
+            Settings.Default.Save();
         }
         #endregion
 

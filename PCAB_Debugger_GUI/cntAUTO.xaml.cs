@@ -1,4 +1,5 @@
 ﻿using MWComLibCS.ExternalControl;
+using PCAB_Debugger_GUI.Properties;
 using System;
 using System.Text.RegularExpressions;
 using System.Windows;
@@ -28,6 +29,9 @@ namespace PCAB_Debugger_GUI
             DPS_VNALOOP_GRID.IsEnabled = false;
             DSA_VNALOOP_GRID.IsEnabled = false;
             VNALOOP_CONF_GRID.IsEnabled = false;
+            VNALOOP_VISAADDR_TEXTBOX.Text = Settings.Default.visaAddr;
+            VNALOOP_TIMEOUT_TEXTBOX.Text = Settings.Default.visaTO.ToString("0");
+            VNALOOP_FILEHEADER_TEXTBOX.Text = Settings.Default.fnHeader;
         }
 
         private void VNALOOP_START_BUTTON_Click(object sender, RoutedEventArgs e)
