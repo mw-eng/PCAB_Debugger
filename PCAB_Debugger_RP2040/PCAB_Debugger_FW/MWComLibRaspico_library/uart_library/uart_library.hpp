@@ -51,6 +51,14 @@ class uartSYNC
     /// @brief Destructor
     ~uartSYNC();
 
+    /// @brief Wait for the UART TX fifo to be drained.
+    void tx_wait_blocking();
+
+    /// @brief Set UART baud rate.
+    /// @param baudrate baud rate.
+    /// @return The UART is paused for around two character periods whilst the settings are changed. Data received during this time may be dropped by the UART.
+    uint set_baudrate(uint baudrate);
+
     /// @brief Read one line of string.
     /// @param echo Return echo during communication.
     std::string readLine(bool echo);
@@ -74,6 +82,5 @@ class uartSYNC
     /// @brief Send string as one line. (Add new line string automatically string to send.)
     /// @param str string to send.
     void writeLine(std::string str);
-    
 };
 

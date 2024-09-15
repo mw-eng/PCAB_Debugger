@@ -22,7 +22,7 @@ uartSYNC::uartSYNC(uint tx_gpio, uint rx_gpio, uint baud_ratio)
 
 uartSYNC::uartSYNC() : uartSYNC(0, 1, 9600){}
 
-uartSYNC::~uartSYNC() {}
+uartSYNC::~uartSYNC() { uart_deinit(uart); }
 
 /// @brief Serial Line Internet Protocol Encode
 /// @param dat Original Data
@@ -77,6 +77,18 @@ std::vector<uint8_t> DecodeSLIP(const std::vector<uint8_t> &dat)
         }
     }
     return slip;
+}
+
+
+void uartSYNC::tx_wait_blocking() { uart_tx_wait_blocking(uart); }
+
+uint uartSYNC::set_baudrate(uint baudrate)
+{
+    tx_wait_blocking();
+    uart_set_irq_enables(uart, false, false);
+    uint result = uart_set_baudrate(uart, baudrate);
+    uart_set_irq_enables(uart, true, true);
+    return result;
 }
 
 std::string uartSYNC::readLine(bool echo)

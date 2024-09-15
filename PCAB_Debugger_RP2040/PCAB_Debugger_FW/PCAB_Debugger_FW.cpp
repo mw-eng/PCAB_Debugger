@@ -43,7 +43,7 @@ bool stbDRA = false;
 bool stbLNA = false;
 bool lowMODE = false;
 bool modeBCM = false;
-
+uint32_t brNOW;
 
 void setup()
 {
@@ -52,12 +52,11 @@ void setup()
     analog = new adc(true, true, true, true , 3.3f);
     spi_dps = new spi(spi0, SPI_CLK, SPI0_CLK_PIN, SPI0_TX_PIN, SPI0_RX_PIN, SPI0_LE_PIN, SPI_BITS, SPI_MODE, SPI_ORDER);
     spi_dsa = new spi(spi1, SPI_CLK, SPI1_CLK_PIN, SPI1_TX_PIN, SPI1_RX_PIN, SPI1_LE_PIN, SPI_BITS, SPI_MODE, SPI_ORDER);
-
-    //uart = new pcabCMD(UART_TX_PIN, UART_RX_PIN, UART_BAUD_RATE, RS485_DE_PIN);
+    brNOW = readBR();
 #ifdef UART_PARITY_ENABLE
-    uart = new pcabCMD(uart0, UART_TX_PIN, UART_RX_PIN, readBR(), UART_DATA_BITS, UART_STOP_BIT, UART_PARITY_EVEN, false, false, "\r\n", RS485_DE_PIN, RS485_DE_ENB_WAITE_TIME, RS485_DE_WAITE_TIME);
+    uart = new pcabCMD(uart0, UART_TX_PIN, UART_RX_PIN, brNOW, UART_DATA_BITS, UART_STOP_BIT, UART_PARITY_EVEN, false, false, "\r\n", RS485_DE_PIN, RS485_DE_ENB_WAITE_TIME, RS485_DE_WAITE_TIME);
 #else
-    uart = new pcabCMD(uart0, UART_TX_PIN, UART_RX_PIN, readBR(), UART_DATA_BITS, UART_STOP_BIT, UART_PARITY_NONE, false, false, "\r\n", RS485_DE_PIN, RS485_DE_ENB_WAITE_TIME, RS485_DE_WAITE_TIME);
+    uart = new pcabCMD(uart0, UART_TX_PIN, UART_RX_PIN, brNOW, UART_DATA_BITS, UART_STOP_BIT, UART_PARITY_NONE, false, false, "\r\n", RS485_DE_PIN, RS485_DE_ENB_WAITE_TIME, RS485_DE_WAITE_TIME);
 #endif
     //GPIO Setup
     gpio_init(LPW_MOD_PIN);
@@ -1239,6 +1238,40 @@ int main()
                         uart->writeLine(Convert::ToString(romID, 16, 16));
                     }
                     break;
+                case pcabCMD::cmdCode::SetBR:
+                    uint32_t brBF;
+                    if(modeBCM)
+                    {
+                        if(cmd.argment.size() != 4) { uart->writeSLIP_block(retCODE(0xF2)); break; }
+                        else { uint32_t brBF = cmd.argment[0] * 0x100 * 0x100 * 0x100 + cmd.argment[1] * 0x100 * 0x100 + cmd.argment[2] * 0x100 + cmd.argment[3]; }
+                        uint32_t brRET = uart->setBaudRate(brBF);
+                        uart->setBaudRate(brNOW);
+                        if(brRET == brBF) 
+                        { 
+                            uart->writeSLIP_block(retCODE(0x00));
+                            brNOW = uart->setBaudRate(brBF);
+                        } else { uart->writeSLIP_block(retCODE(0xEF)); }
+                    }
+                    else
+                    {
+                        if(cmd.argments.size() != 1) { uart->writeLine("ERR > Number of arguments does not match."); break; }
+                        if(!Convert::TryToUInt32(cmd.argments[0], 10, brBF)) { uart->writeLine("ERR > Argument error.");  break; }
+                        uint32_t brRET = uart->setBaudRate(brBF);
+                        uart->setBaudRate(brNOW);
+                        if(brRET == brBF) 
+                        { 
+                            uart->writeLine("DONE > Set BAUD RATE now.");
+                            brNOW = uart->setBaudRate(brBF);
+                        }
+                        else
+                        {
+                            char ch[SNPRINTF_BUFFER_LEN];
+                            int len = snprintf(ch, sizeof(ch), "[%s] is the closest possible value.", Convert::ToString(brRET, 10, 0).c_str());
+                            uart->writeLine(std::string(ch, len));
+                        }
+                        
+                    }
+                    break;
                 case pcabCMD::cmdCode::BINARY:
                     if(cmd.argments.size() != 0) { uart->writeLine("ERR > Number of arguments does not match."); }
                     else
@@ -1391,9 +1424,9 @@ uint readBR()
 {
     uint8_t dat[FLASH_PAGE_SIZE];
     if(!flash::readROM(PICO_FLASH_SIZE_BYTES / FLASH_BLOCK_SIZE - 1, 0x0F, 0x0F, dat)) { return false; }
-    uint16_t ratio;
-    ratio = dat[FLASH_PAGE_SIZE - 18] * 0x10 + dat[FLASH_PAGE_SIZE - 17];
-    if(ratio == 0x00 || ratio == 0xFF) { ratio = UART_BAUD_RATE; }
+    uint32_t ratio;
+    ratio = dat[FLASH_PAGE_SIZE - 20] * 0x100 * 0x100 * 0x100 + dat[FLASH_PAGE_SIZE - 19] * 0x100 * 0x100 + dat[FLASH_PAGE_SIZE - 18] * 0x100 + dat[FLASH_PAGE_SIZE - 17];
+    if(ratio == 0x00000000 || ratio == 0xFFFFFFFF) { ratio = UART_BAUD_RATE; }
     return ratio;
 }
 

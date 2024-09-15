@@ -55,9 +55,9 @@ class pcabCMD : uartSYNC
         GetMODE,
         Reboot,
         SetBR,
-        NONE,
         BINARY,
         ASCII,
+        NONE,
         NUL
     };
 
@@ -171,6 +171,11 @@ class pcabCMD : uartSYNC
     /// @brief Get DE state.
     /// @return DE state.
     bool getRS485mode();
+
+    /// @brief Set UART baud rate.
+    /// @param baudrate baud rate.
+    /// @return The UART is paused for around two character periods whilst the settings are changed. Data received during this time may be dropped by the UART.
+    uint setBaudRate(uint baudrate);
 };
 
 

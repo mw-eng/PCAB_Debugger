@@ -30,7 +30,7 @@ pcabCMD::pcabCMD(uint tx_gpio, uint rx_gpio, uint baud_ratio, uint rs485de_gpio,
 
 pcabCMD::pcabCMD() : pcabCMD(0, 1, 9600, 2, 20, 10){}
 
-pcabCMD::~pcabCMD() {}
+pcabCMD::~pcabCMD() { uart.~uartSYNC(); }
 
 pcabCMD::CommandLine pcabCMD::readCMD(bool echo, bool slpi)
 {
@@ -97,6 +97,7 @@ pcabCMD::CommandLine pcabCMD::readCMD(bool echo, bool slpi)
         case 0xFA: return pcabCMD::CommandLine(serialNum, romID, cmdCode::RST, arg);
         case 0xFB: return pcabCMD::CommandLine(serialNum, romID, cmdCode::SaveMEM, arg);
         case 0xFC: return pcabCMD::CommandLine(serialNum, romID, cmdCode::LoadMEM, arg);
+        case 0xFD: return pcabCMD::CommandLine(serialNum, romID, cmdCode::SetBR, arg);
         case 0xFE: return pcabCMD::CommandLine(serialNum, romID, cmdCode::ASCII, arg);
         case 0xAA: return pcabCMD::CommandLine(serialNum, romID, cmdCode::ReadROM, arg);
         case 0xBB: return pcabCMD::CommandLine(serialNum, romID, cmdCode::OverwriteROM, arg);
@@ -173,6 +174,7 @@ pcabCMD::CommandLine pcabCMD::readCMD(bool echo, bool slpi)
         if (String::strCompare(cmd, "GetIDN", true)) { return pcabCMD::CommandLine(serialNum, romID, cmdCode::GetIDN, strArr, argments.size()); }
         if (String::strCompare(cmd, "*IDN?", true)) { return pcabCMD::CommandLine(serialNum, romID, cmdCode::GetIDN, strArr, argments.size()); }
         if (String::strCompare(cmd, "GetIDR", true)) { return pcabCMD::CommandLine(serialNum, romID, cmdCode::GetIDR, strArr, argments.size()); }
+        if (String::strCompare(cmd, "SetBR", true)) { return pcabCMD::CommandLine(serialNum, romID, cmdCode::SetBR, strArr, argments.size()); }
         if (String::strCompare(cmd, "BCM", true)) { return pcabCMD::CommandLine(serialNum, romID, cmdCode::BINARY, strArr, argments.size()); }
         else { return pcabCMD::CommandLine(serialNum, romID, cmdCode::NONE, strArr, argments.size()); }
     }
@@ -182,6 +184,7 @@ void pcabCMD::writeSLIP_block(std::vector<uint8_t> dat)
 {
     if(!de_mode){sleep_ms(waitBeforEN); rs485enable(); sleep_ms(waitEN);}
     uart.writeSLIP_block(dat);
+    uart.tx_wait_blocking();
     sleep_ms(waitEN);
     rs485disable();
 }
@@ -190,6 +193,7 @@ void pcabCMD::write(std::string str)
 {
     if(!de_mode){sleep_ms(waitBeforEN); rs485enable(); sleep_ms(waitEN);}
     uart.write(str);
+    uart.tx_wait_blocking();
     sleep_ms(waitEN);
     rs485disable();
 }
@@ -198,6 +202,7 @@ void pcabCMD::writeLine(std::string str)
 {
     if(!de_mode){sleep_ms(waitBeforEN); rs485enable(); sleep_ms(waitEN);}
     uart.writeLine(str);
+    uart.tx_wait_blocking();
     sleep_ms(waitEN);
     rs485disable();
 }
@@ -215,5 +220,7 @@ void pcabCMD::rs485disable()
 }
 
 bool pcabCMD::getRS485mode(){ return de_mode; }
+
+uint pcabCMD::setBaudRate(uint baudrate){ return uart.set_baudrate(baudrate); }
 
 #pragma endregion pcabCMD Class

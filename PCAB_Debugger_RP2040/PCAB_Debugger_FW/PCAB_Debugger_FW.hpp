@@ -40,8 +40,8 @@
 #define SW_4_PIN 11
 
 // UART Configure
-//#define UART_BAUD_RATE 9600
-#define UART_BAUD_RATE 115200
+#define UART_BAUD_RATE 9600
+//#define UART_BAUD_RATE 115200
 //#define UART_BAUD_RATE 230400
 //#define UART_BAUD_RATE 460800
 //#define UART_BAUD_RATE 921600
@@ -52,8 +52,8 @@
 #define UART_STOP_BIT 1
 #define UART_DATA_BITS 8
 //#define UART_PARITY_ENABLE
-#define RS485_DE_ENB_WAITE_TIME 8
-#define RS485_DE_WAITE_TIME 4
+#define RS485_DE_ENB_WAITE_TIME 1
+#define RS485_DE_WAITE_TIME 0
 
 // SPI Configure
 #define SPI_MODE 3
@@ -73,4 +73,5 @@ std::string readSerialNum();
 bool saveSTATE(const uint8_t &sectorNum, const uint8_t &pageNum, const uint8_t &stateNum);
 bool readSTATE(const uint8_t &sectorNum, const uint8_t &pageNum, const uint8_t &stateNum);
 void writeNowSTATE();
+uint readBR();
 std::vector<uint8_t> retCODE(uint8_t code);
