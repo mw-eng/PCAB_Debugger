@@ -70,9 +70,14 @@ namespace PCAB_Debugger_GUI
                         {
                             PCAB_Monitors[cnt].SetTempValue(i + 1, e.ReceiveDAT[cnt].SensorValuesNOW.Temprature.Values[i].ToString("0.00"));
                         }
-                        foreach(float val in e.ReceiveDAT[cnt].SensorValuesNOW.Temprature.Values)
+                    }
+                    if(e.ReceiveDAT[cnt].SensorValuesNOW.ID.IDs?.Length == 15)
+                    {
+                        for (uint i = 0; i < e.ReceiveDAT[cnt].SensorValuesNOW.ID.IDs.Length; i++)
                         {
+                            PCAB_Monitors[cnt].SetTempID(i + 1, "0x" + e.ReceiveDAT[cnt].SensorValuesNOW.ID.IDs[i].ToString("X16"));
                         }
+                        PCAB_Monitors[cnt].TEMPviewIDs = true;
                     }
                 }
             }

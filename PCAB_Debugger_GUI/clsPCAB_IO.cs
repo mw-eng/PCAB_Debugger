@@ -35,6 +35,7 @@ namespace PCAB_Debugger_GUI
             if (serialInterface.Open(serialNum))
             {
                 _task = true;
+                _state = false;
                 Task.Factory.StartNew(() => { PCAB_Task(waiteTime); });
                 return true;
             }
@@ -45,6 +46,22 @@ namespace PCAB_Debugger_GUI
         {
             try
             {
+                if(_task == true)
+                {
+                    while (_state) { Thread.Sleep(12); }
+                    _state = true;
+                    try
+                    {
+                        foreach (PCAB_UnitInterface unit in serialInterface.pcabUNITs)
+                        {
+                            serialInterface.DiscardInBuffer();
+                            TempratureID ids = serialInterface.GetTempID(unit);
+                            unit.SensorValuesNOW = new SensorValues(ids.IDs.ToList());
+                        }
+                    }
+                    catch { }
+                    _state = false;
+                }
                 do
                 {
                     Thread.Sleep((int)waiteTime);
@@ -64,7 +81,7 @@ namespace PCAB_Debugger_GUI
                                 values.Analog.Pin != unit.SensorValuesNOW.Analog.Pin ||
                                 values.Analog.CPU_Temprature != unit.SensorValuesNOW.Analog.CPU_Temprature ||
                                 values.Temprature.Values != unit.SensorValuesNOW.Temprature.Values)
-                            { updateFLG = true; unit.SensorValuesNOW = values; }
+                            { updateFLG = true; unit.SensorValuesNOW = new SensorValues(values.Analog,values.Temprature, unit.SensorValuesNOW.ID); }
                         }
                         if (updateFLG)
                         {
@@ -297,14 +314,14 @@ namespace PCAB_Debugger_GUI
             }
             catch (Exception e) { throw; }
         }
-        public List<UInt64> PCAB_GetTempID(PCAB_UnitInterface unit)
+        public TempratureID PCAB_GetTempID(PCAB_UnitInterface unit)
         {
             _task = null;
             while (_state) { Thread.Sleep(59); }
             _state = true;
             try
             {
-                List<UInt64> result = serialInterface.GetTempID(unit);
+                TempratureID result = serialInterface.GetTempID(unit);
                 _state = false;
                 _task = true;
                 return result;
@@ -851,7 +868,7 @@ namespace PCAB_Debugger_GUI
             }
             catch (Exception ex) { throw; }
         }
-        public List<UInt64> GetTempID(PCAB_UnitInterface unit)
+        public TempratureID GetTempID(PCAB_UnitInterface unit)
         {
             try
             {
@@ -871,7 +888,7 @@ namespace PCAB_Debugger_GUI
                             (1u << 8) * (UInt64)ret[i + 6] +
                             (UInt64)ret[i + 7]);
                     }
-                    return result;
+                    return new TempratureID(result);
                 }
                 else { throw new Exception("GetTempID Error"); }
             }
@@ -1013,7 +1030,7 @@ namespace PCAB_Debugger_GUI
         public bool OverWriteROM(PCAB_UnitInterface unit, UInt32 blockNum, byte sectorNum, List<byte> dat)
         {
             if (sectorNum > 0x0F) { return false; }
-            if(dat.Count != 4096) { return false; }
+            if (dat.Count != 4096) { return false; }
             byte block1 = (byte)((blockNum & 0xFF00) >> 8);
             byte block2 = (byte)((blockNum & 0x00FF));
             uint spNum = (1u << 4) * sectorNum;
@@ -1055,8 +1072,10 @@ namespace PCAB_Debugger_GUI
         {
             public AnalogValues Analog { get; private set; }
             public TempratureValue Temprature { get; private set; }
+            public TempratureID ID { get; private set; }
             public SensorValues(List<byte> dat)
             {
+                ID = new TempratureID();
                 if (dat.Count == 10 + 2 * 15)
                 {
                     Analog = new AnalogValues(dat.Skip(0).Take(10).ToList());
@@ -1078,7 +1097,12 @@ namespace PCAB_Debugger_GUI
                     Temprature = new TempratureValue();
                 }
             }
-            public void Clear() { Analog.Clear(); Temprature.Clear(); }
+            public SensorValues(List<UInt64> id) : this(new List<byte>(), id) { }
+            public SensorValues(List<byte> dat, List<UInt64> id) : this(dat)
+            { ID = new TempratureID(id); }
+            public SensorValues(AnalogValues _analog, TempratureValue _tempVal, TempratureID _id)
+            { Analog = _analog; Temprature = _tempVal; ID = _id; }
+            public void Clear() { Analog.Clear(); Temprature.Clear(); ID.Clear(); }
         }
 
         public struct AnalogValues
@@ -1124,6 +1148,23 @@ namespace PCAB_Debugger_GUI
             }
             public void Clear() { Values = null; }
         }
-    }
 
+        public struct TempratureID
+        {
+            public UInt64[] IDs { get; private set; }
+            public TempratureID(List<UInt64> dat)
+            {
+                if (dat.Count == 15)
+                {
+                    IDs = new UInt64[15];
+                    for (int i = 0; i < 15; i++)
+                    {
+                        IDs[i] = dat[i];
+                    }
+                }
+                else { IDs = null; }
+            }
+            public void Clear() { IDs = null; }
+        }
+    }
 }
