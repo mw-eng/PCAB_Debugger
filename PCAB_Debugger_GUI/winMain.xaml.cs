@@ -31,7 +31,7 @@ namespace PCAB_Debugger_GUI
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             this.Title += " Ver," + System.Diagnostics.FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetExecutingAssembly().Location).ProductVersion;
-            BOARD_GRID.IsEnabled = false;
+            //BOARD_GRID.IsEnabled = false;
 #if DEBUG
             //Settings.Default.Reset();
             this.Title += "_DEBUG MODE";
@@ -75,7 +75,7 @@ namespace PCAB_Debugger_GUI
             else
             {
                 string[] sn = SERIAL_NUMBERS_TEXTBOX.Text.Replace(" ", "").Split(',');
-                _io = new clsSerialIO(ports[SERIAL_PORTS_COMBOBOX.SelectedIndex].Name);
+                _io = new clsSerialIO(ports[SERIAL_PORTS_COMBOBOX.SelectedIndex].Name, UInt32.Parse(BAUD_RATE_COMBOBOX.Text.Trim().Replace(",","")));
                 _io.OnError += OnError;
                 try
                 {

@@ -21,18 +21,20 @@
             </Grid.RowDefinitions>
             <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="10*"/>
+                    <ColumnDefinition Width="50*"/>
                     <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="5*"/>
+                    <ColumnDefinition Width="10*"/>
+                    <ColumnDefinition Width="10*"/>
                     <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="10*"/>
                 </Grid.ColumnDefinitions>
-                <Viewbox Grid.Column="0" Margin="5" HorizontalAlignment="Left">
-                    <Label Content="Serial Port"/>
-                </Viewbox>
+                <Viewbox Grid.Column="0" Margin="5" HorizontalAlignment="Left"><Label Content="Serial Port"/></Viewbox>
                 <ComboBox Grid.Column="1" x:Name="SERIAL_PORTS_COMBOBOX" Margin="5" FontSize="16" VerticalContentAlignment="Center" DropDownOpened="SERIAL_PORTS_COMBOBOX_DropDownOpened" DropDownClosed="SERIAL_PORTS_COMBOBOX_DropDownClosed"/>
-                <Button Grid.Column="2" x:Name="CONNECT_BUTTON" Margin="5" Click="CONNECT_BUTTON_Click" IsEnabled="False">
-                    <Viewbox>
-                        <TextBlock x:Name="CONNECT_BUTTON_CONTENT">Connect</TextBlock>
-                    </Viewbox>
+                <Viewbox Grid.Column="3" Margin="5" HorizontalAlignment="Right"><Label Content="Baud Rate"/></Viewbox>
+                <Viewbox Grid.Column="4"><ComboBox x:Name="BAUD_RATE_COMBOBOX" SelectedIndex="9" ItemsSource="{StaticResource BR_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}" Margin="5" FontSize="16" VerticalContentAlignment="Center"/></Viewbox>
+                <Button Grid.Column="6" x:Name="CONNECT_BUTTON" Margin="5" Click="CONNECT_BUTTON_Click" IsEnabled="False">
+                    <Viewbox><TextBlock x:Name="CONNECT_BUTTON_CONTENT">Connect</TextBlock></Viewbox>
                 </Button>
             </Grid>
             <Grid Grid.Row="1" x:Name="SERIAL_CONFIG_GRID">

@@ -19,8 +19,9 @@ ${\color{Aqua} 1. \space Settings \space before \space connection}$<br>
 |No|Item|Description|
 |:--|:--|:--|
 |1-1|Serial Port			|Select the *Serial Port* coneected to PCAB.
-|1-2|Monitor loop inberval	|Specifies the acquisition interval for monitors (temperature, etc.) in milliseconds.|
-|1-3|Serial Numbers			|Enter the serial number of the connect target (separate with "," when connecting multiple units).|
+|1-2|Baud Rate				|Select the *BAUD RATE* for the main communication to the PCAB.
+|1-3|Monitor loop inberval	|Specifies the acquisition interval for monitors (temperature, etc.) in milliseconds.|
+|1-4|Serial Numbers			|Enter the serial number of the connect target (separate with "," when connecting multiple units).|
 
 ${\color{Gold} 2. \space CONTROL \space TAB}$<br>
 |No|Item|Description|

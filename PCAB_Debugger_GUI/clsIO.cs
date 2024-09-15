@@ -13,9 +13,9 @@ namespace PCAB_Debugger_GUI
         public List<cntMonitor> PCAB_Monitors { get; private set; } = new List<cntMonitor>();
         public event EventHandler<PCABEventArgs> OnError;
         public PCAB_TASK serial { get { return _task; } }
-        public clsSerialIO(string SerialPortName)
+        public clsSerialIO(string SerialPortName, UInt32 BaudRate)
         {
-            _task = new PCAB_TASK(SerialPortName);
+            _task = new PCAB_TASK(SerialPortName, BaudRate);
             _task.OnUpdateDAT += OnUpdateDAT;
             _task.OnTaskError += PCAB_TASK_OnError;
         }

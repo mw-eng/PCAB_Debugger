@@ -20,7 +20,7 @@ namespace PCAB_Debugger_GUI
         public event EventHandler<PCABEventArgs> OnTaskError;
         public List<PCAB_UnitInterface> UNITs { get { return serialInterface?.pcabUNITs; } }
 
-        public PCAB_TASK(string PortName) { serialInterface = new PCAB_SerialInterface(PortName); }
+        public PCAB_TASK(string PortName, UInt32 BaudRate) { serialInterface = new PCAB_SerialInterface(PortName, BaudRate); }
         public PCAB_TASK(SerialPort serialPort) { serialInterface = new PCAB_SerialInterface(serialPort); }
 
         private void Close()
@@ -506,7 +506,6 @@ namespace PCAB_Debugger_GUI
 
     public class PCAB_SerialInterface
     {
-        private const int BAUD_RATE = 3686400;
         private const string REVISION_CHECK_STRING = "1.4.";
         private SerialPort _serialPort;
         public bool isOpen { get; private set; } = false;
@@ -515,8 +514,8 @@ namespace PCAB_Debugger_GUI
 
         /// <summary>Constructor</summary>
         /// <param name="PortName">Serial Port Name</param>
-        public PCAB_SerialInterface(string PortName)
-            : this(PortName, BAUD_RATE, 8, Parity.Even, StopBits.One, 4096, 5000, 5000) { }
+        public PCAB_SerialInterface(string PortName, UInt32 BaudRate_Ex)
+            : this(PortName, (int)BaudRate_Ex, 8, Parity.None, StopBits.One, 4096, 5000, 5000) {  }
         public PCAB_SerialInterface(string PortName,
             int baudRate, int dataBits, Parity parity, StopBits stopbit, int readBufferSize, int writeTimeOut, int readTimeOut)
         {
@@ -630,6 +629,7 @@ namespace PCAB_Debugger_GUI
                     _serialPort.Close();
                     return false;
                 }
+
                 foreach (PCAB_UnitInterface unit in pcabUNITs)
                 {
                     _serialPort.WriteLine("#" + unit.SerialNumberASCII + " BCM");
