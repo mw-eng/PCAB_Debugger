@@ -879,13 +879,13 @@ namespace PCAB_Debugger_GUI
                     for (int i = 0; i < ret.Count; i += 8)
                     {
                         result.Add(
-                            (1u << 56) * (UInt64)ret[i] +
-                            (1u << 48) * (UInt64)ret[i + 1] +
-                            (1u << 40) * (UInt64)ret[i + 2] +
-                            (1u << 32) * (UInt64)ret[i + 3] +
-                            (1u << 24) * (UInt64)ret[i + 4] +
-                            (1u << 16) * (UInt64)ret[i + 5] +
-                            (1u << 8) * (UInt64)ret[i + 6] +
+                            (1ul << 56) * (UInt64)ret[i] +
+                            (1ul << 48) * (UInt64)ret[i + 1] +
+                            (1ul << 40) * (UInt64)ret[i + 2] +
+                            (1ul << 32) * (UInt64)ret[i + 3] +
+                            (1ul << 24) * (UInt64)ret[i + 4] +
+                            (1ul << 16) * (UInt64)ret[i + 5] +
+                            (1ul << 8) * (UInt64)ret[i + 6] +
                             (UInt64)ret[i + 7]);
                     }
                     return new TempratureID(result);
