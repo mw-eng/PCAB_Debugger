@@ -122,7 +122,7 @@ void setup()
 
     if(bootMode == 0x01 || bootMode == 0x03) { readSTATE(14u, 0u, 0u); }
     writeNowSTATE();
-    if(bootMode == 0x0A) { saveSTATE(14u, 0u, 0u); }
+    if(bootMode == 0x0A) { uart->setBaudRate(UART_BAUD_RATE); saveSTATE(14u, 0u, 0u); }
 }
 
 int main()

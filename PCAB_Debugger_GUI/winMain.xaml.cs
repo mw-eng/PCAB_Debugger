@@ -31,7 +31,7 @@ namespace PCAB_Debugger_GUI
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             this.Title += " Ver," + System.Diagnostics.FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetExecutingAssembly().Location).ProductVersion;
-            //BOARD_GRID.IsEnabled = false;
+            BOARD_GRID.IsEnabled = false;
 #if DEBUG
             //Settings.Default.Reset();
             this.Title += "_DEBUG MODE";
@@ -140,7 +140,8 @@ namespace PCAB_Debugger_GUI
                     CONNECT_BUTTON_CONTENT.Text = "Disconnect";
 
                     if(_io.PCAB_Boards.Count == 1 && _io.PCAB_Boards[0].SerialNumber == "*" &&
-                        _io.serial.PCAB_GetMode(new PCAB_UnitInterface(_io.PCAB_Boards[0].SerialNumber)) == 0x0F)
+                        (_io.serial.PCAB_GetMode(new PCAB_UnitInterface(_io.PCAB_Boards[0].SerialNumber)) == 0x0F ||
+                        _io.serial.PCAB_GetMode(new PCAB_UnitInterface(_io.PCAB_Boards[0].SerialNumber)) == 0x0A))
                     {
                         if (MessageBox.Show("Do you want to launch a binary editor?", "Binary editor", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                         {
