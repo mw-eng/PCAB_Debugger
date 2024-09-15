@@ -66,3 +66,7 @@ ${\color{LightSkyBlue} 4. \space AUTO \space TAB \space}$ Automatic measurement 
 |4-13|DSAn				|Select loop target.|
 |4-14|Waite Time		|Waite time befor next step.|
 |4-15|START Button		|Automatic loop control execution button.|
+
+
+<br><img src="https://github.com/mw-eng/PCAB_Debugger/blob/master/PCAB_Debugger_GUI/assets/UI3.png?raw=true" width="600px"><br>
+<br>

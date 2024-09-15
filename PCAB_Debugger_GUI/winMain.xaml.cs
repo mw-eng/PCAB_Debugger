@@ -31,6 +31,7 @@ namespace PCAB_Debugger_GUI
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             this.Title += " Ver," + System.Diagnostics.FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetExecutingAssembly().Location).ProductVersion;
+            BOARD_GRID.IsEnabled = false;
 #if DEBUG
             //Settings.Default.Reset();
             this.Title += "_DEBUG MODE";
