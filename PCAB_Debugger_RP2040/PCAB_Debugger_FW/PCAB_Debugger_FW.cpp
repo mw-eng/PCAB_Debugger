@@ -52,11 +52,12 @@ void setup()
     analog = new adc(true, true, true, true , 3.3f);
     spi_dps = new spi(spi0, SPI_CLK, SPI0_CLK_PIN, SPI0_TX_PIN, SPI0_RX_PIN, SPI0_LE_PIN, SPI_BITS, SPI_MODE, SPI_ORDER);
     spi_dsa = new spi(spi1, SPI_CLK, SPI1_CLK_PIN, SPI1_TX_PIN, SPI1_RX_PIN, SPI1_LE_PIN, SPI_BITS, SPI_MODE, SPI_ORDER);
+
     //uart = new pcabCMD(UART_TX_PIN, UART_RX_PIN, UART_BAUD_RATE, RS485_DE_PIN);
 #ifdef UART_PARITY_ENABLE
-    uart = new pcabCMD(uart0, UART_TX_PIN, UART_RX_PIN, UART_BAUD_RATE, UART_DATA_BITS, UART_STOP_BIT, UART_PARITY_EVEN, false, false, "\r\n", RS485_DE_PIN, RS485_DE_ENB_WAITE_TIME, RS485_DE_WAITE_TIME);
+    uart = new pcabCMD(uart0, UART_TX_PIN, UART_RX_PIN, readBR(), UART_DATA_BITS, UART_STOP_BIT, UART_PARITY_EVEN, false, false, "\r\n", RS485_DE_PIN, RS485_DE_ENB_WAITE_TIME, RS485_DE_WAITE_TIME);
 #else
-    uart = new pcabCMD(uart0, UART_TX_PIN, UART_RX_PIN, UART_BAUD_RATE, UART_DATA_BITS, UART_STOP_BIT, UART_PARITY_NONE, false, false, "\r\n", RS485_DE_PIN, RS485_DE_ENB_WAITE_TIME, RS485_DE_WAITE_TIME);
+    uart = new pcabCMD(uart0, UART_TX_PIN, UART_RX_PIN, readBR(), UART_DATA_BITS, UART_STOP_BIT, UART_PARITY_NONE, false, false, "\r\n", RS485_DE_PIN, RS485_DE_ENB_WAITE_TIME, RS485_DE_WAITE_TIME);
 #endif
     //GPIO Setup
     gpio_init(LPW_MOD_PIN);
@@ -1384,6 +1385,16 @@ bool readSTATE(const uint8_t &sectorNum, const uint8_t &pageNum, const uint8_t &
     stbLNA = (ioBF >> 2) & 1;
     lowMODE = (ioBF >> 3) & 1;
     return true;
+}
+
+uint readBR()
+{
+    uint8_t dat[FLASH_PAGE_SIZE];
+    if(!flash::readROM(PICO_FLASH_SIZE_BYTES / FLASH_BLOCK_SIZE - 1, 0x0F, 0x0F, dat)) { return false; }
+    uint16_t ratio;
+    ratio = dat[FLASH_PAGE_SIZE - 18] * 0x10 + dat[FLASH_PAGE_SIZE - 17];
+    if(ratio == 0x00 || ratio == 0xFF) { ratio = UART_BAUD_RATE; }
+    return ratio;
 }
 
 void writeNowSTATE()

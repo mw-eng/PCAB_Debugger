@@ -54,6 +54,7 @@ class pcabCMD : uartSYNC
         GetIDR,
         GetMODE,
         Reboot,
+        SetBR,
         NONE,
         BINARY,
         ASCII,

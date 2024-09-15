@@ -91,6 +91,7 @@ CUI {0/1/false/true} | CUI Control Use<br>{1/true} : CUI MODE<br>{0/false} : GUI
 RST | Restore factory default settings.<br>*PS all 0<br>DSA all 2dB(No,0 = 0dB)<br>STB all 0(RUN MODE)<br>LPM 0(Full Power MODE)*
 *RST | Same as RST.
 Reboot | Reload setup function.
+SetBR {x}| BAUD RATE changes.<br>{x} : Baud rate value.
 BCM | Switch to binary communication mode.
 
 </details>
@@ -143,6 +144,7 @@ Command Code | Description
 0xFA | Restore factory default settings.<br>PS all 0<br>DSA all 2dB(No,0 = 0dB)<br>STB all 0(RUN MODE)<br>LPM 0(Full Power MODE)
 0xFB {Address} | Save state to memory(ROM).<br>However, whether or not it can be saved depends on the boot mode.<br>To save the default settings, set {Address} to 0x00 or leave it unspecified. ({Address} can be specified from 0x00 to 0x03.)<br>If you specify the sector number (4 bits), setting number (4 bits), and setting number (specified in one byte from 0x00 to 0x03), it will be written to the specified setting number. (Default is {0xE0}{0x00})<br>The range that can be specified is the same as for WR.
 0xFC {Address} | Load state from memory(ROM).<br>Argument are the same as 0xFB.
+0xFD {BAUD RATE} | BAUD RATE chages.<br>{BAUD RATE} : Specify the value in 2bytes.
 0xAA {Address} | Read sector data from ROM.<br>{Address(3byte)} : Specify the address to read (sector by sector)
 0xBB {Address} {Binary} | Overwrite sector data to ROM.<br>{Address(3byte)} : Specify the address to write (sector by sector).<br>{Binary(4096byte)} * Specify the sector data to write.
 0xFE | Switch to ASCII communication mode.
