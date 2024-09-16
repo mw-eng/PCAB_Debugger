@@ -458,7 +458,6 @@ namespace PCAB_Debugger_GUI
                         else
                         { MessageBox.Show("Config read error.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
                         break;
-                        break;
                     case ButtonCategory.RESET:
                         if (MessageBox.Show("Restore default settins."
                             , "Warning", MessageBoxButton.OKCancel, MessageBoxImage.Warning) != MessageBoxResult.OK) { return; }

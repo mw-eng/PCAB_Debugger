@@ -121,6 +121,7 @@ namespace PCAB_Debugger_GUI
             {
                 CommandEvent?.Invoke(this, _code);
             }
+
         }
 
         public Command SetATTCommand { get; private set; }

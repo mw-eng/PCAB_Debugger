@@ -19,7 +19,6 @@ namespace PCAB_Debugger_GUI
     public partial class winLoop : Window
     {
         private bool runTASK = true;
-        private string sn;
         private string dirPath;
         private string fileHeader;
         private bool singTRIG = false;

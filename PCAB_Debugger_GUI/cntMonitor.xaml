@@ -70,7 +70,7 @@
                 <RowDefinition Height="5*"/>
             </Grid.RowDefinitions>
             <Viewbox Grid.Row="0" Margin="5" HorizontalAlignment="Left"><Label Content="TEMPERATURE [degreeC]" /></Viewbox>
-            <Grid Grid.Row="1" Margin="5" Background="#FFE389FF" ShowGridLines="True">
+            <Grid Grid.Row="1" Margin="5" Background="#FFE389FF" ShowGridLines="True" x:Name="TEMP_GRID">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="1*"/>
                     <RowDefinition Height="1*"/>

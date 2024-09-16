@@ -274,7 +274,6 @@ namespace PCAB_Debugger_GUI
                 }));
             }
         }
-
         public string GetTempID(uint id)
         {
             switch (id)
@@ -457,6 +456,26 @@ namespace PCAB_Debugger_GUI
                     throw new ArgumentException("A non-existent TEMP number was specified.", "SetTempValue[" + id + "]");
             }
         }
+        public double TEMPviewIDratio
+        {
+            get
+            {
+                if (TEMP01CODE.Visibility == Visibility.Visible)
+                { return ((Grid)TEMP_GRID.Children[0]).RowDefinitions[1].Height.Value; }
+                else { return 0; }
+            }
+            set
+            {
+                Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    foreach(Grid grid in TEMP_GRID.Children)
+                    {
+                        grid.RowDefinitions[1].Height = new GridLength(value, GridUnitType.Star);
+                    }
+                }));
+            }
+        }
+
         #endregion
         public cntMonitor() : this("SN") { }
         public cntMonitor(string SN)
@@ -475,21 +494,7 @@ namespace PCAB_Debugger_GUI
                 SetTempValue(i, "---");
             }
             TEMPviewIDs = false;
-            ((Grid)((Viewbox)(TEMP01VAL.Parent)).Parent).RowDefinitions[1].Height = new GridLength(2, GridUnitType.Star);
-            ((Grid)((Viewbox)(TEMP02VAL.Parent)).Parent).RowDefinitions[1].Height = new GridLength(2, GridUnitType.Star);
-            ((Grid)((Viewbox)(TEMP03VAL.Parent)).Parent).RowDefinitions[1].Height = new GridLength(2, GridUnitType.Star);
-            ((Grid)((Viewbox)(TEMP04VAL.Parent)).Parent).RowDefinitions[1].Height = new GridLength(2, GridUnitType.Star);
-            ((Grid)((Viewbox)(TEMP05VAL.Parent)).Parent).RowDefinitions[1].Height = new GridLength(2, GridUnitType.Star);
-            ((Grid)((Viewbox)(TEMP06VAL.Parent)).Parent).RowDefinitions[1].Height = new GridLength(2, GridUnitType.Star);
-            ((Grid)((Viewbox)(TEMP07VAL.Parent)).Parent).RowDefinitions[1].Height = new GridLength(2, GridUnitType.Star);
-            ((Grid)((Viewbox)(TEMP08VAL.Parent)).Parent).RowDefinitions[1].Height = new GridLength(2, GridUnitType.Star);
-            ((Grid)((Viewbox)(TEMP09VAL.Parent)).Parent).RowDefinitions[1].Height = new GridLength(2, GridUnitType.Star);
-            ((Grid)((Viewbox)(TEMP10VAL.Parent)).Parent).RowDefinitions[1].Height = new GridLength(2, GridUnitType.Star);
-            ((Grid)((Viewbox)(TEMP11VAL.Parent)).Parent).RowDefinitions[1].Height = new GridLength(2, GridUnitType.Star);
-            ((Grid)((Viewbox)(TEMP12VAL.Parent)).Parent).RowDefinitions[1].Height = new GridLength(2, GridUnitType.Star);
-            ((Grid)((Viewbox)(TEMP13VAL.Parent)).Parent).RowDefinitions[1].Height = new GridLength(2, GridUnitType.Star);
-            ((Grid)((Viewbox)(TEMP14VAL.Parent)).Parent).RowDefinitions[1].Height = new GridLength(2, GridUnitType.Star);
-            ((Grid)((Viewbox)(TEMP15VAL.Parent)).Parent).RowDefinitions[1].Height = new GridLength(2, GridUnitType.Star);
+            TEMPviewIDratio = 2;
         }
     }
 }

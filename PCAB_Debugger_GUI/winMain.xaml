@@ -7,7 +7,32 @@
         mc:Ignorable="d"
         Title="PCAB Debugger" Height="720" Width="1280" Loaded="Window_Loaded" Closing="Window_Closing" Icon="/PCAB_Debugger_GUI.ico">
     <Window.Resources>
-        <ResourceDictionary Source="./Style.xaml"/>
+        <Style TargetType="{x:Type TextBox}" x:Key="EDIT_TEXT_LINE">
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="TextWrapping" Value="NoWrap" />
+            <Setter Property="IsReadOnly" Value="False" />
+        </Style>
+        <Style TargetType="{x:Type ComboBox}" x:Key="COMBOBOX_CONTENT_CENTER">
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="14px"/>
+            <Setter Property="FontFamily" Value="UD Digi Kyokasho N-R"/>
+        </Style>
+        <x:Array xmlns:sys="clr-namespace:System;assembly=mscorlib" xml:space="preserve" Type="{x:Type sys:String}" x:Key="BR_List">
+        <sys:String>    9,600</sys:String>
+        <sys:String>   14,400</sys:String>
+        <sys:String>   19,201</sys:String>
+        <sys:String>   38,402</sys:String>
+        <sys:String>   57,603</sys:String>
+        <sys:String>  115,207</sys:String>
+        <sys:String>  230,414</sys:String>
+        <sys:String>  460,829</sys:String>
+        <sys:String>  920,810</sys:String>
+        <sys:String>1,000,000</sys:String>
+        <sys:String>2,000,000</sys:String>
+        <sys:String>4,000,000</sys:String>
+        <sys:String>7,812,500</sys:String>
+    </x:Array>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
