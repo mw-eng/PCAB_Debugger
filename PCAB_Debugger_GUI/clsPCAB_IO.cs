@@ -573,7 +573,7 @@ namespace PCAB_Debugger_GUI
             if (_serialPort?.IsOpen == true) { return false; }
             try { _serialPort.Open(); }
             catch (UnauthorizedAccessException) { MessageBox.Show("Serial port open Error.\nAlready used.\n", "Error", MessageBoxButton.OK, MessageBoxImage.Error); throw; }
-            catch (Exception) { MessageBox.Show("Serial port open Error.\n{e.ToString()}\n", "Error", MessageBoxButton.OK, MessageBoxImage.Error); throw; }
+            catch (Exception e) { MessageBox.Show("Serial port open Error.\n{" + e.ToString() + "}\n", "Error", MessageBoxButton.OK, MessageBoxImage.Error); throw; }
             try
             {
                 DiscardInBuffer();

@@ -77,5 +77,5 @@ ${\color{Magenta} 4. \space Sensor \space display \space Window}$<br>
 |4-4|SNS Pin      |PreAMP Detector voltage value [V].|
 |4-5|SNS Id       |Id current value [A].|
 |4-6|SNS Vd       |Vd voltage value [V].|
-|4-7|Tempurature  |1-wire sensor temperature value [degreeC].|
+|4-7|Tempurature  |1-wire sensor temperature id(HEX) and value [degreeC].|
 

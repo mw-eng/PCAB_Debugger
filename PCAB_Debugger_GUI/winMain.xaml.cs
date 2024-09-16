@@ -122,12 +122,13 @@ namespace PCAB_Debugger_GUI
                     monitor.MONITOR_GRID.Children.Clear();
                     monitor.MONITOR_GRID.RowDefinitions.Clear();
                     monitor.MONITOR_GRID.ColumnDefinitions.Clear();
-                    foreach (cntMonitor mon in _io.PCAB_Monitors)
+                    for (int i = 0; i < _io.PCAB_Monitors.Count; i++)
                     {
                         monitor.MONITOR_GRID.ColumnDefinitions.Add(new ColumnDefinition());
-                        mon.SetValue(Grid.ColumnProperty, 0);
-                        monitor.MONITOR_GRID.Children.Add(mon);
+                        _io.PCAB_Monitors[i].SetValue(Grid.ColumnProperty, i);
+                        monitor.MONITOR_GRID.Children.Add(_io.PCAB_Monitors[i]);
                     }
+                    if(_io.PCAB_Monitors.Count > 1) { monitor.MONITOR_GRID.ShowGridLines = true; }
                     monitor.Show();
                     BOARD_GRID.Children.Clear();
                     if (_io.PCAB_Boards.Count == 1)
