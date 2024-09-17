@@ -159,12 +159,8 @@ namespace PCAB_Debugger_GUI
             }
             else
             {
-                while (datBF != null)
-                {
-                    BLOCK_COMBOBOX.Items.Add(block.ToString("X4"));
-                    block++;
-                    datBF = _serial.PCAB_ReadROM(serialNum, block, 0);
-                }
+                MessageBox.Show("Failed to load ROM", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                this.Close();
             }
             SECTOR_COMBOBOX.Items.Clear();
             for(uint i = 0; i < 0x10u; i++) { SECTOR_COMBOBOX.Items.Add((i * 0x10u).ToString("X2")); }
