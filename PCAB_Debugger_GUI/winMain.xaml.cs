@@ -165,6 +165,7 @@ namespace PCAB_Debugger_GUI
                     }
                     SERIAL_PORTS_COMBOBOX.IsEnabled = false;
                     SERIAL_CONFIG_GRID.IsEnabled = false;
+                    BAUD_RATE_COMBOBOX.IsEnabled = false;
                     BOARD_GRID.IsEnabled = true;
                     CONNECT_BUTTON_CONTENT.Text = "Disconnect";
 
@@ -528,6 +529,7 @@ namespace PCAB_Debugger_GUI
                 BOARD_GRID.IsEnabled = false;
                 SERIAL_PORTS_COMBOBOX.IsEnabled = true;
                 SERIAL_CONFIG_GRID.IsEnabled = true;
+                BAUD_RATE_COMBOBOX.IsEnabled = true;
                 CONNECT_BUTTON_CONTENT.Text = "Connect";
             }));
         }

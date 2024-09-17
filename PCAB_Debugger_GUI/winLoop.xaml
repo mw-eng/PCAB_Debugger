@@ -28,10 +28,10 @@
                 <Label Content="DSA"/>
             </Viewbox>
             <Viewbox Grid.Row="1" Grid.Column="0">
-                <Label Content="LOCK" x:Name="dps_state"/>
+                <Label FontFamily="FontFamily"  Content="LOCK" x:Name="dps_state"/>
             </Viewbox>
             <Viewbox Grid.Row="1" Grid.Column="1">
-                <Label Content="LOCK" x:Name="dsa_state"/>
+                <Label FontFamily="FontFamily" Content="LOCK" x:Name="dsa_state"/>
             </Viewbox>
         </Grid>
         <ProgressBar Grid.Row="1" Margin="5" x:Name="Progress" ValueChanged="Progress_ValueChanged"/>

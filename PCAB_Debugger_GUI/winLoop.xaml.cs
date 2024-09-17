@@ -447,9 +447,9 @@ namespace PCAB_Debugger_GUI
             Dispatcher.BeginInvoke(new Action(() =>
             {
                 if (loops[cnt].dps < 0) { dps_state.Content = "LOCK"; }
-                else { dps_state.Content = (5.625 * loops[cnt].dps).ToString() + "deg (" + loops[cnt].dps.ToString() + ")"; }
+                else { dps_state.Content = (5.625 * loops[cnt].dps).ToString("0.000").PadLeft(7, ' ') + "deg (" + loops[cnt].dps.ToString("00") + ")"; }
                 if (loops[cnt].dsa < 0) { dsa_state.Content = "LOCK"; }
-                else { dsa_state.Content = (0.25 * loops[cnt].dsa).ToString() + "dB (" + loops[cnt].dsa.ToString() + ")"; }
+                else { dsa_state.Content = (0.25 * loops[cnt].dsa).ToString("0.00").PadLeft(6, ' ') + " dB (" + loops[cnt].dsa.ToString("00") + ")"; }
                 Progress.Value = (int)((double)cnt / (loops.Count - 1) * 100.0);
             }));
         }
