@@ -48,7 +48,7 @@ namespace PCAB_Debugger_GUI
             {
                 if(_task == true)
                 {
-                    while (_state) { Thread.Sleep(12); }
+                    while (_state) { Thread.Sleep(8); }
                     _state = true;
                     try
                     {
@@ -67,7 +67,7 @@ namespace PCAB_Debugger_GUI
                     Thread.Sleep((int)waiteTime);
                     if (_task == true)
                     {
-                        while (_state) { Thread.Sleep(53); }
+                        while (_state) { Thread.Sleep(2); }
                         _state = true;
                         bool updateFLG = false;
                         foreach (PCAB_UnitInterface unit in serialInterface.pcabUNITs)
@@ -107,7 +107,7 @@ namespace PCAB_Debugger_GUI
         public bool PCAB_PRESET(PCAB_UnitInterface unit)
         {
             _task = null;
-            while (_state) { Thread.Sleep(59); }
+            while (_state) { Thread.Sleep(5); }
             _state = true;
             try
             {
@@ -121,7 +121,7 @@ namespace PCAB_Debugger_GUI
         public bool PCAB_WriteDSAin(PCAB_UnitInterface unit, uint config)
         {
             _task = null;
-            while (_state) { Thread.Sleep(59); }
+            while (_state) { Thread.Sleep(5); }
             _state = true;
             try
             {
@@ -135,7 +135,7 @@ namespace PCAB_Debugger_GUI
         public bool PCAB_WriteDSA(PCAB_UnitInterface unit, List<uint> configs)
         {
             _task = null;
-            while (_state) { Thread.Sleep(59); }
+            while (_state) { Thread.Sleep(5); }
             _state = true;
             try
             {
@@ -149,7 +149,7 @@ namespace PCAB_Debugger_GUI
         public bool PCAB_WriteDPS(PCAB_UnitInterface unit, List<uint> configs)
         {
             _task = null;
-            while (_state) { Thread.Sleep(59); }
+            while (_state) { Thread.Sleep(5); }
             _state = true;
             try
             {
@@ -163,7 +163,7 @@ namespace PCAB_Debugger_GUI
         public bool PCAB_SetSTB_AMP(PCAB_UnitInterface unit, bool mode)
         {
             _task = null;
-            while (_state) { Thread.Sleep(59); }
+            while (_state) { Thread.Sleep(5); }
             _state = true;
             try
             {
@@ -177,7 +177,7 @@ namespace PCAB_Debugger_GUI
         public bool PCAB_SetSTB_DRA(PCAB_UnitInterface unit, bool mode)
         {
             _task = null;
-            while (_state) { Thread.Sleep(59); }
+            while (_state) { Thread.Sleep(5); }
             _state = true;
             try
             {
@@ -191,7 +191,7 @@ namespace PCAB_Debugger_GUI
         public bool PCAB_SetSTB_LNA(PCAB_UnitInterface unit, bool mode)
         {
             _task = null;
-            while (_state) { Thread.Sleep(59); }
+            while (_state) { Thread.Sleep(5); }
             _state = true;
             try
             {
@@ -205,7 +205,7 @@ namespace PCAB_Debugger_GUI
         public bool PCAB_SetLowPowerMode(PCAB_UnitInterface unit, bool mode)
         {
             _task = null;
-            while (_state) { Thread.Sleep(59); }
+            while (_state) { Thread.Sleep(5); }
             _state = true;
             try
             {
@@ -219,7 +219,7 @@ namespace PCAB_Debugger_GUI
         public int PCAB_GetDSAin(PCAB_UnitInterface unit)
         {
             _task = null;
-            while (_state) { Thread.Sleep(59); }
+            while (_state) { Thread.Sleep(5); }
             _state = true;
             try
             {
@@ -233,7 +233,7 @@ namespace PCAB_Debugger_GUI
         public List<uint> PCAB_GetDSA(PCAB_UnitInterface unit)
         {
             _task = null;
-            while (_state) { Thread.Sleep(59); }
+            while (_state) { Thread.Sleep(5); }
             _state = true;
             try
             {
@@ -247,7 +247,7 @@ namespace PCAB_Debugger_GUI
         public List<uint> PCAB_GetDPS(PCAB_UnitInterface unit)
         {
             _task = null;
-            while (_state) { Thread.Sleep(59); }
+            while (_state) { Thread.Sleep(5); }
             _state = true;
             try
             {
@@ -261,7 +261,7 @@ namespace PCAB_Debugger_GUI
         public bool? PCAB_GetSTB_AMP(PCAB_UnitInterface unit)
         {
             _task = null;
-            while (_state) { Thread.Sleep(59); }
+            while (_state) { Thread.Sleep(5); }
             _state = true;
             try
             {
@@ -275,7 +275,7 @@ namespace PCAB_Debugger_GUI
         public bool? PCAB_GetSTB_DRA(PCAB_UnitInterface unit)
         {
             _task = null;
-            while (_state) { Thread.Sleep(59); }
+            while (_state) { Thread.Sleep(5); }
             _state = true;
             try
             {
@@ -289,7 +289,7 @@ namespace PCAB_Debugger_GUI
         public bool? PCAB_GetSTB_LNA(PCAB_UnitInterface unit)
         {
             _task = null;
-            while (_state) { Thread.Sleep(59); }
+            while (_state) { Thread.Sleep(5); }
             _state = true;
             try
             {
@@ -303,7 +303,7 @@ namespace PCAB_Debugger_GUI
         public bool? PCAB_GetLowPowerMode(PCAB_UnitInterface unit)
         {
             _task = null;
-            while (_state) { Thread.Sleep(59); }
+            while (_state) { Thread.Sleep(5); }
             _state = true;
             try
             {
@@ -317,7 +317,7 @@ namespace PCAB_Debugger_GUI
         public TempratureID PCAB_GetTempID(PCAB_UnitInterface unit)
         {
             _task = null;
-            while (_state) { Thread.Sleep(59); }
+            while (_state) { Thread.Sleep(5); }
             _state = true;
             try
             {
@@ -331,7 +331,7 @@ namespace PCAB_Debugger_GUI
         public TempratureValue PCAB_GetTempValue(PCAB_UnitInterface unit)
         {
             _task = null;
-            while (_state) { Thread.Sleep(59); }
+            while (_state) { Thread.Sleep(5); }
             _state = true;
             try
             {
@@ -345,7 +345,7 @@ namespace PCAB_Debugger_GUI
         public byte PCAB_GetMode(PCAB_UnitInterface unit)
         {
             _task = null;
-            while (_state) { Thread.Sleep(59); }
+            while (_state) { Thread.Sleep(5); }
             _state = true;
             try
             {
@@ -359,7 +359,7 @@ namespace PCAB_Debugger_GUI
         public AnalogValues PCAB_GetAnalogValue(PCAB_UnitInterface unit)
         {
             _task = null;
-            while (_state) { Thread.Sleep(59); }
+            while (_state) { Thread.Sleep(5); }
             _state = true;
             try
             {
@@ -373,7 +373,7 @@ namespace PCAB_Debugger_GUI
         public SensorValues PCAB_GetSensorValue(PCAB_UnitInterface unit)
         {
             _task = null;
-            while (_state) { Thread.Sleep(59); }
+            while (_state) { Thread.Sleep(5); }
             _state = true;
             try
             {
@@ -387,7 +387,7 @@ namespace PCAB_Debugger_GUI
         public string PCAB_GetIDN(PCAB_UnitInterface unit)
         {
             _task = null;
-            while (_state) { Thread.Sleep(59); }
+            while (_state) { Thread.Sleep(5); }
             _state = true;
             try
             {
@@ -405,7 +405,7 @@ namespace PCAB_Debugger_GUI
         public bool? PCAB_SaveState(PCAB_UnitInterface unit, byte sectorNum, byte pageNum, uint confNum)
         {
             _task = null;
-            while (_state) { Thread.Sleep(59); }
+            while (_state) { Thread.Sleep(5); }
             _state = true;
             try
             {
@@ -419,7 +419,7 @@ namespace PCAB_Debugger_GUI
         public bool? PCAB_SaveState(PCAB_UnitInterface unit, byte sectorPageNum, uint confNum)
         {
             _task = null;
-            while (_state) { Thread.Sleep(59); }
+            while (_state) { Thread.Sleep(5); }
             _state = true;
             try
             {
@@ -435,7 +435,7 @@ namespace PCAB_Debugger_GUI
         public bool? PCAB_LoadState(PCAB_UnitInterface unit, byte sectorNum, byte pageNum, uint confNum)
         {
             _task = null;
-            while (_state) { Thread.Sleep(59); }
+            while (_state) { Thread.Sleep(5); }
             _state = true;
             try
             {
@@ -449,7 +449,7 @@ namespace PCAB_Debugger_GUI
         public bool? PCAB_LoadState(PCAB_UnitInterface unit, byte sectorPageNum, uint confNum)
         {
             _task = null;
-            while (_state) { Thread.Sleep(59); }
+            while (_state) { Thread.Sleep(5); }
             _state = true;
             try
             {
@@ -464,7 +464,7 @@ namespace PCAB_Debugger_GUI
         public List<byte> PCAB_ReadROM(PCAB_UnitInterface unit, UInt32 blockNum, byte sectorNum)
         {
             _task = null;
-            while (_state) { Thread.Sleep(59); }
+            while (_state) { Thread.Sleep(5); }
             _state = true;
             try
             {
@@ -478,7 +478,7 @@ namespace PCAB_Debugger_GUI
         public bool? PCAB_OverWriteROM(PCAB_UnitInterface unit, UInt32 blockNum, byte sectorNum, List<byte> dat)
         {
             _task = null;
-            while (_state) { Thread.Sleep(59); }
+            while (_state) { Thread.Sleep(5); }
             _state = true;
             try
             {
@@ -507,6 +507,8 @@ namespace PCAB_Debugger_GUI
     public class PCAB_SerialInterface
     {
         private const string REVISION_CHECK_STRING = "1.4.";
+        private const int SLEEP_TIME_LOOP = 5;
+        private const int SLEEP_TIME = 10;
         private SerialPort _serialPort;
         public bool isOpen { get; private set; } = false;
         public List<PCAB_UnitInterface> pcabUNITs { get; private set; } = new List<PCAB_UnitInterface>();
@@ -550,7 +552,7 @@ namespace PCAB_Debugger_GUI
                             WriteSLIP(unit.GetCommandCode(new List<byte> { 0xFE }));
                         }
                         catch { }
-                        Thread.Sleep(500);
+                        Thread.Sleep(SLEEP_TIME_LOOP);
                         DiscardInBuffer();
                     }
                     _serialPort.Close();
@@ -588,7 +590,7 @@ namespace PCAB_Debugger_GUI
                     WriteSLIP(bf);
                     WriteSLIP(bf);
                     WriteSLIP(bf);
-                    Thread.Sleep(50);
+                    Thread.Sleep(SLEEP_TIME_LOOP);
                     _serialPort.WriteLine("");
                     _serialPort.WriteLine("");
                     _serialPort.WriteLine("");
@@ -597,7 +599,7 @@ namespace PCAB_Debugger_GUI
                     DiscardInBuffer();
                 }
                 _serialPort.DiscardOutBuffer();
-                Thread.Sleep(100);
+                Thread.Sleep(SLEEP_TIME);
                 DiscardInBuffer();
                 int rTObf = _serialPort.ReadTimeout;
                 _serialPort.ReadTimeout = 100;
@@ -619,7 +621,7 @@ namespace PCAB_Debugger_GUI
                     catch
                     {
                         _serialPort.WriteLine("#" + s + " CUI 1");
-                        Thread.Sleep(100);
+                        Thread.Sleep(SLEEP_TIME_LOOP);
                         DiscardInBuffer();
                     }
                 }
@@ -635,7 +637,7 @@ namespace PCAB_Debugger_GUI
                     _serialPort.WriteLine("#" + unit.SerialNumberASCII + " BCM");
                 }
                 _serialPort.Write(new byte[] { 0xC0 }, 0, 1);
-                Thread.Sleep(500);
+                Thread.Sleep(SLEEP_TIME);
                 DiscardInBuffer();
             }
             catch (Exception)

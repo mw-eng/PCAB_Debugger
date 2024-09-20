@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using static PCAB_Debugger_GUI.CommandControl;
+using static PCAB_Debugger_GUI.cntConfigSettings;
 
 namespace PCAB_Debugger_GUI
 {
@@ -27,13 +28,13 @@ namespace PCAB_Debugger_GUI
         public string SerialNumber { get; private set; }
         public cntConfigSettings CONFIG_SETTINGS { get; private set; }
 
-        public cntConfig() : this("SN") { }
-        public cntConfig(string SN)
+        public cntConfig() : this("SN", 0) { }
+        public cntConfig(string _serialNumber, ROTATE _rotate)
         {
             InitializeComponent();
-            SerialNumber = SN;
+            SerialNumber = _serialNumber;
             CS_GRID.Children.Clear();
-            CONFIG_SETTINGS = new cntConfigSettings(SN);
+            CONFIG_SETTINGS = new cntConfigSettings(_serialNumber, _rotate);
             CS_GRID.Children.Add(CONFIG_SETTINGS);
             CommandControl cmd = new CommandControl();
             cmd.CommandEvent += CommandEvent;

@@ -6,7 +6,6 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using static MWComLibCS.ExternalControl.FTD2xx;
 using static PCAB_Debugger_GUI.cntConfig;
 using static PCAB_Debugger_GUI.cntConfigSettings;
 using static PCAB_Debugger_GUI.PCAB_SerialInterface;
@@ -298,7 +297,7 @@ namespace PCAB_Debugger_GUI
                     {
                         _io.Close();
                     }
-                    SERIAL_PORTS_COMBOBOX_RELOAD(sender, e);
+                    SERIAL_PORTS_COMBOBOX_RELOAD(null, null);
                     SERIAL_PORTS_COMBOBOX_DropDownClosed(null, null);
                     return;
                 }
@@ -388,6 +387,7 @@ namespace PCAB_Debugger_GUI
                     MessageBox.Show("No valid PCAB found.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
+            return;
         }
 
         #endregion
@@ -499,7 +499,7 @@ namespace PCAB_Debugger_GUI
             {
                 foreach (PCAB_UnitInterface unit in io.serial.UNITs)
                 {
-                    if (unit.SerialNumberASCII == strSN) { _io = io; break; flg = true; }
+                    if (unit.SerialNumberASCII == strSN) { _io = io; flg = true; break; }
                 }
                 if (flg) { break; }
             }
@@ -525,7 +525,7 @@ namespace PCAB_Debugger_GUI
             {
                 foreach (PCAB_UnitInterface unit in io.serial.UNITs)
                 {
-                    if (unit.SerialNumberASCII == strSN) { _io = io; break; flg = true; }
+                    if (unit.SerialNumberASCII == strSN) { _io = io; flg = true; break; }
                 }
                 if (flg) { break; }
             }
@@ -690,7 +690,7 @@ namespace PCAB_Debugger_GUI
             {
                 foreach (PCAB_UnitInterface unit in io.serial.UNITs)
                 {
-                    if (unit.SerialNumberASCII == strSN) { _io = io; break; flg = true; }
+                    if (unit.SerialNumberASCII == strSN) { _io = io; flg = true; break; }
                 }
                 if (flg) { break; }
             }

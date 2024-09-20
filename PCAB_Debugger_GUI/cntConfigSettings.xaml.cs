@@ -17,6 +17,14 @@ namespace PCAB_Debugger_GUI
             StandbyLNA,
             NULL
         }
+        public enum ROTATE
+        {
+            ZERO,
+            RIGHT_TURN,
+            LEFT_TURN,
+            HALF_TURN
+
+        }
 
         public delegate void CheckboxClickEventHandler(object sender, RoutedEventArgs e, CheckBoxCategory category, bool? isChecked);
         public event CheckboxClickEventHandler CheckboxClickEvent;
@@ -299,12 +307,161 @@ namespace PCAB_Debugger_GUI
             }
         }
         public string SerialNumber { get; private set; }
+        private ROTATE angle;
+        public ROTATE TURN
+        {
+            get { return angle; }
+            set
+            {
+                angle = value;
+                switch (angle)
+                {
+                    case ROTATE.RIGHT_TURN:
+                        P01_GRID.SetValue(Grid.RowProperty, 3);
+                        P02_GRID.SetValue(Grid.RowProperty, 3);
+                        P03_GRID.SetValue(Grid.RowProperty, 3);
+                        P04_GRID.SetValue(Grid.RowProperty, 3);
+                        P05_GRID.SetValue(Grid.RowProperty, 2);
+                        P06_GRID.SetValue(Grid.RowProperty, 2);
+                        P07_GRID.SetValue(Grid.RowProperty, 2);
+                        P08_GRID.SetValue(Grid.RowProperty, 2);
+                        P09_GRID.SetValue(Grid.RowProperty, 1);
+                        P10_GRID.SetValue(Grid.RowProperty, 1);
+                        P11_GRID.SetValue(Grid.RowProperty, 1);
+                        P12_GRID.SetValue(Grid.RowProperty, 1);
+                        P13_GRID.SetValue(Grid.RowProperty, 0);
+                        P14_GRID.SetValue(Grid.RowProperty, 0);
+                        P15_GRID.SetValue(Grid.RowProperty, 0);
+                        P16_GRID.SetValue(Grid.RowProperty, 0);
+                        P01_GRID.SetValue(Grid.ColumnProperty, 0);
+                        P02_GRID.SetValue(Grid.ColumnProperty, 1);
+                        P03_GRID.SetValue(Grid.ColumnProperty, 2);
+                        P04_GRID.SetValue(Grid.ColumnProperty, 3);
+                        P05_GRID.SetValue(Grid.ColumnProperty, 3);
+                        P06_GRID.SetValue(Grid.ColumnProperty, 2);
+                        P07_GRID.SetValue(Grid.ColumnProperty, 1);
+                        P08_GRID.SetValue(Grid.ColumnProperty, 0);
+                        P09_GRID.SetValue(Grid.ColumnProperty, 0);
+                        P10_GRID.SetValue(Grid.ColumnProperty, 1);
+                        P11_GRID.SetValue(Grid.ColumnProperty, 2);
+                        P12_GRID.SetValue(Grid.ColumnProperty, 3);
+                        P13_GRID.SetValue(Grid.ColumnProperty, 3);
+                        P14_GRID.SetValue(Grid.ColumnProperty, 2);
+                        P15_GRID.SetValue(Grid.ColumnProperty, 1);
+                        P16_GRID.SetValue(Grid.ColumnProperty, 0);
+                        break;
+                    case ROTATE.LEFT_TURN:
+                        P01_GRID.SetValue(Grid.RowProperty, 0);
+                        P02_GRID.SetValue(Grid.RowProperty, 0);
+                        P03_GRID.SetValue(Grid.RowProperty, 0);
+                        P04_GRID.SetValue(Grid.RowProperty, 0);
+                        P05_GRID.SetValue(Grid.RowProperty, 1);
+                        P06_GRID.SetValue(Grid.RowProperty, 1);
+                        P07_GRID.SetValue(Grid.RowProperty, 1);
+                        P08_GRID.SetValue(Grid.RowProperty, 1);
+                        P09_GRID.SetValue(Grid.RowProperty, 2);
+                        P10_GRID.SetValue(Grid.RowProperty, 2);
+                        P11_GRID.SetValue(Grid.RowProperty, 2);
+                        P12_GRID.SetValue(Grid.RowProperty, 2);
+                        P13_GRID.SetValue(Grid.RowProperty, 3);
+                        P14_GRID.SetValue(Grid.RowProperty, 3);
+                        P15_GRID.SetValue(Grid.RowProperty, 3);
+                        P16_GRID.SetValue(Grid.RowProperty, 3);
+                        P01_GRID.SetValue(Grid.ColumnProperty, 3);
+                        P02_GRID.SetValue(Grid.ColumnProperty, 2);
+                        P03_GRID.SetValue(Grid.ColumnProperty, 1);
+                        P04_GRID.SetValue(Grid.ColumnProperty, 0);
+                        P05_GRID.SetValue(Grid.ColumnProperty, 0);
+                        P06_GRID.SetValue(Grid.ColumnProperty, 1);
+                        P07_GRID.SetValue(Grid.ColumnProperty, 2);
+                        P08_GRID.SetValue(Grid.ColumnProperty, 3);
+                        P09_GRID.SetValue(Grid.ColumnProperty, 3);
+                        P10_GRID.SetValue(Grid.ColumnProperty, 2);
+                        P11_GRID.SetValue(Grid.ColumnProperty, 1);
+                        P12_GRID.SetValue(Grid.ColumnProperty, 0);
+                        P13_GRID.SetValue(Grid.ColumnProperty, 0);
+                        P14_GRID.SetValue(Grid.ColumnProperty, 1);
+                        P15_GRID.SetValue(Grid.ColumnProperty, 2);
+                        P16_GRID.SetValue(Grid.ColumnProperty, 3);
+                        break;
+                    case ROTATE.HALF_TURN:
+                        P01_GRID.SetValue(Grid.RowProperty, 0);
+                        P02_GRID.SetValue(Grid.RowProperty, 1);
+                        P03_GRID.SetValue(Grid.RowProperty, 2);
+                        P04_GRID.SetValue(Grid.RowProperty, 3);
+                        P05_GRID.SetValue(Grid.RowProperty, 3);
+                        P06_GRID.SetValue(Grid.RowProperty, 2);
+                        P07_GRID.SetValue(Grid.RowProperty, 1);
+                        P08_GRID.SetValue(Grid.RowProperty, 0);
+                        P09_GRID.SetValue(Grid.RowProperty, 0);
+                        P10_GRID.SetValue(Grid.RowProperty, 1);
+                        P11_GRID.SetValue(Grid.RowProperty, 2);
+                        P12_GRID.SetValue(Grid.RowProperty, 3);
+                        P13_GRID.SetValue(Grid.RowProperty, 3);
+                        P14_GRID.SetValue(Grid.RowProperty, 2);
+                        P15_GRID.SetValue(Grid.RowProperty, 1);
+                        P16_GRID.SetValue(Grid.RowProperty, 0);
+                        P01_GRID.SetValue(Grid.ColumnProperty, 0);
+                        P02_GRID.SetValue(Grid.ColumnProperty, 0);
+                        P03_GRID.SetValue(Grid.ColumnProperty, 0);
+                        P04_GRID.SetValue(Grid.ColumnProperty, 0);
+                        P05_GRID.SetValue(Grid.ColumnProperty, 1);
+                        P06_GRID.SetValue(Grid.ColumnProperty, 1);
+                        P07_GRID.SetValue(Grid.ColumnProperty, 1);
+                        P08_GRID.SetValue(Grid.ColumnProperty, 1);
+                        P09_GRID.SetValue(Grid.ColumnProperty, 2);
+                        P10_GRID.SetValue(Grid.ColumnProperty, 2);
+                        P11_GRID.SetValue(Grid.ColumnProperty, 2);
+                        P12_GRID.SetValue(Grid.ColumnProperty, 2);
+                        P13_GRID.SetValue(Grid.ColumnProperty, 3);
+                        P14_GRID.SetValue(Grid.ColumnProperty, 3);
+                        P15_GRID.SetValue(Grid.ColumnProperty, 3);
+                        P16_GRID.SetValue(Grid.ColumnProperty, 3);
+                        break;
+                    default:
+                        P01_GRID.SetValue(Grid.RowProperty, 3);
+                        P02_GRID.SetValue(Grid.RowProperty, 2);
+                        P03_GRID.SetValue(Grid.RowProperty, 1);
+                        P04_GRID.SetValue(Grid.RowProperty, 0);
+                        P05_GRID.SetValue(Grid.RowProperty, 0);
+                        P06_GRID.SetValue(Grid.RowProperty, 1);
+                        P07_GRID.SetValue(Grid.RowProperty, 2);
+                        P08_GRID.SetValue(Grid.RowProperty, 3);
+                        P09_GRID.SetValue(Grid.RowProperty, 3);
+                        P10_GRID.SetValue(Grid.RowProperty, 2);
+                        P11_GRID.SetValue(Grid.RowProperty, 1);
+                        P12_GRID.SetValue(Grid.RowProperty, 0);
+                        P13_GRID.SetValue(Grid.RowProperty, 0);
+                        P14_GRID.SetValue(Grid.RowProperty, 1);
+                        P15_GRID.SetValue(Grid.RowProperty, 2);
+                        P16_GRID.SetValue(Grid.RowProperty, 3);
+                        P01_GRID.SetValue(Grid.ColumnProperty, 3);
+                        P02_GRID.SetValue(Grid.ColumnProperty, 3);
+                        P03_GRID.SetValue(Grid.ColumnProperty, 3);
+                        P04_GRID.SetValue(Grid.ColumnProperty, 3);
+                        P05_GRID.SetValue(Grid.ColumnProperty, 2);
+                        P06_GRID.SetValue(Grid.ColumnProperty, 2);
+                        P07_GRID.SetValue(Grid.ColumnProperty, 2);
+                        P08_GRID.SetValue(Grid.ColumnProperty, 2);
+                        P09_GRID.SetValue(Grid.ColumnProperty, 1);
+                        P10_GRID.SetValue(Grid.ColumnProperty, 1);
+                        P11_GRID.SetValue(Grid.ColumnProperty, 1);
+                        P12_GRID.SetValue(Grid.ColumnProperty, 1);
+                        P13_GRID.SetValue(Grid.ColumnProperty, 0);
+                        P14_GRID.SetValue(Grid.ColumnProperty, 0);
+                        P15_GRID.SetValue(Grid.ColumnProperty, 0);
+                        P16_GRID.SetValue(Grid.ColumnProperty, 0);
+                        break;
+                }
+            }
+        }
 
-        public cntConfigSettings() : this("SN") { }
-        public cntConfigSettings(string SN)
+        public cntConfigSettings() : this("SN", ROTATE.ZERO) { }
+        public cntConfigSettings(string serialNumber, ROTATE _turn)
         {
             InitializeComponent();
-            SerialNumber = SN;
+            SerialNumber = serialNumber;
+            TURN = _turn;
         }
 
         public void CHECKBOX_Checked(object sender, RoutedEventArgs e)

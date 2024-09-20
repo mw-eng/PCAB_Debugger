@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Windows;
 using static PCAB_Debugger_GUI.PCAB_TASK;
+using static PCAB_Debugger_GUI.cntConfigSettings;
 
 namespace PCAB_Debugger_GUI
 {
@@ -28,7 +29,8 @@ namespace PCAB_Debugger_GUI
             {
                 foreach (PCAB_SerialInterface.PCAB_UnitInterface unit in _task.UNITs)
                 {
-                    PCAB_Boards.Add(new cntBOARD(unit.SerialNumberASCII));
+                    //PCAB_Boards.Add(new cntBOARD(unit.SerialNumberASCII, ROTATE.ZERO));
+                    PCAB_Boards.Add(new cntBOARD(unit.SerialNumberASCII, ROTATE.ZERO));
                     PCAB_Monitors.Add(new cntMonitor(unit.SerialNumberASCII));
                 }
                 for (int cnt = 0; cnt < _task.UNITs.Count; cnt++)

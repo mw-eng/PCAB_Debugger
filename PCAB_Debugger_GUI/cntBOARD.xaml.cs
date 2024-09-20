@@ -1,4 +1,5 @@
 ﻿using System.Windows.Controls;
+using static PCAB_Debugger_GUI.cntConfigSettings;
 
 namespace PCAB_Debugger_GUI
 {
@@ -10,14 +11,14 @@ namespace PCAB_Debugger_GUI
         public string SerialNumber { get;private set; }
         public cntConfig CONFIG { get; private set; }
         public cntAUTO AUTO { get; private set; }
-        public cntBOARD():this("SN") { }
-        public cntBOARD(string SN)
+        public cntBOARD():this("SN", 0) { }
+        public cntBOARD(string _serialNumber, ROTATE _rotate)
         {
             InitializeComponent();
             TAB_CONTROL.Items.Clear();
-            CONFIG = new cntConfig(SN);
-            AUTO = new cntAUTO(SN);
-            SerialNumber = SN;
+            CONFIG = new cntConfig(_serialNumber, _rotate);
+            AUTO = new cntAUTO(_serialNumber);
+            SerialNumber = _serialNumber;
             TabItem control = new TabItem();
             TabItem auto = new TabItem();
             control.Header = "CONTROL";

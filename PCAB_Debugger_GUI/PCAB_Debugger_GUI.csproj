@@ -57,6 +57,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="clsAsyncButton.cs" />
     <Compile Include="clsIO.cs" />
     <Compile Include="clsPCAB_IO.cs" />
     <Compile Include="clsSLIP.cs" />
@@ -66,7 +67,6 @@
     <Compile Include="cntBOARD.xaml.cs">
       <DependentUpon>cntBOARD.xaml</DependentUpon>
     </Compile>
-    <Compile Include="CommandBase.cs" />
     <Compile Include="winMonitor.xaml.cs">
       <DependentUpon>winMonitor.xaml</DependentUpon>
     </Compile>
