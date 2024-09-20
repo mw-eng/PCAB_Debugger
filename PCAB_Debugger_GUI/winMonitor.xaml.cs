@@ -1,5 +1,6 @@
 ﻿using PCAB_Debugger_GUI.Properties;
 using System;
+using System.Runtime;
 using System.Runtime.InteropServices;
 using System.Windows;
 
@@ -21,15 +22,15 @@ namespace PCAB_Debugger_GUI
         public winMonitor()
         {
             InitializeComponent();
-            if (Settings.Default.winMonitorTop >= 0 &&
+            if (Settings.Default.winMonitorTop >= SystemParameters.VirtualScreenTop &&
                 (Settings.Default.winMonitorTop + Settings.Default.winMonitorHeight) <
-                SystemParameters.VirtualScreenHeight)
+                SystemParameters.VirtualScreenTop + SystemParameters.VirtualScreenHeight)
             {
                 this.Top = Settings.Default.winMonitorTop;
             }
-            if (Settings.Default.winMonitorLeft >= 0 &&
+            if (Settings.Default.winMonitorLeft >= SystemParameters.VirtualScreenLeft &&
                 (Settings.Default.winMonitorLeft + Settings.Default.winMonitorWidth) <
-                SystemParameters.VirtualScreenHeight)
+                SystemParameters.VirtualScreenLeft + SystemParameters.VirtualScreenHeight)
             {
                 this.Left = Settings.Default.winMonitorLeft;
             }
@@ -43,6 +44,8 @@ namespace PCAB_Debugger_GUI
             {
                 this.Height = Settings.Default.winMonitorHeight;
             }
+            if (Settings.Default.winMonitorMaximized)
+            { Loaded += (o, e) => this.WindowState = WindowState.Maximized; }
         }
 
         private void Window_SourceInitialized(object sender, EventArgs e)
@@ -63,6 +66,8 @@ namespace PCAB_Debugger_GUI
             Settings.Default.winMonitorLeft = this.Left;
             Settings.Default.winMonitorHeight = this.Height;
             Settings.Default.winMonitorWidth = this.Width;
+            Settings.Default.winMonitorMaximized = this.WindowState == WindowState.Maximized;
+            this.WindowState = WindowState.Normal;
             closeFLG = true;
             Close();
         }

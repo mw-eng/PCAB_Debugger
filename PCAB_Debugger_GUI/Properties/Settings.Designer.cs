@@ -190,5 +190,29 @@ namespace PCAB_Debugger_GUI.Properties {
                 this["winMonitorLeft"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool winMainMaximized {
+            get {
+                return ((bool)(this["winMainMaximized"]));
+            }
+            set {
+                this["winMainMaximized"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool winMonitorMaximized {
+            get {
+                return ((bool)(this["winMonitorMaximized"]));
+            }
+            set {
+                this["winMonitorMaximized"] = value;
+            }
+        }
     }
 }

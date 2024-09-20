@@ -27,32 +27,15 @@ namespace PCAB_Debugger_GUI
         public winMain()
         {
             InitializeComponent();
-        }
-
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            this.Title += " Ver," + System.Diagnostics.FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetExecutingAssembly().Location).ProductVersion;
-            BOARD_GRID.IsEnabled = false;
-#if DEBUG
-            Settings.Default.Reset();
-            this.Title += "_DEBUG MODE";
-            BOARD_GRID.IsEnabled = true;
-#endif
-            visa32Resource = VisaControlNI.NewResourceManager();
-            SERIAL_PORTS_COMBOBOX_RELOAD();
-            if (SERIAL_PORTS_COMBOBOX.Items.Count > 0) { SERIAL_PORTS_COMBOBOX.SelectedIndex = 0; CONNECT_BUTTON.IsEnabled = true; }
-            if (ports != null) { for (int i = 0; i < ports.Length; i++) { if (Settings.Default.spCaption == ports[i].Caption) { SERIAL_PORTS_COMBOBOX.SelectedIndex = i; break; } } }
-            WAITE_TIME_TEXTBOX.Text = Settings.Default.mli.ToString("0");
-            SERIAL_NUMBERS_TEXTBOX.Text = Settings.Default.sn;
-            if (Settings.Default.winMainTop >= 0 &&
+            if (Settings.Default.winMainTop >= SystemParameters.VirtualScreenTop &&
                 (Settings.Default.winMainTop + Settings.Default.winMainHeight) <
-                SystemParameters.VirtualScreenHeight)
+                SystemParameters.VirtualScreenTop + SystemParameters.VirtualScreenHeight)
             {
                 this.Top = Settings.Default.winMainTop;
             }
-            if (Settings.Default.winMainLeft >= 0 &&
+            if (Settings.Default.winMainLeft >= SystemParameters.VirtualScreenLeft &&
                 (Settings.Default.winMainLeft + Settings.Default.winMainWidth) <
-                SystemParameters.VirtualScreenHeight)
+                SystemParameters.VirtualScreenLeft + SystemParameters.VirtualScreenWidth)
             {
                 this.Left = Settings.Default.winMainLeft;
             }
@@ -66,6 +49,50 @@ namespace PCAB_Debugger_GUI
             {
                 this.Height = Settings.Default.winMainHeight;
             }
+            if (Settings.Default.winMainMaximized)
+            { Loaded += (o, e) => WindowState = WindowState.Maximized; }
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            this.Title += " Ver," + System.Diagnostics.FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetExecutingAssembly().Location).ProductVersion;
+            BOARD_GRID.IsEnabled = false;
+#if DEBUG
+            //Settings.Default.Reset();
+            this.Title += "_DEBUG MODE";
+            BOARD_GRID.IsEnabled = true;
+#endif
+            visa32Resource = VisaControlNI.NewResourceManager();
+            SERIAL_PORTS_COMBOBOX_RELOAD();
+            if (SERIAL_PORTS_COMBOBOX.Items.Count > 0) { SERIAL_PORTS_COMBOBOX.SelectedIndex = 0; CONNECT_BUTTON.IsEnabled = true; }
+            if (ports != null) { for (int i = 0; i < ports.Length; i++) { if (Settings.Default.spCaption == ports[i].Caption) { SERIAL_PORTS_COMBOBOX.SelectedIndex = i; break; } } }
+            WAITE_TIME_TEXTBOX.Text = Settings.Default.mli.ToString("0");
+            SERIAL_NUMBERS_TEXTBOX.Text = Settings.Default.sn;
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (_io?.isOpen == true)
+            {
+                Settings.Default.visaAddr = _io.PCAB_Boards[0].AUTO.VNALOOP_VISAADDR_TEXTBOX.Text;
+                Settings.Default.visaTO = long.Parse(_io.PCAB_Boards[0].AUTO.VNALOOP_TIMEOUT_TEXTBOX.Text);
+                Settings.Default.fnHeader = _io.PCAB_Boards[0].AUTO.VNALOOP_FILEHEADER_TEXTBOX.Text;
+                if (MessageBox.Show("Communication with PCAB\nDo you want to disconnect and exit?", "Worning", MessageBoxButton.OKCancel, MessageBoxImage.Warning) == MessageBoxResult.OK)
+                {
+                    OnError(null, null);
+                }
+                else { e.Cancel = true; }
+            }
+            Settings.Default.spCaption = SERIAL_PORTS_COMBOBOX.Text;
+            Settings.Default.mli = long.Parse(WAITE_TIME_TEXTBOX.Text);
+            Settings.Default.sn = SERIAL_NUMBERS_TEXTBOX.Text;
+            Settings.Default.winMainTop = this.Top;
+            Settings.Default.winMainLeft = this.Left;
+            Settings.Default.winMainHeight = this.Height;
+            Settings.Default.winMainWidth = this.Width;
+            Settings.Default.winMainMaximized = this.WindowState == WindowState.Maximized;
+            this.WindowState = WindowState.Normal;
+            Settings.Default.Save();
         }
 
         #region Serial EVENT
@@ -287,28 +314,6 @@ namespace PCAB_Debugger_GUI
             }
         }
 
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            if (_io?.isOpen == true)
-            {
-                Settings.Default.visaAddr = _io.PCAB_Boards[0].AUTO.VNALOOP_VISAADDR_TEXTBOX.Text;
-                Settings.Default.visaTO = long.Parse(_io.PCAB_Boards[0].AUTO.VNALOOP_TIMEOUT_TEXTBOX.Text);
-                Settings.Default.fnHeader = _io.PCAB_Boards[0].AUTO.VNALOOP_FILEHEADER_TEXTBOX.Text;
-                if (MessageBox.Show("Communication with PCAB\nDo you want to disconnect and exit?", "Worning", MessageBoxButton.OKCancel, MessageBoxImage.Warning) == MessageBoxResult.OK)
-                {
-                    OnError(null, null);
-                }
-                else { e.Cancel = true; }
-            }
-            Settings.Default.spCaption = SERIAL_PORTS_COMBOBOX.Text;
-            Settings.Default.mli = long.Parse(WAITE_TIME_TEXTBOX.Text);
-            Settings.Default.sn = SERIAL_NUMBERS_TEXTBOX.Text;
-            Settings.Default.winMainTop = this.Top;
-            Settings.Default.winMainLeft = this.Left;
-            Settings.Default.winMainHeight = this.Height;
-            Settings.Default.winMainWidth = this.Width;
-            Settings.Default.Save();
-        }
         #endregion
 
         #region Sub Function EVENT
