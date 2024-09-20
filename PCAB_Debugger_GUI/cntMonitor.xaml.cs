@@ -36,6 +36,11 @@ namespace PCAB_Debugger_GUI
             get { return SNS_ID_LABEL.Content.ToString(); }
             set { Dispatcher.BeginInvoke(new Action(() => { SNS_ID_LABEL.Content = value; })); }
         }
+        public string TEMPavg
+        {
+            get { return TMP_AVG_LABEL.Content.ToString(); }
+            set { Dispatcher.BeginInvoke(new Action(() => { TMP_AVG_LABEL.Content = value; })); }
+        }
         public string TEMP01ID
         {
             get { return TEMP01CODE.Content.ToString(); }
@@ -486,6 +491,7 @@ namespace PCAB_Debugger_GUI
             SNSpin = "---";
             SNSvd = "---";
             SNSid = "---";
+            TEMPavg = "---";
             TITLE = "";
             SerialNumber = SN;
             for (uint i = 1; i < 16; i++)

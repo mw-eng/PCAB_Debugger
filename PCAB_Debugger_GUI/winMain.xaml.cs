@@ -63,9 +63,33 @@ namespace PCAB_Debugger_GUI
             BOARD_GRID.IsEnabled = true;
 #endif
             visa32Resource = VisaControlNI.NewResourceManager();
-            SERIAL_PORTS_COMBOBOX_RELOAD();
-            if (SERIAL_PORTS_COMBOBOX.Items.Count > 0) { SERIAL_PORTS_COMBOBOX.SelectedIndex = 0; CONNECT_BUTTON.IsEnabled = true; }
-            if (ports != null) { for (int i = 0; i < ports.Length; i++) { if (Settings.Default.spCaption == ports[i].Caption) { SERIAL_PORTS_COMBOBOX.SelectedIndex = i; break; } } }
+            SERIAL_PORTS_COMBOBOX_RELOAD(sender, e);
+            SERIAL_PORTS_CHECKBOX1.IsChecked = Settings.Default.spEnable1;
+            SERIAL_PORTS_CHECKBOX2.IsChecked = Settings.Default.spEnable2;
+            SERIAL_PORTS_CHECKBOX3.IsChecked = Settings.Default.spEnable3;
+            SERIAL_PORTS_COMBOBOX1.SelectedIndex = Settings.Default.spBaudRate1;
+            SERIAL_PORTS_COMBOBOX2.SelectedIndex = Settings.Default.spBaudRate2;
+            SERIAL_PORTS_COMBOBOX3.SelectedIndex = Settings.Default.spBaudRate3;
+            if (SERIAL_PORTS_COMBOBOX1.Items.Count > 0) { SERIAL_PORTS_COMBOBOX1.SelectedIndex = 0; }
+            if (SERIAL_PORTS_COMBOBOX2.Items.Count > 1) { SERIAL_PORTS_COMBOBOX2.SelectedIndex = 1; }
+            if (SERIAL_PORTS_COMBOBOX3.Items.Count > 2) { SERIAL_PORTS_COMBOBOX3.SelectedIndex = 2; }
+            if (ports != null)
+            {
+                for (int i = 0; i < ports.Length; i++)
+                {
+                    if (Settings.Default.spCaption1 == ports[i].Caption)
+                    { SERIAL_PORTS_COMBOBOX1.SelectedIndex = i; }
+                    if (Settings.Default.spCaption2 == ports[i].Caption)
+                    { SERIAL_PORTS_COMBOBOX2.SelectedIndex = i; }
+                    if (Settings.Default.spCaption3 == ports[i].Caption)
+                    { SERIAL_PORTS_COMBOBOX3.SelectedIndex = i; }
+                }
+            }
+            if((SERIAL_PORTS_CHECKBOX1.IsChecked == true && SERIAL_PORTS_COMBOBOX1.SelectedIndex >= 0) ||
+                (SERIAL_PORTS_CHECKBOX2.IsChecked == true && SERIAL_PORTS_COMBOBOX2.SelectedIndex >= 0) ||
+                (SERIAL_PORTS_CHECKBOX3.IsChecked == true && SERIAL_PORTS_COMBOBOX3.SelectedIndex >= 0))
+            { CONNECT_BUTTON.IsEnabled = true; }
+            else {  CONNECT_BUTTON.IsEnabled = false; }
             WAITE_TIME_TEXTBOX.Text = Settings.Default.mli.ToString("0");
             SERIAL_NUMBERS_TEXTBOX.Text = Settings.Default.sn;
         }
@@ -83,7 +107,15 @@ namespace PCAB_Debugger_GUI
                 }
                 else { e.Cancel = true; }
             }
-            Settings.Default.spCaption = SERIAL_PORTS_COMBOBOX.Text;
+            Settings.Default.spEnable1 = SERIAL_PORTS_CHECKBOX1.IsChecked == true;
+            Settings.Default.spEnable2 = SERIAL_PORTS_CHECKBOX2.IsChecked == true;
+            Settings.Default.spEnable3 = SERIAL_PORTS_CHECKBOX3.IsChecked == true;
+            Settings.Default.spCaption1 = SERIAL_PORTS_COMBOBOX1.Text;
+            Settings.Default.spCaption2 = SERIAL_PORTS_COMBOBOX2.Text;
+            Settings.Default.spCaption3 = SERIAL_PORTS_COMBOBOX3.Text;
+            Settings.Default.spBaudRate1 = SERIAL_PORTS_COMBOBOX1.SelectedIndex;
+            Settings.Default.spBaudRate2 = SERIAL_PORTS_COMBOBOX2.SelectedIndex;
+            Settings.Default.spBaudRate3 = SERIAL_PORTS_COMBOBOX3.SelectedIndex;
             Settings.Default.mli = long.Parse(WAITE_TIME_TEXTBOX.Text);
             Settings.Default.sn = SERIAL_NUMBERS_TEXTBOX.Text;
             Settings.Default.winMainTop = this.Top;
@@ -97,28 +129,107 @@ namespace PCAB_Debugger_GUI
 
         #region Serial EVENT
 
-        private void SERIAL_PORTS_COMBOBOX_RELOAD()
+        private void SERIAL_PORTS_COMBOBOX_RELOAD(object sender, EventArgs e)
         {
-            SERIAL_PORTS_COMBOBOX.Items.Clear();
             ports = GetDeviceNames();
-            if (ports != null)
+            if (sender is ComboBox)
             {
-                foreach (SerialPortTable port in ports)
+                ((ComboBox)sender).Items.Clear();
+                if(ports != null)
                 {
-                    SERIAL_PORTS_COMBOBOX.Items.Add(port.Caption);
+                    foreach (SerialPortTable port in ports)
+                    {
+                        ((ComboBox)sender).Items.Add(port.Caption);
+                    }
+                }
+            }
+            else
+            {
+                SERIAL_PORTS_COMBOBOX1.Items.Clear();
+                SERIAL_PORTS_COMBOBOX2.Items.Clear();
+                SERIAL_PORTS_COMBOBOX3.Items.Clear();
+                if (ports != null)
+                {
+                    foreach (SerialPortTable port in ports)
+                    {
+                        SERIAL_PORTS_COMBOBOX1.Items.Add(port.Caption);
+                        SERIAL_PORTS_COMBOBOX2.Items.Add(port.Caption);
+                        SERIAL_PORTS_COMBOBOX3.Items.Add(port.Caption);
+                    }
                 }
             }
         }
 
         private void SERIAL_PORTS_COMBOBOX_DropDownOpened(object sender, EventArgs e)
         {
-            SERIAL_PORTS_COMBOBOX_RELOAD();
+            SERIAL_PORTS_COMBOBOX_RELOAD(sender, e);
         }
 
         private void SERIAL_PORTS_COMBOBOX_DropDownClosed(object sender, EventArgs e)
         {
-            if(SERIAL_PORTS_COMBOBOX.SelectedIndex < 0) { CONNECT_BUTTON.IsEnabled = false; }
-            else { CONNECT_BUTTON.IsEnabled = true; }
+            if ((SERIAL_PORTS_CHECKBOX1.IsChecked == true && SERIAL_PORTS_COMBOBOX1.SelectedIndex >= 0) ||
+                (SERIAL_PORTS_CHECKBOX2.IsChecked == true && SERIAL_PORTS_COMBOBOX2.SelectedIndex >= 0) ||
+                (SERIAL_PORTS_CHECKBOX3.IsChecked == true && SERIAL_PORTS_COMBOBOX3.SelectedIndex >= 0))
+            { CONNECT_BUTTON.IsEnabled = true; }
+            else { CONNECT_BUTTON.IsEnabled = false; }
+        }
+
+        private void SERIAL_PORTS_CHECKBOX_Checked(object sender, RoutedEventArgs e)
+        {
+            string strBF;
+            if (sender is CheckBox)
+            {
+                switch (((CheckBox)sender).Name)
+                {
+                    case "SERIAL_PORTS_CHECKBOX1":
+                        SERIAL_PORTS_COMBOBOX1.IsEnabled = true;
+                        BAUD_RATE_COMBOBOX1.IsEnabled = true;
+                        break;
+                    case "SERIAL_PORTS_CHECKBOX2":
+                        SERIAL_PORTS_COMBOBOX2.IsEnabled = true;
+                        BAUD_RATE_COMBOBOX2.IsEnabled = true;
+                        break;
+                    case "SERIAL_PORTS_CHECKBOX3":
+                        SERIAL_PORTS_COMBOBOX3.IsEnabled = true;
+                        BAUD_RATE_COMBOBOX3.IsEnabled = true;
+                        break;
+                }
+            }
+            if ((SERIAL_PORTS_CHECKBOX1.IsChecked == true && SERIAL_PORTS_COMBOBOX1.SelectedIndex >= 0) ||
+                (SERIAL_PORTS_CHECKBOX2.IsChecked == true && SERIAL_PORTS_COMBOBOX2.SelectedIndex >= 0) ||
+                (SERIAL_PORTS_CHECKBOX3.IsChecked == true && SERIAL_PORTS_COMBOBOX3.SelectedIndex >= 0))
+            { CONNECT_BUTTON.IsEnabled = true; }
+            else { CONNECT_BUTTON.IsEnabled = false; }
+        }
+
+        private void SERIAL_PORTS_CHECKBOX_Unchecked(object sender, RoutedEventArgs e)
+        {
+            switch (((CheckBox)sender).Name)
+            {
+                case "SERIAL_PORTS_CHECKBOX1":
+                    SERIAL_PORTS_COMBOBOX1.IsEnabled = false;
+                    BAUD_RATE_COMBOBOX1.IsEnabled = false;
+                    break;
+                case "SERIAL_PORTS_CHECKBOX2":
+                    SERIAL_PORTS_COMBOBOX2.IsEnabled = false;
+                    BAUD_RATE_COMBOBOX2.IsEnabled = false;
+                    break;
+                case "SERIAL_PORTS_CHECKBOX3":
+                    SERIAL_PORTS_COMBOBOX3.IsEnabled = false;
+                    BAUD_RATE_COMBOBOX3.IsEnabled = true;
+                    break;
+            }
+            if(SERIAL_PORTS_CHECKBOX1.IsChecked != true &&
+                SERIAL_PORTS_CHECKBOX2.IsChecked != true &&
+                SERIAL_PORTS_CHECKBOX3.IsChecked != true)
+            {
+                CONNECT_BUTTON.IsEnabled = false;
+            }
+            if ((SERIAL_PORTS_CHECKBOX1.IsChecked == true && SERIAL_PORTS_COMBOBOX1.SelectedIndex >= 0) ||
+                (SERIAL_PORTS_CHECKBOX2.IsChecked == true && SERIAL_PORTS_COMBOBOX2.SelectedIndex >= 0) ||
+                (SERIAL_PORTS_CHECKBOX3.IsChecked == true && SERIAL_PORTS_COMBOBOX3.SelectedIndex >= 0))
+            { CONNECT_BUTTON.IsEnabled = true; }
+            else { CONNECT_BUTTON.IsEnabled = false; }
         }
 
         private void CONNECT_BUTTON_Click(object sender, RoutedEventArgs e)
@@ -130,7 +241,7 @@ namespace PCAB_Debugger_GUI
             else
             {
                 string[] sn = SERIAL_NUMBERS_TEXTBOX.Text.Replace(" ", "").Split(',');
-                _io = new clsSerialIO(ports[SERIAL_PORTS_COMBOBOX.SelectedIndex].Name, UInt32.Parse(BAUD_RATE_COMBOBOX.Text.Trim().Replace(",","")));
+                _io = new clsSerialIO(ports[SERIAL_PORTS_COMBOBOX1.SelectedIndex].Name, UInt32.Parse(BAUD_RATE_COMBOBOX1.Text.Trim().Replace(",", "")));
                 _io.OnError += OnError;
                 try
                 {
@@ -139,7 +250,7 @@ namespace PCAB_Debugger_GUI
                 catch
                 {
                     _io.Close();
-                    SERIAL_PORTS_COMBOBOX_RELOAD();
+                    SERIAL_PORTS_COMBOBOX_RELOAD(sender, e);
                     SERIAL_PORTS_COMBOBOX_DropDownClosed(null, null);
                     return;
                 }
@@ -155,7 +266,7 @@ namespace PCAB_Debugger_GUI
                         _io.PCAB_Monitors[i].SetValue(Grid.ColumnProperty, i);
                         monitor.MONITOR_GRID.Children.Add(_io.PCAB_Monitors[i]);
                     }
-                    if(_io.PCAB_Monitors.Count > 1) { monitor.MONITOR_GRID.ShowGridLines = true; }
+                    if (_io.PCAB_Monitors.Count > 1) { monitor.MONITOR_GRID.ShowGridLines = true; }
                     monitor.Show();
                     BOARD_GRID.Children.Clear();
                     if (_io.PCAB_Boards.Count == 1)
@@ -190,13 +301,12 @@ namespace PCAB_Debugger_GUI
                             }
                         }
                     }
-                    SERIAL_PORTS_COMBOBOX.IsEnabled = false;
-                    SERIAL_CONFIG_GRID.IsEnabled = false;
-                    BAUD_RATE_COMBOBOX.IsEnabled = false;
+                    CONFIG_EXPANDER.IsExpanded = false;
+                    CONFIG_GRID.IsEnabled = false;
                     BOARD_GRID.IsEnabled = true;
                     CONNECT_BUTTON_CONTENT.Text = "Disconnect";
 
-                    if(_io.PCAB_Boards.Count == 1 && _io.PCAB_Boards[0].SerialNumber == "*" &&
+                    if (_io.PCAB_Boards.Count == 1 && _io.PCAB_Boards[0].SerialNumber == "*" &&
                         (_io.serial.PCAB_GetMode(new PCAB_UnitInterface(_io.PCAB_Boards[0].SerialNumber)) == 0x0F ||
                         _io.serial.PCAB_GetMode(new PCAB_UnitInterface(_io.PCAB_Boards[0].SerialNumber)) == 0x0A))
                     {
@@ -531,11 +641,10 @@ namespace PCAB_Debugger_GUI
                 _io.Close();
                 BOARD_GRID.Children.Clear();
                 BOARD_GRID.Children.Add(new cntBOARD());
+                CONFIG_GRID.IsEnabled = true;
                 BOARD_GRID.IsEnabled = false;
-                SERIAL_PORTS_COMBOBOX.IsEnabled = true;
-                SERIAL_CONFIG_GRID.IsEnabled = true;
-                BAUD_RATE_COMBOBOX.IsEnabled = true;
                 CONNECT_BUTTON_CONTENT.Text = "Connect";
+                CONFIG_EXPANDER.IsExpanded = true;
             }));
         }
         #endregion

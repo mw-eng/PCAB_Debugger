@@ -66,10 +66,13 @@ namespace PCAB_Debugger_GUI
                     PCAB_Monitors[cnt].SNSid = e.ReceiveDAT[cnt].SensorValuesNOW.Analog.Id.ToString("0.00");
                     if (e.ReceiveDAT[cnt].SensorValuesNOW.Temprature.Values?.Length == 15)
                     {
+                        float avg = 0;
                         for (uint i = 0; i < e.ReceiveDAT[cnt].SensorValuesNOW.Temprature.Values.Length; i++)
                         {
+                            avg += e.ReceiveDAT[cnt].SensorValuesNOW.Temprature.Values[i];
                             PCAB_Monitors[cnt].SetTempValue(i + 1, e.ReceiveDAT[cnt].SensorValuesNOW.Temprature.Values[i].ToString("0.00"));
                         }
+                        PCAB_Monitors[cnt].TEMPavg = (avg / 15.0f).ToString("0.00");
                     }
                     if(e.ReceiveDAT[cnt].SensorValuesNOW.ID.IDs?.Length == 15)
                     {
