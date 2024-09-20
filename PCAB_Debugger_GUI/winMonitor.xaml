@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:PCAB_Debugger_GUI"
         mc:Ignorable="d"
         Title="PCAB Debugger Monitor" Height="450" Width="800" Closing="Window_Closing"
-        SourceInitialized="Window_SourceInitialized">
+        SourceInitialized="Window_SourceInitialized" Icon="/PCAB_Debugger_GUI_Monitor.ico">
     <Grid x:Name="MONITOR_GRID">
         <local:cntMonitor/>
     </Grid>

@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using static MWComLibCS.ExternalControl.FTD2xx;
 using static PCAB_Debugger_GUI.cntConfig;
 using static PCAB_Debugger_GUI.cntConfigSettings;
 using static PCAB_Debugger_GUI.PCAB_SerialInterface;
@@ -20,7 +21,7 @@ namespace PCAB_Debugger_GUI
     public partial class winMain : Window
     {
         SerialPortTable[] ports;
-        public clsSerialIO _io;
+        public List<clsSerialIO> _ioList = new List<clsSerialIO>();
         private winMonitor monitor;
         private int visa32Resource;
 
@@ -85,27 +86,38 @@ namespace PCAB_Debugger_GUI
                     { SERIAL_PORTS_COMBOBOX3.SelectedIndex = i; }
                 }
             }
-            if((SERIAL_PORTS_CHECKBOX1.IsChecked == true && SERIAL_PORTS_COMBOBOX1.SelectedIndex >= 0) ||
-                (SERIAL_PORTS_CHECKBOX2.IsChecked == true && SERIAL_PORTS_COMBOBOX2.SelectedIndex >= 0) ||
-                (SERIAL_PORTS_CHECKBOX3.IsChecked == true && SERIAL_PORTS_COMBOBOX3.SelectedIndex >= 0))
+            if ((SERIAL_PORTS_CHECKBOX1.IsChecked != true || (SERIAL_PORTS_CHECKBOX1.IsChecked == true && SERIAL_PORTS_COMBOBOX1.SelectedIndex >= 0)) &&
+                (SERIAL_PORTS_CHECKBOX2.IsChecked != true || (SERIAL_PORTS_CHECKBOX2.IsChecked == true && SERIAL_PORTS_COMBOBOX2.SelectedIndex >= 0)) &&
+                (SERIAL_PORTS_CHECKBOX3.IsChecked != true || (SERIAL_PORTS_CHECKBOX3.IsChecked == true && SERIAL_PORTS_COMBOBOX3.SelectedIndex >= 0)) &&
+                (SERIAL_PORTS_CHECKBOX1.IsChecked == true || SERIAL_PORTS_CHECKBOX2.IsChecked == true || SERIAL_PORTS_CHECKBOX3.IsChecked == true))
             { CONNECT_BUTTON.IsEnabled = true; }
-            else {  CONNECT_BUTTON.IsEnabled = false; }
+            else { CONNECT_BUTTON.IsEnabled = false; }
             WAITE_TIME_TEXTBOX.Text = Settings.Default.mli.ToString("0");
             SERIAL_NUMBERS_TEXTBOX.Text = Settings.Default.sn;
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if (_io?.isOpen == true)
+            if (_ioList.Count > 0)
             {
-                Settings.Default.visaAddr = _io.PCAB_Boards[0].AUTO.VNALOOP_VISAADDR_TEXTBOX.Text;
-                Settings.Default.visaTO = long.Parse(_io.PCAB_Boards[0].AUTO.VNALOOP_TIMEOUT_TEXTBOX.Text);
-                Settings.Default.fnHeader = _io.PCAB_Boards[0].AUTO.VNALOOP_FILEHEADER_TEXTBOX.Text;
-                if (MessageBox.Show("Communication with PCAB\nDo you want to disconnect and exit?", "Worning", MessageBoxButton.OKCancel, MessageBoxImage.Warning) == MessageBoxResult.OK)
+                if (_ioList[0]?.isOpen == true)
                 {
-                    OnError(null, null);
+                    Settings.Default.visaAddr = _ioList[0].PCAB_Boards[0].AUTO.VNALOOP_VISAADDR_TEXTBOX.Text;
+                    Settings.Default.visaTO = long.Parse(_ioList[0].PCAB_Boards[0].AUTO.VNALOOP_TIMEOUT_TEXTBOX.Text);
+                    Settings.Default.fnHeader = _ioList[0].PCAB_Boards[0].AUTO.VNALOOP_FILEHEADER_TEXTBOX.Text;
                 }
-                else { e.Cancel = true; }
+                foreach (clsSerialIO _io in _ioList)
+                {
+                    if (_io?.isOpen == true)
+                    {
+                        if (MessageBox.Show("Communication with PCAB\nDo you want to disconnect and exit?", "Worning", MessageBoxButton.OKCancel, MessageBoxImage.Warning) == MessageBoxResult.OK)
+                        {
+                            OnError(null, null);
+                        }
+                        else { e.Cancel = true; return; }
+                    }
+                }
+
             }
             Settings.Default.spEnable1 = SERIAL_PORTS_CHECKBOX1.IsChecked == true;
             Settings.Default.spEnable2 = SERIAL_PORTS_CHECKBOX2.IsChecked == true;
@@ -135,11 +147,14 @@ namespace PCAB_Debugger_GUI
             if (sender is ComboBox)
             {
                 ((ComboBox)sender).Items.Clear();
-                if(ports != null)
+                if (ports != null)
                 {
                     foreach (SerialPortTable port in ports)
                     {
-                        ((ComboBox)sender).Items.Add(port.Caption);
+                        if (port.Caption != SERIAL_PORTS_COMBOBOX1.Text &&
+                            port.Caption != SERIAL_PORTS_COMBOBOX2.Text &&
+                            port.Caption != SERIAL_PORTS_COMBOBOX3.Text)
+                            ((ComboBox)sender).Items.Add(port.Caption);
                     }
                 }
             }
@@ -167,9 +182,10 @@ namespace PCAB_Debugger_GUI
 
         private void SERIAL_PORTS_COMBOBOX_DropDownClosed(object sender, EventArgs e)
         {
-            if ((SERIAL_PORTS_CHECKBOX1.IsChecked == true && SERIAL_PORTS_COMBOBOX1.SelectedIndex >= 0) ||
-                (SERIAL_PORTS_CHECKBOX2.IsChecked == true && SERIAL_PORTS_COMBOBOX2.SelectedIndex >= 0) ||
-                (SERIAL_PORTS_CHECKBOX3.IsChecked == true && SERIAL_PORTS_COMBOBOX3.SelectedIndex >= 0))
+            if ((SERIAL_PORTS_CHECKBOX1.IsChecked != true || (SERIAL_PORTS_CHECKBOX1.IsChecked == true && SERIAL_PORTS_COMBOBOX1.SelectedIndex >= 0)) &&
+                (SERIAL_PORTS_CHECKBOX2.IsChecked != true || (SERIAL_PORTS_CHECKBOX2.IsChecked == true && SERIAL_PORTS_COMBOBOX2.SelectedIndex >= 0)) &&
+                (SERIAL_PORTS_CHECKBOX3.IsChecked != true || (SERIAL_PORTS_CHECKBOX3.IsChecked == true && SERIAL_PORTS_COMBOBOX3.SelectedIndex >= 0)) &&
+                (SERIAL_PORTS_CHECKBOX1.IsChecked == true || SERIAL_PORTS_CHECKBOX2.IsChecked == true || SERIAL_PORTS_CHECKBOX3.IsChecked == true))
             { CONNECT_BUTTON.IsEnabled = true; }
             else { CONNECT_BUTTON.IsEnabled = false; }
         }
@@ -195,9 +211,10 @@ namespace PCAB_Debugger_GUI
                         break;
                 }
             }
-            if ((SERIAL_PORTS_CHECKBOX1.IsChecked == true && SERIAL_PORTS_COMBOBOX1.SelectedIndex >= 0) ||
-                (SERIAL_PORTS_CHECKBOX2.IsChecked == true && SERIAL_PORTS_COMBOBOX2.SelectedIndex >= 0) ||
-                (SERIAL_PORTS_CHECKBOX3.IsChecked == true && SERIAL_PORTS_COMBOBOX3.SelectedIndex >= 0))
+            if ((SERIAL_PORTS_CHECKBOX1.IsChecked != true || (SERIAL_PORTS_CHECKBOX1.IsChecked == true && SERIAL_PORTS_COMBOBOX1.SelectedIndex >= 0)) &&
+                (SERIAL_PORTS_CHECKBOX2.IsChecked != true || (SERIAL_PORTS_CHECKBOX2.IsChecked == true && SERIAL_PORTS_COMBOBOX2.SelectedIndex >= 0)) &&
+                (SERIAL_PORTS_CHECKBOX3.IsChecked != true || (SERIAL_PORTS_CHECKBOX3.IsChecked == true && SERIAL_PORTS_COMBOBOX3.SelectedIndex >= 0)) &&
+                (SERIAL_PORTS_CHECKBOX1.IsChecked == true || SERIAL_PORTS_CHECKBOX2.IsChecked == true || SERIAL_PORTS_CHECKBOX3.IsChecked == true))
             { CONNECT_BUTTON.IsEnabled = true; }
             else { CONNECT_BUTTON.IsEnabled = false; }
         }
@@ -219,59 +236,101 @@ namespace PCAB_Debugger_GUI
                     BAUD_RATE_COMBOBOX3.IsEnabled = true;
                     break;
             }
-            if(SERIAL_PORTS_CHECKBOX1.IsChecked != true &&
-                SERIAL_PORTS_CHECKBOX2.IsChecked != true &&
-                SERIAL_PORTS_CHECKBOX3.IsChecked != true)
-            {
-                CONNECT_BUTTON.IsEnabled = false;
-            }
-            if ((SERIAL_PORTS_CHECKBOX1.IsChecked == true && SERIAL_PORTS_COMBOBOX1.SelectedIndex >= 0) ||
-                (SERIAL_PORTS_CHECKBOX2.IsChecked == true && SERIAL_PORTS_COMBOBOX2.SelectedIndex >= 0) ||
-                (SERIAL_PORTS_CHECKBOX3.IsChecked == true && SERIAL_PORTS_COMBOBOX3.SelectedIndex >= 0))
+            if ((SERIAL_PORTS_CHECKBOX1.IsChecked != true || (SERIAL_PORTS_CHECKBOX1.IsChecked == true && SERIAL_PORTS_COMBOBOX1.SelectedIndex >= 0)) &&
+                (SERIAL_PORTS_CHECKBOX2.IsChecked != true || (SERIAL_PORTS_CHECKBOX2.IsChecked == true && SERIAL_PORTS_COMBOBOX2.SelectedIndex >= 0)) &&
+                (SERIAL_PORTS_CHECKBOX3.IsChecked != true || (SERIAL_PORTS_CHECKBOX3.IsChecked == true && SERIAL_PORTS_COMBOBOX3.SelectedIndex >= 0)) &&
+                (SERIAL_PORTS_CHECKBOX1.IsChecked == true || SERIAL_PORTS_CHECKBOX2.IsChecked == true || SERIAL_PORTS_CHECKBOX3.IsChecked == true))
             { CONNECT_BUTTON.IsEnabled = true; }
             else { CONNECT_BUTTON.IsEnabled = false; }
         }
 
         private void CONNECT_BUTTON_Click(object sender, RoutedEventArgs e)
         {
-            if (_io?.isOpen == true)
+            if (_ioList.Count > 0)
             {
                 OnError(null, null);
             }
             else
             {
                 string[] sn = SERIAL_NUMBERS_TEXTBOX.Text.Replace(" ", "").Split(',');
-                _io = new clsSerialIO(ports[SERIAL_PORTS_COMBOBOX1.SelectedIndex].Name, UInt32.Parse(BAUD_RATE_COMBOBOX1.Text.Trim().Replace(",", "")));
-                _io.OnError += OnError;
+                SerialPortTable[] pt = GetDeviceNames();
+                if (SERIAL_PORTS_CHECKBOX1.IsChecked == true)
+                {
+                    foreach (SerialPortTable port in pt)
+                    {
+                        if (port.Caption == SERIAL_PORTS_COMBOBOX1.Text)
+                        {
+                            _ioList.Add(new clsSerialIO(port.Name, UInt32.Parse(BAUD_RATE_COMBOBOX1.Text.Trim().Replace(",", ""))));
+                        }
+                    }
+                }
+                if (SERIAL_PORTS_CHECKBOX2.IsChecked == true)
+                {
+                    foreach (SerialPortTable port in pt)
+                    {
+                        if (port.Caption == SERIAL_PORTS_COMBOBOX2.Text)
+                        {
+                            _ioList.Add(new clsSerialIO(port.Name, UInt32.Parse(BAUD_RATE_COMBOBOX2.Text.Trim().Replace(",", ""))));
+                        }
+                    }
+                }
+                if (SERIAL_PORTS_CHECKBOX3.IsChecked == true)
+                {
+                    foreach (SerialPortTable port in pt)
+                    {
+                        if (port.Caption == SERIAL_PORTS_COMBOBOX3.Text)
+                        {
+                            _ioList.Add(new clsSerialIO(port.Name, UInt32.Parse(BAUD_RATE_COMBOBOX3.Text.Trim().Replace(",", ""))));
+                        }
+                    }
+                }
                 try
                 {
-                    _io.Open(sn, uint.Parse(WAITE_TIME_TEXTBOX.Text));
+                    foreach (clsSerialIO _io in _ioList)
+                    {
+                        _io.OnError += OnError;
+                        _io.Open(sn, uint.Parse(WAITE_TIME_TEXTBOX.Text));
+                    }
                 }
                 catch
                 {
-                    _io.Close();
+                    foreach (clsSerialIO _io in _ioList)
+                    {
+                        _io.Close();
+                    }
                     SERIAL_PORTS_COMBOBOX_RELOAD(sender, e);
                     SERIAL_PORTS_COMBOBOX_DropDownClosed(null, null);
                     return;
                 }
-                if (_io?.isOpen == true)
+                for (int i = _ioList.Count; i > 0; i--)
+                {
+                    if (_ioList[i - 1]?.isOpen != true) { _ioList.RemoveAt(i - 1); }
+                }
+                if (_ioList.Count > 0)
                 {
                     monitor = new winMonitor();
                     monitor.MONITOR_GRID.Children.Clear();
                     monitor.MONITOR_GRID.RowDefinitions.Clear();
                     monitor.MONITOR_GRID.ColumnDefinitions.Clear();
-                    for (int i = 0; i < _io.PCAB_Monitors.Count; i++)
+                    for (int i = 0; i < _ioList.Count; i++)
                     {
-                        monitor.MONITOR_GRID.ColumnDefinitions.Add(new ColumnDefinition());
-                        _io.PCAB_Monitors[i].SetValue(Grid.ColumnProperty, i);
-                        monitor.MONITOR_GRID.Children.Add(_io.PCAB_Monitors[i]);
+                        monitor.MONITOR_GRID.RowDefinitions.Add(new RowDefinition());
+                        for (int j = 0; j < _ioList[i].PCAB_Monitors.Count; j++)
+                        {
+                            if (monitor.MONITOR_GRID.ColumnDefinitions.Count < j + 1)
+                            {
+                                monitor.MONITOR_GRID.ColumnDefinitions.Add(new ColumnDefinition());
+                            }
+                            _ioList[i].PCAB_Monitors[j].SetValue(Grid.RowProperty, i);
+                            _ioList[i].PCAB_Monitors[j].SetValue(Grid.ColumnProperty, j);
+                            monitor.MONITOR_GRID.Children.Add(_ioList[i].PCAB_Monitors[j]);
+                        }
                     }
-                    if (_io.PCAB_Monitors.Count > 1) { monitor.MONITOR_GRID.ShowGridLines = true; }
-                    monitor.Show();
+                    if (monitor.MONITOR_GRID.Children.Count > 1) { monitor.MONITOR_GRID.ShowGridLines = true; }
                     BOARD_GRID.Children.Clear();
-                    if (_io.PCAB_Boards.Count == 1)
+                    if (_ioList.Count == 1 && _ioList[0].PCAB_Boards.Count == 1)
                     {
-                        BOARD_GRID.Children.Add(_io.PCAB_Boards[0]);
+                        BOARD_GRID.Children.Add(_ioList[0].PCAB_Boards[0]);
                         ((cntBOARD)BOARD_GRID.Children[0]).AUTO.setResourceManager = visa32Resource;
                         ((cntBOARD)BOARD_GRID.Children[0]).AUTO.ButtonClickEvent += AUTO_ButtonClickEvent;
                         ((cntBOARD)BOARD_GRID.Children[0]).CONFIG.ButtonClickEvent += CONFIG_ButtonClickEvent;
@@ -284,36 +343,41 @@ namespace PCAB_Debugger_GUI
                     else
                     {
                         BOARD_GRID.Children.Add(new TabControl());
-                        for (int i = 0; i < _io.PCAB_Boards.Count; i++)
+                        ((TabControl)BOARD_GRID.Children[0]).FontSize = 24;
+                        ((TabControl)BOARD_GRID.Children[0]).Margin = new Thickness(5);
+                        foreach (clsSerialIO _io in _ioList)
                         {
-                            ((TabControl)BOARD_GRID.Children[0]).FontSize = 24;
-                            ((TabControl)BOARD_GRID.Children[0]).Margin = new Thickness(5);
-                            ((TabControl)BOARD_GRID.Children[0]).Items.Add(new TabItem());
-                            ((TabItem)((TabControl)BOARD_GRID.Children[0]).Items[i]).Header = "S/N, " + _io.PCAB_Boards[i].SerialNumber;
-                            ((TabItem)((TabControl)BOARD_GRID.Children[0]).Items[i]).Content = _io.PCAB_Boards[i];
-                            ((cntBOARD)((TabItem)((TabControl)BOARD_GRID.Children[0]).Items[i]).Content).AUTO.setResourceManager = visa32Resource;
-                            ((cntBOARD)((TabItem)((TabControl)BOARD_GRID.Children[0]).Items[i]).Content).AUTO.ButtonClickEvent += AUTO_ButtonClickEvent;
-                            ((cntBOARD)((TabItem)((TabControl)BOARD_GRID.Children[0]).Items[i]).Content).CONFIG.ButtonClickEvent += CONFIG_ButtonClickEvent;
-                            ((cntBOARD)((TabItem)((TabControl)BOARD_GRID.Children[0]).Items[i]).Content).CONFIG.CONFIG_SETTINGS.CheckboxClickEvent += CONFIG_CONFIG_SETTINGS_CheckboxClickEventHandler;
-                            if (!readConfig(((cntBOARD)((TabItem)((TabControl)BOARD_GRID.Children[0]).Items[i]).Content).CONFIG.CONFIG_SETTINGS))
+                            for (int i = 0; i < _io.PCAB_Boards.Count; i++)
                             {
-                                MessageBox.Show("Config read error.\nS/N, " + _io.PCAB_Boards[i].SerialNumber, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                                TabItem _tabitem = new TabItem();
+                                _tabitem.Header = "S/N, " + _io.PCAB_Boards[i].SerialNumber;
+                                _tabitem.Content = _io.PCAB_Boards[i];
+                                ((cntBOARD)_tabitem.Content).AUTO.setResourceManager = visa32Resource;
+                                ((cntBOARD)_tabitem.Content).AUTO.ButtonClickEvent += AUTO_ButtonClickEvent;
+                                ((cntBOARD)_tabitem.Content).CONFIG.ButtonClickEvent += CONFIG_ButtonClickEvent;
+                                ((cntBOARD)_tabitem.Content).CONFIG.CONFIG_SETTINGS.CheckboxClickEvent += CONFIG_CONFIG_SETTINGS_CheckboxClickEventHandler;
+
+                                ((TabControl)BOARD_GRID.Children[0]).Items.Add(_tabitem);
+                                if (!readConfig(((cntBOARD)_tabitem.Content).CONFIG.CONFIG_SETTINGS))
+                                {
+                                    MessageBox.Show("Config read error.\nS/N, " + _io.PCAB_Boards[i].SerialNumber, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                                }
                             }
                         }
                     }
+                    monitor.Show();
                     CONFIG_EXPANDER.IsExpanded = false;
                     CONFIG_GRID.IsEnabled = false;
                     BOARD_GRID.IsEnabled = true;
                     CONNECT_BUTTON_CONTENT.Text = "Disconnect";
-
-                    if (_io.PCAB_Boards.Count == 1 && _io.PCAB_Boards[0].SerialNumber == "*" &&
-                        (_io.serial.PCAB_GetMode(new PCAB_UnitInterface(_io.PCAB_Boards[0].SerialNumber)) == 0x0F ||
-                        _io.serial.PCAB_GetMode(new PCAB_UnitInterface(_io.PCAB_Boards[0].SerialNumber)) == 0x0A))
+                    if (!(BOARD_GRID.Children[0] is TabControl) && _ioList[0].PCAB_Boards[0].SerialNumber == "*" &&
+                        (_ioList[0].serial.PCAB_GetMode(new PCAB_UnitInterface(_ioList[0].PCAB_Boards[0].SerialNumber)) == 0x0F ||
+                        _ioList[0].serial.PCAB_GetMode(new PCAB_UnitInterface(_ioList[0].PCAB_Boards[0].SerialNumber)) == 0x0A))
                     {
                         if (MessageBox.Show("Do you want to launch a binary editor?", "Binary editor", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                         {
                             this.Hide();
-                            Window win = new winEditor(_io.serial, new PCAB_UnitInterface(_io.PCAB_Boards[0].SerialNumber));
+                            Window win = new winEditor(_ioList[0].serial, new PCAB_UnitInterface(_ioList[0].PCAB_Boards[0].SerialNumber));
                             win.ShowDialog();
                             this.Show();
                         }
@@ -321,7 +385,6 @@ namespace PCAB_Debugger_GUI
                 }
                 else
                 {
-                    _io.Close();
                     MessageBox.Show("No valid PCAB found.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
@@ -400,7 +463,7 @@ namespace PCAB_Debugger_GUI
             try
             {
                 string strBF = ((TextBox)sender).Text.Replace(" ", "");
-                if(0 <= strBF.IndexOf("*") && strBF.Length != 1)
+                if (0 <= strBF.IndexOf("*") && strBF.Length != 1)
                 {
                     MessageBox.Show("Multiple \"*\" specifications cannot be specified.");
                     e.Handled = true;
@@ -430,6 +493,16 @@ namespace PCAB_Debugger_GUI
         private void AUTO_ButtonClickEvent(object sender, RoutedEventArgs e, string dirPath)
         {
             string strSN = ((cntAUTO)sender).SerialNumber;
+            clsSerialIO _io = null;
+            bool flg = false;
+            foreach (clsSerialIO io in _ioList)
+            {
+                foreach (PCAB_UnitInterface unit in io.serial.UNITs)
+                {
+                    if (unit.SerialNumberASCII == strSN) { _io = io; break; flg = true; }
+                }
+                if (flg) { break; }
+            }
             bool detFLG = false;
             cntConfig conf = new cntConfig();
             foreach (cntBOARD board in _io.PCAB_Boards)
@@ -446,6 +519,16 @@ namespace PCAB_Debugger_GUI
         private void CONFIG_ButtonClickEvent(object sender, RoutedEventArgs e, ButtonCategory category)
         {
             string strSN = ((cntConfig)sender).SerialNumber;
+            clsSerialIO _io = null;
+            bool flg = false;
+            foreach (clsSerialIO io in _ioList)
+            {
+                foreach (PCAB_UnitInterface unit in io.serial.UNITs)
+                {
+                    if (unit.SerialNumberASCII == strSN) { _io = io; break; flg = true; }
+                }
+                if (flg) { break; }
+            }
             uint sectorPage = 0xE0;
             uint stateNum = 0;
             string strBF = ((cntConfig)sender).SAVEADDRESS_COMBOBOX.Text;
@@ -601,6 +684,16 @@ namespace PCAB_Debugger_GUI
         private void CONFIG_CONFIG_SETTINGS_CheckboxClickEventHandler(object sender, RoutedEventArgs e, CheckBoxCategory category, bool? isChecked)
         {
             string strSN = ((cntConfigSettings)sender).SerialNumber;
+            clsSerialIO _io = null;
+            bool flg = false;
+            foreach (clsSerialIO io in _ioList)
+            {
+                foreach (PCAB_UnitInterface unit in io.serial.UNITs)
+                {
+                    if (unit.SerialNumberASCII == strSN) { _io = io; break; flg = true; }
+                }
+                if (flg) { break; }
+            }
             bool ch;
             bool? result;
             if (isChecked == false) { ch = false; }
@@ -638,7 +731,11 @@ namespace PCAB_Debugger_GUI
             Dispatcher.BeginInvoke(new Action(() =>
             {
                 monitor.WindowClose();
-                _io.Close();
+                foreach (clsSerialIO _io in _ioList)
+                {
+                    _io.Close();
+                }
+                _ioList = new List<clsSerialIO>();
                 BOARD_GRID.Children.Clear();
                 BOARD_GRID.Children.Add(new cntBOARD());
                 CONFIG_GRID.IsEnabled = true;
@@ -653,70 +750,80 @@ namespace PCAB_Debugger_GUI
         {
             try
             {
-                List<uint> dsa = _io.serial.PCAB_GetDSA(new PCAB_UnitInterface(conf.SerialNumber));
-                int dsaIN = _io.serial.PCAB_GetDSAin(new PCAB_UnitInterface(conf.SerialNumber));
-                List<uint> dps = _io.serial.PCAB_GetDPS(new PCAB_UnitInterface(conf.SerialNumber));
-                if (dsa.Count != dps.Count || dsa.Count != 15) { return false; }
-                bool? result;
-                result = _io.serial.PCAB_GetSTB_AMP(new PCAB_UnitInterface(conf.SerialNumber));
-                switch (result)
+                foreach (clsSerialIO _io in _ioList)
                 {
-                    case true:
-                        conf.CHECKBOX_Checked("STBAMP", null);
-                        break;
-                    case false:
-                        conf.CHECKBOX_Unchecked("STBAMP", null);
-                        break;
-                    default:
-                        conf.CHECKBOX_Indeterminate("STBAMP", null);
-                        break;
-                }
-                result = _io.serial.PCAB_GetSTB_DRA(new PCAB_UnitInterface(conf.SerialNumber));
-                switch (result)
-                {
-                    case true:
-                        conf.CHECKBOX_Checked("STBDRA", null);
-                        break;
-                    case false:
-                        conf.CHECKBOX_Unchecked("STBDRA", null);
-                        break;
-                    default:
-                        conf.CHECKBOX_Indeterminate("STBDRA", null);
-                        break;
-                }
-                result = _io.serial.PCAB_GetLowPowerMode(new PCAB_UnitInterface(conf.SerialNumber));
-                switch (result)
-                {
-                    case true:
-                        conf.CHECKBOX_Checked("LPM", null);
-                        break;
-                    case false:
-                        conf.CHECKBOX_Unchecked("LPM", null);
-                        break;
-                    default:
-                        conf.CHECKBOX_Indeterminate("LPM", null);
-                        break;
-                }
-                result = _io.serial.PCAB_GetSTB_LNA(new PCAB_UnitInterface(conf.SerialNumber));
-                switch (result)
-                {
-                    case true:
-                        conf.CHECKBOX_Checked("STBLNA", null);
-                        break;
-                    case false:
-                        conf.CHECKBOX_Unchecked("STBLNA", null);
-                        break;
-                    default:
-                        conf.CHECKBOX_Indeterminate("STBLNA", null);
-                        break;
-                }
-                conf.ALL_DPS_CHECKBOX.IsChecked = false;
-                conf.ALL_DSA_CHECKBOX.IsChecked = false;
-                conf.SetDSA(0, dsaIN);
-                for(int i = 0; i < dsa.Count; i++)
-                {
-                    conf.SetDSA((uint)(i + 1), (int)dsa[i]);
-                    conf.SetDPS((uint)(i + 1), (int)dps[i]);
+                    foreach (PCAB_UnitInterface unit in _io.serial.UNITs)
+                    {
+                        if (unit.SerialNumberASCII == conf.SerialNumber)
+                        {
+                            List<uint> dsa = _io.serial.PCAB_GetDSA(new PCAB_UnitInterface(conf.SerialNumber));
+                            int dsaIN = _io.serial.PCAB_GetDSAin(new PCAB_UnitInterface(conf.SerialNumber));
+                            List<uint> dps = _io.serial.PCAB_GetDPS(new PCAB_UnitInterface(conf.SerialNumber));
+                            if (dsa.Count != dps.Count || dsa.Count != 15) { return false; }
+                            bool? result;
+                            result = _io.serial.PCAB_GetSTB_AMP(new PCAB_UnitInterface(conf.SerialNumber));
+                            switch (result)
+                            {
+                                case true:
+                                    conf.CHECKBOX_Checked("STBAMP", null);
+                                    break;
+                                case false:
+                                    conf.CHECKBOX_Unchecked("STBAMP", null);
+                                    break;
+                                default:
+                                    conf.CHECKBOX_Indeterminate("STBAMP", null);
+                                    break;
+                            }
+                            result = _io.serial.PCAB_GetSTB_DRA(new PCAB_UnitInterface(conf.SerialNumber));
+                            switch (result)
+                            {
+                                case true:
+                                    conf.CHECKBOX_Checked("STBDRA", null);
+                                    break;
+                                case false:
+                                    conf.CHECKBOX_Unchecked("STBDRA", null);
+                                    break;
+                                default:
+                                    conf.CHECKBOX_Indeterminate("STBDRA", null);
+                                    break;
+                            }
+                            result = _io.serial.PCAB_GetLowPowerMode(new PCAB_UnitInterface(conf.SerialNumber));
+                            switch (result)
+                            {
+                                case true:
+                                    conf.CHECKBOX_Checked("LPM", null);
+                                    break;
+                                case false:
+                                    conf.CHECKBOX_Unchecked("LPM", null);
+                                    break;
+                                default:
+                                    conf.CHECKBOX_Indeterminate("LPM", null);
+                                    break;
+                            }
+                            result = _io.serial.PCAB_GetSTB_LNA(new PCAB_UnitInterface(conf.SerialNumber));
+                            switch (result)
+                            {
+                                case true:
+                                    conf.CHECKBOX_Checked("STBLNA", null);
+                                    break;
+                                case false:
+                                    conf.CHECKBOX_Unchecked("STBLNA", null);
+                                    break;
+                                default:
+                                    conf.CHECKBOX_Indeterminate("STBLNA", null);
+                                    break;
+                            }
+                            conf.ALL_DPS_CHECKBOX.IsChecked = false;
+                            conf.ALL_DSA_CHECKBOX.IsChecked = false;
+                            conf.SetDSA(0, dsaIN);
+                            for (int i = 0; i < dsa.Count; i++)
+                            {
+                                conf.SetDSA((uint)(i + 1), (int)dsa[i]);
+                                conf.SetDPS((uint)(i + 1), (int)dps[i]);
+                            }
+                            break;
+                        }
+                    }
                 }
                 return true;
             }

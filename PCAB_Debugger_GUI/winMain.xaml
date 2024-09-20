@@ -46,7 +46,7 @@
                 <ColumnDefinition Width="6*"/>
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="6" x:Name="CONNECT_BUTTON" Margin="5" Click="CONNECT_BUTTON_Click" IsEnabled="False">
+            <Button Grid.Column="6" x:Name="CONNECT_BUTTON" IsEnabled="{Binding Path=CONNECT_BUTTON_ISENABLED}" Margin="5" Click="CONNECT_BUTTON_Click">
                 <Viewbox><TextBlock x:Name="CONNECT_BUTTON_CONTENT">Connect</TextBlock></Viewbox>
             </Button>
         </Grid>
