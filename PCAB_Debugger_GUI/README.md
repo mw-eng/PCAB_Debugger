@@ -31,7 +31,7 @@ ${\color{Gold} 2. \space CONTROL \space TAB}$<br>
 |2-1|Standby AMP			|If checked, it will go into standby mode.|
 |2-2|Standby DRA			|If checked, it will go into standby mode.|
 |2-3|Low Power Mode			|If checked, it will go into low power mode.|
-|2-4|Low Power Mode			|V|
+|2-4|View					|Select the port display order.|
 |2-5|Phase and ATT Config	|Setting the phase delay and attenation.|
 |2-6|Standby LNA			|If checked, it will go into standby mode.|
 |2-7|Set ATT Config			|Write attenation config.|
