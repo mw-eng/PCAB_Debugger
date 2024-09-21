@@ -510,7 +510,7 @@ namespace PCAB_Debugger_GUI
     {
         private const string REVISION_CHECK_STRING = "1.4.";
         private const int SLEEP_TIME_LOOP = 5;
-        private const int SLEEP_TIME = 10;
+        private const int SLEEP_TIME = 50;
         private SerialPort _serialPort;
         public bool isOpen { get; private set; } = false;
         public List<PCAB_UnitInterface> pcabUNITs { get; private set; } = new List<PCAB_UnitInterface>();
@@ -557,6 +557,8 @@ namespace PCAB_Debugger_GUI
                         Thread.Sleep(SLEEP_TIME_LOOP);
                         DiscardInBuffer();
                     }
+                    Thread.Sleep(SLEEP_TIME);
+                    DiscardInBuffer();
                     _serialPort.Close();
                 }
                 catch { }

@@ -193,6 +193,20 @@ namespace PCAB_Debugger_GUI
 
         private void SERIAL_PORTS_CHECKBOX_Checked(object sender, RoutedEventArgs e)
         {
+            if (0 <= SERIAL_NUMBERS_TEXTBOX.Text.IndexOf("*") && !(
+                (SERIAL_PORTS_CHECKBOX1.IsChecked == false && SERIAL_PORTS_CHECKBOX2.IsChecked == false && SERIAL_PORTS_CHECKBOX3.IsChecked == false) ||
+                (SERIAL_PORTS_CHECKBOX1.IsChecked == true && SERIAL_PORTS_CHECKBOX2.IsChecked == false && SERIAL_PORTS_CHECKBOX3.IsChecked == false) ||
+                (SERIAL_PORTS_CHECKBOX1.IsChecked == false && SERIAL_PORTS_CHECKBOX2.IsChecked == true && SERIAL_PORTS_CHECKBOX3.IsChecked == false) ||
+                (SERIAL_PORTS_CHECKBOX1.IsChecked == false && SERIAL_PORTS_CHECKBOX2.IsChecked == false && SERIAL_PORTS_CHECKBOX3.IsChecked == true)
+                ))
+            {
+                MessageBox.Show("If multiple ports are selected, \"*\" cannot be specified.");
+                if (sender is CheckBox)
+                {
+                    ((CheckBox)sender).IsChecked = false;
+                }
+                return;
+            }
             string strBF;
             if (sender is CheckBox)
             {
@@ -234,7 +248,7 @@ namespace PCAB_Debugger_GUI
                     break;
                 case "SERIAL_PORTS_CHECKBOX3":
                     SERIAL_PORTS_COMBOBOX3.IsEnabled = false;
-                    BAUD_RATE_COMBOBOX3.IsEnabled = true;
+                    BAUD_RATE_COMBOBOX3.IsEnabled = false;
                     break;
             }
             if ((SERIAL_PORTS_CHECKBOX1.IsChecked != true || (SERIAL_PORTS_CHECKBOX1.IsChecked == true && SERIAL_PORTS_COMBOBOX1.SelectedIndex >= 0)) &&
@@ -486,6 +500,17 @@ namespace PCAB_Debugger_GUI
                 if (0 <= strBF.IndexOf("*") && strBF.Length != 1)
                 {
                     MessageBox.Show("Multiple \"*\" specifications cannot be specified.");
+                    e.Handled = true;
+                    return;
+                }
+                if (0 <= strBF.IndexOf("*") && !(
+                    (SERIAL_PORTS_CHECKBOX1.IsChecked == false && SERIAL_PORTS_CHECKBOX2.IsChecked == false && SERIAL_PORTS_CHECKBOX3.IsChecked == false) ||
+                    (SERIAL_PORTS_CHECKBOX1.IsChecked == true && SERIAL_PORTS_CHECKBOX2.IsChecked == false && SERIAL_PORTS_CHECKBOX3.IsChecked == false) ||
+                    (SERIAL_PORTS_CHECKBOX1.IsChecked == false && SERIAL_PORTS_CHECKBOX2.IsChecked == true && SERIAL_PORTS_CHECKBOX3.IsChecked == false) ||
+                    (SERIAL_PORTS_CHECKBOX1.IsChecked == false && SERIAL_PORTS_CHECKBOX2.IsChecked == false && SERIAL_PORTS_CHECKBOX3.IsChecked == true)
+                    ))
+                {
+                    MessageBox.Show("If multiple ports are selected, \"*\" cannot be specified.");
                     e.Handled = true;
                     return;
                 }
@@ -770,7 +795,7 @@ namespace PCAB_Debugger_GUI
         {
             Dispatcher.BeginInvoke(new Action(() =>
             {
-                monitor.WindowClose();
+                monitor?.WindowClose();
                 foreach (clsSerialIO _io in _ioList)
                 {
                     _io.Close();
