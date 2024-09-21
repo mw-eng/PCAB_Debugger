@@ -12,7 +12,7 @@ Control GUI program.
 ### Main window
 This is how to use it when communicating one-to-one.<br>
 When communicating one-to-many, each SN is displayed in a tab.<br>
-<br><img src="https://github.com/mw-eng/PCAB_Debugger/blob/master/PCAB_Debugger_GUI/assets/UI1_Ex_.png?raw=true" width="600px"><br>
+<br><img src="https://github.com/mw-eng/PCAB_Debugger/blob/master/PCAB_Debugger_GUI/assets/UI1_Ex.png?raw=true" width="600px"><br>
 <br>
 ${\color{Aqua} 1. \space Settings \space before \space connection}$<br>
 |No|Item|Description|
@@ -23,7 +23,7 @@ ${\color{Aqua} 1. \space Settings \space before \space connection}$<br>
 |1-4|Serial Numbers			|Enter the serial number of the connect target.<br>separate with "," when connecting multiple units.<br>If you want to specify a view display, enter the code separated by "@".<br>Z : default<br>R : Rotate right 90 degrees<br>L : Rotate left 90 degrees<br>H : Rotate 180 degrees<br>ZM : default mirror<br>R : Rotate right 90 degrees and then mirror<br>L : Rotate left 90 degrees and then mirror<br>H : Rotate 180 degrees and then mirror |
 
 
-<br><img src="https://github.com/mw-eng/PCAB_Debugger/blob/master/PCAB_Debugger_GUI/assets/UI1_.png?raw=true" width="600px"><br>
+<br><img src="https://github.com/mw-eng/PCAB_Debugger/blob/master/PCAB_Debugger_GUI/assets/UI1.png?raw=true" width="600px"><br>
 <br>
 ${\color{Gold} 2. \space CONTROL \space TAB}$<br>
 |No|Item|Description|
