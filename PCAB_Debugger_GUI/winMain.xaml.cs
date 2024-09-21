@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using static PCAB_Debugger_GUI.clsSerialIO;
 using static PCAB_Debugger_GUI.cntConfig;
 using static PCAB_Debugger_GUI.cntConfigSettings;
 using static PCAB_Debugger_GUI.PCAB_SerialInterface;
@@ -57,8 +58,9 @@ namespace PCAB_Debugger_GUI
         {
             this.Title += " Ver," + System.Diagnostics.FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetExecutingAssembly().Location).ProductVersion;
             BOARD_GRID.IsEnabled = false;
+            CONFIG_EXPANDER.IsExpanded = true;
 #if DEBUG
-            //Settings.Default.Reset();
+            Settings.Default.Reset();
             this.Title += "_DEBUG MODE";
             BOARD_GRID.IsEnabled = true;
 #endif
@@ -251,7 +253,25 @@ namespace PCAB_Debugger_GUI
             }
             else
             {
-                string[] sn = SERIAL_NUMBERS_TEXTBOX.Text.Replace(" ", "").Split(',');
+                string[] snArr = SERIAL_NUMBERS_TEXTBOX.Text.Replace(" ", "").Split(',');
+                List<SN_POSI> sn = new List<SN_POSI>();
+                foreach (string strBf in snArr)
+                {
+                    string[] snBF = strBf.Split('@');
+                    if(snBF.Length == 1) { sn.Add(new SN_POSI(snBF[0], ROTATE.ZERO)); }
+                    else if(snBF.Length == 2)
+                    {
+                        if (string.Compare(snBF[1], "Z", true) == 0) { sn.Add(new SN_POSI(snBF[0], ROTATE.ZERO)); }
+                        if (string.Compare(snBF[1], "R", true) == 0) { sn.Add(new SN_POSI(snBF[0], ROTATE.RIGHT_TURN)); }
+                        if (string.Compare(snBF[1], "L", true) == 0) { sn.Add(new SN_POSI(snBF[0], ROTATE.LEFT_TURN)); }
+                        if (string.Compare(snBF[1], "H", true) == 0) { sn.Add(new SN_POSI(snBF[0], ROTATE.HALF_TURN)); }
+                        if (string.Compare(snBF[1], "ZM", true) == 0) { sn.Add(new SN_POSI(snBF[0], ROTATE.MIRROR_ZERO)); }
+                        if (string.Compare(snBF[1], "RM", true) == 0) { sn.Add(new SN_POSI(snBF[0], ROTATE.MIRROR_RIGHT_TURN)); }
+                        if (string.Compare(snBF[1], "LM", true) == 0) { sn.Add(new SN_POSI(snBF[0], ROTATE.MIRROR_LEFT_TURN)); }
+                        if (string.Compare(snBF[1], "HM", true) == 0) { sn.Add(new SN_POSI(snBF[0], ROTATE.MIRROR_HALF_TURN)); }
+                        if (string.Compare(snBF[1], "M", true) == 0) { sn.Add(new SN_POSI(snBF[0], ROTATE.MATRIX)); }
+                    }
+                }
                 SerialPortTable[] pt = GetDeviceNames();
                 if (SERIAL_PORTS_CHECKBOX1.IsChecked == true)
                 {
@@ -437,7 +457,7 @@ namespace PCAB_Debugger_GUI
         private void SN_TextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
             // 0-9およびa-f/A-Fのみ
-            e.Handled = !new Regex("[0-9|a-z|A-Z|,| |*]").IsMatch(e.Text);
+            e.Handled = !new Regex("[0-9|a-z|A-Z|,| |*|@]").IsMatch(e.Text);
         }
 
         private void SN_TextBox_PreviewExecuted(object sender, ExecutedRoutedEventArgs e)
@@ -448,7 +468,7 @@ namespace PCAB_Debugger_GUI
                 string strTXT = Clipboard.GetText();
                 for (int cnt = 0; cnt < strTXT.Length; cnt++)
                 {
-                    if (!new Regex("[0-9|a-z|A-Z|,]|[ ]").IsMatch(strTXT[cnt].ToString()))
+                    if (!new Regex("[0-9|a-z|A-Z|,|@]|[ ]").IsMatch(strTXT[cnt].ToString()))
                     {
                         // 処理済み
                         e.Handled = true;
@@ -474,7 +494,27 @@ namespace PCAB_Debugger_GUI
                 {
                     foreach (string str in arrBF)
                     {
-                        if (str.Length < 0 || 15 < str.Length) { throw new Exception(); }
+                        string[] snBF = str.Split('@');
+                        if (snBF.Length == 1)
+                        {
+                            if (snBF[0].Length < 0 || 15 < snBF[0].Length) { throw new Exception(); }
+                        }
+                        else if(snBF.Length == 2)
+                        {
+                            if (snBF[0].Length < 0 || 15 < snBF[0].Length) { throw new Exception(); }
+                            if (string.Compare(snBF[1], "Z", true) != 0 &&
+                                string.Compare(snBF[1], "R", true) != 0 &&
+                                string.Compare(snBF[1], "L", true) != 0 &&
+                                string.Compare(snBF[1], "H", true) != 0 &&
+                                string.Compare(snBF[1], "ZM", true) != 0 &&
+                                string.Compare(snBF[1], "RM", true) != 0 &&
+                                string.Compare(snBF[1], "LM", true) != 0 &&
+                                string.Compare(snBF[1], "HM", true) != 0 &&
+                                string.Compare(snBF[1], "M", true) != 0)
+                            {
+                                throw new Exception();
+                            }
+                        }
                     }
                 }
                 else { throw new Exception(); }

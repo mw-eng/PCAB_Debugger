@@ -5,6 +5,13 @@ The main unit firmware. @ RP2040
 Firmware is stored at the beginning of the flash ROM. The area used varies depending on the firmware capacity.<br>
 The last block is store STATE information and factory settings, the last 16 bytes store the 15-character serial number in ASCII code, and the last byte stores the character count.<br>
 
+## RS485 Serial Port Configuration
+* Baud rate : 1,000,000 [bps] @ Factory Default
+* Data bits : 8 [bit]
+* Prity bits : None
+* Stop bits : 1 [bit]
+* Flow control : None
+
 ## RS485 Serial Communication Protocol
 ### ASCII Communication Mode
 Send commands in the order of *#{SERIAL NUMBER}*, *{COMMAND}*, *{ARGUMENTS}*, and *{EXIT CODE}*, separated by space.<br>

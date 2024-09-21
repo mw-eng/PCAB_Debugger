@@ -12,8 +12,7 @@ Control GUI program.
 ### Main window
 This is how to use it when communicating one-to-one.<br>
 When communicating one-to-many, each SN is displayed in a tab.<br>
-<br>
-<img src="https://github.com/mw-eng/PCAB_Debugger/blob/master/PCAB_Debugger_GUI/assets/UI1.png?raw=true" width="600px"><br>
+<br><img src="https://github.com/mw-eng/PCAB_Debugger/blob/master/PCAB_Debugger_GUI/assets/UI1_Ex_.png?raw=true" width="600px"><br>
 <br>
 ${\color{Aqua} 1. \space Settings \space before \space connection}$<br>
 |No|Item|Description|
@@ -21,24 +20,28 @@ ${\color{Aqua} 1. \space Settings \space before \space connection}$<br>
 |1-1|Serial Port			|Select the *Serial Port* coneected to PCAB.
 |1-2|Baud Rate				|Select the *BAUD RATE* for the main communication to the PCAB.
 |1-3|Monitor loop inberval	|Specifies the acquisition interval for monitors (temperature, etc.) in milliseconds.|
-|1-4|Serial Numbers			|Enter the serial number of the connect target (separate with "," when connecting multiple units).|
+|1-4|Serial Numbers			|Enter the serial number of the connect target.<br>separate with "," when connecting multiple units.<br>If you want to specify a view display, enter the code separated by "@".<br>Z : default<br>R : Rotate right 90 degrees<br>L : Rotate left 90 degrees<br>H : Rotate 180 degrees<br>ZM : default mirror<br>R : Rotate right 90 degrees and then mirror<br>L : Rotate left 90 degrees and then mirror<br>H : Rotate 180 degrees and then mirror |
 
+
+<br><img src="https://github.com/mw-eng/PCAB_Debugger/blob/master/PCAB_Debugger_GUI/assets/UI1_.png?raw=true" width="600px"><br>
+<br>
 ${\color{Gold} 2. \space CONTROL \space TAB}$<br>
 |No|Item|Description|
 |:--|:--|:--|
 |2-1|Standby AMP			|If checked, it will go into standby mode.|
 |2-2|Standby DRA			|If checked, it will go into standby mode.|
 |2-3|Low Power Mode			|If checked, it will go into low power mode.|
-|2-4|Phase and ATT Config	|Setting the phase delay and attenation.|
-|2-5|Standby LNA			|If checked, it will go into standby mode.|
-|2-6|Set ATT Config			|Write attenation config.|
-|2-7|Set Phase Config		|Write phase delay config.|
-|2-8|Set Config				|Write phase delay and attnation config.|
-|2-8|Read Config			|Read the currently set state.|
-|2-9|Save and Load Target	|Memory number to save and load. <br>0 specifies the autoload region {0xE0 - 0}.|
-|2-10|Load Memory			|Load state to memory(ROM).|
-|2-11|Save Memory			|Save state to memory(ROM).|
-|2-12|Preset Config			|Preset config load.(Load factory defaults.)|
+|2-4|Low Power Mode			|V|
+|2-5|Phase and ATT Config	|Setting the phase delay and attenation.|
+|2-6|Standby LNA			|If checked, it will go into standby mode.|
+|2-7|Set ATT Config			|Write attenation config.|
+|2-8|Set Phase Config		|Write phase delay config.|
+|2-9|Set Config				|Write phase delay and attnation config.|
+|2-10|Read Config			|Read the currently set state.|
+|2-11|Save and Load Target	|Memory number to save and load. <br>0 specifies the autoload region {0xE0 - 0}.|
+|2-12|Load Memory			|Load state to memory(ROM).|
+|2-13|Save Memory			|Save state to memory(ROM).|
+|2-14|Preset Config			|Preset config load.(Load factory defaults.)|
 
 
 <br><img src="https://github.com/mw-eng/PCAB_Debugger/blob/master/PCAB_Debugger_GUI/assets/UI2.png?raw=true" width="600px"><br>
@@ -51,15 +54,15 @@ ${\color{LightSkyBlue} 3. \space AUTO \space TAB \space}$ Automatic measurement 
 |3-3|Channel			|Config collection channels.|
 |3-4|Mode Settings		|Automatic trigger settings.|
 |3-5|Save target		|Select save target.|
-|3-7|File Name Header	|Save file name header.|
-|3-8|DPS Loop 			|Enable the phase delay step loop.|
-|3-9|DPS step			|Select the phase delay step interval.|
-|3-0|DPSn				|Select loop target.|
-|3-11|DSA Loop 			|Enable the attenation step loop.|
-|3-12|DSA step			|Select the attenation step interval.|
-|3-13|DSAn				|Select loop target.|
-|3-14|Waite Time		|Waite time befor next step.|
-|3-15|START Button		|Automatic loop control execution button.|
+|3-6|File Name Header	|Save file name header.|
+|3-7|DPS Loop 			|Enable the phase delay step loop.|
+|3-8|DPS step			|Select the phase delay step interval.|
+|3-9|DPSn				|Select loop target.|
+|3-10|DSA Loop 			|Enable the attenation step loop.|
+|3-11|DSA step			|Select the attenation step interval.|
+|3-12|DSAn				|Select loop target.|
+|3-13|Waite Time		|Waite time befor next step.|
+|3-14|START Button		|Automatic loop control execution button.|
 
 <br><br>
 
@@ -72,10 +75,11 @@ For one-to-many communication, it is displayed as a list.<br>
 ${\color{Magenta} 4. \space Sensor \space display \space Window}$<br>
 |No|Item|Description|
 |:--|:--|:--|
-|4-2|CPU TMP      |CPU internal temperature value [degreeC].|
-|4-3|SNS Vin      |Vin voltage value [V].|
-|4-4|SNS Pin      |PreAMP Detector voltage value [V].|
-|4-5|SNS Id       |Id current value [A].|
-|4-6|SNS Vd       |Vd voltage value [V].|
+|4-1|CPU TMP      |CPU internal temperature value [degreeC].|
+|4-2|SNS Vin      |Vin voltage value [V].|
+|4-3|SNS Pin      |PreAMP Detector voltage value [V].|
+|4-4|SNS Id       |Id current value [A].|
+|4-5|SNS Vd       |Vd voltage value [V].|
+|4-6|TMP AVG      |1-wire sensor temperature avarage [degreeC].|
 |4-7|Tempurature  |1-wire sensor temperature id(HEX) and value [degreeC].|
 

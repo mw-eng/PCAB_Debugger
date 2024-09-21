@@ -12,6 +12,54 @@
                 <Setter Property="HorizontalContentAlignment" Value="Center"/>
                 <Setter Property="VerticalContentAlignment" Value="Center"/>
             </Style>
+            <Style TargetType="{x:Type Grid}" x:Key="GRID_BGCOLOR01">
+                <Setter Property="Background" Value="#7F00FF00"/>
+            </Style>
+            <Style TargetType="{x:Type Grid}" x:Key="GRID_BGCOLOR02">
+                <Setter Property="Background" Value="#7F00FF24"/>
+            </Style>
+            <Style TargetType="{x:Type Grid}" x:Key="GRID_BGCOLOR03">
+                <Setter Property="Background" Value="#7F00FF48"/>
+            </Style>
+            <Style TargetType="{x:Type Grid}" x:Key="GRID_BGCOLOR04">
+                <Setter Property="Background" Value="#7F00FF6C"/>
+            </Style>
+            <Style TargetType="{x:Type Grid}" x:Key="GRID_BGCOLOR05">
+                <Setter Property="Background" Value="#7F00FF90"/>
+            </Style>
+            <Style TargetType="{x:Type Grid}" x:Key="GRID_BGCOLOR06">
+                <Setter Property="Background" Value="#7F00FFB4"/>
+            </Style>
+            <Style TargetType="{x:Type Grid}" x:Key="GRID_BGCOLOR07">
+                <Setter Property="Background" Value="#7F00FFD8"/>
+            </Style>
+            <Style TargetType="{x:Type Grid}" x:Key="GRID_BGCOLOR08">
+                <Setter Property="Background" Value="#7F00FFFF"/>
+            </Style>
+            <Style TargetType="{x:Type Grid}" x:Key="GRID_BGCOLOR09">
+                <Setter Property="Background" Value="#7F00D8FF"/>
+            </Style>
+            <Style TargetType="{x:Type Grid}" x:Key="GRID_BGCOLOR10">
+                <Setter Property="Background" Value="#7F00B4FF"/>
+            </Style>
+            <Style TargetType="{x:Type Grid}" x:Key="GRID_BGCOLOR11">
+                <Setter Property="Background" Value="#7F0090FF"/>
+            </Style>
+            <Style TargetType="{x:Type Grid}" x:Key="GRID_BGCOLOR12">
+                <Setter Property="Background" Value="#7F006CFF"/>
+            </Style>
+            <Style TargetType="{x:Type Grid}" x:Key="GRID_BGCOLOR13">
+                <Setter Property="Background" Value="#7F0048FF"/>
+            </Style>
+            <Style TargetType="{x:Type Grid}" x:Key="GRID_BGCOLOR14">
+                <Setter Property="Background" Value="#7F0024FF"/>
+            </Style>
+            <Style TargetType="{x:Type Grid}" x:Key="GRID_BGCOLOR15">
+                <Setter Property="Background" Value="#7F0000FF"/>
+            </Style>
+            <Style TargetType="{x:Type Grid}" x:Key="GRID_BGCOLOR16">
+                <Setter Property="Background" Value="#FFFFFF00"/>
+            </Style>
             <Style TargetType="{x:Type ComboBox}" x:Key="COMBOBOX_CONTENT_CENTER">
                 <Setter Property="HorizontalContentAlignment" Value="Left"/>
                 <Setter Property="VerticalContentAlignment" Value="Center"/>
@@ -184,6 +232,17 @@
                 <sys:String>7.50  dB  (011110 = 30)</sys:String>
                 <sys:String>7.75  dB  (011111 = 31)</sys:String>
             </x:Array>
+            <x:Array xmlns:sys="clr-namespace:System;assembly=mscorlib" xml:space="preserve" Type="{x:Type sys:String}" x:Key="VIEW_List">
+                <sys:String>         ZERO        </sys:String>
+                <sys:String>      RIGHT TURN     </sys:String>
+                <sys:String>      LEFT TURN      </sys:String>
+                <sys:String>      HALF TURN      </sys:String>
+                <sys:String>     ZERO MIRROR     </sys:String>
+                <sys:String>RIGHT TURN and MIRROR</sys:String>
+                <sys:String> LEFT TURN and MIRROR</sys:String>
+                <sys:String> HALF TURN and MIRROR</sys:String>
+                <sys:String>        MATRIX       </sys:String>
+            </x:Array>
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid Grid.Column="0" Background="#FFFFF587">
@@ -203,6 +262,14 @@
             <Viewbox Grid.Row="0" Grid.Column="0" Margin="5" HorizontalAlignment="Left"><CheckBox x:Name="STBAMP_CHECKBOX" Style="{StaticResource CHECKBOX_CONTENT_CENTER}" Content="Standby AMP" Checked="CHECKBOX_Checked" Unchecked="CHECKBOX_Unchecked" Indeterminate="CHECKBOX_Indeterminate" /></Viewbox>
             <Viewbox Grid.Row="0" Grid.Column="1" Margin="5" HorizontalAlignment="Left"><CheckBox x:Name="STBDRA_CHECKBOX" Style="{StaticResource CHECKBOX_CONTENT_CENTER}" Content="Standby DRA" Checked="CHECKBOX_Checked" Unchecked="CHECKBOX_Unchecked" Indeterminate="CHECKBOX_Indeterminate" /></Viewbox>
             <Viewbox Grid.Row="1" Grid.Column="0" Margin="5" HorizontalAlignment="Left"><CheckBox x:Name="SETLPM_CHECKBOX" Style="{StaticResource CHECKBOX_CONTENT_CENTER}" Content="Low Power Mode" Checked="CHECKBOX_Checked" Unchecked="CHECKBOX_Unchecked" Indeterminate="CHECKBOX_Indeterminate" /></Viewbox>
+            <Grid Grid.Row="1" Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <Viewbox Grid.Column="0" HorizontalAlignment="Right" Margin="5"><TextBlock Text="View"/></Viewbox>
+                <Viewbox Grid.Column="1" HorizontalAlignment="Left"><ComboBox x:Name="VIEW_COMBOBOX" SelectedIndex="0" ItemsSource="{StaticResource VIEW_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}" DropDownClosed="VIEW_COMBOBOX_DropDownClosed"/></Viewbox>
+            </Grid>
         </Grid>
         <Grid Grid.Row="1">
             <Grid.RowDefinitions>
@@ -246,7 +313,7 @@
                     <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
-                <Grid x:Name="P01_GRID" Grid.Row="3" Grid.Column="3" Margin="5">
+                <Grid x:Name="P01_GRID" Grid.Row="3" Grid.Column="3" Margin="5" Style="{StaticResource GRID_BGCOLOR01}">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="1*"/>
                         <RowDefinition Height="1*"/>
@@ -256,7 +323,7 @@
                     <Viewbox Grid.Row="1"><ComboBox SelectedIndex="0" x:Name="DSA01_COMBOBOX" ItemsSource="{StaticResource DSA_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/></Viewbox>
                     <Viewbox Grid.Row="2"><ComboBox SelectedIndex="0" x:Name="DPS01_COMBOBOX" ItemsSource="{StaticResource DPS_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/></Viewbox>
                 </Grid>
-                <Grid x:Name="P02_GRID" Grid.Row="2" Grid.Column="3" Margin="5">
+                <Grid x:Name="P02_GRID" Grid.Row="2" Grid.Column="3" Margin="5" Style="{StaticResource GRID_BGCOLOR02}">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="1*"/>
                         <RowDefinition Height="1*"/>
@@ -266,7 +333,7 @@
                     <Viewbox Grid.Row="1"><ComboBox SelectedIndex="0" x:Name="DSA02_COMBOBOX" ItemsSource="{StaticResource DSA_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/></Viewbox>
                     <Viewbox Grid.Row="2"><ComboBox SelectedIndex="0" x:Name="DPS02_COMBOBOX" ItemsSource="{StaticResource DPS_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/></Viewbox>
                 </Grid>
-                <Grid x:Name="P03_GRID" Grid.Row="1" Grid.Column="3" Margin="5">
+                <Grid x:Name="P03_GRID" Grid.Row="1" Grid.Column="3" Margin="5" Style="{StaticResource GRID_BGCOLOR03}">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="1*"/>
                         <RowDefinition Height="1*"/>
@@ -276,7 +343,7 @@
                     <Viewbox Grid.Row="1"><ComboBox SelectedIndex="0" x:Name="DSA03_COMBOBOX" ItemsSource="{StaticResource DSA_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/></Viewbox>
                     <Viewbox Grid.Row="2"><ComboBox SelectedIndex="0" x:Name="DPS03_COMBOBOX" ItemsSource="{StaticResource DPS_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/></Viewbox>
                 </Grid>
-                <Grid x:Name="P04_GRID" Grid.Row="0" Grid.Column="3" Margin="5">
+                <Grid x:Name="P04_GRID" Grid.Row="0" Grid.Column="3" Margin="5" Style="{StaticResource GRID_BGCOLOR04}">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="1*"/>
                         <RowDefinition Height="1*"/>
@@ -286,7 +353,7 @@
                     <Viewbox Grid.Row="1"><ComboBox SelectedIndex="0" x:Name="DSA04_COMBOBOX" ItemsSource="{StaticResource DSA_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/></Viewbox>
                     <Viewbox Grid.Row="2"><ComboBox SelectedIndex="0" x:Name="DPS04_COMBOBOX" ItemsSource="{StaticResource DPS_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/></Viewbox>
                 </Grid>
-                <Grid x:Name="P05_GRID" Grid.Row="0" Grid.Column="2" Margin="5">
+                <Grid x:Name="P05_GRID" Grid.Row="0" Grid.Column="2" Margin="5" Style="{StaticResource GRID_BGCOLOR05}">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="1*"/>
                         <RowDefinition Height="1*"/>
@@ -296,7 +363,7 @@
                     <Viewbox Grid.Row="1"><ComboBox SelectedIndex="0" x:Name="DSA05_COMBOBOX" ItemsSource="{StaticResource DSA_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/></Viewbox>
                     <Viewbox Grid.Row="2"><ComboBox SelectedIndex="0" x:Name="DPS05_COMBOBOX" ItemsSource="{StaticResource DPS_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/></Viewbox>
                 </Grid>
-                <Grid x:Name="P06_GRID" Grid.Row="1" Grid.Column="2" Margin="5">
+                <Grid x:Name="P06_GRID" Grid.Row="1" Grid.Column="2" Margin="5" Style="{StaticResource GRID_BGCOLOR06}">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="1*"/>
                         <RowDefinition Height="1*"/>
@@ -306,7 +373,7 @@
                     <Viewbox Grid.Row="1"><ComboBox SelectedIndex="0" x:Name="DSA06_COMBOBOX" ItemsSource="{StaticResource DSA_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/></Viewbox>
                     <Viewbox Grid.Row="2"><ComboBox SelectedIndex="0" x:Name="DPS06_COMBOBOX" ItemsSource="{StaticResource DPS_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/></Viewbox>
                 </Grid>
-                <Grid x:Name="P07_GRID" Grid.Row="2" Grid.Column="2" Margin="5">
+                <Grid x:Name="P07_GRID" Grid.Row="2" Grid.Column="2" Margin="5" Style="{StaticResource GRID_BGCOLOR07}">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="1*"/>
                         <RowDefinition Height="1*"/>
@@ -316,7 +383,7 @@
                     <Viewbox Grid.Row="1"><ComboBox SelectedIndex="0" x:Name="DSA07_COMBOBOX" ItemsSource="{StaticResource DSA_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/></Viewbox>
                     <Viewbox Grid.Row="2"><ComboBox SelectedIndex="0" x:Name="DPS07_COMBOBOX" ItemsSource="{StaticResource DPS_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/></Viewbox>
                 </Grid>
-                <Grid x:Name="P08_GRID" Grid.Row="3" Grid.Column="2" Margin="5">
+                <Grid x:Name="P08_GRID" Grid.Row="3" Grid.Column="2" Margin="5" Style="{StaticResource GRID_BGCOLOR08}">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="1*"/>
                         <RowDefinition Height="1*"/>
@@ -326,7 +393,7 @@
                     <Viewbox Grid.Row="1"><ComboBox SelectedIndex="0" x:Name="DSA08_COMBOBOX" ItemsSource="{StaticResource DSA_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/></Viewbox>
                     <Viewbox Grid.Row="2"><ComboBox SelectedIndex="0" x:Name="DPS08_COMBOBOX" ItemsSource="{StaticResource DPS_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/></Viewbox>
                 </Grid>
-                <Grid x:Name="P09_GRID" Grid.Row="3" Grid.Column="1" Margin="5">
+                <Grid x:Name="P09_GRID" Grid.Row="3" Grid.Column="1" Margin="5" Style="{StaticResource GRID_BGCOLOR09}">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="1*"/>
                         <RowDefinition Height="1*"/>
@@ -336,7 +403,7 @@
                     <Viewbox Grid.Row="1"><ComboBox SelectedIndex="0" x:Name="DSA09_COMBOBOX" ItemsSource="{StaticResource DSA_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/></Viewbox>
                     <Viewbox Grid.Row="2"><ComboBox SelectedIndex="0" x:Name="DPS09_COMBOBOX" ItemsSource="{StaticResource DPS_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/></Viewbox>
                 </Grid>
-                <Grid x:Name="P10_GRID" Grid.Row="2" Grid.Column="1" Margin="5">
+                <Grid x:Name="P10_GRID" Grid.Row="2" Grid.Column="1" Margin="5" Style="{StaticResource GRID_BGCOLOR10}">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="1*"/>
                         <RowDefinition Height="1*"/>
@@ -346,7 +413,7 @@
                     <Viewbox Grid.Row="1"><ComboBox SelectedIndex="0" x:Name="DSA10_COMBOBOX" ItemsSource="{StaticResource DSA_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/></Viewbox>
                     <Viewbox Grid.Row="2"><ComboBox SelectedIndex="0" x:Name="DPS10_COMBOBOX" ItemsSource="{StaticResource DPS_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/></Viewbox>
                 </Grid>
-                <Grid x:Name="P11_GRID" Grid.Row="1" Grid.Column="1" Margin="5">
+                <Grid x:Name="P11_GRID" Grid.Row="1" Grid.Column="1" Margin="5" Style="{StaticResource GRID_BGCOLOR11}">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="1*"/>
                         <RowDefinition Height="1*"/>
@@ -356,7 +423,7 @@
                     <Viewbox Grid.Row="1"><ComboBox SelectedIndex="0" x:Name="DSA11_COMBOBOX" ItemsSource="{StaticResource DSA_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/></Viewbox>
                     <Viewbox Grid.Row="2"><ComboBox SelectedIndex="0" x:Name="DPS11_COMBOBOX" ItemsSource="{StaticResource DPS_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/></Viewbox>
                 </Grid>
-                <Grid x:Name="P12_GRID" Grid.Row="0" Grid.Column="1" Margin="5">
+                <Grid x:Name="P12_GRID" Grid.Row="0" Grid.Column="1" Margin="5" Style="{StaticResource GRID_BGCOLOR12}">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="1*"/>
                         <RowDefinition Height="1*"/>
@@ -366,7 +433,7 @@
                     <Viewbox Grid.Row="1"><ComboBox SelectedIndex="0" x:Name="DSA12_COMBOBOX" ItemsSource="{StaticResource DSA_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/></Viewbox>
                     <Viewbox Grid.Row="2"><ComboBox SelectedIndex="0" x:Name="DPS12_COMBOBOX" ItemsSource="{StaticResource DPS_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/></Viewbox>
                 </Grid>
-                <Grid x:Name="P13_GRID" Grid.Row="0" Grid.Column="0" Margin="5">
+                <Grid x:Name="P13_GRID" Grid.Row="0" Grid.Column="0" Margin="5" Style="{StaticResource GRID_BGCOLOR13}">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="1*"/>
                         <RowDefinition Height="1*"/>
@@ -376,7 +443,7 @@
                     <Viewbox Grid.Row="1"><ComboBox SelectedIndex="0" x:Name="DSA13_COMBOBOX" ItemsSource="{StaticResource DSA_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/></Viewbox>
                     <Viewbox Grid.Row="2"><ComboBox SelectedIndex="0" x:Name="DPS13_COMBOBOX" ItemsSource="{StaticResource DPS_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/></Viewbox>
                 </Grid>
-                <Grid x:Name="P14_GRID" Grid.Row="1" Grid.Column="0" Margin="5">
+                <Grid x:Name="P14_GRID" Grid.Row="1" Grid.Column="0" Margin="5" Style="{StaticResource GRID_BGCOLOR14}">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="1*"/>
                         <RowDefinition Height="1*"/>
@@ -386,7 +453,7 @@
                     <Viewbox Grid.Row="1"><ComboBox SelectedIndex="0" x:Name="DSA14_COMBOBOX" ItemsSource="{StaticResource DSA_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/></Viewbox>
                     <Viewbox Grid.Row="2"><ComboBox SelectedIndex="0" x:Name="DPS14_COMBOBOX" ItemsSource="{StaticResource DPS_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/></Viewbox>
                 </Grid>
-                <Grid x:Name="P15_GRID" Grid.Row="2" Grid.Column="0" Margin="5">
+                <Grid x:Name="P15_GRID" Grid.Row="2" Grid.Column="0" Margin="5" Style="{StaticResource GRID_BGCOLOR15}">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="1*"/>
                         <RowDefinition Height="1*"/>
@@ -396,7 +463,7 @@
                     <Viewbox Grid.Row="1"><ComboBox SelectedIndex="0" x:Name="DSA15_COMBOBOX" ItemsSource="{StaticResource DSA_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/></Viewbox>
                     <Viewbox Grid.Row="2"><ComboBox SelectedIndex="0" x:Name="DPS15_COMBOBOX" ItemsSource="{StaticResource DPS_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/></Viewbox>
                 </Grid>
-                <Grid x:Name="P16_GRID" Grid.Row="3" Grid.Column="0" Margin="5">
+                <Grid x:Name="P16_GRID" Grid.Row="3" Grid.Column="0" Margin="5" Style="{StaticResource GRID_BGCOLOR16}">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="1*"/>
                         <RowDefinition Height="1*"/>

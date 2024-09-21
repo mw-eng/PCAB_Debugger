@@ -52,7 +52,7 @@
         </Grid>
         <Grid Grid.Row="1" Grid.RowSpan="5" Panel.ZIndex="1">
             <Grid.RowDefinitions><RowDefinition Height="AUTO"/></Grid.RowDefinitions>
-            <Expander Grid.Column="0" x:Name="CONFIG_EXPANDER" ExpandDirection="Down" IsExpanded="True" Background="#FFB8FFFD">
+            <Expander Grid.Column="0" x:Name="CONFIG_EXPANDER" ExpandDirection="Down" IsExpanded="False" Background="#FFB8FFFD">
                 <Expander.Header><Viewbox Height="30"><TextBlock Text="CONTROL CONFIG"/></Viewbox></Expander.Header>
                 <Grid Grid.Row="1" x:Name="CONFIG_GRID" Background="#FFB8FFFD" Height="200" Margin="5">
                     <Grid.RowDefinitions>

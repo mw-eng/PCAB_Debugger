@@ -29,17 +29,19 @@ namespace PCAB_Debugger_GUI
             serialInterface = null;
         }
 
-        public bool PCAB_AutoTaskStart(UInt32 waiteTime, string[] serialNum)
+        public List<bool> PCAB_AutoTaskStart(UInt32 waiteTime, List<string> serialNum)
         {
             if (serialInterface.isOpen) { serialInterface.Close(); }
-            if (serialInterface.Open(serialNum))
+            List<bool> ret = serialInterface.Open(serialNum);
+            bool result = false;
+            foreach(bool re in ret) { if (re) { result = true; break; } }
+            if (result)
             {
                 _task = true;
                 _state = false;
                 Task.Factory.StartNew(() => { PCAB_Task(waiteTime); });
-                return true;
             }
-            else { return false; }
+            return ret;
         }
 
         private void PCAB_Task(UInt32 waiteTime)
@@ -566,13 +568,14 @@ namespace PCAB_Debugger_GUI
         /// <summary>Open Serial Port</summary>
         /// <param name="SerialNumbers">Serial Number List</param>
         /// <returns></returns>
-        public bool Open(string[] SerialNumbers)
+        public List<bool> Open(List<String> SerialNumbers)
         {
-            if (SerialNumbers.Length <= 0)
+            List<bool> results = new List<bool>();
+            if (SerialNumbers.Count <= 0)
             {
-                return false;
+                return results;
             }
-            if (_serialPort?.IsOpen == true) { return false; }
+            if (_serialPort?.IsOpen == true) { return results; }
             try { _serialPort.Open(); }
             catch (UnauthorizedAccessException) { MessageBox.Show("Serial port open Error.\nAlready used.\n", "Error", MessageBoxButton.OK, MessageBoxImage.Error); throw; }
             catch (Exception e) { MessageBox.Show("Serial port open Error.\n{" + e.ToString() + "}\n", "Error", MessageBoxButton.OK, MessageBoxImage.Error); throw; }
@@ -609,17 +612,20 @@ namespace PCAB_Debugger_GUI
                     {
                         _serialPort.WriteLine("#" + s + " GetIDN");
                         string[] arrBf = _serialPort.ReadLine().Split(',');
-                        if (arrBf.Length != 4) { _serialPort.Close(); return false; }
                         if (arrBf.Length == 4)
                         {
                             if (arrBf[0] == "Orient Microwave Corp." && arrBf[1] == "LX00-0004-00" && arrBf[3].Substring(0, REVISION_CHECK_STRING.Length) == REVISION_CHECK_STRING && (arrBf[2] == s || "*" == s))
                             {
                                 pcabUNITs.Add(new PCAB_UnitInterface(s));
+                                results.Add(true);
                             }
+                            else { results.Add(false); }
                         }
+                        else { results.Add(false); }
                     }
                     catch
                     {
+                        results.Add(false);
                         _serialPort.WriteLine("#" + s + " CUI 1");
                         Thread.Sleep(SLEEP_TIME_LOOP);
                         DiscardInBuffer();
@@ -629,7 +635,7 @@ namespace PCAB_Debugger_GUI
                 if (pcabUNITs.Count <= 0)
                 {
                     _serialPort.Close();
-                    return false;
+                    return results;
                 }
 
                 foreach (PCAB_UnitInterface unit in pcabUNITs)
@@ -642,10 +648,10 @@ namespace PCAB_Debugger_GUI
             }
             catch (Exception)
             {
-                return false;
+                return results;
             }
             isOpen = true;
-            return true;
+            return results;
         }
 
         public void DiscardInBuffer()

@@ -8,6 +8,12 @@ namespace PCAB_Debugger_GUI
 {
     public class clsSerialIO
     {
+        public struct SN_POSI
+        {
+            public string SerialNumber { get; set; }
+            public ROTATE RotateCODE { get; set; }
+            public SN_POSI(string _serialNumber, ROTATE _rotatecode) { SerialNumber = _serialNumber; RotateCODE = _rotatecode; }
+        }
         private PCAB_TASK _task;
         public bool? isOpen { get { return _task?.isOpen; } }
         public List<cntBOARD> PCAB_Boards {  get; private set; } = new List<cntBOARD>();
@@ -23,19 +29,25 @@ namespace PCAB_Debugger_GUI
 
         ~clsSerialIO() { }
 
-        public void Open(string[] SerialNumber, uint MonitorIntervalTime)
+        public void Open(List<SN_POSI> SerialNumber_Posi, uint MonitorIntervalTime)
         {
-            if (_task.PCAB_AutoTaskStart(MonitorIntervalTime, SerialNumber))
+            bool result = false;
+            List<string> serialNumber = new List<string>();
+            foreach(SN_POSI snp in SerialNumber_Posi) { serialNumber.Add(snp.SerialNumber); }
+            List<bool> ret = _task.PCAB_AutoTaskStart(MonitorIntervalTime, serialNumber);
+            foreach (bool re in ret) { if (re) { result = true; break; } }
+            if (result && ret.Count == SerialNumber_Posi.Count)
             {
-                foreach (PCAB_SerialInterface.PCAB_UnitInterface unit in _task.UNITs)
+                int cnt = 0;
+                for (int snCNT = 0; snCNT < SerialNumber_Posi.Count; snCNT++)
                 {
-                    //PCAB_Boards.Add(new cntBOARD(unit.SerialNumberASCII, ROTATE.ZERO));
-                    PCAB_Boards.Add(new cntBOARD(unit.SerialNumberASCII, ROTATE.ZERO));
-                    PCAB_Monitors.Add(new cntMonitor(unit.SerialNumberASCII));
-                }
-                for (int cnt = 0; cnt < _task.UNITs.Count; cnt++)
-                {
-                    PCAB_Monitors[cnt].TITLE = "S/N, " + _task.UNITs[cnt].SerialNumberASCII;
+                    if (ret[snCNT])
+                    {
+                        PCAB_Boards.Add(new cntBOARD(_task.UNITs[cnt].SerialNumberASCII, SerialNumber_Posi[snCNT].RotateCODE));
+                        PCAB_Monitors.Add(new cntMonitor(_task.UNITs[cnt].SerialNumberASCII));
+                        PCAB_Monitors[cnt].TITLE = "S/N, " + _task.UNITs[cnt].SerialNumberASCII;
+                        cnt++;
+                    }
                 }
             }
         }
