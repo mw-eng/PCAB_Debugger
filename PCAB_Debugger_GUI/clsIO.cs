@@ -8,7 +8,7 @@ namespace PCAB_Debugger_GUI
 {
     public class clsSerialIO
     {
-        public struct SN_POSI : IEqualityComparer<SN_POSI>
+        public struct SN_POSI : IEquatable<SN_POSI>,  IEqualityComparer<SN_POSI>
         {
             public string SerialNumber { get; set; }
             public ROTATE RotateCODE { get; set; }
@@ -16,12 +16,18 @@ namespace PCAB_Debugger_GUI
 
             public bool Equals(SN_POSI x, SN_POSI y)
             {
-                return (x.SerialNumber == y.SerialNumber);
+                if (Object.ReferenceEquals(x, y)) return true;
+                return x.SerialNumber == y.SerialNumber;
             }
 
             public int GetHashCode(SN_POSI obj)
             {
                 return this.GetHashCode();
+            }
+
+            bool IEquatable<SN_POSI>.Equals(SN_POSI other)
+            {
+                return this.SerialNumber == other.SerialNumber;
             }
         }
         private PCAB_TASK _task;
