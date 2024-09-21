@@ -2,6 +2,7 @@
 using PCAB_Debugger_GUI.Properties;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
@@ -286,6 +287,9 @@ namespace PCAB_Debugger_GUI
                         if (string.Compare(snBF[1], "M", true) == 0) { sn.Add(new SN_POSI(snBF[0], ROTATE.MATRIX)); }
                     }
                 }
+#if !DEBUG
+                sn = sn.Distinct().ToList();
+#endif
                 SerialPortTable[] pt = GetDeviceNames();
                 if (SERIAL_PORTS_CHECKBOX1.IsChecked == true)
                 {

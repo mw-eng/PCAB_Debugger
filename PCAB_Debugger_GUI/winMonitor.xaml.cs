@@ -1,6 +1,5 @@
 ﻿using PCAB_Debugger_GUI.Properties;
 using System;
-using System.Runtime;
 using System.Runtime.InteropServices;
 using System.Windows;
 
@@ -30,7 +29,7 @@ namespace PCAB_Debugger_GUI
             }
             if (Settings.Default.winMonitorLeft >= SystemParameters.VirtualScreenLeft &&
                 (Settings.Default.winMonitorLeft + Settings.Default.winMonitorWidth) <
-                SystemParameters.VirtualScreenLeft + SystemParameters.VirtualScreenHeight)
+                SystemParameters.VirtualScreenLeft + SystemParameters.VirtualScreenWidth)
             {
                 this.Left = Settings.Default.winMonitorLeft;
             }

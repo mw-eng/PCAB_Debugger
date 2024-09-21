@@ -8,11 +8,21 @@ namespace PCAB_Debugger_GUI
 {
     public class clsSerialIO
     {
-        public struct SN_POSI
+        public struct SN_POSI : IEqualityComparer<SN_POSI>
         {
             public string SerialNumber { get; set; }
             public ROTATE RotateCODE { get; set; }
             public SN_POSI(string _serialNumber, ROTATE _rotatecode) { SerialNumber = _serialNumber; RotateCODE = _rotatecode; }
+
+            public bool Equals(SN_POSI x, SN_POSI y)
+            {
+                return (x.SerialNumber == y.SerialNumber);
+            }
+
+            public int GetHashCode(SN_POSI obj)
+            {
+                return this.GetHashCode();
+            }
         }
         private PCAB_TASK _task;
         public bool? isOpen { get { return _task?.isOpen; } }
