@@ -104,7 +104,7 @@ namespace PCAB_Debugger_GUI
             }
         }
 
-        public void PCAB_AutoTaskStop() { _task = false; Close(); }
+        public void PCAB_AutoTaskStop() { _task = false; }
 
         public bool PCAB_PRESET(PCAB_UnitInterface unit)
         {
