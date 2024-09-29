@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PCAB_Debugger_GUI", "PCAB_D
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "PCAB_Debugger_GUI_Setup", "PCAB_Debugger_GUI_Setup\PCAB_Debugger_GUI_Setup.vdproj", "{4BF2DC5B-7F80-4786-821B-5AD2FC53A980}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PCAB_Debugger_ACS", "PCAB_Debugger_ACS\PCAB_Debugger_ACS.csproj", "{70CC4A3B-2A23-43D8-860C-0BACE884B5E2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -40,6 +42,18 @@ Global
 		{4BF2DC5B-7F80-4786-821B-5AD2FC53A980}.Release|x64.Build.0 = Release
 		{4BF2DC5B-7F80-4786-821B-5AD2FC53A980}.Release|x86.ActiveCfg = Release
 		{4BF2DC5B-7F80-4786-821B-5AD2FC53A980}.Release|x86.Build.0 = Release
+		{70CC4A3B-2A23-43D8-860C-0BACE884B5E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70CC4A3B-2A23-43D8-860C-0BACE884B5E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70CC4A3B-2A23-43D8-860C-0BACE884B5E2}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{70CC4A3B-2A23-43D8-860C-0BACE884B5E2}.Debug|x64.Build.0 = Debug|Any CPU
+		{70CC4A3B-2A23-43D8-860C-0BACE884B5E2}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{70CC4A3B-2A23-43D8-860C-0BACE884B5E2}.Debug|x86.Build.0 = Debug|Any CPU
+		{70CC4A3B-2A23-43D8-860C-0BACE884B5E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70CC4A3B-2A23-43D8-860C-0BACE884B5E2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{70CC4A3B-2A23-43D8-860C-0BACE884B5E2}.Release|x64.ActiveCfg = Release|Any CPU
+		{70CC4A3B-2A23-43D8-860C-0BACE884B5E2}.Release|x64.Build.0 = Release|Any CPU
+		{70CC4A3B-2A23-43D8-860C-0BACE884B5E2}.Release|x86.ActiveCfg = Release|Any CPU
+		{70CC4A3B-2A23-43D8-860C-0BACE884B5E2}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
