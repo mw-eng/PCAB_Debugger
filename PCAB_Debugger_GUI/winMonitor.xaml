@@ -4,10 +4,11 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PCAB_Debugger_GUI"
+        xmlns:PCAB_Debugger_ComLib="clr-namespace:PCAB_Debugger_ComLib;assembly=PCAB_Debugger_ComLib"
         mc:Ignorable="d"
         Title="PCAB Debugger Monitor" Height="450" Width="800" Closing="Window_Closing"
         SourceInitialized="Window_SourceInitialized" Icon="/PCAB_Debugger_GUI_Monitor.ico">
     <Grid x:Name="MONITOR_GRID">
-        <local:cntMonitor/>
+        <PCAB_Debugger_ComLib:cntMonitor/>
     </Grid>
 </Window>

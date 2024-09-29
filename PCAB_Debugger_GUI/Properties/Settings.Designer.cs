@@ -49,42 +49,6 @@ namespace PCAB_Debugger_GUI.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("TCPIP0::localhost::hislip0::INSTR")]
-        public string visaAddr {
-            get {
-                return ((string)(this["visaAddr"]));
-            }
-            set {
-                this["visaAddr"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("2000")]
-        public long visaTO {
-            get {
-                return ((long)(this["visaTO"]));
-            }
-            set {
-                this["visaTO"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("DAT")]
-        public string fnHeader {
-            get {
-                return ((string)(this["fnHeader"]));
-            }
-            set {
-                this["fnHeader"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("1280")]
         public double winMainWidth {
             get {

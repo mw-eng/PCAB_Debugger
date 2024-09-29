@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace PCAB_Debugger_GUI
+namespace PCAB_Debugger_ComLib
 {
     public class clsSLIP
     {

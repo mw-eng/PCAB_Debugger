@@ -7,7 +7,8 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using static PCAB_Debugger_GUI.PCAB_TASK;
+using PCAB_Debugger_ComLib;
+using static PCAB_Debugger_ComLib.PCAB_TASK;
 
 namespace PCAB_Debugger_GUI
 {

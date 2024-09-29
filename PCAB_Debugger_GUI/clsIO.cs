@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows;
-using static PCAB_Debugger_GUI.PCAB_TASK;
-using static PCAB_Debugger_GUI.cntConfigSettings;
+using PCAB_Debugger_ComLib;
+using static PCAB_Debugger_ComLib.PCAB_TASK;
+using static PCAB_Debugger_ComLib.cntConfigSettings;
 
 namespace PCAB_Debugger_GUI
 {

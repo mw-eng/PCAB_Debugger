@@ -2,10 +2,10 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using static PCAB_Debugger_GUI.CommandControl;
-using static PCAB_Debugger_GUI.cntConfigSettings;
+using static PCAB_Debugger_ComLib.CommandControl;
+using static PCAB_Debugger_ComLib.cntConfigSettings;
 
-namespace PCAB_Debugger_GUI
+namespace PCAB_Debugger_ComLib
 {
     /// <summary>
     /// cntConfig.xaml の相互作用ロジック
@@ -27,6 +27,8 @@ namespace PCAB_Debugger_GUI
         public event ButtonClickEventHandler ButtonClickEvent;
         public string SerialNumber { get; private set; }
         public cntConfigSettings CONFIG_SETTINGS { get; private set; }
+
+        public string MemoeryTargetAddress { get { return SAVEADDRESS_COMBOBOX.Text; } }
 
         public cntConfig() : this("SN", 0) { }
         public cntConfig(string _serialNumber, ROTATE _rotate)
@@ -152,4 +154,5 @@ namespace PCAB_Debugger_GUI
             ReadConfig
         }
     }
+
 }

@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 
-namespace PCAB_Debugger_GUI
+namespace PCAB_Debugger_ComLib
 {
     /// <summary>
     /// cntConfigSettings.xaml の相互作用ロジック
@@ -629,6 +629,9 @@ namespace PCAB_Debugger_GUI
                 }
             }
         }
+
+        public bool? ALL_DPS { get { return ALL_DPS_CHECKBOX.IsChecked; } set { ALL_DPS_CHECKBOX.IsChecked = value; } }
+        public bool? ALL_DSA { get { return ALL_DSA_CHECKBOX.IsChecked; } set { ALL_DSA_CHECKBOX.IsChecked = value; } }
 
         public cntConfigSettings() : this("SN", ROTATE.ZERO) { }
         public cntConfigSettings(string serialNumber, ROTATE _turn)

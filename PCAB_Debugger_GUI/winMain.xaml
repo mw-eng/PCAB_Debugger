@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PCAB_Debugger_GUI"
+        xmlns:PCAB_Debugger_ComLib="clr-namespace:PCAB_Debugger_ComLib;assembly=PCAB_Debugger_ComLib"
         mc:Ignorable="d"
         Title="PCAB Debugger" Height="720" Width="1280" Loaded="Window_Loaded" Closing="Window_Closing" Icon="/PCAB_Debugger_GUI.ico">
     <Window.Resources>
@@ -136,6 +137,6 @@
             </Expander>
         </Grid>
         <Grid Grid.Row="0" Grid.RowSpan="3" Background="#FFB8FFFD" Panel.ZIndex="0"/>
-        <Grid Grid.Row="4" Panel.ZIndex="0" x:Name="BOARD_GRID"><local:cntBOARD/></Grid>
+        <Grid Grid.Row="4" Panel.ZIndex="0" x:Name="BOARD_GRID"><PCAB_Debugger_ComLib:cntBOARD/></Grid>
     </Grid>
 </Window>

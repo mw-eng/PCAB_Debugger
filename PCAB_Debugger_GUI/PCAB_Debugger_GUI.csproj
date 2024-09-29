@@ -59,37 +59,9 @@
     </ApplicationDefinition>
     <Compile Include="clsAsyncButton.cs" />
     <Compile Include="clsIO.cs" />
-    <Compile Include="clsPCAB_IO.cs" />
-    <Compile Include="clsSLIP.cs" />
-    <Compile Include="cntAUTO.xaml.cs">
-      <DependentUpon>cntAUTO.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="cntBOARD.xaml.cs">
-      <DependentUpon>cntBOARD.xaml</DependentUpon>
-    </Compile>
     <Compile Include="winMonitor.xaml.cs">
       <DependentUpon>winMonitor.xaml</DependentUpon>
     </Compile>
-    <Page Include="cntAUTO.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="cntBOARD.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="cntConfig.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="cntConfigSettings.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="cntMonitor.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="winEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -105,17 +77,6 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="clsPNA835x.cs" />
-    <Compile Include="clsSERIAL.cs" />
-    <Compile Include="cntConfig.xaml.cs">
-      <DependentUpon>cntConfig.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="cntConfigSettings.xaml.cs">
-      <DependentUpon>cntConfigSettings.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="cntMonitor.xaml.cs">
-      <DependentUpon>cntMonitor.xaml</DependentUpon>
     </Compile>
     <Compile Include="winEditor.xaml.cs">
       <DependentUpon>winEditor.xaml</DependentUpon>
@@ -161,14 +122,12 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MWComLibCS.ExternalControl">
-      <HintPath>MWComLibCS\MWComLibCS.ExternalControl.dll</HintPath>
+      <HintPath>..\PCAB_Debugger_ComLib\MWComLibCS\MWComLibCS.ExternalControl.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Management" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
@@ -189,6 +148,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="PCAB_Debugger_GUI_Monitor.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PCAB_Debugger_ComLib\PCAB_Debugger_ComLib.csproj">
+      <Project>{5cd876d1-09c5-47d1-b80a-8768b9d3afdc}</Project>
+      <Name>PCAB_Debugger_ComLib</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

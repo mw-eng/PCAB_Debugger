@@ -1,5 +1,4 @@
-﻿using MWComLibCS.ExternalControl;
-using System;
+﻿using System;
 using System.IO;
 using System.Text;
 using System.Collections.Generic;
@@ -7,9 +6,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using static PCAB_Debugger_GUI.agPNA835x;
-using static PCAB_Debugger_GUI.PCAB_TASK;
+using static PCAB_Debugger_ComLib.agPNA835x;
+using static PCAB_Debugger_ComLib.PCAB_TASK;
+using PCAB_Debugger_ComLib;
 using System.Linq;
+using MWComLibCS.ExternalControl;
 
 namespace PCAB_Debugger_GUI
 {
@@ -24,8 +25,8 @@ namespace PCAB_Debugger_GUI
         private bool singTRIG = false;
         private bool saveSCR = false;
         private bool saveTRA = false;
-        private List<int> dps = new List<int>();
-        private List<int> dsa = new List<int>();
+        private List<uint> dps = new List<uint>();
+        private List<uint> dsa = new List<uint>();
         private List<uint> channels = new List<uint>();
         private List<uint> sheets = new List<uint>();
         private List<loopCONF> loops = new List<loopCONF>();
@@ -52,37 +53,19 @@ namespace PCAB_Debugger_GUI
             uint stepDSA = 0;
             int waitTIME = -1;
             //Get Configuration
-            fileHeader = owner.VNALOOP_FILEHEADER_TEXTBOX.Text;
+            fileHeader = owner.FileNameHeader;
             dps.Clear();
             dsa.Clear();
-            waitTIME = int.Parse(owner.VNALOOP_WAITTIME_TEXTBOX.Text);
-            if (owner.DPS_VnaLoopEnable.IsChecked == true)
+            waitTIME = (int)owner.WaiteTime;
+            if (owner.DPS_Enable == true)
             {
-                foreach (object objBF in owner.DPS_VNALOOP_GRID.Children)
-                {
-                    if (typeof(CheckBox) == objBF.GetType())
-                    {
-                        if (((CheckBox)objBF).IsChecked == true)
-                        {
-                            dps.Add(int.Parse(((CheckBox)objBF).Content.ToString().Substring(3)));
-                        }
-                    }
-                }
-                if (dps.Count > 0) { stepDPS = (uint)Math.Pow(2, (double)owner.VNALOOP_DPSstep_COMBOBOX.SelectedIndex); }
+                dps = owner.DPS;
+                if (dps.Count > 0) { stepDPS = owner.DPS_Step; }
             }
-            if (owner.DSA_VnaLoopEnable.IsChecked == true)
+            if (owner.DSA_Enable == true)
             {
-                foreach (object objBF in owner.DSA_VNALOOP_GRID.Children)
-                {
-                    if (typeof(CheckBox) == objBF.GetType())
-                    {
-                        if (((CheckBox)objBF).IsChecked == true)
-                        {
-                            dsa.Add(int.Parse(((CheckBox)objBF).Content.ToString().Substring(3)));
-                        }
-                    }
-                }
-                if (dsa.Count > 0) { stepDSA = (uint)Math.Pow(2, (double)owner.VNALOOP_DSAstep_COMBOBOX.SelectedIndex); }
+                dsa = owner.DSA;
+                if (dsa.Count > 0) { stepDSA = owner.DSA_Step; }
             }
             loops.Clear();
             loopCONF loopCONFBF = new loopCONF();
@@ -122,19 +105,19 @@ namespace PCAB_Debugger_GUI
                 loopCONFBF.dsa = -1;
                 loops.Add(loopCONFBF);
             }
-            if (owner.VNALOOP_SCRE_CHECKBOX.IsChecked == true ||
-                owner.VNALOOP_TRA_CHECKBOX.IsChecked == true)
+            if (owner.GetScreen_Enable == true ||
+                owner.GetTrace_Enable == true)
             {
-                if (owner.VNALOOP_SCRE_CHECKBOX.IsChecked == true) { saveSCR = true; }
-                if (owner.VNALOOP_TRA_CHECKBOX.IsChecked == true) { saveTRA = true; }
-                instr = new agPNA835x(new IEEE488(new VisaControlNI(owner.setResourceManager, owner.VNALOOP_VISAADDR_TEXTBOX.Text)));
-                instr.Instrument.IEEE488_VisaControl.SetTimeout(uint.Parse(owner.VNALOOP_TIMEOUT_TEXTBOX.Text));
+                if (owner.GetScreen_Enable == true) { saveSCR = true; }
+                if (owner.GetTrace_Enable == true) { saveTRA = true; }
+                instr = new agPNA835x(new IEEE488(new VisaControlNI(owner.setResourceManager, owner.VISA_Address)));
+                instr.Instrument.IEEE488_VisaControl.SetTimeout(owner.VISA_Timeout);
                 //Get instrument configure
                 try
                 {
                     IEEE488_IDN idn = instr.Instrument.IDN();
                     channels.Clear();
-                    if (owner.VNALOOP_CH_ALL.IsChecked == true)
+                    if (owner.Channel == -1)
                     {
                         foreach (uint i in instr.getChannelCatalog())
                         {
@@ -143,10 +126,10 @@ namespace PCAB_Debugger_GUI
                     }
                     else
                     {
-                        channels.Add(uint.Parse(owner.VNALOOP_CHANNEL_COMBOBOX.Text));
+                        channels.Add((uint)owner.Channel);
                     }
                     trig.Clear();
-                    if (owner.VNALOOP_SING_CHECKBOX.IsChecked == true)
+                    if (owner.SingleTrigger == true)
                     {
                         singTRIG = true;
                         foreach (uint ch in channels)
@@ -167,7 +150,7 @@ namespace PCAB_Debugger_GUI
                     return;
                 }
                 //check file path
-                if (owner.VNALOOP_SCRE_CHECKBOX.IsChecked == true)
+                if (owner.GetScreen_Enable == true)
                 {
                     foreach (uint sh in sheets)
                     {
@@ -182,7 +165,7 @@ namespace PCAB_Debugger_GUI
                         if (fileFLG) { break; }
                     }
                 }
-                if (owner.VNALOOP_TRA_CHECKBOX.IsChecked == true && fileFLG == false)
+                if (owner.GetTrace_Enable == true && fileFLG == false)
                 {
                     foreach (uint sh in sheets)
                     {

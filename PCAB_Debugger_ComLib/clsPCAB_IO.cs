@@ -6,9 +6,9 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using static PCAB_Debugger_GUI.PCAB_SerialInterface;
+using static PCAB_Debugger_ComLib.PCAB_SerialInterface;
 
-namespace PCAB_Debugger_GUI
+namespace PCAB_Debugger_ComLib
 {
     public class PCAB_TASK
     {

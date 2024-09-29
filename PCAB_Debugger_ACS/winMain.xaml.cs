@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.IO.Ports;
 using System.Linq;
 using System.Text;
@@ -15,7 +16,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using static PCAB_Debugger_ACS.clsPOS;
+using static PCAB_Debugger_ComLib.clsPOS;
+using PCAB_Debugger_ComLib;
+using static PCAB_Debugger_ComLib.ShowSerialPortName;
 
 namespace PCAB_Debugger_ACS
 {
@@ -25,6 +28,7 @@ namespace PCAB_Debugger_ACS
     public partial class winMain : Window
     {
         private clsPOS _pos;
+        private SerialPortTable[] ports;
         public winMain()
         {
             InitializeComponent();
@@ -60,7 +64,7 @@ namespace PCAB_Debugger_ACS
 #if DEBUG
             Settings.Default.Reset();
             this.Title += "_DEBUG MODE";
-#endif
+#endif      
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -74,19 +78,20 @@ namespace PCAB_Debugger_ACS
             Settings.Default.Save();
         }
 
-        private void TEST_BUTTON_Click(object sender, RoutedEventArgs e)
+        private void RUN_BUTTON_Click(object sender, RoutedEventArgs e)
         {
             if (_pos != null)
             {
                 _pos.POS_AutoTaskStop();
                 _pos.Close();
                 _pos = null;
+                SERIAL_PORTS_COMBOBOX.IsEnabled = true;
+                RUN_BUTTON.Content = "RUN";
             }
             else
             {
-                READ_TEXTBOX.Text = "";
                 SerialPort _serialPort = new SerialPort();
-                _serialPort.PortName = "COM5";
+                _serialPort.PortName = ports[SERIAL_PORTS_COMBOBOX.SelectedIndex].Name;
                 _serialPort.BaudRate = 115200;
                 _serialPort.DataBits = 8;
                 _serialPort.Parity = Parity.None;
@@ -98,25 +103,84 @@ namespace PCAB_Debugger_ACS
                 _pos = new clsPOS(_serialPort);
                 _pos.OnTaskError += OnTaskError;
                 _pos.OnReadDAT += OnReadDAT;
-                _pos.Open();
-                _pos.POS_AutoTaskStart();
+                try
+                {
+                    _pos.Open();
+                    SERIAL_PORTS_COMBOBOX.IsEnabled = false;
+                    LOG_TEXTBOX.Text = "";
+                    RUN_BUTTON.Content = "STOP";
+                    _pos.POS_AutoTaskStart();
+                }
+                catch
+                {
+                    _pos = null;
+                    SERIAL_PORTS_COMBOBOX_RELOAD(this, null);
+                }
             }
         }
-
 
         private void OnTaskError(object sender, POSEventArgs e)
         {
             Dispatcher.BeginInvoke(new Action(() => {
-                READ_TEXTBOX.Text += e.Message + "\n";
+                _pos?.POS_AutoTaskStop();
+                _pos?.Close();
+                _pos = null;
+                SERIAL_PORTS_COMBOBOX.IsEditable = true;
+                RUN_BUTTON.Content = "RUN";
             }));
         }
 
         private void OnReadDAT(object sender, POSEventArgs e)
         {
             Dispatcher.BeginInvoke(new Action(() => {
-                READ_TEXTBOX.Text += BitConverter.ToString(e.ReceiveDAT.ToArray()) + "\n";
+                try
+                {
+                    POS_VIEWER.DATA = new clsPOS.PAST2(e.ReceiveDAT);
+                    LOG_TEXTBOX.Text += BitConverter.ToString(e.ReceiveDAT.ToArray()) + "\n";
+                }
+                catch(Exception ex)
+                {
+                    LOG_TEXTBOX.Text += ex.Message + "\n";
+                }
             }));
         }
 
+        private void SERIAL_PORTS_COMBOBOX_RELOAD(object sender, EventArgs e)
+        {
+            ports = GetDeviceNames();
+            if (sender is ComboBox)
+            {
+                ((ComboBox)sender).Items.Clear();
+                if (ports != null)
+                {
+                    foreach (SerialPortTable port in ports)
+                    {
+                        ((ComboBox)sender).Items.Add(port.Caption);
+                    }
+                }
+            }
+            else
+            {
+                SERIAL_PORTS_COMBOBOX.Items.Clear();
+                if (ports != null)
+                {
+                    foreach (SerialPortTable port in ports)
+                    {
+                        SERIAL_PORTS_COMBOBOX.Items.Add(port.Caption);
+                    }
+                }
+            }
+        }
+
+        private void SERIAL_PORTS_COMBOBOX_DropDownOpened(object sender, EventArgs e)
+        {
+            SERIAL_PORTS_COMBOBOX_RELOAD(sender, e);
+        }
+
+        private void SERIAL_PORTS_COMBOBOX_DropDownClosed(object sender, EventArgs e)
+        {
+            if (SERIAL_PORTS_COMBOBOX.SelectedIndex >= 0) { RUN_BUTTON.IsEnabled = true; }
+            else { RUN_BUTTON.IsEnabled = false; }
+        }
     }
 }

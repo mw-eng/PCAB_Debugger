@@ -2,9 +2,9 @@
 using System.IO.Ports;
 using System.Management;
 
-namespace PCAB_Debugger_GUI
+namespace PCAB_Debugger_ComLib
 {
-    class ShowSerialPortName
+    public class ShowSerialPortName
     {
         public struct SerialPortTable
         {

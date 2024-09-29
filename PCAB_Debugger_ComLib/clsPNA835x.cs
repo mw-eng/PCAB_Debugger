@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 
-namespace PCAB_Debugger_GUI
+namespace PCAB_Debugger_ComLib
 {
     /// <summary>AgilentPNA835x Wrapper Library</summary>
     public class agPNA835x

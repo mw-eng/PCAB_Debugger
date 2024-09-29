@@ -1,20 +1,32 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
-namespace PCAB_Debugger_GUI
+namespace PCAB_Debugger_ComLib
 {
     /// <summary>
     /// cntMonitor.xaml の相互作用ロジック
     /// </summary>
     public partial class cntMonitor : UserControl
     {
+        private const float maxTMP = 55;
+        private const float minTMP = 15;
         #region Property
         public string SerialNumber { get; private set; }
         public string TEMPcpu
         {
             get { return SNS_CPU_TEMP_LABEL.Content.ToString(); }
-            set { Dispatcher.BeginInvoke(new Action(() => { SNS_CPU_TEMP_LABEL.Content = value; })); }
+            set { Dispatcher.BeginInvoke(new Action(() => {
+                SNS_CPU_TEMP_LABEL.Content = value;
+                try
+                {
+                    if (float.Parse(value) > maxTMP) { SNS_CPU_TEMP_LABEL.Background = new SolidColorBrush(Color.FromScRgb(100, 255, 0, 0)); }
+                    else if (float.Parse(value) < minTMP) { SNS_CPU_TEMP_LABEL.Background = new SolidColorBrush(Color.FromScRgb(100, 0, 255, 255)); }
+                    else{ SNS_CPU_TEMP_LABEL.Background = null; }
+                }
+                catch { SNS_CPU_TEMP_LABEL.Background = new SolidColorBrush(Color.FromScRgb(100, 255, 255, 0));}
+            })); }
         }
         public string SNSvin
         {
@@ -39,7 +51,16 @@ namespace PCAB_Debugger_GUI
         public string TEMPavg
         {
             get { return TMP_AVG_LABEL.Content.ToString(); }
-            set { Dispatcher.BeginInvoke(new Action(() => { TMP_AVG_LABEL.Content = value; })); }
+            set { Dispatcher.BeginInvoke(new Action(() => {
+                TMP_AVG_LABEL.Content = value;
+                try
+                {
+                    if (float.Parse(value) > maxTMP) { TMP_AVG_LABEL.Background = new SolidColorBrush(Color.FromScRgb(100, 255, 0, 0)); }
+                    else if (float.Parse(value) < minTMP) { TMP_AVG_LABEL.Background = new SolidColorBrush(Color.FromScRgb(100, 0, 255, 255)); }
+                    else { TMP_AVG_LABEL.Background = null; }
+                }
+                catch { TMP_AVG_LABEL.Background = new SolidColorBrush(Color.FromScRgb(100, 255, 255, 0)); }
+            })); }
         }
         public string TEMP01ID
         {

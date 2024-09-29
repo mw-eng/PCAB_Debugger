@@ -1,18 +1,19 @@
-﻿using MWComLibCS.ExternalControl;
+﻿using PCAB_Debugger_ComLib;
 using PCAB_Debugger_GUI.Properties;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using static PCAB_Debugger_ComLib.cntConfig;
+using static PCAB_Debugger_ComLib.cntConfigSettings;
+using static PCAB_Debugger_ComLib.PCAB_SerialInterface;
+using static PCAB_Debugger_ComLib.PCAB_TASK;
+using static PCAB_Debugger_ComLib.ShowSerialPortName;
 using static PCAB_Debugger_GUI.clsSerialIO;
-using static PCAB_Debugger_GUI.cntConfig;
-using static PCAB_Debugger_GUI.cntConfigSettings;
-using static PCAB_Debugger_GUI.PCAB_SerialInterface;
-using static PCAB_Debugger_GUI.PCAB_TASK;
-using static PCAB_Debugger_GUI.ShowSerialPortName;
+using MWComLibCS.ExternalControl;
+
 
 namespace PCAB_Debugger_GUI
 {
@@ -102,12 +103,6 @@ namespace PCAB_Debugger_GUI
         {
             if (_ioList.Count > 0)
             {
-                if (_ioList[0]?.isOpen == true)
-                {
-                    Settings.Default.visaAddr = _ioList[0].PCAB_Boards[0].AUTO.VNALOOP_VISAADDR_TEXTBOX.Text;
-                    Settings.Default.visaTO = long.Parse(_ioList[0].PCAB_Boards[0].AUTO.VNALOOP_TIMEOUT_TEXTBOX.Text);
-                    Settings.Default.fnHeader = _ioList[0].PCAB_Boards[0].AUTO.VNALOOP_FILEHEADER_TEXTBOX.Text;
-                }
                 foreach (clsSerialIO _io in _ioList)
                 {
                     if (_io?.isOpen == true)
@@ -600,7 +595,7 @@ namespace PCAB_Debugger_GUI
             }
             uint sectorPage = 0xE0;
             uint stateNum = 0;
-            string strBF = ((cntConfig)sender).SAVEADDRESS_COMBOBOX.Text;
+            string strBF = ((cntConfig)sender).MemoeryTargetAddress;
             string[] strARR = strBF.Split('-');
             try
             {
@@ -882,8 +877,8 @@ namespace PCAB_Debugger_GUI
                                     conf.CHECKBOX_Indeterminate("STBLNA", null);
                                     break;
                             }
-                            conf.ALL_DPS_CHECKBOX.IsChecked = false;
-                            conf.ALL_DSA_CHECKBOX.IsChecked = false;
+                            conf.ALL_DPS = false;
+                            conf.ALL_DSA = false;
                             conf.SetDSA(0, dsaIN);
                             for (int i = 0; i < dsa.Count; i++)
                             {

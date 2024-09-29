@@ -4,10 +4,29 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PCAB_Debugger_ACS"
+        xmlns:PCAB_Debugger_ComLib="clr-namespace:PCAB_Debugger_ComLib;assembly=PCAB_Debugger_ComLib"
         mc:Ignorable="d"
         Title="PCAB Debugger ACS" Height="450" Width="800" Loaded="Window_Loaded" Closing="Window_Closing">
+    <Window.Resources>
+        <ResourceDictionary>
+            <Style TargetType="{x:Type ComboBox}" x:Key="COMBOBOX_CONTENT_CENTER">
+                <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                <Setter Property="FontSize" Value="14px"/>
+                <Setter Property="FontFamily" Value="UD Digi Kyokasho N-R"/>
+            </Style>
+        </ResourceDictionary>
+    </Window.Resources>
     <Grid>
-        <Button Content="Button" HorizontalAlignment="Left" Margin="10,0,0,10" Width="182" Click="TEST_BUTTON_Click" Height="26" VerticalAlignment="Bottom"/>
-        <TextBox x:Name="READ_TEXTBOX" HorizontalAlignment="Right" Margin="0,10,10,41" TextWrapping="Wrap" Text="TextBox" Width="780"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="3*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="40"/>
+        </Grid.RowDefinitions>
+        <TextBox Grid.Row="1" x:Name="LOG_TEXTBOX" Margin="5" IsReadOnly="True" />
+        <PCAB_Debugger_ComLib:cntPOS Grid.Row="0" x:Name="POS_VIEWER"/>
+        <ComboBox Grid.Row="2" x:Name="SERIAL_PORTS_COMBOBOX" Style="{StaticResource COMBOBOX_CONTENT_CENTER}" Margin="5" DropDownOpened="SERIAL_PORTS_COMBOBOX_DropDownOpened" DropDownClosed="SERIAL_PORTS_COMBOBOX_DropDownClosed" IsEnabled="True"/>
+        <Button Grid.Row="3" x:Name="RUN_BUTTON" Content="RUN" Margin ="5" IsEnabled="False" Click="RUN_BUTTON_Click"/>
     </Grid>
 </Window>

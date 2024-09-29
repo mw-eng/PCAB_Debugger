@@ -1,12 +1,13 @@
 ﻿using MWComLibCS.ExternalControl;
-using PCAB_Debugger_GUI.Properties;
+using PCAB_Debugger_ComLib.Properties;
 using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace PCAB_Debugger_GUI
+namespace PCAB_Debugger_ComLib
 {
     /// <summary>
     /// cntAUTO.xaml の相互作用ロジック
@@ -18,6 +19,64 @@ namespace PCAB_Debugger_GUI
         public event StartButtonClickEventHandler ButtonClickEvent;
         public int setResourceManager { get { return sesn; } set { sesn = value; } }
         public string SerialNumber { get; private set; }
+
+        public string VISA_Address { get { return VNALOOP_VISAADDR_TEXTBOX.Text; } }
+        public uint VISA_Timeout { get { return uint.Parse(VNALOOP_TIMEOUT_TEXTBOX.Text); } }
+        public string FileNameHeader { get { return VNALOOP_FILEHEADER_TEXTBOX.Text; } }
+        public uint WaiteTime { get { return uint.Parse(VNALOOP_WAITTIME_TEXTBOX.Text); } }
+        public bool? DPS_Enable { get { return DPS_VnaLoopEnable.IsChecked; } }
+        public bool? DSA_Enable { get { return DSA_VnaLoopEnable.IsChecked; } }
+        public bool? GetScreen_Enable { get { return VNALOOP_SCRE_CHECKBOX.IsChecked; } }
+        public bool? GetTrace_Enable { get { return VNALOOP_TRA_CHECKBOX.IsChecked; } }
+        public bool? SingleTrigger { get { return VNALOOP_SING_CHECKBOX.IsChecked; } }
+        public int Channel
+        {
+            get
+            {
+                if (VNALOOP_CH_ALL.IsChecked == true) { return -1; }
+                return int.Parse(VNALOOP_CHANNEL_COMBOBOX.Text);
+            }
+        }
+        public uint DPS_Step { get { return (uint)Math.Pow(2, (double)VNALOOP_DPSstep_COMBOBOX.SelectedIndex); } }
+        public uint DSA_Step { get { return (uint)Math.Pow(2, (double)VNALOOP_DSAstep_COMBOBOX.SelectedIndex); } }
+        public List<uint> DPS
+        {
+            get
+            {
+                List<uint> dps = new List<uint>();
+                dps.Clear();
+                foreach (object objBF in DPS_VNALOOP_GRID.Children)
+                {
+                    if (typeof(CheckBox) == objBF.GetType())
+                    {
+                        if (((CheckBox)objBF).IsChecked == true)
+                        {
+                            dps.Add(uint.Parse(((CheckBox)objBF).Content.ToString().Substring(3)));
+                        }
+                    }
+                }
+                return dps;
+            }
+        }
+        public List<uint> DSA
+        {
+            get
+            {
+                List<uint> dps = new List<uint>();
+                dps.Clear();
+                foreach (object objBF in DSA_VNALOOP_GRID.Children)
+                {
+                    if (typeof(CheckBox) == objBF.GetType())
+                    {
+                        if (((CheckBox)objBF).IsChecked == true)
+                        {
+                            dps.Add(uint.Parse(((CheckBox)objBF).Content.ToString().Substring(3)));
+                        }
+                    }
+                }
+                return dps;
+            }
+        }
 
         public cntAUTO() : this("SN") { }
         public cntAUTO(string SN)

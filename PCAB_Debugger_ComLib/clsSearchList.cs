@@ -1,29 +1,41 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
-namespace PCAB_Debugger_ACS
+namespace PCAB_Debugger_ComLib
 {
     public static class clsSearchList
     {
         /// <summary>
-        /// Binary search with the sunday algorithmを行います。検索先 byte 配列の先頭から検索を行います。
+        /// Binary search with the sunday algorithm
         /// </summary>
         /// <param name="target">Target list</param>
         /// <param name="pattern">Search vlue byte array</param>
         /// <returns>Match position (-1 if not found)</returns>
-        public static int SearchBytesSunday(List<byte> target, byte[] pattern)
+        public static int SearchBytesSundayIndexOf(List<byte> target, byte[] pattern)
         {
-            return SearchBytesSunday(target, pattern, 0);
+            return SearchBytesSundayIndexOf(target, pattern, 0);
+        }
+
+        /// <summary>
+        /// Binary search with the sunday algorithm
+        /// </summary>
+        /// <param name="target">Target list</param>
+        /// <param name="pattern">Search vlue byte array</param>
+        /// <returns>Match position (-1 if not found)</returns>
+        public static int SearchBytesSundayLastIndexOf(List<byte> target, byte[] pattern)
+        {
+            return SearchBytesSundayLastIndexOf(target, pattern, target.Count - 1);
         }
 
 
         /// <summary>
-        /// Binary search with the sunday algorithmを行います。検索先 byte 配列の先頭から検索を行います。
+        /// Binary search with the sunday algorithm
         /// </summary>
         /// <param name="target">Target list</param>
         /// <param name="pattern">Search vlue byte array</param>
         /// <param name="index">Start position</param>
         /// <returns>Match position (-1 if not found)</returns>
-        public static int SearchBytesSunday(List<byte> target, byte[] pattern, int index)
+        public static int SearchBytesSundayIndexOf(List<byte> target, byte[] pattern, int index)
         {
             int patLen = pattern.Length;
             int txtLen = target.Count;
@@ -31,7 +43,7 @@ namespace PCAB_Debugger_ACS
             if (txtLen < patLen) return -1;
             txtLen -= patLen;
 
-            var bmTable = MakeSundayTable(pattern);
+            Dictionary<byte, int> bmTable = MakeSundayTable(pattern);
 
             int patIdx = 0;
             while (index <= txtLen)
@@ -55,7 +67,6 @@ namespace PCAB_Debugger_ACS
                     break;
                 }
 
-                // テーブルから移動量を求める
                 if (bmTable.ContainsKey(target[index + patLen]))
                 {
                     index += bmTable[target[index + patLen]];
@@ -68,6 +79,27 @@ namespace PCAB_Debugger_ACS
 
             return -1;
         }
+
+
+        /// <summary>
+        /// Binary search with the sunday algorithm
+        /// </summary>
+        /// <param name="target">Target list</param>
+        /// <param name="pattern">Search vlue byte array</param>
+        /// <param name="index">Start position</param>
+        /// <returns>Match position (-1 if not found)</returns>
+        public static int SearchBytesSundayLastIndexOf(List<byte> target, byte[] pattern, int index)
+        {
+            if (target.Count < pattern.Length) return -1;
+            List<byte> targRev = new List<byte>(target);
+            List<byte> patRev = pattern.ToList();
+            targRev.Reverse();
+            patRev.Reverse();
+            int num = SearchBytesSundayIndexOf(targRev, patRev.ToArray(), target.Count - index - 1);
+            if(num<0) return -1;
+            return target.Count - num - patRev.Count;
+        }
+
 
         /// <summary>
         /// Create shift table.
