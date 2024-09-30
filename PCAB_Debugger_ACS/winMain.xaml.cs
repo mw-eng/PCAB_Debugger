@@ -29,6 +29,7 @@ namespace PCAB_Debugger_ACS
     {
         private clsPOS _pos;
         private SerialPortTable[] ports;
+        private DateTime startTIME = new DateTime();
         public winMain()
         {
             InitializeComponent();
@@ -64,7 +65,8 @@ namespace PCAB_Debugger_ACS
 #if DEBUG
             Settings.Default.Reset();
             this.Title += "_DEBUG MODE";
-#endif      
+#endif
+            startTIME = DateTime.Now;
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -92,7 +94,7 @@ namespace PCAB_Debugger_ACS
             {
                 SerialPort _serialPort = new SerialPort();
                 _serialPort.PortName = ports[SERIAL_PORTS_COMBOBOX.SelectedIndex].Name;
-                _serialPort.BaudRate = 115200;
+                _serialPort.BaudRate = 9600;
                 _serialPort.DataBits = 8;
                 _serialPort.Parity = Parity.None;
                 _serialPort.StopBits = StopBits.One;
@@ -132,17 +134,26 @@ namespace PCAB_Debugger_ACS
 
         private void OnReadDAT(object sender, POSEventArgs e)
         {
-            Dispatcher.BeginInvoke(new Action(() => {
-                try
+            try
+            {
+                clsPOS.PAST2 dat = new PAST2(e.ReceiveDAT);
+                if (DateTime.Now - startTIME > new TimeSpan(100 * 1000))
                 {
-                    POS_VIEWER.DATA = new clsPOS.PAST2(e.ReceiveDAT);
-                    LOG_TEXTBOX.Text += BitConverter.ToString(e.ReceiveDAT.ToArray()) + "\n";
+                    startTIME = DateTime.Now;
+                    Dispatcher.BeginInvoke(new Action(() =>
+                    {
+                        POS_VIEWER.DATA = dat;
+                    }));
                 }
-                catch(Exception ex)
+            }
+            catch(Exception ex)
+            {
+                Dispatcher.BeginInvoke(new Action(() =>
                 {
-                    LOG_TEXTBOX.Text += ex.Message + "\n";
-                }
-            }));
+                    LOG_TEXTBOX.Text += ex.Message + " > " + BitConverter.ToString(e.ReceiveDAT.ToArray()) + "\n";
+                    LOG_TEXTBOX.ScrollToEnd();
+                }));
+            }
         }
 
         private void SERIAL_PORTS_COMBOBOX_RELOAD(object sender, EventArgs e)

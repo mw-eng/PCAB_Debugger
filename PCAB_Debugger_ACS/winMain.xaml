@@ -20,13 +20,15 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="3*"/>
+            <RowDefinition Height="AUTO"/>
             <RowDefinition Height="1*"/>
             <RowDefinition Height="40"/>
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
-        <TextBox Grid.Row="1" x:Name="LOG_TEXTBOX" Margin="5" IsReadOnly="True" />
         <PCAB_Debugger_ComLib:cntPOS Grid.Row="0" x:Name="POS_VIEWER"/>
-        <ComboBox Grid.Row="2" x:Name="SERIAL_PORTS_COMBOBOX" Style="{StaticResource COMBOBOX_CONTENT_CENTER}" Margin="5" DropDownOpened="SERIAL_PORTS_COMBOBOX_DropDownOpened" DropDownClosed="SERIAL_PORTS_COMBOBOX_DropDownClosed" IsEnabled="True"/>
-        <Button Grid.Row="3" x:Name="RUN_BUTTON" Content="RUN" Margin ="5" IsEnabled="False" Click="RUN_BUTTON_Click"/>
+        <GridSplitter Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Stretch" Background="Black" ShowsPreview="True" Height="3"/>
+        <TextBox Grid.Row="2" x:Name="LOG_TEXTBOX" Margin="5" IsReadOnly="True" VerticalScrollBarVisibility="Auto" TextWrapping="NoWrap"/>
+        <ComboBox Grid.Row="3" x:Name="SERIAL_PORTS_COMBOBOX" Style="{StaticResource COMBOBOX_CONTENT_CENTER}" Margin="5" DropDownOpened="SERIAL_PORTS_COMBOBOX_DropDownOpened" DropDownClosed="SERIAL_PORTS_COMBOBOX_DropDownClosed" IsEnabled="True"/>
+        <Button Grid.Row="4" x:Name="RUN_BUTTON" Content="RUN" Margin ="5" IsEnabled="False" Click="RUN_BUTTON_Click"/>
     </Grid>
 </Window>

@@ -34,8 +34,8 @@
                         <ColumnDefinition Width="1*"/>
                         <ColumnDefinition Width="1*"/>
                     </Grid.ColumnDefinitions>
-                    <Viewbox Grid.Row="0" Grid.Column="0"><Label Content="Latitude  [arcsec]    " Style="{StaticResource LABEL}"/></Viewbox>
-                    <Viewbox Grid.Row="1" Grid.Column="0"><Label Content="Longitude [arcsec]    " Style="{StaticResource LABEL}"/></Viewbox>
+                    <Viewbox Grid.Row="0" Grid.Column="0"><Label Content="Latitude              " Style="{StaticResource LABEL}"/></Viewbox>
+                    <Viewbox Grid.Row="1" Grid.Column="0"><Label Content="Longitude             " Style="{StaticResource LABEL}"/></Viewbox>
                     <Viewbox Grid.Row="2" Grid.Column="0"><Label Content="Altitude [m]          " Style="{StaticResource LABEL}"/></Viewbox>
                     <Viewbox Grid.Row="0" Grid.Column="1"><Label x:Name="LATITUDE_LABEL" Content="ND" Style="{StaticResource LABEL}"/></Viewbox>
                     <Viewbox Grid.Row="1" Grid.Column="1"><Label x:Name="LONGITUDE_LABEL" Content="ND" Style="{StaticResource LABEL}"/></Viewbox>
