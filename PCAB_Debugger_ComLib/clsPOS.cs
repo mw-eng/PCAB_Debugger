@@ -25,7 +25,7 @@ namespace PCAB_Debugger_ComLib
         public clsPOS(string portName)
         {
             _serial = new SerialPort(portName);
-            _serial.BaudRate = 115200;
+            _serial.BaudRate = 9600;
             _serial.DataBits = 8;
             _serial.Parity = Parity.None;
             _serial.StopBits = StopBits.One;
@@ -79,6 +79,7 @@ namespace PCAB_Debugger_ComLib
                         if (posi2 >= 0 && datBF.Count >= posi2 + 40)
                         { OnReadDAT.Invoke(this, new POSEventArgs(datBF.GetRange(posi2, 40), "GatDAT", null)); datBF.RemoveRange(0, posi2 + 40); }
                     }
+                    if(datBF.Count > 1024 * 1024) { datBF.Clear(); }
                 }
                 catch(TimeoutException ex)
                 {
@@ -110,18 +111,18 @@ namespace PCAB_Debugger_ComLib
 
         public class PAST2
         {
-            public double TIME { get { return BitConverter.ToDouble(TIME_BINARY, 0); } }
-            public float ROLL { get { return BitConverter.ToInt16(ROLL_BINARY, 0) * 0.01f; } }
-            public float PITCH { get { return BitConverter.ToInt16(PITCH_BINARY, 0) * 0.01f; } }
-            public float HEADING { get { return BitConverter.ToUInt16(HEADING_BINARY, 0) * 0.01f; } }
-            public float LATITUDE { get { return BitConverter.ToInt32(LATITUDE_BINARY, 0) * 0.001f; } }
-            public float LONGITUDE { get { return BitConverter.ToInt32(LONGITUDE_BINARY, 0) * 0.001f; } }
-            public float ALTITUDE { get { return BitConverter.ToInt32(ALTITUDE_BINARY, 0) * 0.01f; } }
-            public float SPEED { get { return BitConverter.ToUInt16(SPEED_BINARY, 0) * 0.01f; } }
-            public float TRACK { get { return BitConverter.ToUInt16(TRACK_BINARY, 0) * 0.01f; } }
-            public float LONG_ACCEL { get { return BitConverter.ToInt16(LONG_ACCEL_BINARY, 0) * 0.0005f; } }
-            public float TRAN_ACCEL { get { return BitConverter.ToInt16(TRAN_ACCELBINARY, 0) * 0.0005f; } }
-            public float DOWN_ACCEL { get { return BitConverter.ToInt16(DOWN_ACCEL_BINARY, 0) * 0.0005f; } }
+            public double TIME { get { return BitConverter.ToDouble(DATA, 2); } }
+            public float ROLL { get { return BitConverter.ToInt16(DATA, 10) * 0.01f; } }
+            public float PITCH { get { return BitConverter.ToInt16(DATA, 12) * 0.01f; } }
+            public float HEADING { get { return BitConverter.ToUInt16(DATA, 14) * 0.01f; } }
+            public float LATITUDE { get { return BitConverter.ToInt32(DATA, 16) * 0.001f; } }
+            public float LONGITUDE { get { return BitConverter.ToInt32(DATA, 20) * 0.001f; } }
+            public float ALTITUDE { get { return BitConverter.ToInt32(DATA, 24) * 0.01f; } }
+            public float SPEED { get { return BitConverter.ToUInt16(DATA, 28) * 0.01f; } }
+            public float TRACK { get { return BitConverter.ToUInt16(DATA, 30) * 0.01f; } }
+            public float LONG_ACCEL { get { return BitConverter.ToInt16(DATA, 32) * 0.0005f; } }
+            public float TRAN_ACCEL { get { return BitConverter.ToInt16(DATA, 34) * 0.0005f; } }
+            public float DOWN_ACCEL { get { return BitConverter.ToInt16(DATA, 36) * 0.0005f; } }
 
             public byte[] TIME_BINARY { get { return DATA.Skip(2).Take(8).ToArray(); } }
             public byte[] ROLL_BINARY { get { return DATA.Skip(10).Take(2).ToArray(); } }
@@ -135,6 +136,19 @@ namespace PCAB_Debugger_ComLib
             public byte[] LONG_ACCEL_BINARY { get { return DATA.Skip(32).Take(2).ToArray(); } }
             public byte[] TRAN_ACCELBINARY { get { return DATA.Skip(34).Take(2).ToArray(); } }
             public byte[] DOWN_ACCEL_BINARY { get { return DATA.Skip(36).Take(2).ToArray(); } }
+
+            //public double TIME { get { return BitConverter.ToDouble(TIME_BINARY, 0); } }
+            //public float ROLL { get { return BitConverter.ToInt16(ROLL_BINARY, 0) * 0.01f; } }
+            //public float PITCH { get { return BitConverter.ToInt16(PITCH_BINARY, 0) * 0.01f; } }
+            //public float HEADING { get { return BitConverter.ToUInt16(HEADING_BINARY, 0) * 0.01f; } }
+            //public float LATITUDE { get { return BitConverter.ToInt32(LATITUDE_BINARY, 0) * 0.001f; } }
+            //public float LONGITUDE { get { return BitConverter.ToInt32(LONGITUDE_BINARY, 0) * 0.001f; } }
+            //public float ALTITUDE { get { return BitConverter.ToInt32(ALTITUDE_BINARY, 0) * 0.01f; } }
+            //public float SPEED { get { return BitConverter.ToUInt16(SPEED_BINARY, 0) * 0.01f; } }
+            //public float TRACK { get { return BitConverter.ToUInt16(TRACK_BINARY, 0) * 0.01f; } }
+            //public float LONG_ACCEL { get { return BitConverter.ToInt16(LONG_ACCEL_BINARY, 0) * 0.0005f; } }
+            //public float TRAN_ACCEL { get { return BitConverter.ToInt16(TRAN_ACCELBINARY, 0) * 0.0005f; } }
+            //public float DOWN_ACCEL { get { return BitConverter.ToInt16(DOWN_ACCEL_BINARY, 0) * 0.0005f; } }
 
             //public byte[] TIME_BINARY { get { return DATA.Skip(2).Take(8).ToArray(); } }
             //public byte[] ROLL_BINARY { get { return new byte[] { DATA[11], DATA[10] }; } }
