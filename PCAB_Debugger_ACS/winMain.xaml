@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:PCAB_Debugger_ACS"
         xmlns:PCAB_Debugger_ComLib="clr-namespace:PCAB_Debugger_ComLib;assembly=PCAB_Debugger_ComLib"
         mc:Ignorable="d"
-        Title="PCAB Debugger ACS" Height="450" Width="800" Loaded="Window_Loaded" Closing="Window_Closing">
+        Title="PCAB Debugger ACS" Height="450" Width="800" Loaded="Window_Loaded" Closing="Window_Closing" Icon="/PCAB_Debugger_ACS.ico">
     <Window.Resources>
         <ResourceDictionary>
             <Style TargetType="{x:Type ComboBox}" x:Key="COMBOBOX_CONTENT_CENTER">

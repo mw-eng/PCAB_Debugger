@@ -51,14 +51,26 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_9E7649700DB81BA0936CD8A2AFEEB0BB"
-        "OwnerKey" = "8:_55219439E27A4BB88D2EDAAFB85C87A6"
+        "MsmKey" = "8:_60307AAC2FA143D48548EB43D664C31D"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_9E7649700DB81BA0936CD8A2AFEEB0BB"
-        "OwnerKey" = "8:_B550224760695DC09838E7BF09BF9BCA"
+        "OwnerKey" = "8:_DC54A4B250B54FA5A1394D3E6D46BAC6"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_A319CD15B281D34DB79A6E6A8D30B8B3"
+        "OwnerKey" = "8:_55219439E27A4BB88D2EDAAFB85C87A6"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_A319CD15B281D34DB79A6E6A8D30B8B3"
+        "OwnerKey" = "8:_BB0B3FA9675E4238AB958486A9056B13"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -70,7 +82,13 @@
         "Entry"
         {
         "MsmKey" = "8:_A319CD15B281D34DB79A6E6A8D30B8B3"
-        "OwnerKey" = "8:_55219439E27A4BB88D2EDAAFB85C87A6"
+        "OwnerKey" = "8:_DC54A4B250B54FA5A1394D3E6D46BAC6"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_A319CD15B281D34DB79A6E6A8D30B8B3"
+        "OwnerKey" = "8:_F48F5DCBF63EA5335B96D9345086955E"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -81,14 +99,62 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_B550224760695DC09838E7BF09BF9BCA"
+        "OwnerKey" = "8:_DC54A4B250B54FA5A1394D3E6D46BAC6"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_B7299B8AC5F15A1848916900D0DF2DBA"
         "OwnerKey" = "8:_A319CD15B281D34DB79A6E6A8D30B8B3"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
+        "MsmKey" = "8:_BB0B3FA9675E4238AB958486A9056B13"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_DC54A4B250B54FA5A1394D3E6D46BAC6"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F48F5DCBF63EA5335B96D9345086955E"
+        "OwnerKey" = "8:_B550224760695DC09838E7BF09BF9BCA"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F48F5DCBF63EA5335B96D9345086955E"
+        "OwnerKey" = "8:_BB0B3FA9675E4238AB958486A9056B13"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F48F5DCBF63EA5335B96D9345086955E"
+        "OwnerKey" = "8:_55219439E27A4BB88D2EDAAFB85C87A6"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_55219439E27A4BB88D2EDAAFB85C87A6"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_BB0B3FA9675E4238AB958486A9056B13"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_DC54A4B250B54FA5A1394D3E6D46BAC6"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -335,6 +401,26 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_60307AAC2FA143D48548EB43D664C31D"
+            {
+            "SourcePath" = "8:..\\PCAB_Debugger_ACS\\PCAB_Debugger_ACS.ico"
+            "TargetName" = "8:PCAB_Debugger_ACS.ico"
+            "Tag" = "8:"
+            "Folder" = "8:_74480F6C3B5E4178865AAF909950A49F"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:TRUE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_9E7649700DB81BA0936CD8A2AFEEB0BB"
             {
             "AssemblyRegister" = "3:1"
@@ -424,7 +510,7 @@
             "SharedLegacy" = "11:FALSE"
             "PackageAs" = "3:1"
             "Register" = "3:1"
-            "Exclude" = "11:FALSE"
+            "Exclude" = "11:TRUE"
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
@@ -442,6 +528,37 @@
                     }
                 }
             "SourcePath" = "8:System.Diagnostics.Tracing.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_74480F6C3B5E4178865AAF909950A49F"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:TRUE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_F48F5DCBF63EA5335B96D9345086955E"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:MWComLibCS.ExternalControl, Version=1.0.0.1, Culture=neutral, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_F48F5DCBF63EA5335B96D9345086955E"
+                    {
+                    "Name" = "8:MWComLibCS.ExternalControl.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:MWComLibCS.ExternalControl.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_74480F6C3B5E4178865AAF909950A49F"
@@ -506,13 +623,13 @@
                     "Property" = "8:_A4A6A88DE7DF4AF7816E99660C6B0ECC"
                         "Folders"
                         {
-                            "{9EF0B969-E518-4E46-987F-47570745A589}:_241369603EE14BC2B9277D4BED718080"
+                            "{9EF0B969-E518-4E46-987F-47570745A589}:_F4B1FE5531364F4FB1F79A6D1CA7E34A"
                             {
                             "Name" = "8:Products"
                             "AlwaysCreate" = "11:FALSE"
                             "Condition" = "8:"
                             "Transitive" = "11:FALSE"
-                            "Property" = "8:_9C1E64314A224911AF102251E0E16E6A"
+                            "Property" = "8:_C0D9181491BD4E5BAB80F81D04FA9719"
                                 "Folders"
                                 {
                                 }
@@ -669,6 +786,20 @@
         }
         "Shortcut"
         {
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_1EEF2AC1A89F4C3BB6ABB2652AC9B22F"
+            {
+            "Name" = "8:PCAB_DebuggerACS"
+            "Arguments" = "8:"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_DC54A4B250B54FA5A1394D3E6D46BAC6"
+            "Folder" = "8:_F4B1FE5531364F4FB1F79A6D1CA7E34A"
+            "WorkingFolder" = "8:_74480F6C3B5E4178865AAF909950A49F"
+            "Icon" = "8:_60307AAC2FA143D48548EB43D664C31D"
+            "Feature" = "8:"
+            }
             "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_5AB13D8FEBC54ED58E5B6CFBB0FF1CC6"
             {
             "Name" = "8:PCAB_DebuggerGUI"
@@ -692,9 +823,23 @@
             "IconIndex" = "3:0"
             "Transitive" = "11:FALSE"
             "Target" = "8:_55219439E27A4BB88D2EDAAFB85C87A6"
-            "Folder" = "8:_241369603EE14BC2B9277D4BED718080"
+            "Folder" = "8:_F4B1FE5531364F4FB1F79A6D1CA7E34A"
             "WorkingFolder" = "8:_74480F6C3B5E4178865AAF909950A49F"
             "Icon" = "8:_2F06F5BA90734A6EAD5D9E4504F83401"
+            "Feature" = "8:"
+            }
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_8949A82B738C411BB2C3CA8C2B6A31CC"
+            {
+            "Name" = "8:PCAB_DebuggerACS"
+            "Arguments" = "8:"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_DC54A4B250B54FA5A1394D3E6D46BAC6"
+            "Folder" = "8:_D13C94555DD94C63B0E4D241FEFB2B72"
+            "WorkingFolder" = "8:_74480F6C3B5E4178865AAF909950A49F"
+            "Icon" = "8:_60307AAC2FA143D48548EB43D664C31D"
             "Feature" = "8:"
             }
         }
@@ -1098,7 +1243,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_55219439E27A4BB88D2EDAAFB85C87A6"
             {
-            "SourcePath" = "8:..\\PCAB_Debugger_GUI\\obj\\Debug\\PCAB_Debugger_GUI.exe"
+            "SourcePath" = "8:..\\PCAB_Debugger_GUI\\obj\\Release\\PCAB_Debugger_GUI.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_74480F6C3B5E4178865AAF909950A49F"
@@ -1119,6 +1264,62 @@
             "OutputConfiguration" = "8:"
             "OutputGroupCanonicalName" = "8:Built"
             "OutputProjectGuid" = "8:{6D12DC96-76ED-41B9-9271-FE5B9C1982C5}"
+            "ShowKeyOutput" = "11:TRUE"
+                "ExcludeFilters"
+                {
+                }
+            }
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_BB0B3FA9675E4238AB958486A9056B13"
+            {
+            "SourcePath" = "8:"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_74480F6C3B5E4178865AAF909950A49F"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            "ProjectOutputGroupRegister" = "3:1"
+            "OutputConfiguration" = "8:"
+            "OutputGroupCanonicalName" = "8:Built"
+            "OutputProjectGuid" = "8:{5CD876D1-09C5-47D1-B80A-8768B9D3AFDC}"
+            "ShowKeyOutput" = "11:TRUE"
+                "ExcludeFilters"
+                {
+                }
+            }
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_DC54A4B250B54FA5A1394D3E6D46BAC6"
+            {
+            "SourcePath" = "8:..\\PCAB_Debugger_ACS\\obj\\Release\\PCAB_Debugger_ACS.exe"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_74480F6C3B5E4178865AAF909950A49F"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            "ProjectOutputGroupRegister" = "3:1"
+            "OutputConfiguration" = "8:"
+            "OutputGroupCanonicalName" = "8:Built"
+            "OutputProjectGuid" = "8:{70CC4A3B-2A23-43D8-860C-0BACE884B5E2}"
             "ShowKeyOutput" = "11:TRUE"
                 "ExcludeFilters"
                 {

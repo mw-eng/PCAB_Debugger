@@ -13,6 +13,7 @@ using static PCAB_Debugger_ComLib.PCAB_TASK;
 using static PCAB_Debugger_ComLib.ShowSerialPortName;
 using static PCAB_Debugger_GUI.clsSerialIO;
 using MWComLibCS.ExternalControl;
+using System.Linq;
 
 
 namespace PCAB_Debugger_GUI
