@@ -4,6 +4,10 @@ It was not created for the purpose of commercialization, so please use it for ev
 This program consists of the main unit firmware and a GUI section that performs control, and can also be controlled by commands using a serial interface.<br>
 For commands, see PCAB_Debugger_RP2040 [README.md](./PCAB_Debugger_RP2040/README.md).<br>
 
+## PCAB_Debugger_ACS
+POS linked control GUI program.
+[README.md](./PCAB_Debugger_ACS/README.md)
+
 ## PCAB_Debugger_GUI
 Control GUI program.
 [README.md](./PCAB_Debugger_GUI/README.md)
