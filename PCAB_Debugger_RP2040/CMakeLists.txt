@@ -43,3 +43,4 @@ endif()
 # Hardware-specific examples in subdirectories:
 add_subdirectory(PCAB_Debugger_FW)
 add_subdirectory(PCAB_Debugger_POS_Emu)
+add_subdirectory(PCAB_Debugger_FW_Pico)

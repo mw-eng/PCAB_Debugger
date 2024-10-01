@@ -2,11 +2,8 @@
 
 int main()
 {
-    uart_init(uart0, UART_BAUD_RATE);
-    gpio_set_function(UART_TX_PIN, GPIO_FUNC_UART);
-    gpio_set_function(UART_RX_PIN, GPIO_FUNC_UART);
-    uart_set_hw_flow(uart0, false, false);
-    uart_set_format(uart0, UART_DATA_BITS, UART_STOP_BIT, UART_PARITY_NONE);
+    uartSYNC uart = uartSYNC(uart0, UART_TX_PIN, UART_RX_PIN, UART_BAUD_RATE, "\r\n");
+
     std::vector<uint8_t> dat;
     dat.clear();
 

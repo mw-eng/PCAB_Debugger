@@ -10,8 +10,21 @@ namespace PCAB_Debugger_ComLib
     /// </summary>
     public partial class cntMonitor : UserControl
     {
-        private const float maxTMP = 55;
-        private const float minTMP = 15;
+        private const float maxTMP = 55.0f;
+        private const float minTMP = 15.0f;
+        private const float maxVin = 30.0f;
+        private const float minVin = 26.0f;
+        private const float maxPin = 1.1f;
+        private const float minPin = 0.9f;
+        private const float maxVd = 26.0f;
+        private const float minVd = 10.0f;
+        private const float maxId = 4.0f;
+        private const float minId = 0.2f;
+        private SolidColorBrush maxColor = new SolidColorBrush(Color.FromScRgb(100, 255, 0, 0));
+        private SolidColorBrush minColor = new SolidColorBrush(Color.FromScRgb(100, 0, 255, 255));
+        private SolidColorBrush normColor = null;
+        private SolidColorBrush errColor = new SolidColorBrush(Color.FromScRgb(100, 255, 255, 0));
+
         #region Property
         public string SerialNumber { get; private set; }
         public string TEMPcpu
@@ -21,32 +34,80 @@ namespace PCAB_Debugger_ComLib
                 SNS_CPU_TEMP_LABEL.Content = value;
                 try
                 {
-                    if (float.Parse(value) > maxTMP) { SNS_CPU_TEMP_LABEL.Background = new SolidColorBrush(Color.FromScRgb(100, 255, 0, 0)); }
-                    else if (float.Parse(value) < minTMP) { SNS_CPU_TEMP_LABEL.Background = new SolidColorBrush(Color.FromScRgb(100, 0, 255, 255)); }
-                    else{ SNS_CPU_TEMP_LABEL.Background = null; }
+                    if (float.Parse(value) > maxTMP) { SNS_CPU_TEMP_LABEL.Background = maxColor; }
+                    else if (float.Parse(value) < minTMP) { SNS_CPU_TEMP_LABEL.Background = minColor; }
+                    else{ SNS_CPU_TEMP_LABEL.Background = normColor; }
                 }
-                catch { SNS_CPU_TEMP_LABEL.Background = new SolidColorBrush(Color.FromScRgb(100, 255, 255, 0));}
+                catch { SNS_CPU_TEMP_LABEL.Background = errColor; }
             })); }
         }
         public string SNSvin
         {
             get { return SNS_VIN_LABEL.Content.ToString(); }
-            set { Dispatcher.BeginInvoke(new Action(() => { SNS_VIN_LABEL.Content = value; })); }
+            set
+            {
+                Dispatcher.BeginInvoke(new Action(() => {
+                    SNS_VIN_LABEL.Content = value;
+                    try
+                    {
+                        if (float.Parse(value) > maxVin) { SNS_VIN_LABEL.Background = maxColor; }
+                        else if (float.Parse(value) < minVin) { SNS_VIN_LABEL.Background = minColor; }
+                        else { SNS_VIN_LABEL.Background = normColor; }
+                    }
+                    catch { SNS_VIN_LABEL.Background = errColor; }
+                }));
+            }
         }
         public string SNSpin
         {
             get { return SNS_PIN_LABEL.Content.ToString(); }
-            set { Dispatcher.BeginInvoke(new Action(() => { SNS_PIN_LABEL.Content = value; })); }
+            set
+            {
+                Dispatcher.BeginInvoke(new Action(() => {
+                    SNS_PIN_LABEL.Content = value;
+                    try
+                    {
+                        if (float.Parse(value) > maxVin) { SNS_PIN_LABEL.Background = maxColor; }
+                        else if (float.Parse(value) < minVin) { SNS_PIN_LABEL.Background = minColor; }
+                        else { SNS_PIN_LABEL.Background = normColor; }
+                    }
+                    catch { SNS_PIN_LABEL.Background = errColor; }
+                }));
+            }
         }
         public string SNSvd
         {
             get { return SNS_VD_LABEL.Content.ToString(); }
-            set { Dispatcher.BeginInvoke(new Action(() => { SNS_VD_LABEL.Content = value; })); }
+            set
+            {
+                Dispatcher.BeginInvoke(new Action(() => {
+                    SNS_VD_LABEL.Content = value;
+                    try
+                    {
+                        if (float.Parse(value) > maxVd) { SNS_VD_LABEL.Background = maxColor; }
+                        else if (float.Parse(value) < minVd) { SNS_VD_LABEL.Background = minColor; }
+                        else { SNS_VD_LABEL.Background = normColor; }
+                    }
+                    catch { SNS_VD_LABEL.Background = errColor; }
+                }));
+            }
         }
         public string SNSid
         {
             get { return SNS_ID_LABEL.Content.ToString(); }
-            set { Dispatcher.BeginInvoke(new Action(() => { SNS_ID_LABEL.Content = value; })); }
+            set
+            {
+                Dispatcher.BeginInvoke(new Action(() => {
+                    SNS_ID_LABEL.Content = value;
+                    try
+                    {
+                        if (float.Parse(value) > maxId) { SNS_ID_LABEL.Background = maxColor; }
+                        else if (float.Parse(value) < minId) { SNS_ID_LABEL.Background = minColor; }
+                        else { SNS_ID_LABEL.Background = normColor; }
+                    }
+                    catch { SNS_ID_LABEL.Background = errColor; }
+                }));
+            }
         }
         public string TEMPavg
         {
@@ -55,11 +116,11 @@ namespace PCAB_Debugger_ComLib
                 TMP_AVG_LABEL.Content = value;
                 try
                 {
-                    if (float.Parse(value) > maxTMP) { TMP_AVG_LABEL.Background = new SolidColorBrush(Color.FromScRgb(100, 255, 0, 0)); }
-                    else if (float.Parse(value) < minTMP) { TMP_AVG_LABEL.Background = new SolidColorBrush(Color.FromScRgb(100, 0, 255, 255)); }
-                    else { TMP_AVG_LABEL.Background = null; }
+                    if (float.Parse(value) > maxTMP) { TMP_AVG_LABEL.Background = maxColor; }
+                    else if (float.Parse(value) < minTMP) { TMP_AVG_LABEL.Background = minColor; }
+                    else { TMP_AVG_LABEL.Background = normColor; }
                 }
-                catch { TMP_AVG_LABEL.Background = new SolidColorBrush(Color.FromScRgb(100, 255, 255, 0)); }
+                catch { TMP_AVG_LABEL.Background = errColor; }
             })); }
         }
         public string TEMP01ID

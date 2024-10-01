@@ -94,7 +94,7 @@ namespace PCAB_Debugger_ACS
             {
                 SerialPort _serialPort = new SerialPort();
                 _serialPort.PortName = ports[SERIAL_PORTS_COMBOBOX.SelectedIndex].Name;
-                _serialPort.BaudRate = 9600;
+                _serialPort.BaudRate = 115200;
                 _serialPort.DataBits = 8;
                 _serialPort.Parity = Parity.None;
                 _serialPort.StopBits = StopBits.One;

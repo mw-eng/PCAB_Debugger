@@ -33,7 +33,7 @@ namespace PCAB_Debugger_ComLib
                     int hh = (int)Math.Truncate((_data.TIME - (day * 24 * 60 * 60)) / 60 / 60);
                     int mm = (int)Math.Truncate((_data.TIME - (day * 24 * 60 * 60) - (hh * 60 * 60)) / 60);
                     double ss = _data.TIME - day * 24 * 60 * 60 - hh * 60 * 60 - mm * 60;
-                    TIME_LABEL.Content = day.ToString() + "day" +  hh.ToString("00") + ":" + mm.ToString("00")+ ":" + ss.ToString("00.000000");
+                    TIME_LABEL.Content = day.ToString() + "day " +  hh.ToString("00") + ":" + mm.ToString("00")+ ":" + ss.ToString("00.000000");
                     ROLL_LABEL.Content = _data.ROLL.ToString("0.00").PadLeft(7, ' ');
                     PITCH_LABEL.Content = _data.PITCH.ToString("0.00").PadLeft(7, ' ');
                     HEADING_LABEL.Content = _data.HEADING.ToString("0.00").PadLeft(7, ' ');
