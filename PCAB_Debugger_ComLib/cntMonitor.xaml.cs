@@ -67,8 +67,8 @@ namespace PCAB_Debugger_ComLib
                     SNS_PIN_LABEL.Content = value;
                     try
                     {
-                        if (float.Parse(value) > maxVin) { SNS_PIN_LABEL.Background = maxColor; }
-                        else if (float.Parse(value) < minVin) { SNS_PIN_LABEL.Background = minColor; }
+                        if (float.Parse(value) > maxPin) { SNS_PIN_LABEL.Background = maxColor; }
+                        else if (float.Parse(value) < minPin) { SNS_PIN_LABEL.Background = minColor; }
                         else { SNS_PIN_LABEL.Background = normColor; }
                     }
                     catch { SNS_PIN_LABEL.Background = errColor; }
@@ -201,77 +201,257 @@ namespace PCAB_Debugger_ComLib
         public string TEMP01VALUE
         {
             get { return TEMP01VAL.Content.ToString(); }
-            set { Dispatcher.BeginInvoke(new Action(() => { TEMP01VAL.Content = value; })); }
+            set
+            {
+                Dispatcher.BeginInvoke(new Action(() => {
+                    TEMP01VAL.Content = value;
+                    try
+                    {
+                        if (float.Parse(value) > maxTMP) { TEMP01VAL.Background = maxColor; }
+                        else if (float.Parse(value) < minTMP) { TEMP01VAL.Background = minColor; }
+                        else { TEMP01VAL.Background = normColor; }
+                    }
+                    catch { TEMP01VAL.Background = errColor; }
+                }));
+            }
         }
         public string TEMP02VALUE
         {
             get { return TEMP02VAL.Content.ToString(); }
-            set { Dispatcher.BeginInvoke(new Action(() => { TEMP02VAL.Content = value; })); }
+            set
+            {
+                Dispatcher.BeginInvoke(new Action(() => {
+                    TEMP02VAL.Content = value;
+                    try
+                    {
+                        if (float.Parse(value) > maxTMP) { TEMP02VAL.Background = maxColor; }
+                        else if (float.Parse(value) < minTMP) { TEMP02VAL.Background = minColor; }
+                        else { TEMP02VAL.Background = normColor; }
+                    }
+                    catch { TEMP02VAL.Background = errColor; }
+                }));
+            }
         }
         public string TEMP03VALUE
         {
             get { return TEMP03VAL.Content.ToString(); }
-            set { Dispatcher.BeginInvoke(new Action(() => { TEMP03VAL.Content = value; })); }
+            set
+            {
+                Dispatcher.BeginInvoke(new Action(() => {
+                    TEMP03VAL.Content = value;
+                    try
+                    {
+                        if (float.Parse(value) > maxTMP) { TEMP03VAL.Background = maxColor; }
+                        else if (float.Parse(value) < minTMP) { TEMP03VAL.Background = minColor; }
+                        else { TEMP03VAL.Background = normColor; }
+                    }
+                    catch { TEMP03VAL.Background = errColor; }
+                }));
+            }
         }
         public string TEMP04VALUE
         {
             get { return TEMP04VAL.Content.ToString(); }
-            set { Dispatcher.BeginInvoke(new Action(() => { TEMP04VAL.Content = value; })); }
+            set
+            {
+                Dispatcher.BeginInvoke(new Action(() => {
+                    TEMP04VAL.Content = value;
+                    try
+                    {
+                        if (float.Parse(value) > maxTMP) { TEMP04VAL.Background = maxColor; }
+                        else if (float.Parse(value) < minTMP) { TEMP04VAL.Background = minColor; }
+                        else { TEMP04VAL.Background = normColor; }
+                    }
+                    catch { TEMP04VAL.Background = errColor; }
+                }));
+            }
         }
         public string TEMP05VALUE
         {
             get { return TEMP05VAL.Content.ToString(); }
-            set { Dispatcher.BeginInvoke(new Action(() => { TEMP05VAL.Content = value; })); }
+            set
+            {
+                Dispatcher.BeginInvoke(new Action(() => {
+                    TEMP05VAL.Content = value;
+                    try
+                    {
+                        if (float.Parse(value) > maxTMP) { TEMP05VAL.Background = maxColor; }
+                        else if (float.Parse(value) < minTMP) { TEMP05VAL.Background = minColor; }
+                        else { TEMP05VAL.Background = normColor; }
+                    }
+                    catch { TEMP05VAL.Background = errColor; }
+                }));
+            }
         }
         public string TEMP06VALUE
         {
             get { return TEMP06VAL.Content.ToString(); }
-            set { Dispatcher.BeginInvoke(new Action(() => { TEMP06VAL.Content = value; })); }
+            set
+            {
+                Dispatcher.BeginInvoke(new Action(() => {
+                    TEMP06VAL.Content = value;
+                    try
+                    {
+                        if (float.Parse(value) > maxTMP) { TEMP06VAL.Background = maxColor; }
+                        else if (float.Parse(value) < minTMP) { TEMP06VAL.Background = minColor; }
+                        else { TEMP06VAL.Background = normColor; }
+                    }
+                    catch { TEMP06VAL.Background = errColor; }
+                }));
+            }
         }
         public string TEMP07VALUE
         {
             get { return TEMP07VAL.Content.ToString(); }
-            set { Dispatcher.BeginInvoke(new Action(() => { TEMP07VAL.Content = value; })); }
+            set
+            {
+                Dispatcher.BeginInvoke(new Action(() => {
+                    TEMP07VAL.Content = value;
+                    try
+                    {
+                        if (float.Parse(value) > maxTMP) { TEMP07VAL.Background = maxColor; }
+                        else if (float.Parse(value) < minTMP) { TEMP07VAL.Background = minColor; }
+                        else { TEMP07VAL.Background = normColor; }
+                    }
+                    catch { TEMP07VAL.Background = errColor; }
+                }));
+            }
         }
         public string TEMP08VALUE
         {
             get { return TEMP08VAL.Content.ToString(); }
-            set { Dispatcher.BeginInvoke(new Action(() => { TEMP08VAL.Content = value; })); }
+            set
+            {
+                Dispatcher.BeginInvoke(new Action(() => {
+                    TEMP08VAL.Content = value;
+                    try
+                    {
+                        if (float.Parse(value) > maxTMP) { TEMP08VAL.Background = maxColor; }
+                        else if (float.Parse(value) < minTMP) { TEMP08VAL.Background = minColor; }
+                        else { TEMP08VAL.Background = normColor; }
+                    }
+                    catch { TEMP08VAL.Background = errColor; }
+                }));
+            }
         }
         public string TEMP09VALUE
         {
             get { return TEMP09VAL.Content.ToString(); }
-            set { Dispatcher.BeginInvoke(new Action(() => { TEMP09VAL.Content = value; })); }
+            set
+            {
+                Dispatcher.BeginInvoke(new Action(() => {
+                    TEMP09VAL.Content = value;
+                    try
+                    {
+                        if (float.Parse(value) > maxTMP) { TEMP09VAL.Background = maxColor; }
+                        else if (float.Parse(value) < minTMP) { TEMP09VAL.Background = minColor; }
+                        else { TEMP09VAL.Background = normColor; }
+                    }
+                    catch { TEMP09VAL.Background = errColor; }
+                }));
+            }
         }
         public string TEMP10VALUE
         {
             get { return TEMP10VAL.Content.ToString(); }
-            set { Dispatcher.BeginInvoke(new Action(() => { TEMP10VAL.Content = value; })); }
+            set
+            {
+                Dispatcher.BeginInvoke(new Action(() => {
+                    TEMP10VAL.Content = value;
+                    try
+                    {
+                        if (float.Parse(value) > maxTMP) { TEMP10VAL.Background = maxColor; }
+                        else if (float.Parse(value) < minTMP) { TEMP10VAL.Background = minColor; }
+                        else { TEMP10VAL.Background = normColor; }
+                    }
+                    catch { TEMP10VAL.Background = errColor; }
+                }));
+            }
         }
         public string TEMP11VALUE
         {
             get { return TEMP11VAL.Content.ToString(); }
-            set { Dispatcher.BeginInvoke(new Action(() => { TEMP11VAL.Content = value; })); }
+            set
+            {
+                Dispatcher.BeginInvoke(new Action(() => {
+                    TEMP11VAL.Content = value;
+                    try
+                    {
+                        if (float.Parse(value) > maxTMP) { TEMP11VAL.Background = maxColor; }
+                        else if (float.Parse(value) < minTMP) { TEMP11VAL.Background = minColor; }
+                        else { TEMP11VAL.Background = normColor; }
+                    }
+                    catch { TEMP11VAL.Background = errColor; }
+                }));
+            }
         }
         public string TEMP12VALUE
         {
             get { return TEMP12VAL.Content.ToString(); }
-            set { Dispatcher.BeginInvoke(new Action(() => { TEMP12VAL.Content = value; })); }
+            set
+            {
+                Dispatcher.BeginInvoke(new Action(() => {
+                    TEMP12VAL.Content = value;
+                    try
+                    {
+                        if (float.Parse(value) > maxTMP) { TEMP12VAL.Background = maxColor; }
+                        else if (float.Parse(value) < minTMP) { TEMP12VAL.Background = minColor; }
+                        else { TEMP12VAL.Background = normColor; }
+                    }
+                    catch { TEMP12VAL.Background = errColor; }
+                }));
+            }
         }
         public string TEMP13VALUE
         {
             get { return TEMP13VAL.Content.ToString(); }
-            set { Dispatcher.BeginInvoke(new Action(() => { TEMP13VAL.Content = value; })); }
+            set
+            {
+                Dispatcher.BeginInvoke(new Action(() => {
+                    TEMP13VAL.Content = value;
+                    try
+                    {
+                        if (float.Parse(value) > maxTMP) { TEMP13VAL.Background = maxColor; }
+                        else if (float.Parse(value) < minTMP) { TEMP13VAL.Background = minColor; }
+                        else { TEMP13VAL.Background = normColor; }
+                    }
+                    catch { TEMP13VAL.Background = errColor; }
+                }));
+            }
         }
         public string TEMP14VALUE
         {
             get { return TEMP14VAL.Content.ToString(); }
-            set { Dispatcher.BeginInvoke(new Action(() => { TEMP14VAL.Content = value; })); }
+            set
+            {
+                Dispatcher.BeginInvoke(new Action(() => {
+                    TEMP14VAL.Content = value;
+                    try
+                    {
+                        if (float.Parse(value) > maxTMP) { TEMP14VAL.Background = maxColor; }
+                        else if (float.Parse(value) < minTMP) { TEMP14VAL.Background = minColor; }
+                        else { TEMP14VAL.Background = normColor; }
+                    }
+                    catch { TEMP14VAL.Background = errColor; }
+                }));
+            }
         }
         public string TEMP15VALUE
         {
             get { return TEMP15VAL.Content.ToString(); }
-            set { Dispatcher.BeginInvoke(new Action(() => { TEMP15VAL.Content = value; })); }
+            set
+            {
+                Dispatcher.BeginInvoke(new Action(() => {
+                    TEMP15VAL.Content = value;
+                    try
+                    {
+                        if (float.Parse(value) > maxTMP) { TEMP15VAL.Background = maxColor; }
+                        else if (float.Parse(value) < minTMP) { TEMP15VAL.Background = minColor; }
+                        else { TEMP15VAL.Background = normColor; }
+                    }
+                    catch { TEMP15VAL.Background = errColor; }
+                }));
+            }
         }
         public bool TEMPviewIDs
         {
