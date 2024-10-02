@@ -1,7 +1,6 @@
 cmake_minimum_required(VERSION 3.12)
 
 set(ProjectName "PCAB_Debugger_RP2040")
-set(ProjectNamePOSemu "PCAB_Debugger_RP2040")
 
 # Pull in SDK (must be before project)
 include(pico_sdk_import.cmake)
@@ -42,5 +41,5 @@ endif()
 
 # Hardware-specific examples in subdirectories:
 add_subdirectory(PCAB_Debugger_FW)
-add_subdirectory(PCAB_Debugger_POS_Emu)
-add_subdirectory(PCAB_Debugger_FW_Pico)
+#add_subdirectory(PCAB_Debugger_POS_Emu)
+#add_subdirectory(PCAB_Debugger_FW_Pico)

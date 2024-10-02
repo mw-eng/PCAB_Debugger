@@ -63,6 +63,11 @@ class uartSYNC
     /// @param echo Return echo during communication.
     std::string readLine(bool echo);
 
+    /// @brief Read binary
+    /// @param echo Return echo during communication.
+    /// @param len The number of bytes to receive.
+    std::vector<uint8_t> read(bool echo, size_t len);
+
     /// @brief Read SLPI block. (Read and decode binary date.)
     /// @param echo Return echo during communication.
     std::vector<uint8_t> readSLIP_block(bool echo);

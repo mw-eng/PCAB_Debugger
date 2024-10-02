@@ -117,8 +117,15 @@ std::vector<uint8_t> uartSYNC::readSLIP_block(bool echo)
         if(dat.size() == SIZE_MAX - 1){return std::vector<uint8_t>();}
     }while(byteBF[0] != 0xC0);
     return DecodeSLIP(dat);
-    //return Convert::EncodeSLIP(dat);
-    //return dat;
+}
+
+ std::vector<uint8_t> uartSYNC::read(bool echo, size_t len)
+{
+    uint8_t byteBF[len];
+    uart_read_blocking(uart, byteBF, sizeof(byteBF));
+    std::vector<uint8_t> _dst(byteBF, byteBF + len);
+    if(echo) { uart_write_blocking(uart, byteBF, len); }
+    return _dst;
 }
 
 void uartSYNC::write(std::string str) { uart_puts(uart, str.c_str()); }
