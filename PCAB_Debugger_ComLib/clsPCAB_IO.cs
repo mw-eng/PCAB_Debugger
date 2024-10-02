@@ -663,7 +663,7 @@ namespace PCAB_Debugger_ComLib
         }
         public void WriteSLIP(List<byte> dat)
         {
-            List<byte> tx = clsSLIP.EncodeSLIP(dat);
+            List<byte> tx = SLIP.EncodeSLIP(dat);
             _serialPort.Write(tx.ToArray(), 0, tx.Count);
         }
         public List<byte> ReadSLIP() { return ReadSLIP(_serialPort.ReadBufferSize); }
@@ -706,7 +706,7 @@ namespace PCAB_Debugger_ComLib
                         }
                     }
                 } while (num == -1);
-                return clsSLIP.DecodeSLIP(ret);
+                return SLIP.DecodeSLIP(ret);
             }
             catch (Exception ex) { throw; }
         }

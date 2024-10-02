@@ -47,6 +47,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="clsCOLOR.cs" />
     <Compile Include="clsPCAB_IO.cs" />
     <Compile Include="clsPNA835x.cs" />
     <Compile Include="clsPOS.cs" />

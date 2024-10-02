@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace PCAB_Debugger_ComLib
 {
-    public static class clsSearchList
+    public static class SearchList
     {
         /// <summary>
         /// Binary search with the sunday algorithm

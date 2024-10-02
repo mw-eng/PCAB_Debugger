@@ -1,23 +1,12 @@
 ﻿using PCAB_Debugger_ACS.Properties;
+using PCAB_Debugger_ComLib;
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
 using System.IO.Ports;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using static PCAB_Debugger_ComLib.clsPOS;
-using PCAB_Debugger_ComLib;
+using static PCAB_Debugger_ComLib.POS;
 using static PCAB_Debugger_ComLib.ShowSerialPortName;
 
 namespace PCAB_Debugger_ACS
@@ -27,9 +16,10 @@ namespace PCAB_Debugger_ACS
     /// </summary>
     public partial class winMain : Window
     {
-        private clsPOS _pos;
+        private POS _pos;
         private SerialPortTable[] ports;
         private DateTime startTIME = new DateTime();
+        NormalizedColorChart cc;
         public winMain()
         {
             InitializeComponent();
@@ -67,6 +57,14 @@ namespace PCAB_Debugger_ACS
             this.Title += "_DEBUG MODE";
 #endif
             startTIME = DateTime.Now;
+
+            colorSlider.Minimum = -180;
+            colorSlider.Maximum = 180;
+            cc = new NormalizedColorChart(colorSlider.Minimum, colorSlider.Maximum);
+            colorSlider.Minimum = -360;
+            colorSlider.Maximum = 360;
+
+
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -102,7 +100,7 @@ namespace PCAB_Debugger_ACS
                 _serialPort.DtrEnable = true;
                 _serialPort.Encoding = Encoding.ASCII;
                 _serialPort.NewLine = "\r\n";
-                _pos = new clsPOS(_serialPort);
+                _pos = new POS(_serialPort);
                 _pos.OnTaskError += OnTaskError;
                 _pos.OnReadDAT += OnReadDAT;
                 try
@@ -136,7 +134,7 @@ namespace PCAB_Debugger_ACS
         {
             try
             {
-                clsPOS.PAST2 dat = new PAST2(e.ReceiveDAT);
+                POS.PAST2 dat = new PAST2(e.ReceiveDAT);
                 if (DateTime.Now - startTIME > new TimeSpan(100 * 1000))
                 {
                     startTIME = DateTime.Now;
@@ -192,6 +190,13 @@ namespace PCAB_Debugger_ACS
         {
             if (SERIAL_PORTS_COMBOBOX.SelectedIndex >= 0) { RUN_BUTTON.IsEnabled = true; }
             else { RUN_BUTTON.IsEnabled = false; }
+        }
+
+
+        private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            colorVal.Content = colorSlider.Value;
+            colorGRID.Background = new SolidColorBrush(cc.getColor(colorSlider.Value));
         }
     }
 }

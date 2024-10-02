@@ -21,8 +21,8 @@ namespace PCAB_Debugger_ComLib
     /// </summary>
     public partial class cntPOS : UserControl
     {
-        private clsPOS.PAST2 _data;
-        public clsPOS.PAST2 DATA
+        private POS.PAST2 _data;
+        public POS.PAST2 DATA
         {
             get { return _data; }
             set

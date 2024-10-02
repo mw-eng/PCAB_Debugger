@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace PCAB_Debugger_ComLib
 {
-    public class clsSLIP
+    public class SLIP
     {
         public static List<byte> EncodeSLIP(List<byte> data)
         {

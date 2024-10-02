@@ -8,7 +8,7 @@ using System.Windows;
 
 namespace PCAB_Debugger_ComLib
 {
-    public class clsPOS
+    public class POS
     {
         public event EventHandler<POSEventArgs> OnReadDAT;
         public event EventHandler<POSEventArgs> OnTaskError;
@@ -17,12 +17,12 @@ namespace PCAB_Debugger_ComLib
         private bool _task = false;
         private List<byte> datBF = new List<byte>();
 
-        public clsPOS(SerialPort _serialPort)
+        public POS(SerialPort _serialPort)
         {
             _serial = _serialPort;
         }
 
-        public clsPOS(string portName)
+        public POS(string portName)
         {
             _serial = new SerialPort(portName);
             _serial.BaudRate = 9600;
@@ -39,7 +39,7 @@ namespace PCAB_Debugger_ComLib
             _serial.WriteTimeout = 1000;
         }
 
-        ~clsPOS() { if (_serial?.IsOpen == true) { Close(); } }
+        ~POS() { if (_serial?.IsOpen == true) { Close(); } }
 
         public void Open()
         {
@@ -70,12 +70,12 @@ namespace PCAB_Debugger_ComLib
                     byte[] byBF = new byte[_serial.ReadBufferSize];
                     int count = _serial.Read(byBF,0, byBF.Length);
                     if (count > 0) { datBF.AddRange(byBF.Skip(0).Take(count).ToList()); }
-                    int posi1 = clsSearchList.SearchBytesSundayLastIndexOf(datBF, new byte[] { 0x00, 0x96 });
+                    int posi1 = SearchList.SearchBytesSundayLastIndexOf(datBF, new byte[] { 0x00, 0x96 });
                     if (posi1 >= 0 && datBF.Count >= posi1 + 40)
                     { OnReadDAT.Invoke(this, new POSEventArgs(datBF.GetRange(posi1, 40), "GatDAT", null)); datBF.RemoveRange(0, posi1 + 40); }
                     else
                     {
-                        int posi2 = clsSearchList.SearchBytesSundayLastIndexOf(datBF, new byte[] { 0x00, 0x96 }, posi1 - 1);
+                        int posi2 = SearchList.SearchBytesSundayLastIndexOf(datBF, new byte[] { 0x00, 0x96 }, posi1 - 1);
                         if (posi2 >= 0 && datBF.Count >= posi2 + 40)
                         { OnReadDAT.Invoke(this, new POSEventArgs(datBF.GetRange(posi2, 40), "GatDAT", null)); datBF.RemoveRange(0, posi2 + 40); }
                     }
