@@ -58,12 +58,6 @@ namespace PCAB_Debugger_ACS
 #endif
             startTIME = DateTime.Now;
 
-            colorSlider.Minimum = -180;
-            colorSlider.Maximum = 180;
-            cc = new NormalizedColorChart(colorSlider.Minimum, colorSlider.Maximum);
-            colorSlider.Minimum = -360;
-            colorSlider.Maximum = 360;
-
 
         }
 
@@ -190,13 +184,6 @@ namespace PCAB_Debugger_ACS
         {
             if (SERIAL_PORTS_COMBOBOX.SelectedIndex >= 0) { RUN_BUTTON.IsEnabled = true; }
             else { RUN_BUTTON.IsEnabled = false; }
-        }
-
-
-        private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            colorVal.Content = colorSlider.Value;
-            colorGRID.Background = new SolidColorBrush(cc.getColor(colorSlider.Value));
         }
     }
 }
