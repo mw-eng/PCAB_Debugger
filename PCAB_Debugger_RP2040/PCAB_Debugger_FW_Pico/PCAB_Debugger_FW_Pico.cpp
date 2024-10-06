@@ -583,7 +583,27 @@ int main()
                         {
                             std::vector<uint8_t> result;
                             result.clear();
+#ifdef DEBUG_RASPICO
+                            std::vector<uint64_t> code = std::vector<uint64_t>();
+                            code.clear();
+                            code.push_back(0xFF00000000000001);
+                            code.push_back(0xFF00000000000002);
+                            code.push_back(0xFF00000000000003);
+                            code.push_back(0xFF00000000000004);
+                            code.push_back(0xFF00000000000005);
+                            code.push_back(0xFF00000000000006);
+                            code.push_back(0xFF00000000000007);
+                            code.push_back(0xFF00000000000008);
+                            code.push_back(0xFF00000000000009);
+                            code.push_back(0xFF0000000000000A);
+                            code.push_back(0xFF0000000000000B);
+                            code.push_back(0xFF0000000000000C);
+                            code.push_back(0xFF0000000000000D);
+                            code.push_back(0xFF0000000000000E);
+                            code.push_back(0xFF0000000000000F);
+#else
                             std::vector<uint64_t> code = sens->getSENS_ROMCODE();
+#endif
                             if(code.size() == 0){result.push_back(0xFE);}
                             for(uint i = 0; i < code.size(); i++)
                             {
@@ -652,7 +672,27 @@ int main()
                         {
                             std::vector<uint8_t> result;
                             result.clear();
+#ifdef DEBUG_RASPICO
+                            std::vector<uint16_t> code =  std::vector<uint16_t>();
+                            code.clear();
+                            code.push_back(0x0010);
+                            code.push_back(0x0020);
+                            code.push_back(0x0030);
+                            code.push_back(0x0040);
+                            code.push_back(0x0050);
+                            code.push_back(0x0060);
+                            code.push_back(0x0070);
+                            code.push_back(0x0080);
+                            code.push_back(0x0090);
+                            code.push_back(0x00A0);
+                            code.push_back(0x00B0);
+                            code.push_back(0x00C0);
+                            code.push_back(0x00D0);
+                            code.push_back(0x00E0);
+                            code.push_back(0x00F0);
+#else
                             std::vector<uint16_t> code = sens->readSENS();
+#endif
                             if(code.size() == 0){result.push_back(0xFE);}
                             for(uint i = 0; i < code.size(); i++)
                             {
@@ -902,7 +942,27 @@ int main()
                             tmp = analog->readADC4();
                             result.push_back((uint8_t)((tmp & 0xFF00) >> 8));
                             result.push_back((uint8_t)(tmp & 0x00FF) );
+#ifdef DEBUG_RASPICO
+                            std::vector<uint16_t> code =  std::vector<uint16_t>();
+                            code.clear();
+                            code.push_back(0x0010);
+                            code.push_back(0x0020);
+                            code.push_back(0x0030);
+                            code.push_back(0x0040);
+                            code.push_back(0x0050);
+                            code.push_back(0x0060);
+                            code.push_back(0x0070);
+                            code.push_back(0x0080);
+                            code.push_back(0x0090);
+                            code.push_back(0x00A0);
+                            code.push_back(0x00B0);
+                            code.push_back(0x00C0);
+                            code.push_back(0x00D0);
+                            code.push_back(0x00E0);
+                            code.push_back(0x00F0);
+#else
                             std::vector<uint16_t> code = sens->readSENS();
+#endif
                             for(uint i = 0; i < code.size(); i++)
                             {
                                 result.push_back((uint8_t)((code[i] & 0xFF00) >> 8));

@@ -82,5 +82,329 @@ namespace PCAB_Debugger_ACS.Properties {
                 this["winMainMaximized"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public double winPosMonitorTop {
+            get {
+                return ((double)(this["winPosMonitorTop"]));
+            }
+            set {
+                this["winPosMonitorTop"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public double winPosMonitorLeft {
+            get {
+                return ((double)(this["winPosMonitorLeft"]));
+            }
+            set {
+                this["winPosMonitorLeft"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public double winPosMonitorHeight {
+            get {
+                return ((double)(this["winPosMonitorHeight"]));
+            }
+            set {
+                this["winPosMonitorHeight"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public double winPosMonitorWidth {
+            get {
+                return ((double)(this["winPosMonitorWidth"]));
+            }
+            set {
+                this["winPosMonitorWidth"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool winPosMonitorMaximized {
+            get {
+                return ((bool)(this["winPosMonitorMaximized"]));
+            }
+            set {
+                this["winPosMonitorMaximized"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public double winSnsMonitorTop {
+            get {
+                return ((double)(this["winSnsMonitorTop"]));
+            }
+            set {
+                this["winSnsMonitorTop"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public double winSnsMonitorLeft {
+            get {
+                return ((double)(this["winSnsMonitorLeft"]));
+            }
+            set {
+                this["winSnsMonitorLeft"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public double winSnsMonitorHeight {
+            get {
+                return ((double)(this["winSnsMonitorHeight"]));
+            }
+            set {
+                this["winSnsMonitorHeight"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public double winSnsMonitorWidth {
+            get {
+                return ((double)(this["winSnsMonitorWidth"]));
+            }
+            set {
+                this["winSnsMonitorWidth"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool winSnsMonitorMaximized {
+            get {
+                return ((bool)(this["winSnsMonitorMaximized"]));
+            }
+            set {
+                this["winSnsMonitorMaximized"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string spCaption0 {
+            get {
+                return ((string)(this["spCaption0"]));
+            }
+            set {
+                this["spCaption0"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string spCaption1 {
+            get {
+                return ((string)(this["spCaption1"]));
+            }
+            set {
+                this["spCaption1"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string spCaption2 {
+            get {
+                return ((string)(this["spCaption2"]));
+            }
+            set {
+                this["spCaption2"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string spCaption3 {
+            get {
+                return ((string)(this["spCaption3"]));
+            }
+            set {
+                this["spCaption3"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("5")]
+        public int spBaudRate0 {
+            get {
+                return ((int)(this["spBaudRate0"]));
+            }
+            set {
+                this["spBaudRate0"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("9")]
+        public int spBaudRate1 {
+            get {
+                return ((int)(this["spBaudRate1"]));
+            }
+            set {
+                this["spBaudRate1"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("9")]
+        public int spBaudRate2 {
+            get {
+                return ((int)(this["spBaudRate2"]));
+            }
+            set {
+                this["spBaudRate2"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("9")]
+        public int spBaudRate3 {
+            get {
+                return ((int)(this["spBaudRate3"]));
+            }
+            set {
+                this["spBaudRate3"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0000011")]
+        public string sn11 {
+            get {
+                return ((string)(this["sn11"]));
+            }
+            set {
+                this["sn11"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0000012")]
+        public string sn12 {
+            get {
+                return ((string)(this["sn12"]));
+            }
+            set {
+                this["sn12"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0000013")]
+        public string sn13 {
+            get {
+                return ((string)(this["sn13"]));
+            }
+            set {
+                this["sn13"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0000021")]
+        public string sn21 {
+            get {
+                return ((string)(this["sn21"]));
+            }
+            set {
+                this["sn21"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0000022")]
+        public string sn22 {
+            get {
+                return ((string)(this["sn22"]));
+            }
+            set {
+                this["sn22"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0000023")]
+        public string sn23 {
+            get {
+                return ((string)(this["sn23"]));
+            }
+            set {
+                this["sn23"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0000031")]
+        public string sn31 {
+            get {
+                return ((string)(this["sn31"]));
+            }
+            set {
+                this["sn31"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0000032")]
+        public string sn32 {
+            get {
+                return ((string)(this["sn32"]));
+            }
+            set {
+                this["sn32"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0000033")]
+        public string sn33 {
+            get {
+                return ((string)(this["sn33"]));
+            }
+            set {
+                this["sn33"] = value;
+            }
+        }
     }
 }

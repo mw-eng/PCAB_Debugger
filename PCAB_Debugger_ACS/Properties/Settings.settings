@@ -17,5 +17,86 @@
     <Setting Name="winMainMaximized" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
+    <Setting Name="winPosMonitorTop" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="winPosMonitorLeft" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="winPosMonitorHeight" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="winPosMonitorWidth" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="winPosMonitorMaximized" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="winSnsMonitorTop" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="winSnsMonitorLeft" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="winSnsMonitorHeight" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="winSnsMonitorWidth" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="winSnsMonitorMaximized" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="spCaption0" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="spCaption1" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="spCaption2" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="spCaption3" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="spBaudRate0" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">5</Value>
+    </Setting>
+    <Setting Name="spBaudRate1" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">9</Value>
+    </Setting>
+    <Setting Name="spBaudRate2" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">9</Value>
+    </Setting>
+    <Setting Name="spBaudRate3" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">9</Value>
+    </Setting>
+    <Setting Name="sn11" Type="System.String" Scope="User">
+      <Value Profile="(Default)">0000011</Value>
+    </Setting>
+    <Setting Name="sn12" Type="System.String" Scope="User">
+      <Value Profile="(Default)">0000012</Value>
+    </Setting>
+    <Setting Name="sn13" Type="System.String" Scope="User">
+      <Value Profile="(Default)">0000013</Value>
+    </Setting>
+    <Setting Name="sn21" Type="System.String" Scope="User">
+      <Value Profile="(Default)">0000021</Value>
+    </Setting>
+    <Setting Name="sn22" Type="System.String" Scope="User">
+      <Value Profile="(Default)">0000022</Value>
+    </Setting>
+    <Setting Name="sn23" Type="System.String" Scope="User">
+      <Value Profile="(Default)">0000023</Value>
+    </Setting>
+    <Setting Name="sn31" Type="System.String" Scope="User">
+      <Value Profile="(Default)">0000031</Value>
+    </Setting>
+    <Setting Name="sn32" Type="System.String" Scope="User">
+      <Value Profile="(Default)">0000032</Value>
+    </Setting>
+    <Setting Name="sn33" Type="System.String" Scope="User">
+      <Value Profile="(Default)">0000033</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using static PCAB_Debugger_ComLib.CommandControl;
-using static PCAB_Debugger_ComLib.cntConfigSettings;
+using static PCAB_Debugger_ComLib.cntConfigPorts;
 
 namespace PCAB_Debugger_ComLib
 {

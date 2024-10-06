@@ -19,7 +19,7 @@ set (PICO_DEOPTIMIZED_DEBUG "off")
 #add_compile_definitions(PICO_FLASH_SIZE_BYTES=2*1024*1024) #16Mbit (Raspberry Pi Pico)
 #add_compile_definitions(PICO_FLASH_SIZE_BYTES=4*1024*1024) #32Mbit
 #add_compile_definitions(PICO_FLASH_SIZE_BYTES=8*1024*1024) #64Mbit
-add_compile_definitions(PICO_FLASH_SIZE_BYTES=16*1024*1024) #128Mbit (PCAB)
+#add_compile_definitions(PICO_FLASH_SIZE_BYTES=16*1024*1024) #128Mbit (PCAB)
 #add_compile_definitions(PICO_FLASH_SIZE_BYTES=32*1024*1024) #256Mbit
 #add_compile_definitions(PICO_FLASH_SIZE_BYTES=64*1024*1024) #512Mbit
 #add_compile_definitions(PICO_FLASH_SIZE_BYTES=128*1024*1024) #1024Mbit

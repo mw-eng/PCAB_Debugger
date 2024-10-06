@@ -49,6 +49,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="clsAsyncButton.cs" />
     <Compile Include="clsCOLOR.cs" />
     <Compile Include="clsPCAB_IO.cs" />
     <Compile Include="clsPNA835x.cs" />
@@ -62,6 +63,9 @@
     </Compile>
     <Compile Include="cntConfig.xaml.cs">
       <DependentUpon>cntConfig.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="cntConfigPorts.xaml.cs">
+      <DependentUpon>cntConfigPorts.xaml</DependentUpon>
     </Compile>
     <Compile Include="cntConfigSettings.xaml.cs">
       <DependentUpon>cntConfigSettings.xaml</DependentUpon>
@@ -117,6 +121,10 @@
     <Page Include="cntConfig.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="cntConfigPorts.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="cntConfigSettings.xaml">
       <Generator>MSBuild:Compile</Generator>

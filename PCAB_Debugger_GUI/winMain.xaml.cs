@@ -8,6 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using static PCAB_Debugger_ComLib.cntConfig;
 using static PCAB_Debugger_ComLib.cntConfigSettings;
+using static PCAB_Debugger_ComLib.cntConfigPorts;
 using static PCAB_Debugger_ComLib.PCAB_SerialInterface;
 using static PCAB_Debugger_ComLib.PCAB_TASK;
 using static PCAB_Debugger_ComLib.ShowSerialPortName;
@@ -800,13 +801,13 @@ namespace PCAB_Debugger_GUI
                 {
                     _io.Close();
                 }
-                _ioList = new List<clsSerialIO>();
                 BOARD_GRID.Children.Clear();
                 BOARD_GRID.Children.Add(new cntBOARD());
                 CONFIG_GRID.IsEnabled = true;
                 BOARD_GRID.IsEnabled = false;
                 CONNECT_BUTTON_CONTENT.Text = "Connect";
                 CONFIG_EXPANDER.IsExpanded = true;
+                _ioList = new List<clsSerialIO>();
             }));
         }
         #endregion

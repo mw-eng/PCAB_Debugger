@@ -37,7 +37,8 @@ namespace PCAB_Debugger_GUI.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0000")]
+        [global::System.Configuration.DefaultSettingValueAttribute("0000011@R,0000012@R,0000013@R,0000021@Z,0000022@Z,0000023@Z,0000031@Z,0000032@Z,0" +
+            "000033@Z")]
         public string sn {
             get {
                 return ((string)(this["sn"]));

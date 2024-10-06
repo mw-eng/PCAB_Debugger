@@ -16,6 +16,7 @@ namespace PCAB_Debugger_ComLib
         private SerialPort _serial;
         private bool _task = false;
         private List<byte> datBF = new List<byte>();
+        private Task<int> _loopTask;
 
         public POS(SerialPort _serialPort)
         {
@@ -39,7 +40,7 @@ namespace PCAB_Debugger_ComLib
             _serial.WriteTimeout = 1000;
         }
 
-        ~POS() { if (_serial?.IsOpen == true) { Close(); } }
+        ~POS() { if (_task) { POS_AutoTaskStop();  } Close(); }
 
         public void Open()
         {
@@ -51,17 +52,17 @@ namespace PCAB_Debugger_ComLib
             { MessageBox.Show("Serial port open Error.\n{" + e.ToString() + "}\n", "Error", MessageBoxButton.OK, MessageBoxImage.Error); throw; }
         }
 
-        public void Close() { if (_serial?.IsOpen == true) { _serial.Close(); } }
+        public void Close() { if (_task) { POS_AutoTaskStop(); } if (_serial?.IsOpen == true) { _serial.Close(); } }
 
         public bool POS_AutoTaskStart()
         {
             if (_serial?.IsOpen != true) { return false; }
             _task = true;
-            Task.Factory.StartNew(() => { POS_Task(); });
+            _loopTask = Task.Factory.StartNew(() => { return POS_Task(); });
             return true;
         }
 
-        public void POS_Task()
+        private int POS_Task()
         {
             while (_task)
             {
@@ -90,9 +91,14 @@ namespace PCAB_Debugger_ComLib
                     OnTaskError?.Invoke(this,new POSEventArgs(null,"ERROR > Exception", ex));
                 }
             }
+            return 0;
         }
 
-        public void POS_AutoTaskStop(){ _task = false; }
+        public void POS_AutoTaskStop()
+        {
+            _task = false;
+            _loopTask.ConfigureAwait(false);
+        }
 
         public class POSEventArgs : EventArgs
         {
@@ -136,32 +142,6 @@ namespace PCAB_Debugger_ComLib
             public byte[] LONG_ACCEL_BINARY { get { return DATA.Skip(32).Take(2).ToArray(); } }
             public byte[] TRAN_ACCELBINARY { get { return DATA.Skip(34).Take(2).ToArray(); } }
             public byte[] DOWN_ACCEL_BINARY { get { return DATA.Skip(36).Take(2).ToArray(); } }
-
-            //public double TIME { get { return BitConverter.ToDouble(TIME_BINARY, 0); } }
-            //public float ROLL { get { return BitConverter.ToInt16(ROLL_BINARY, 0) * 0.01f; } }
-            //public float PITCH { get { return BitConverter.ToInt16(PITCH_BINARY, 0) * 0.01f; } }
-            //public float HEADING { get { return BitConverter.ToUInt16(HEADING_BINARY, 0) * 0.01f; } }
-            //public float LATITUDE { get { return BitConverter.ToInt32(LATITUDE_BINARY, 0) * 0.001f; } }
-            //public float LONGITUDE { get { return BitConverter.ToInt32(LONGITUDE_BINARY, 0) * 0.001f; } }
-            //public float ALTITUDE { get { return BitConverter.ToInt32(ALTITUDE_BINARY, 0) * 0.01f; } }
-            //public float SPEED { get { return BitConverter.ToUInt16(SPEED_BINARY, 0) * 0.01f; } }
-            //public float TRACK { get { return BitConverter.ToUInt16(TRACK_BINARY, 0) * 0.01f; } }
-            //public float LONG_ACCEL { get { return BitConverter.ToInt16(LONG_ACCEL_BINARY, 0) * 0.0005f; } }
-            //public float TRAN_ACCEL { get { return BitConverter.ToInt16(TRAN_ACCELBINARY, 0) * 0.0005f; } }
-            //public float DOWN_ACCEL { get { return BitConverter.ToInt16(DOWN_ACCEL_BINARY, 0) * 0.0005f; } }
-
-            //public byte[] TIME_BINARY { get { return DATA.Skip(2).Take(8).ToArray(); } }
-            //public byte[] ROLL_BINARY { get { return new byte[] { DATA[11], DATA[10] }; } }
-            //public byte[] PITCH_BINARY { get { return new byte[] { DATA[13], DATA[12] }; } }
-            //public byte[] HEADING_BINARY { get { return new byte[] { DATA[15], DATA[14] }; } }
-            //public byte[] LATITUDE_BINARY { get { return DATA.Skip(16).Take(4).ToArray(); } }
-            //public byte[] LONGITUDE_BINARY { get { return DATA.Skip(20).Take(4).ToArray(); } }
-            //public byte[] ALTITUDE_BINARY { get { return DATA.Skip(24).Take(4).ToArray(); } }
-            //public byte[] SPEED_BINARY { get { return new byte[] { DATA[29], DATA[28] }; } }
-            //public byte[] TRACK_BINARY { get { return new byte[] { DATA[31], DATA[30] }; } }
-            //public byte[] LONG_ACCEL_BINARY { get { return new byte[] { DATA[33], DATA[32] }; } }
-            //public byte[] TRAN_ACCELBINARY { get { return new byte[] { DATA[35], DATA[34] }; } }
-            //public byte[] DOWN_ACCEL_BINARY { get { return new byte[] { DATA[37], DATA[36] }; } }
 
             public byte[] DATA { get; private set; } = new byte[40];
             public PAST2(IEnumerable<byte> dat)

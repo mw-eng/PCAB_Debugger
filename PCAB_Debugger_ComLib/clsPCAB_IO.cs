@@ -19,12 +19,14 @@ namespace PCAB_Debugger_ComLib
         public event EventHandler<PCABEventArgs> OnUpdateDAT;
         public event EventHandler<PCABEventArgs> OnTaskError;
         public List<PCAB_UnitInterface> UNITs { get { return serialInterface?.pcabUNITs; } }
+        private Task _loopTask;
 
         public PCAB_TASK(string PortName, UInt32 BaudRate) { serialInterface = new PCAB_SerialInterface(PortName, BaudRate); }
         public PCAB_TASK(SerialPort serialPort) { serialInterface = new PCAB_SerialInterface(serialPort); }
 
         private void Close()
         {
+            if (_task != false) { PCAB_AutoTaskStop(); }
             try { serialInterface?.Close(); } catch { }
             serialInterface = null;
         }
@@ -39,13 +41,14 @@ namespace PCAB_Debugger_ComLib
             {
                 _task = true;
                 _state = false;
-                Task.Factory.StartNew(() => { PCAB_Task(waiteTime); });
+                _loopTask = Task.Factory.StartNew(() => { PCAB_Task(waiteTime); });
             }
             return ret;
         }
 
         private void PCAB_Task(UInt32 waiteTime)
         {
+            uint ErrCount = 0;
             try
             {
                 if(_task == true)
@@ -75,7 +78,7 @@ namespace PCAB_Debugger_ComLib
                         foreach (PCAB_UnitInterface unit in serialInterface.pcabUNITs)
                         {
                             serialInterface.DiscardInBuffer();
-                            SensorValues values = serialInterface.GetSensorValue(unit);
+                            try { SensorValues values = serialInterface.GetSensorValue(unit); 
                             if (
                                 values.Analog.Vd != unit.SensorValuesNOW.Analog.Vd ||
                                 values.Analog.Id != unit.SensorValuesNOW.Analog.Id ||
@@ -84,6 +87,9 @@ namespace PCAB_Debugger_ComLib
                                 values.Analog.CPU_Temprature != unit.SensorValuesNOW.Analog.CPU_Temprature ||
                                 values.Temprature.Values != unit.SensorValuesNOW.Temprature.Values)
                             { updateFLG = true; unit.SensorValuesNOW = new SensorValues(values.Analog,values.Temprature, unit.SensorValuesNOW.ID); }
+                            }
+                            catch (Exception e) { ErrCount++; if (ErrCount > 10) { OnTaskError?.Invoke(this, new PCABEventArgs(null, e.Message)); } break; }
+                            ErrCount = 0;
                         }
                         if (updateFLG)
                         {
@@ -104,7 +110,7 @@ namespace PCAB_Debugger_ComLib
             }
         }
 
-        public void PCAB_AutoTaskStop() { _task = false; }
+        public void PCAB_AutoTaskStop() { _task = false; _loopTask?.ConfigureAwait(false); }
 
         public bool PCAB_PRESET(PCAB_UnitInterface unit)
         {
@@ -938,7 +944,7 @@ namespace PCAB_Debugger_ComLib
             {
                 List<byte> ret = WriteReadSLIP(unit.GetCommandCode(new List<byte> { 0xEF }));
                 if (ret.Count == 10 + 2 * 15 || ret.Count == 10 || ret.Count == 2 * 15) { return new SensorValues(ret); }
-                else { throw new Exception("GetSensorValue Error"); }
+                else { throw new Exception("GetSensorValue Error.\nCount > " + ret?.Count + "\nDAT > " + BitConverter.ToString(ret?.ToArray())); }
             }
             catch (Exception ex) { throw; }
         }

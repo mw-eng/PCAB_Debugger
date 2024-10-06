@@ -12,7 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using static PCAB_Debugger_ComLib.cntConfigSettings;
+using static PCAB_Debugger_ComLib.cntConfigPorts;
 
 namespace PCAB_Debugger_ComLib
 {
@@ -47,6 +47,8 @@ namespace PCAB_Debugger_ComLib
                     ((Label)((Viewbox)(gridBF.Children[0])).Child).Content = "Port " + (i * 4 + j + 1).ToString().PadLeft(2);
                     ((Label)((Viewbox)(gridBF.Children[1])).Child).Content = "   0.000 deg";
                 }
+                ports[15].Children.Clear();
+                ports[15].Background = new SolidColorBrush(Color.FromArgb(255,255,255,255));
             }
         }
     }
