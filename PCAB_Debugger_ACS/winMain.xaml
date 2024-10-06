@@ -1034,9 +1034,10 @@
                         <RowDefinition Height="1*"/>
                         <RowDefinition Height="1*"/>
                         <RowDefinition Height="1*"/>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="1*"/>
-                    </Grid.RowDefinitions>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                        </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="1*"/>
                         <ColumnDefinition Width="1*"/>
@@ -1049,6 +1050,7 @@
                         <Label Grid.Row="2" Grid.Column="0" Content="PTU 2x" VerticalAlignment="Center"/>
                         <Label Grid.Row="3" Grid.Column="0" Content="PTU 3x" VerticalAlignment="Center"/>
                         <Label Grid.Row="4" Grid.Column="0" Content="POS" VerticalAlignment="Center"/>
+                        <Label Grid.Row="5" Grid.Column="0" Content="View" VerticalAlignment="Center"/>
                         <Label Grid.Row="0" Grid.Column="1" Content="Serial Port" VerticalAlignment="Center"/>
                         <Label Grid.Row="0" Grid.Column="2" Content="Baud Ratio [bps]" VerticalAlignment="Center"/>
                         <Label Grid.Row="0" Grid.Column="3" Content="PUT x1 S/N" VerticalAlignment="Center"/>
@@ -1071,12 +1073,16 @@
                         <TextBox Grid.Row="3" Grid.Column="3" MinWidth="80" x:Name="SERIAL_NUMBERS_TEXTBOX31" Style="{StaticResource EDIT_TEXT_LINE}" TextWrapping="Wrap" Text="0000031" Margin="5" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" PreviewTextInput="SN_TextBox_PreviewTextInput" CommandManager.PreviewExecuted="SN_TextBox_PreviewExecuted" PreviewLostKeyboardFocus="SN_TextBox_PreviewLostKeyboardForcus" FontSize="16"/>
                         <TextBox Grid.Row="3" Grid.Column="4" MinWidth="80" x:Name="SERIAL_NUMBERS_TEXTBOX32" Style="{StaticResource EDIT_TEXT_LINE}" TextWrapping="Wrap" Text="0000032" Margin="5" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" PreviewTextInput="SN_TextBox_PreviewTextInput" CommandManager.PreviewExecuted="SN_TextBox_PreviewExecuted" PreviewLostKeyboardFocus="SN_TextBox_PreviewLostKeyboardForcus" FontSize="16"/>
                         <TextBox Grid.Row="3" Grid.Column="5" MinWidth="80" x:Name="SERIAL_NUMBERS_TEXTBOX33" Style="{StaticResource EDIT_TEXT_LINE}" TextWrapping="Wrap" Text="0000033" Margin="5" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" PreviewTextInput="SN_TextBox_PreviewTextInput" CommandManager.PreviewExecuted="SN_TextBox_PreviewExecuted" PreviewLostKeyboardFocus="SN_TextBox_PreviewLostKeyboardForcus" FontSize="16"/>
+                        <ComboBox Grid.Row="5" Grid.Column="1" MinWidth="300" x:Name="VIEW_COMBOBOX" Margin="5" SelectedIndex="0" Style="{StaticResource COMBOBOX_CONTENT_CENTER}" VerticalContentAlignment="Center">
+                            <ComboBoxItem><TextBlock Text="Antenna"/></ComboBoxItem>
+                            <ComboBoxItem><TextBlock Text="PCAB"/></ComboBoxItem>
+                        </ComboBox>
                     </Grid>
                 </Viewbox>
             </Expander>
         </Grid>
         <Grid Grid.Row="0" Grid.RowSpan="3" Background="#FFB8FFFD" Panel.ZIndex="0"/>
-        <Grid Grid.Row="4" Panel.ZIndex="0">
+        <Grid Grid.Row="4" Panel.ZIndex="0" x:Name="CONTROL_GRID">
             <Grid.RowDefinitions>
                 <RowDefinition Height="8"/>
                 <RowDefinition Height="20"/>
@@ -1087,7 +1093,7 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="AUTO"/>
                 </Grid.RowDefinitions>
-                <Expander Grid.Column="0" x:Name="BOARD_CONFIG" ExpandDirection="Down" IsExpanded="False" Background="White" Expanded="EXPANDER_Expanded">
+                <Expander Grid.Column="0" x:Name="BOARD_CONFIG_EXPANDER" ExpandDirection="Down" IsExpanded="False" Background="White" Expanded="EXPANDER_Expanded">
                     <Expander.Header>
                         <Viewbox Height="20">
                             <TextBlock Text="BOARD CONFIG"/>
@@ -1099,15 +1105,15 @@
                             <RowDefinition Height="5*"/>
                         </Grid.RowDefinitions>
                         <TabControl Grid.Row="0" FontSize="12">
-                            <TabItem Header="PTU11"><PCAB_Debugger_ComLib:cntConfigPorts x:Name="PUT11"/></TabItem>
-                            <TabItem Header="PTU12"><PCAB_Debugger_ComLib:cntConfigPorts x:Name="PUT12"/></TabItem>
-                            <TabItem Header="PTU13"><PCAB_Debugger_ComLib:cntConfigPorts x:Name="PUT13"/></TabItem>
-                            <TabItem Header="PTU21"><PCAB_Debugger_ComLib:cntConfigPorts x:Name="PUT21"/></TabItem>
-                            <TabItem Header="PTU22"><PCAB_Debugger_ComLib:cntConfigPorts x:Name="PUT22"/></TabItem>
-                            <TabItem Header="PTU23"><PCAB_Debugger_ComLib:cntConfigPorts x:Name="PUT23"/></TabItem>
-                            <TabItem Header="PTU31"><PCAB_Debugger_ComLib:cntConfigPorts x:Name="PUT31"/></TabItem>
-                            <TabItem Header="PTU32"><PCAB_Debugger_ComLib:cntConfigPorts x:Name="PUT32"/></TabItem>
-                            <TabItem Header="PTU33"><PCAB_Debugger_ComLib:cntConfigPorts x:Name="PUT33"/></TabItem>
+                            <TabItem Header="PTU11"><Grid x:Name="PTU11"></Grid></TabItem>
+                            <TabItem Header="PTU12"><Grid x:Name="PTU12"></Grid></TabItem>
+                            <TabItem Header="PTU13"><Grid x:Name="PTU13"></Grid></TabItem>
+                            <TabItem Header="PTU21"><Grid x:Name="PTU21"></Grid></TabItem>
+                            <TabItem Header="PTU22"><Grid x:Name="PTU22"></Grid></TabItem>
+                            <TabItem Header="PTU23"><Grid x:Name="PTU23"></Grid></TabItem>
+                            <TabItem Header="PTU31"><Grid x:Name="PTU31"></Grid></TabItem>
+                            <TabItem Header="PTU32"><Grid x:Name="PTU32"></Grid></TabItem>
+                            <TabItem Header="PTU33"><Grid x:Name="PTU33"></Grid></TabItem>
                         </TabControl>
                         <Grid Grid.Row="1">
                             <Grid.RowDefinitions>

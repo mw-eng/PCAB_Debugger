@@ -23,10 +23,12 @@ namespace PCAB_Debugger_ComLib
             _serial = _serialPort;
         }
 
-        public POS(string portName)
+        public POS(string portName) : this(portName, 9600) { }
+
+        public POS(string portName, int baudRate)
         {
             _serial = new SerialPort(portName);
-            _serial.BaudRate = 9600;
+            _serial.BaudRate = baudRate;
             _serial.DataBits = 8;
             _serial.Parity = Parity.None;
             _serial.StopBits = StopBits.One;
@@ -36,8 +38,8 @@ namespace PCAB_Debugger_ComLib
             _serial.NewLine = "\r\n";
             _serial.ReadBufferSize = 1024;
             _serial.WriteBufferSize = 1024;
-            _serial.ReadTimeout = 1000;
-            _serial.WriteTimeout = 1000;
+            _serial.ReadTimeout = 5000;
+            _serial.WriteTimeout = 5000;
         }
 
         ~POS() { if (_task) { POS_AutoTaskStop();  } Close(); }
@@ -73,18 +75,19 @@ namespace PCAB_Debugger_ComLib
                     if (count > 0) { datBF.AddRange(byBF.Skip(0).Take(count).ToList()); }
                     int posi1 = SearchList.SearchBytesSundayLastIndexOf(datBF, new byte[] { 0x00, 0x96 });
                     if (posi1 >= 0 && datBF.Count >= posi1 + 40)
-                    { OnReadDAT.Invoke(this, new POSEventArgs(datBF.GetRange(posi1, 40), "GatDAT", null)); datBF.RemoveRange(0, posi1 + 40); }
+                    { OnReadDAT?.Invoke(this, new POSEventArgs(datBF.GetRange(posi1, 40), "GatDAT", null)); datBF.RemoveRange(0, posi1 + 40); }
                     else
                     {
                         int posi2 = SearchList.SearchBytesSundayLastIndexOf(datBF, new byte[] { 0x00, 0x96 }, posi1 - 1);
                         if (posi2 >= 0 && datBF.Count >= posi2 + 40)
-                        { OnReadDAT.Invoke(this, new POSEventArgs(datBF.GetRange(posi2, 40), "GatDAT", null)); datBF.RemoveRange(0, posi2 + 40); }
+                        { OnReadDAT?.Invoke(this, new POSEventArgs(datBF.GetRange(posi2, 40), "GatDAT", null)); datBF.RemoveRange(0, posi2 + 40); }
                     }
                     if(datBF.Count > 1024 * 1024) { datBF.Clear(); }
                 }
                 catch(TimeoutException ex)
                 {
                     OnTimeoutError?.Invoke(this, new POSEventArgs(null, "ERROR > Timeout Exception", ex));
+                    OnReadDAT?.Invoke(this, new POSEventArgs(null, "Timeout Exception", ex));
                 }
                 catch(Exception ex)
                 {

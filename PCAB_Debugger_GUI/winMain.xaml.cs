@@ -1,4 +1,5 @@
-﻿using PCAB_Debugger_ComLib;
+﻿using MWComLibCS.ExternalControl;
+using PCAB_Debugger_ComLib;
 using PCAB_Debugger_GUI.Properties;
 using System;
 using System.Collections.Generic;
@@ -7,14 +8,12 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using static PCAB_Debugger_ComLib.cntConfig;
-using static PCAB_Debugger_ComLib.cntConfigSettings;
 using static PCAB_Debugger_ComLib.cntConfigPorts;
+using static PCAB_Debugger_ComLib.cntConfigSettings;
 using static PCAB_Debugger_ComLib.PCAB_SerialInterface;
 using static PCAB_Debugger_ComLib.PCAB_TASK;
 using static PCAB_Debugger_ComLib.ShowSerialPortName;
-using static PCAB_Debugger_GUI.clsSerialIO;
-using MWComLibCS.ExternalControl;
-using System.Linq;
+using static PCAB_Debugger_GUI.PCAB;
 
 
 namespace PCAB_Debugger_GUI
@@ -25,7 +24,7 @@ namespace PCAB_Debugger_GUI
     public partial class winMain : Window
     {
         SerialPortTable[] ports;
-        public List<clsSerialIO> _ioList = new List<clsSerialIO>();
+        public List<PCAB> _ioList = new List<PCAB>();
         private winMonitor monitor;
         private int visa32Resource;
 
@@ -105,7 +104,7 @@ namespace PCAB_Debugger_GUI
         {
             if (_ioList.Count > 0)
             {
-                foreach (clsSerialIO _io in _ioList)
+                foreach (PCAB _io in _ioList)
                 {
                     if (_io?.isOpen == true)
                     {
@@ -294,7 +293,7 @@ namespace PCAB_Debugger_GUI
                     {
                         if (port.Caption == SERIAL_PORTS_COMBOBOX1.Text)
                         {
-                            _ioList.Add(new clsSerialIO(port.Name, UInt32.Parse(BAUD_RATE_COMBOBOX1.Text.Trim().Replace(",", ""))));
+                            _ioList.Add(new PCAB(port.Name, UInt32.Parse(BAUD_RATE_COMBOBOX1.Text.Trim().Replace(",", ""))));
                         }
                     }
                 }
@@ -304,7 +303,7 @@ namespace PCAB_Debugger_GUI
                     {
                         if (port.Caption == SERIAL_PORTS_COMBOBOX2.Text)
                         {
-                            _ioList.Add(new clsSerialIO(port.Name, UInt32.Parse(BAUD_RATE_COMBOBOX2.Text.Trim().Replace(",", ""))));
+                            _ioList.Add(new PCAB(port.Name, UInt32.Parse(BAUD_RATE_COMBOBOX2.Text.Trim().Replace(",", ""))));
                         }
                     }
                 }
@@ -314,13 +313,13 @@ namespace PCAB_Debugger_GUI
                     {
                         if (port.Caption == SERIAL_PORTS_COMBOBOX3.Text)
                         {
-                            _ioList.Add(new clsSerialIO(port.Name, UInt32.Parse(BAUD_RATE_COMBOBOX3.Text.Trim().Replace(",", ""))));
+                            _ioList.Add(new PCAB(port.Name, UInt32.Parse(BAUD_RATE_COMBOBOX3.Text.Trim().Replace(",", ""))));
                         }
                     }
                 }
                 try
                 {
-                    foreach (clsSerialIO _io in _ioList)
+                    foreach (PCAB _io in _ioList)
                     {
                         _io.OnError += OnError;
                         _io.Open(sn, uint.Parse(WAITE_TIME_TEXTBOX.Text));
@@ -328,7 +327,7 @@ namespace PCAB_Debugger_GUI
                 }
                 catch
                 {
-                    foreach (clsSerialIO _io in _ioList)
+                    foreach (PCAB _io in _ioList)
                     {
                         _io.Close();
                     }
@@ -379,7 +378,7 @@ namespace PCAB_Debugger_GUI
                         BOARD_GRID.Children.Add(new TabControl());
                         ((TabControl)BOARD_GRID.Children[0]).FontSize = 24;
                         ((TabControl)BOARD_GRID.Children[0]).Margin = new Thickness(5);
-                        foreach (clsSerialIO _io in _ioList)
+                        foreach (PCAB _io in _ioList)
                         {
                             for (int i = 0; i < _io.PCAB_Boards.Count; i++)
                             {
@@ -559,9 +558,9 @@ namespace PCAB_Debugger_GUI
         private void AUTO_ButtonClickEvent(object sender, RoutedEventArgs e, string dirPath)
         {
             string strSN = ((cntAUTO)sender).SerialNumber;
-            clsSerialIO _io = null;
+            PCAB _io = null;
             bool flg = false;
-            foreach (clsSerialIO io in _ioList)
+            foreach (PCAB io in _ioList)
             {
                 foreach (PCAB_UnitInterface unit in io.serial.UNITs)
                 {
@@ -585,9 +584,9 @@ namespace PCAB_Debugger_GUI
         private void CONFIG_ButtonClickEvent(object sender, RoutedEventArgs e, ButtonCategory category)
         {
             string strSN = ((cntConfig)sender).SerialNumber;
-            clsSerialIO _io = null;
+            PCAB _io = null;
             bool flg = false;
-            foreach (clsSerialIO io in _ioList)
+            foreach (PCAB io in _ioList)
             {
                 foreach (PCAB_UnitInterface unit in io.serial.UNITs)
                 {
@@ -750,9 +749,9 @@ namespace PCAB_Debugger_GUI
         private void CONFIG_CONFIG_SETTINGS_CheckboxClickEventHandler(object sender, RoutedEventArgs e, CheckBoxCategory category, bool? isChecked)
         {
             string strSN = ((cntConfigSettings)sender).SerialNumber;
-            clsSerialIO _io = null;
+            PCAB _io = null;
             bool flg = false;
-            foreach (clsSerialIO io in _ioList)
+            foreach (PCAB io in _ioList)
             {
                 foreach (PCAB_UnitInterface unit in io.serial.UNITs)
                 {
@@ -797,7 +796,7 @@ namespace PCAB_Debugger_GUI
             Dispatcher.BeginInvoke(new Action(() =>
             {
                 monitor?.WindowClose();
-                foreach (clsSerialIO _io in _ioList)
+                foreach (PCAB _io in _ioList)
                 {
                     _io.Close();
                 }
@@ -807,7 +806,7 @@ namespace PCAB_Debugger_GUI
                 BOARD_GRID.IsEnabled = false;
                 CONNECT_BUTTON_CONTENT.Text = "Connect";
                 CONFIG_EXPANDER.IsExpanded = true;
-                _ioList = new List<clsSerialIO>();
+                _ioList = new List<PCAB>();
             }));
         }
         #endregion
@@ -816,7 +815,7 @@ namespace PCAB_Debugger_GUI
         {
             try
             {
-                foreach (clsSerialIO _io in _ioList)
+                foreach (PCAB _io in _ioList)
                 {
                     foreach (PCAB_UnitInterface unit in _io.serial.UNITs)
                     {

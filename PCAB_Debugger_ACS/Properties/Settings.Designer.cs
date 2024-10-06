@@ -205,7 +205,7 @@ namespace PCAB_Debugger_ACS.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("USB シリアル デバイス (COM20)")]
         public string spCaption0 {
             get {
                 return ((string)(this["spCaption0"]));
@@ -217,7 +217,7 @@ namespace PCAB_Debugger_ACS.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("USB シリアル デバイス (COM21)")]
         public string spCaption1 {
             get {
                 return ((string)(this["spCaption1"]));
@@ -229,7 +229,7 @@ namespace PCAB_Debugger_ACS.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("USB シリアル デバイス (COM22)")]
         public string spCaption2 {
             get {
                 return ((string)(this["spCaption2"]));
@@ -241,7 +241,7 @@ namespace PCAB_Debugger_ACS.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("USB シリアル デバイス (COM23)")]
         public string spCaption3 {
             get {
                 return ((string)(this["spCaption3"]));
@@ -404,6 +404,78 @@ namespace PCAB_Debugger_ACS.Properties {
             }
             set {
                 this["sn33"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int view {
+            get {
+                return ((int)(this["view"]));
+            }
+            set {
+                this["view"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public double winPhaseMonitorTop {
+            get {
+                return ((double)(this["winPhaseMonitorTop"]));
+            }
+            set {
+                this["winPhaseMonitorTop"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public double winPhaseMonitorLeft {
+            get {
+                return ((double)(this["winPhaseMonitorLeft"]));
+            }
+            set {
+                this["winPhaseMonitorLeft"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public double winPhaseMonitorHeight {
+            get {
+                return ((double)(this["winPhaseMonitorHeight"]));
+            }
+            set {
+                this["winPhaseMonitorHeight"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public double winPhaseMonitorWidth {
+            get {
+                return ((double)(this["winPhaseMonitorWidth"]));
+            }
+            set {
+                this["winPhaseMonitorWidth"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool winPhaseMonitorMaximized {
+            get {
+                return ((bool)(this["winPhaseMonitorMaximized"]));
+            }
+            set {
+                this["winPhaseMonitorMaximized"] = value;
             }
         }
     }

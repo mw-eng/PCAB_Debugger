@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:PCAB_Debugger_ACS"
         xmlns:PCAB_Debugger_ComLib="clr-namespace:PCAB_Debugger_ComLib;assembly=PCAB_Debugger_ComLib" x:Class="PCAB_Debugger_ACS.winPOS"
         mc:Ignorable="d"
-        Title="PCAB Debugger POS Monitor" Height="300" Width="800" Closing="Window_Closing" SourceInitialized="Window_SourceInitialized">
+        Title="PCAB Debugger POS Monitor" Height="300" Width="800" Closing="Window_Closing" SourceInitialized="Window_SourceInitialized" Icon="/PCAB_Debugger_GUI_POS.ico">
     <Grid>
         <PCAB_Debugger_ComLib:cntPOS x:Name="POS_VIEWER" Margin="5" />
     </Grid>

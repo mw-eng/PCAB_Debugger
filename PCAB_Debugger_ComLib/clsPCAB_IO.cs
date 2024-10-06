@@ -88,8 +88,7 @@ namespace PCAB_Debugger_ComLib
                                 values.Temprature.Values != unit.SensorValuesNOW.Temprature.Values)
                             { updateFLG = true; unit.SensorValuesNOW = new SensorValues(values.Analog,values.Temprature, unit.SensorValuesNOW.ID); }
                             }
-                            catch (Exception e) { ErrCount++; if (ErrCount > 10) { OnTaskError?.Invoke(this, new PCABEventArgs(null, e.Message)); } break; }
-                            ErrCount = 0;
+                            catch (Exception e) { ErrCount++; if (ErrCount > 5) { OnTaskError?.Invoke(this, new PCABEventArgs(null, e.Message)); } break; }
                         }
                         if (updateFLG)
                         {
@@ -110,7 +109,27 @@ namespace PCAB_Debugger_ComLib
             }
         }
 
-        public void PCAB_AutoTaskStop() { _task = false; _loopTask?.ConfigureAwait(false); }
+        public void PCAB_AutoTaskStop() { if (_state) { _state = false;_task = true; } _task = false; _loopTask?.ConfigureAwait(false); }
+
+        public void PCAB_TaskPause()
+        {
+            if (!_state)
+            {
+                _task = null;
+                while (_state) { Thread.Sleep(5); }
+                _state = true;
+            }
+        }
+
+        public void PCAB_TaskRestart()
+        {
+            if (_state)
+            {
+                _state = false;
+                _task = true;
+            }
+        }
+
 
         public bool PCAB_PRESET(PCAB_UnitInterface unit)
         {

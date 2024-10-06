@@ -5,7 +5,13 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Collections.Generic;
+using static PCAB_Debugger_ComLib.cntConfigPorts;
 using static PCAB_Debugger_ComLib.ShowSerialPortName;
+using static PCAB_Debugger_ComLib.PCAB_TASK;
+using System.Collections;
+using System.Threading;
+using static PCAB_Debugger_ComLib.POS;
 
 namespace PCAB_Debugger_ACS
 {
@@ -15,12 +21,20 @@ namespace PCAB_Debugger_ACS
     public partial class winMain : Window
     {
         private POS _pos;
+        private PCABs _pcab1x;
+        private PCABs _pcab2x;
+        private PCABs _pcab3x;
         private SerialPortTable[] ports;
         NormalizedColorChart cc;
         private winPOS winPOSmonitor;
+        private winPCAB_SensorMonitor winPCABsensor;
+        private bool isControl = false;
 
         public winMain()
         {
+#if DEBUG
+            Settings.Default.Reset();
+#endif
             InitializeComponent();
             if (Settings.Default.winMainTop >= SystemParameters.VirtualScreenTop &&
                 (Settings.Default.winMainTop + Settings.Default.winMainHeight) <
@@ -51,9 +65,14 @@ namespace PCAB_Debugger_ACS
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             this.Title += " Ver," + System.Diagnostics.FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetExecutingAssembly().Location).ProductVersion;
+            CONFIG_EXPANDER.IsExpanded = true;
+            BOARD_CONFIG_EXPANDER.IsExpanded = false;
+            CONTROL_GRID.IsEnabled = false;
+
 #if DEBUG
             Settings.Default.Reset();
             this.Title += "_DEBUG MODE";
+            //CONTROL_GRID.IsEnabled = true;
 #endif
             SERIAL_PORTS_COMBOBOX_RELOAD(sender, e);
             SERIAL_PORTS_COMBOBOX0.SelectedIndex = Settings.Default.spBaudRate0;
@@ -87,6 +106,7 @@ namespace PCAB_Debugger_ACS
             SERIAL_NUMBERS_TEXTBOX31.Text = Settings.Default.sn31;
             SERIAL_NUMBERS_TEXTBOX32.Text = Settings.Default.sn32;
             SERIAL_NUMBERS_TEXTBOX33.Text = Settings.Default.sn33;
+            VIEW_COMBOBOX.SelectedIndex = Settings.Default.view;
             SERIAL_PORTS_COMBOBOX_DropDownClosed(null, null);
         }
 
@@ -123,6 +143,7 @@ namespace PCAB_Debugger_ACS
             Settings.Default.sn31 = SERIAL_NUMBERS_TEXTBOX31.Text;
             Settings.Default.sn32 = SERIAL_NUMBERS_TEXTBOX32.Text;
             Settings.Default.sn33 = SERIAL_NUMBERS_TEXTBOX33.Text;
+            Settings.Default.view = VIEW_COMBOBOX.SelectedIndex;
             Settings.Default.winMainTop = this.Top;
             Settings.Default.winMainLeft = this.Left;
             Settings.Default.winMainHeight = this.Height;
@@ -134,7 +155,185 @@ namespace PCAB_Debugger_ACS
 
         private void CONNECT_BUTTON_Click(object sender, RoutedEventArgs e)
         {
+            if (isControl)
+            {
+                _pos.POS_AutoTaskStop();
+                _pos.Close();
+                winPOSmonitor.WindowClose();
+                PTU11.Children.Clear();
+                PTU12.Children.Clear();
+                PTU13.Children.Clear();
+                PTU21.Children.Clear();
+                PTU22.Children.Clear();
+                PTU23.Children.Clear();
+                PTU31.Children.Clear();
+                PTU32.Children.Clear();
+                PTU33.Children.Clear();
+                _pcab1x.Close();
+                _pcab2x.Close();
+                _pcab3x.Close();
+                winPCABsensor.WindowClose();
+                _pos = null;
+                _pcab1x = null;
+                _pcab2x = null;
+                _pcab3x = null;
+                CONFIG_EXPANDER.IsExpanded = true;
+                CONFIG_GRID.IsEnabled = true;
+                CONTROL_GRID.IsEnabled = false;
+                BOARD_CONFIG_EXPANDER.IsExpanded = false;
+                CONNECT_BUTTON_CONTENT.Text = "Connect";
+                isControl = false;
+            }
+            else
+            {
+                foreach (SerialPortTable port in GetDeviceNames())
+                {
+                    if (port.Caption == SERIAL_PORTS_COMBOBOX0.Text)
+                    {
+                        _pos = new POS(port.Name, int.Parse(BAUD_RATE_COMBOBOX0.Text.Trim().Replace(",", "")));
+                    }
+                    if (port.Caption == SERIAL_PORTS_COMBOBOX1.Text)
+                    {
+                        _pcab1x = new PCABs(port.Name, UInt32.Parse(BAUD_RATE_COMBOBOX1.Text.Trim().Replace(",", "")));
+                    }
+                    if (port.Caption == SERIAL_PORTS_COMBOBOX2.Text)
+                    {
+                        _pcab2x = new PCABs(port.Name, UInt32.Parse(BAUD_RATE_COMBOBOX2.Text.Trim().Replace(",", "")));
+                    }
+                    if (port.Caption == SERIAL_PORTS_COMBOBOX3.Text)
+                    {
+                        _pcab3x = new PCABs(port.Name, UInt32.Parse(BAUD_RATE_COMBOBOX3.Text.Trim().Replace(",", "")));
+                    }
+                }
+                if(_pos != null && _pcab1x != null && _pcab2x != null && _pcab3x != null)
+                {
+                    ROTATE ang1;
+                    ROTATE ang2;
+                    if (VIEW_COMBOBOX.SelectedIndex == 0) { ang1 = ROTATE.RIGHT_TURN; ang2 = ROTATE.ZERO; }
+                    else if (VIEW_COMBOBOX.SelectedIndex == 1) { ang1 = ROTATE.MIRROR_RIGHT_TURN; ang2 = ROTATE.MIRROR_ZERO; }
+                    else{ ang1 = ROTATE.MATRIX; ang2 = ROTATE.MATRIX; }
+                    List<PCABs.SN_POSI> sn1x = new List<PCABs.SN_POSI>();
+                    sn1x.Add(new PCABs.SN_POSI(SERIAL_NUMBERS_TEXTBOX11.Text, ang1));
+                    sn1x.Add(new PCABs.SN_POSI(SERIAL_NUMBERS_TEXTBOX12.Text, ang1));
+                    sn1x.Add(new PCABs.SN_POSI(SERIAL_NUMBERS_TEXTBOX13.Text, ang1));
+                    _pcab1x.OnError += PCAB_OnError;
+                    _pcab1x.Open(sn1x, 100);
+                    if (_pcab1x.isOpen != true || _pcab1x.serial.UNITs.Count != 3)
+                    {
+                        MessageBox.Show("Seriao Number detection error.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        _pcab1x.Close();
+                        _pos = null;
+                        _pcab1x = null;
+                        _pcab2x = null;
+                        _pcab3x = null;
+                    }
+                    List<PCABs.SN_POSI> sn2x = new List<PCABs.SN_POSI>();
+                    sn2x.Add(new PCABs.SN_POSI(SERIAL_NUMBERS_TEXTBOX21.Text, ang2));
+                    sn2x.Add(new PCABs.SN_POSI(SERIAL_NUMBERS_TEXTBOX22.Text, ang2));
+                    sn2x.Add(new PCABs.SN_POSI(SERIAL_NUMBERS_TEXTBOX23.Text, ang2));
+                    _pcab2x.OnError += PCAB_OnError;
+                    _pcab2x.Open(sn2x, 100);
+                    if (_pcab2x.isOpen != true || _pcab2x.serial.UNITs.Count != 3)
+                    {
+                        MessageBox.Show("Seriao Number detection error.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        _pcab1x.Close();
+                        _pcab2x.Close();
+                        _pos = null;
+                        _pcab1x = null;
+                        _pcab2x = null;
+                        _pcab3x = null;
+                    }
+                    List<PCABs.SN_POSI> sn3x = new List<PCABs.SN_POSI>();
+                    sn3x.Add(new PCABs.SN_POSI(SERIAL_NUMBERS_TEXTBOX31.Text, ang2));
+                    sn3x.Add(new PCABs.SN_POSI(SERIAL_NUMBERS_TEXTBOX32.Text, ang2));
+                    sn3x.Add(new PCABs.SN_POSI(SERIAL_NUMBERS_TEXTBOX33.Text, ang2));
+                    _pcab3x.OnError += PCAB_OnError;
+                    _pcab3x.Open(sn3x, 100);
+                    if (_pcab3x.isOpen != true || _pcab3x.serial.UNITs.Count != 3)
+                    {
+                        MessageBox.Show("Seriao Number detection error.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        _pcab1x.Close();
+                        _pcab2x.Close();
+                        _pcab3x.Close();
+                        _pos = null;
+                        _pcab1x = null;
+                        _pcab2x = null;
+                        _pcab3x = null;
+                    }
+                    _pcab1x.PCAB_Boards[0].STBLNA_CheckboxClickEvent += STBLNA_CheckboxClick;
+                    _pcab1x.PCAB_Boards[1].STBLNA_CheckboxClickEvent += STBLNA_CheckboxClick;
+                    _pcab1x.PCAB_Boards[2].STBLNA_CheckboxClickEvent += STBLNA_CheckboxClick;
+                    _pcab2x.PCAB_Boards[0].STBLNA_CheckboxClickEvent += STBLNA_CheckboxClick;
+                    _pcab2x.PCAB_Boards[1].STBLNA_CheckboxClickEvent += STBLNA_CheckboxClick;
+                    _pcab2x.PCAB_Boards[2].STBLNA_CheckboxClickEvent += STBLNA_CheckboxClick;
+                    _pcab3x.PCAB_Boards[0].STBLNA_CheckboxClickEvent += STBLNA_CheckboxClick;
+                    _pcab3x.PCAB_Boards[1].STBLNA_CheckboxClickEvent += STBLNA_CheckboxClick;
+                    _pcab3x.PCAB_Boards[2].STBLNA_CheckboxClickEvent += STBLNA_CheckboxClick;
+                    _pcab1x.PCAB_Monitors[0].TITLE = "PTU11";
+                    _pcab1x.PCAB_Monitors[1].TITLE = "PTU12";
+                    _pcab1x.PCAB_Monitors[2].TITLE = "PTU13";
+                    _pcab2x.PCAB_Monitors[0].TITLE = "PTU21";
+                    _pcab2x.PCAB_Monitors[1].TITLE = "PTU22";
+                    _pcab2x.PCAB_Monitors[2].TITLE = "PTU23";
+                    _pcab3x.PCAB_Monitors[0].TITLE = "PTU31";
+                    _pcab3x.PCAB_Monitors[1].TITLE = "PTU32";
+                    _pcab3x.PCAB_Monitors[2].TITLE = "PTU33";
 
+                    PTU11.Children.Clear();
+                    PTU12.Children.Clear();
+                    PTU13.Children.Clear();
+                    PTU21.Children.Clear();
+                    PTU22.Children.Clear();
+                    PTU23.Children.Clear();
+                    PTU31.Children.Clear();
+                    PTU32.Children.Clear();
+                    PTU33.Children.Clear();
+                    PTU11.Children.Add(_pcab1x.PCAB_Boards[0]);
+                    PTU12.Children.Add(_pcab1x.PCAB_Boards[1]);
+                    PTU13.Children.Add(_pcab1x.PCAB_Boards[2]);
+                    PTU21.Children.Add(_pcab2x.PCAB_Boards[0]);
+                    PTU22.Children.Add(_pcab2x.PCAB_Boards[1]);
+                    PTU23.Children.Add(_pcab2x.PCAB_Boards[2]);
+                    PTU31.Children.Add(_pcab3x.PCAB_Boards[0]);
+                    PTU32.Children.Add(_pcab3x.PCAB_Boards[1]);
+                    PTU33.Children.Add(_pcab3x.PCAB_Boards[2]);
+
+                    winPCABsensor = new winPCAB_SensorMonitor();
+                    winPCABsensor.PTU11.Children.Add(_pcab1x.PCAB_Monitors[0]);
+                    winPCABsensor.PTU12.Children.Add(_pcab1x.PCAB_Monitors[1]);
+                    winPCABsensor.PTU13.Children.Add(_pcab1x.PCAB_Monitors[2]);
+                    winPCABsensor.PTU21.Children.Add(_pcab2x.PCAB_Monitors[0]);
+                    winPCABsensor.PTU22.Children.Add(_pcab2x.PCAB_Monitors[1]);
+                    winPCABsensor.PTU23.Children.Add(_pcab2x.PCAB_Monitors[2]);
+                    winPCABsensor.PTU31.Children.Add(_pcab3x.PCAB_Monitors[0]);
+                    winPCABsensor.PTU32.Children.Add(_pcab3x.PCAB_Monitors[1]);
+                    winPCABsensor.PTU33.Children.Add(_pcab3x.PCAB_Monitors[2]);
+                    winPCABsensor.Show();
+
+                    winPOSmonitor = new winPOS();
+                    _pos.OnReadDAT += winPOSmonitor.OnReadDAT;
+                    _pos.OnTaskError += POS_OnError;
+                    _pos.Open();
+                    _pos.POS_AutoTaskStart();
+                    winPOSmonitor.Show();
+
+                    CONFIG_EXPANDER.IsExpanded = false;
+                    CONFIG_GRID.IsEnabled = false;
+                    CONTROL_GRID.IsEnabled = true;
+                    BOARD_CONFIG_EXPANDER.IsExpanded = true;
+                    CONNECT_BUTTON_CONTENT.Text = "Disconnect";
+                    isControl = true;
+                }
+                else
+                {
+                    _pos = null;
+                    _pcab1x = null;
+                    _pcab2x = null;
+                    _pcab3x = null;
+                    MessageBox.Show("Serial port detection error.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    SERIAL_PORTS_COMBOBOX_RELOAD(null, null);
+                }
+            }
         }
 
         /*
@@ -304,6 +503,19 @@ namespace PCAB_Debugger_ACS
         private void EXPANDER_Expanded(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void STBLNA_CheckboxClick(object sender, RoutedEventArgs e, bool? isChecked)
+        {
+
+        }
+
+        private void PCAB_OnError(object sender, PCABEventArgs e)
+        {
+        }
+
+        private void POS_OnError(object sender, POSEventArgs e)
+        {
         }
     }
 }

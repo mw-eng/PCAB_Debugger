@@ -52,6 +52,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="clsPCAB.cs" />
+    <Compile Include="winPCAB_PhaseMonitor.xaml.cs">
+      <DependentUpon>winPCAB_PhaseMonitor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="winPCAB_SensorMonitor.xaml.cs">
+      <DependentUpon>winPCAB_SensorMonitor.xaml</DependentUpon>
+    </Compile>
     <Compile Include="winPOS.xaml.cs">
       <DependentUpon>winPOS.xaml</DependentUpon>
     </Compile>
@@ -67,6 +74,14 @@
       <DependentUpon>winMain.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="winPCAB_PhaseMonitor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="winPCAB_SensorMonitor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="winPOS.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -107,6 +122,10 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="PCAB_Debugger_ACS.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="PCAB_Debugger_GUI_POS.ico" />
+    <Resource Include="PCAB_Debugger_GUI_SensorMonitor.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

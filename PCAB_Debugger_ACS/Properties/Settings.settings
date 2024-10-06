@@ -48,16 +48,16 @@
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="spCaption0" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">USB シリアル デバイス (COM20)</Value>
     </Setting>
     <Setting Name="spCaption1" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">USB シリアル デバイス (COM21)</Value>
     </Setting>
     <Setting Name="spCaption2" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">USB シリアル デバイス (COM22)</Value>
     </Setting>
     <Setting Name="spCaption3" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">USB シリアル デバイス (COM23)</Value>
     </Setting>
     <Setting Name="spBaudRate0" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">5</Value>
@@ -97,6 +97,24 @@
     </Setting>
     <Setting Name="sn33" Type="System.String" Scope="User">
       <Value Profile="(Default)">0000033</Value>
+    </Setting>
+    <Setting Name="view" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="winPhaseMonitorTop" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="winPhaseMonitorLeft" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="winPhaseMonitorHeight" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="winPhaseMonitorWidth" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="winPhaseMonitorMaximized" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
     </Setting>
   </Settings>
 </SettingsFile>

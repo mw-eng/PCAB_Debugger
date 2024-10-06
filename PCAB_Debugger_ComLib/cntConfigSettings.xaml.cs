@@ -89,6 +89,8 @@ namespace PCAB_Debugger_ComLib
         public int GetDPS(uint number) { return CONFIG_PORTS.GetDPS(number); }
         public string SerialNumber { get; private set; }
 
+        public cntConfigPorts CONFIG_PORTS { get; private set; }
+
         public bool? ALL_DPS { get { return CONFIG_PORTS.ALL_DPS_CHECKBOX.IsChecked; } set { CONFIG_PORTS.ALL_DPS_CHECKBOX.IsChecked = value; } }
         public bool? ALL_DSA { get { return CONFIG_PORTS.ALL_DSA_CHECKBOX.IsChecked; } set { CONFIG_PORTS.ALL_DSA_CHECKBOX.IsChecked = value; } }
 
@@ -96,6 +98,9 @@ namespace PCAB_Debugger_ComLib
         public cntConfigSettings(string serialNumber, ROTATE _turn)
         {
             InitializeComponent();
+            CP_GRID.Children.Clear();
+            CONFIG_PORTS = new cntConfigPorts(serialNumber, _turn);
+            CP_GRID.Children.Add(CONFIG_PORTS);
             CONFIG_PORTS.STBLNA_CheckboxClickEvent += STBLNA_CheckboxClickEvent;
             SerialNumber = serialNumber;
             CONFIG_PORTS.TURN = _turn;

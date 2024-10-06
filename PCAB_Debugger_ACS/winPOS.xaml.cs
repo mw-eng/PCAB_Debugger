@@ -86,7 +86,6 @@ namespace PCAB_Debugger_ACS
                 {
                     POS_VIEWER.DATA = dat;
                 }));
-                startTIME = DateTime.Now;
                 //if (DateTime.Now - startTIME > new TimeSpan(100 * 1000))
                 //{
                 //    startTIME = DateTime.Now;
@@ -98,31 +97,15 @@ namespace PCAB_Debugger_ACS
             }
             catch (Exception ex)
             {
-                if (DateTime.Now - startTIME > new TimeSpan(1000 * 1000))
+                Dispatcher.BeginInvoke(new Action(() =>
                 {
-                    startTIME = DateTime.Now;
-                    Dispatcher.BeginInvoke(new Action(() =>
-                    {
-                        POS_VIEWER.DATA = null;
-                    }));
-                }
+                    POS_VIEWER.DATA = null;
+                }));
                 //Dispatcher.BeginInvoke(new Action(() =>
                 //{
                 //    LOG_TEXTBOX.Text += ex.Message + " > " + BitConverter.ToString(e.ReceiveDAT.ToArray()) + "\n";
                 //    LOG_TEXTBOX.ScrollToEnd();
                 //}));
-            }
-        }
-
-        public void OnTimeoutError(object sender, POSEventArgs e)
-        {
-            if (DateTime.Now - startTIME > new TimeSpan(1000 * 1000))
-            {
-                startTIME = DateTime.Now;
-                Dispatcher.BeginInvoke(new Action(() =>
-                {
-                    POS_VIEWER.DATA = null;
-                }));
             }
         }
     }

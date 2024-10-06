@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows;
-using PCAB_Debugger_ComLib;
 using static PCAB_Debugger_ComLib.PCAB_TASK;
 using static PCAB_Debugger_ComLib.cntConfigPorts;
+using PCAB_Debugger_ComLib;
 
 namespace PCAB_Debugger_GUI
 {
-    public class clsSerialIO
+    public class PCAB
     {
         public struct SN_POSI : IEquatable<SN_POSI>,  IEqualityComparer<SN_POSI>
         {
@@ -37,14 +37,14 @@ namespace PCAB_Debugger_GUI
         public List<cntMonitor> PCAB_Monitors { get; private set; } = new List<cntMonitor>();
         public event EventHandler<PCABEventArgs> OnError;
         public PCAB_TASK serial { get { return _task; } }
-        public clsSerialIO(string SerialPortName, UInt32 BaudRate)
+        public PCAB(string SerialPortName, UInt32 BaudRate)
         {
             _task = new PCAB_TASK(SerialPortName, BaudRate);
             _task.OnUpdateDAT += OnUpdateDAT;
             _task.OnTaskError += PCAB_TASK_OnError;
         }
 
-        ~clsSerialIO() { }
+        ~PCAB() { }
 
         public void Open(List<SN_POSI> SerialNumber_Posi, uint MonitorIntervalTime)
         {

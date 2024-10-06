@@ -271,6 +271,6 @@
                 <Viewbox Grid.Column="1" HorizontalAlignment="Left"><ComboBox x:Name="VIEW_COMBOBOX" SelectedIndex="0" ItemsSource="{StaticResource VIEW_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}" DropDownClosed="VIEW_COMBOBOX_DropDownClosed"/></Viewbox>
             </Grid>
         </Grid>
-        <local:cntConfigPorts Grid.Row="1" x:Name="CONFIG_PORTS"/>
+        <Grid Grid.Row="1" x:Name="CP_GRID"><local:cntConfigPorts/></Grid>
     </Grid>
 </UserControl>
