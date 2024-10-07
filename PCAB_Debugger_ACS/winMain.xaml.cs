@@ -288,7 +288,23 @@ namespace PCAB_Debugger_ACS
                         winPCABphase.GRID32.Children.Add(_ptp.unitIFs[2].UNITs[1].PHASE_MONITOR);
                         winPCABphase.GRID33.Children.Add(_ptp.unitIFs[2].UNITs[2].PHASE_MONITOR);
                     }
-
+                    double pitch = 31.25;
+                    _ptp.unitIFs[0].UNITs[0].Ports.Clear();
+                    _ptp.unitIFs[0].UNITs[0].Ports.Add(new PANEL.PORT(1, 0, 0, 0));
+                    _ptp.unitIFs[0].UNITs[0].Ports.Add(new PANEL.PORT(1, 0, 0, 0));
+                    _ptp.unitIFs[0].UNITs[0].Ports.Add(new PANEL.PORT(1, 0, 0, 0));
+                    _ptp.unitIFs[0].UNITs[0].Ports.Add(new PANEL.PORT(1, 0, 0, 0));
+                    _ptp.unitIFs[0].UNITs[0].Ports.Add(new PANEL.PORT(1, 0, 0, 0));
+                    _ptp.unitIFs[0].UNITs[0].Ports.Add(new PANEL.PORT(1, 0, 0, 0));
+                    _ptp.unitIFs[0].UNITs[0].Ports.Add(new PANEL.PORT(1, 0, 0, 0));
+                    _ptp.unitIFs[0].UNITs[0].Ports.Add(new PANEL.PORT(1, 0, 0, 0));
+                    _ptp.unitIFs[0].UNITs[0].Ports.Add(new PANEL.PORT(1, 0, 0, 0));
+                    _ptp.unitIFs[0].UNITs[0].Ports.Add(new PANEL.PORT(1, 0, 0, 0));
+                    _ptp.unitIFs[0].UNITs[0].Ports.Add(new PANEL.PORT(1, 0, 0, 0));
+                    _ptp.unitIFs[0].UNITs[0].Ports.Add(new PANEL.PORT(1, 0, 0, 0));
+                    _ptp.unitIFs[0].UNITs[0].Ports.Add(new PANEL.PORT(1, 0, 0, 0));
+                    _ptp.unitIFs[0].UNITs[0].Ports.Add(new PANEL.PORT(1, 0, 0, 0));
+                    _ptp.unitIFs[0].UNITs[0].Ports.Add(new PANEL.PORT(1, 0, 0, 0));
 
                     if (!_ptp.Open())
                     {
@@ -309,7 +325,7 @@ namespace PCAB_Debugger_ACS
                     _pos.POS_AutoTaskStart();
                     winPOSmonitor.Show();
 
-                    READ_Click(null, null);
+                    try { READ_CONFIG(); } catch { }
                     CONFIG_EXPANDER.IsExpanded = false;
                     CONFIG_GRID.IsEnabled = false;
                     CONTROL_GRID.IsEnabled = true;
@@ -615,6 +631,145 @@ namespace PCAB_Debugger_ACS
 
         private void READ_Click(object sender, RoutedEventArgs e)
         {
+            try
+            {
+                READ_CONFIG();
+                MessageBox.Show("Config read done.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
+        }
+
+        private void LOADDMEM_Click(object sender, RoutedEventArgs e)
+        {
+            uint sectorPage = 0xE0;
+            uint stateNum = 0;
+            string[] strARR = SAVEADDRESS_COMBOBOX.Text.Split('-');
+            if (MessageBox.Show("Load configuration from memory."
+                , "Warning", MessageBoxButton.OKCancel, MessageBoxImage.Warning) != MessageBoxResult.OK) { return; }
+            if (strARR.Length == 1)
+            {
+                if (!uint.TryParse(strARR[0].Trim(), out stateNum))
+                { MessageBox.Show("The setting number is invalid", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
+            }
+            else if (strARR.Length == 2)
+            {
+                if (!uint.TryParse(strARR[0].Trim().StartsWith("0x") ? strARR[0].Trim().Substring(2) : strARR[0], System.Globalization.NumberStyles.HexNumber, null, out sectorPage))
+                { MessageBox.Show("The setting number is invalid", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
+                if (!uint.TryParse(strARR[1].Trim(), out stateNum))
+                { MessageBox.Show("The setting number is invalid", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
+            }
+            _ptp.PANEL_SensorMonitor_TASK_Pause();
+            bool errFLG = false;
+            foreach (PANEL.UNIT_IF unitIF in _ptp.unitIFs)
+            {
+                foreach (PANEL.UNIT unit in unitIF.UNITs)
+                {
+                    if (!unitIF.SerialInterface.LoadState(new PCAB_UnitInterface(unit.SerialNumber), (byte)sectorPage, stateNum)) { errFLG = true; break; }
+                }
+                if (errFLG) { break; }
+            }
+            _ptp.PANEL_SensorMonitor_TASK_Restart();
+
+            if (errFLG)
+            { MessageBox.Show("Load memory error.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
+            try
+            {
+                READ_CONFIG();
+                MessageBox.Show("Load memory done.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Config read error.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void SAVEMEM_Click(object sender, RoutedEventArgs e)
+        {
+            uint sectorPage = 0xE0;
+            uint stateNum = 0;
+            string[] strARR = SAVEADDRESS_COMBOBOX.Text.Split('-');
+            if (MessageBox.Show("Save configuration from memory."
+                , "Warning", MessageBoxButton.OKCancel, MessageBoxImage.Warning) != MessageBoxResult.OK) { return; }
+            if (strARR.Length == 1)
+            {
+                if (!uint.TryParse(strARR[0].Trim(), out stateNum))
+                { MessageBox.Show("The setting number is invalid", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
+            }
+            else if (strARR.Length == 2)
+            {
+                if (!uint.TryParse(strARR[0].Trim().StartsWith("0x") ? strARR[0].Trim().Substring(2) : strARR[0], System.Globalization.NumberStyles.HexNumber, null, out sectorPage))
+                { MessageBox.Show("The setting number is invalid", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
+                if (!uint.TryParse(strARR[1].Trim(), out stateNum))
+                { MessageBox.Show("The setting number is invalid", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
+            }
+            _ptp.PANEL_SensorMonitor_TASK_Pause();
+            bool errFLG = false;
+            foreach (PANEL.UNIT_IF unitIF in _ptp.unitIFs)
+            {
+                foreach (PANEL.UNIT unit in unitIF.UNITs)
+                {
+                    if (!unitIF.SerialInterface.SaveState(new PCAB_UnitInterface(unit.SerialNumber), (byte)sectorPage, stateNum)) { errFLG = true; break; }
+                }
+                if (errFLG) { break; }
+            }
+            _ptp.PANEL_SensorMonitor_TASK_Restart();
+            if (errFLG)
+            { MessageBox.Show("Save memory error.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
+            try
+            {
+                READ_CONFIG();
+                MessageBox.Show("Save memory done.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Config read error.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void RESET_Click(object sender, RoutedEventArgs e)
+        {
+            if (MessageBox.Show("Restore default settins."
+                , "Warning", MessageBoxButton.OKCancel, MessageBoxImage.Warning) != MessageBoxResult.OK) { return; }
+            _ptp.PANEL_SensorMonitor_TASK_Pause();
+            bool errFLG = false;
+            foreach (PANEL.UNIT_IF unitIF in _ptp.unitIFs)
+            {
+                foreach (PANEL.UNIT unit in unitIF.UNITs)
+                {
+                    if (!unitIF.SerialInterface.LoadFactoryDefault(new PCAB_UnitInterface(unit.SerialNumber))) { errFLG = true; break; }
+                }
+                if (errFLG) { break; }
+            }
+            _ptp.PANEL_SensorMonitor_TASK_Restart();
+            if (errFLG)
+            { MessageBox.Show("Reset error.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
+            try
+            {
+                READ_CONFIG();
+                MessageBox.Show("Preset done.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Config read error.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void PANEL_OnError(object sender, ErrorEventArgs e)
+        {
+
+        }
+
+        private void POS_OnError(object sender, POSEventArgs e)
+        {
+
+        }
+
+        private void READ_CONFIG()
+        {
             _ptp.PANEL_SensorMonitor_TASK_Pause();
             List<uint> ptu11, ptu12, ptu13, ptu21, ptu22, ptu23, ptu31, ptu32, ptu33;
             try
@@ -675,31 +830,10 @@ namespace PCAB_Debugger_ACS
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                _ptp.PANEL_SensorMonitor_TASK_Restart();
+                throw;
             }
-
             _ptp.PANEL_SensorMonitor_TASK_Restart();
-
-        }
-
-        private void LOADDMEM_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void SAVEMEM_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void PANEL_OnError(object sender, ErrorEventArgs e)
-        {
-
-        }
-
-        private void POS_OnError(object sender, POSEventArgs e)
-        {
-
         }
 
         #region private Tasks

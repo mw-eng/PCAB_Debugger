@@ -207,17 +207,13 @@ namespace PCAB_Debugger_ACS
             public double Xposi { get; set; }
             public double Yposi { get; set; }
             public double Zposi { get; set; }
-            public uint OffsetATT { get; set; }
-            public uint OffsetPHA { get; set; }
 
-            public PORT(uint portNumber, double X, double Y, double Z, uint ATT_VALUE, uint Phase_VALUE)
+            public PORT(uint portNumber, double X, double Y, double Z)
             {
                 PortNumber = portNumber;
                 Xposi = X;
                 Yposi = Y;
                 Zposi = Z;
-                OffsetATT = 0;
-                OffsetPHA = 0;
             }
         }
 

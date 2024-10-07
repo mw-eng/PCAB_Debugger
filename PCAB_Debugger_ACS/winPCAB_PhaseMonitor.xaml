@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PCAB_Debugger_ACS"
         mc:Ignorable="d"
-        Title="PCAB Phase Monitor" Height="450" Width="800" Closing="Window_Closing" SourceInitialized="Window_SourceInitialized">
+        Title="PCAB Phase Delay Config Monitor" Height="450" Width="800" Closing="Window_Closing" SourceInitialized="Window_SourceInitialized">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="30"/>
