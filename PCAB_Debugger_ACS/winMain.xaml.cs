@@ -1,22 +1,17 @@
 ﻿using PCAB_Debugger_ACS.Properties;
 using PCAB_Debugger_ComLib;
 using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Collections.Generic;
 using static PCAB_Debugger_ComLib.cntConfigPorts;
-using static PCAB_Debugger_ComLib.ShowSerialPortName;
-using static PCAB_Debugger_ComLib.PCAB_TASK;
 using static PCAB_Debugger_ComLib.PCAB_SerialInterface;
-using System.Threading.Tasks;
-using System.Collections;
-using System.Threading;
 using static PCAB_Debugger_ComLib.POS;
-using System.Windows.Controls.Primitives;
-using System.IO;
-using static PCAB_Debugger_ACS.PANEL;
+using static PCAB_Debugger_ComLib.ShowSerialPortName;
 
 namespace PCAB_Debugger_ACS
 {
@@ -31,6 +26,7 @@ namespace PCAB_Debugger_ACS
         NormalizedColorChart cc;
         private winPOS winPOSmonitor;
         private winPCAB_SensorMonitor winPCABsensor;
+        private winPCAB_PhaseMonitor winPCABphase;
         private bool isControl = false;
 
         public winMain()
@@ -162,6 +158,7 @@ namespace PCAB_Debugger_ACS
             PTU32.Children.Clear();
             PTU33.Children.Clear();
             winPCABsensor?.WindowClose();
+            winPCABphase?.WindowClose();
 
             _pos?.POS_AutoTaskStop();
             _ptp?.PANEL_SensorMonitor_TASK_Stop();
@@ -179,7 +176,7 @@ namespace PCAB_Debugger_ACS
 
         private void CONNECT_BUTTON_Click(object sender, RoutedEventArgs e)
         {
-            if (isControl) { DISCONNECT();}
+            if (isControl) { DISCONNECT(); }
             else
             {
                 string sp1Name = "";
@@ -266,6 +263,32 @@ namespace PCAB_Debugger_ACS
                     winPCABsensor.PTU31.Children.Add(_ptp.unitIFs[2].UNITs[0].SENS_MONITOR);
                     winPCABsensor.PTU32.Children.Add(_ptp.unitIFs[2].UNITs[1].SENS_MONITOR);
                     winPCABsensor.PTU33.Children.Add(_ptp.unitIFs[2].UNITs[2].SENS_MONITOR);
+                    winPCABphase = new winPCAB_PhaseMonitor();
+                    if (VIEW_COMBOBOX.SelectedIndex == 1)
+                    {
+                        winPCABphase.GRID13.Children.Add(_ptp.unitIFs[0].UNITs[0].PHASE_MONITOR);
+                        winPCABphase.GRID12.Children.Add(_ptp.unitIFs[0].UNITs[1].PHASE_MONITOR);
+                        winPCABphase.GRID11.Children.Add(_ptp.unitIFs[0].UNITs[2].PHASE_MONITOR);
+                        winPCABphase.GRID23.Children.Add(_ptp.unitIFs[1].UNITs[0].PHASE_MONITOR);
+                        winPCABphase.GRID22.Children.Add(_ptp.unitIFs[1].UNITs[1].PHASE_MONITOR);
+                        winPCABphase.GRID21.Children.Add(_ptp.unitIFs[1].UNITs[2].PHASE_MONITOR);
+                        winPCABphase.GRID33.Children.Add(_ptp.unitIFs[2].UNITs[0].PHASE_MONITOR);
+                        winPCABphase.GRID32.Children.Add(_ptp.unitIFs[2].UNITs[1].PHASE_MONITOR);
+                        winPCABphase.GRID31.Children.Add(_ptp.unitIFs[2].UNITs[2].PHASE_MONITOR);
+                    }
+                    else
+                    {
+                        winPCABphase.GRID11.Children.Add(_ptp.unitIFs[0].UNITs[0].PHASE_MONITOR);
+                        winPCABphase.GRID12.Children.Add(_ptp.unitIFs[0].UNITs[1].PHASE_MONITOR);
+                        winPCABphase.GRID13.Children.Add(_ptp.unitIFs[0].UNITs[2].PHASE_MONITOR);
+                        winPCABphase.GRID21.Children.Add(_ptp.unitIFs[1].UNITs[0].PHASE_MONITOR);
+                        winPCABphase.GRID22.Children.Add(_ptp.unitIFs[1].UNITs[1].PHASE_MONITOR);
+                        winPCABphase.GRID23.Children.Add(_ptp.unitIFs[1].UNITs[2].PHASE_MONITOR);
+                        winPCABphase.GRID31.Children.Add(_ptp.unitIFs[2].UNITs[0].PHASE_MONITOR);
+                        winPCABphase.GRID32.Children.Add(_ptp.unitIFs[2].UNITs[1].PHASE_MONITOR);
+                        winPCABphase.GRID33.Children.Add(_ptp.unitIFs[2].UNITs[2].PHASE_MONITOR);
+                    }
+
 
                     if (!_ptp.Open())
                     {
@@ -277,6 +300,7 @@ namespace PCAB_Debugger_ACS
                     }
                     _ptp.PANEL_SensorMonitor_TASK_Start(100);
                     winPCABsensor.Show();
+                    winPCABphase.Show();
 
                     winPOSmonitor = new winPOS();
                     _pos.OnReadDAT += winPOSmonitor.OnReadDAT;
@@ -358,7 +382,7 @@ namespace PCAB_Debugger_ACS
                 SERIAL_NUMBERS_TEXTBOX23.Text.Replace(" ", "").Length > 0 &&
                 SERIAL_NUMBERS_TEXTBOX31.Text.Replace(" ", "").Length > 0 &&
                 SERIAL_NUMBERS_TEXTBOX32.Text.Replace(" ", "").Length > 0 &&
-                SERIAL_NUMBERS_TEXTBOX33.Text.Replace(" ", "").Length > 0 
+                SERIAL_NUMBERS_TEXTBOX33.Text.Replace(" ", "").Length > 0
                 )
             { CONNECT_BUTTON.IsEnabled = true; }
             else { CONNECT_BUTTON.IsEnabled = false; }
@@ -391,7 +415,7 @@ namespace PCAB_Debugger_ACS
         private void SN_TextBox_PreviewLostKeyboardForcus(object sender, KeyboardFocusChangedEventArgs e)
         {
             string strBF = ((TextBox)sender).Text.Replace(" ", "");
-            if(strBF.Length > 15)
+            if (strBF.Length > 15)
             {
                 MessageBox.Show("Enter the serial number between 1 and 15 characters, without spaces, separated by commas.");
                 e.Handled = true;
@@ -407,9 +431,9 @@ namespace PCAB_Debugger_ACS
         private void EXPANDER_Expanded(object sender, RoutedEventArgs e)
         {
             double thisHeight = this.Height;
-            if(this.WindowState == WindowState.Maximized) { thisHeight = System.Windows.SystemParameters.WorkArea.Height - 50; }
+            if (this.WindowState == WindowState.Maximized) { thisHeight = System.Windows.SystemParameters.WorkArea.Height - 50; }
             if (sender == CONFIG_EXPANDER) { CONFIG_GRID.Height = thisHeight * 0.7; }
-            if (sender == BOARD_CONFIG_EXPANDER){ BOARD_CONFIG_GRID.Height = thisHeight * 0.7;}
+            if (sender == BOARD_CONFIG_EXPANDER) { BOARD_CONFIG_GRID.Height = thisHeight * 0.7; }
         }
 
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -548,7 +572,7 @@ namespace PCAB_Debugger_ACS
             {
                 MessageBox.Show("Write DSA failed.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-            if(result && ((Button)sender).Name == "WRITEDSA")
+            if (result && ((Button)sender).Name == "WRITEDSA")
             {
                 MessageBox.Show("Set ATT Config write done.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
             }
@@ -563,6 +587,12 @@ namespace PCAB_Debugger_ACS
                 foreach (PANEL.UNIT unit in unitIF.UNITs)
                 {
                     if (!unitIF.SerialInterface.WriteDPS(new PCAB_UnitInterface(unit.SerialNumber), unit.CONFIG.GetDPS())) { result = false; }
+                    List<float> dpsVal = new List<float>();
+                    foreach (uint val in unit.CONFIG.GetDPS())
+                    {
+                        dpsVal.Add(val * -5.625f);
+                    }
+                    unit.PHASE_MONITOR.VALUEs = dpsVal;
                 }
             }
             _ptp.PANEL_SensorMonitor_TASK_Restart();
@@ -634,18 +664,18 @@ namespace PCAB_Debugger_ACS
                         else
                         {
                             if (STBAMP_CHECKBOX.IsChecked == null || STBAMP_CHECKBOX.IsChecked != _ptp.unitIFs[i].SerialInterface.GetSTB_AMP(j))
-                                { STBAMP_CHECKBOX.IsChecked = null; }
+                            { STBAMP_CHECKBOX.IsChecked = null; }
                             if (STBDRA_CHECKBOX.IsChecked == null || STBDRA_CHECKBOX.IsChecked != _ptp.unitIFs[i].SerialInterface.GetSTB_DRA(j))
-                                { STBDRA_CHECKBOX.IsChecked = null; }
+                            { STBDRA_CHECKBOX.IsChecked = null; }
                             if (SETLPM_CHECKBOX.IsChecked == null || SETLPM_CHECKBOX.IsChecked != _ptp.unitIFs[i].SerialInterface.GetLowPowerMode(j))
-                                { SETLPM_CHECKBOX.IsChecked = null; }
+                            { SETLPM_CHECKBOX.IsChecked = null; }
                         }
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                MessageBox.Show(ex.Message,"Error",MessageBoxButton.OK,MessageBoxImage.Error);
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
             _ptp.PANEL_SensorMonitor_TASK_Restart();
@@ -683,7 +713,38 @@ namespace PCAB_Debugger_ACS
             Task<bool> _wrt2x = Task.Factory.StartNew(() => { return WriteDPSxx(1, ptu21, ptu22, ptu23); });
             Task<bool> _wrt3x = Task.Factory.StartNew(() => { return WriteDPSxx(2, ptu31, ptu32, ptu33); });
             Task.WaitAll(_wrt1x, _wrt2x, _wrt3x);
-            if (_wrt1x.Result && _wrt2x.Result && _wrt3x.Result) { return true; }
+            if (_wrt1x.Result && _wrt2x.Result && _wrt3x.Result)
+            {
+                List<float> ptuVal = new List<float>();
+                ptuVal.Clear();
+                foreach (uint val in ptu11) { ptuVal.Add(val * -5.625f); }
+                _ptp.unitIFs[0].UNITs[0].PHASE_MONITOR.VALUEs = ptuVal;
+                ptuVal.Clear();
+                foreach (uint val in ptu12) { ptuVal.Add(val * -5.625f); }
+                _ptp.unitIFs[0].UNITs[1].PHASE_MONITOR.VALUEs = ptuVal;
+                ptuVal.Clear();
+                foreach (uint val in ptu13) { ptuVal.Add(val * -5.625f); }
+                _ptp.unitIFs[0].UNITs[2].PHASE_MONITOR.VALUEs = ptuVal;
+                ptuVal.Clear();
+                foreach (uint val in ptu21) { ptuVal.Add(val * -5.625f); }
+                _ptp.unitIFs[1].UNITs[0].PHASE_MONITOR.VALUEs = ptuVal;
+                ptuVal.Clear();
+                foreach (uint val in ptu22) { ptuVal.Add(val * -5.625f); }
+                _ptp.unitIFs[1].UNITs[1].PHASE_MONITOR.VALUEs = ptuVal;
+                ptuVal.Clear();
+                foreach (uint val in ptu23) { ptuVal.Add(val * -5.625f); }
+                _ptp.unitIFs[1].UNITs[2].PHASE_MONITOR.VALUEs = ptuVal;
+                ptuVal.Clear();
+                foreach (uint val in ptu31) { ptuVal.Add(val * -5.625f); }
+                _ptp.unitIFs[2].UNITs[0].PHASE_MONITOR.VALUEs = ptuVal;
+                ptuVal.Clear();
+                foreach (uint val in ptu32) { ptuVal.Add(val * -5.625f); }
+                _ptp.unitIFs[2].UNITs[1].PHASE_MONITOR.VALUEs = ptuVal;
+                ptuVal.Clear();
+                foreach (uint val in ptu33) { ptuVal.Add(val * -5.625f); }
+                _ptp.unitIFs[2].UNITs[2].PHASE_MONITOR.VALUEs = ptuVal;
+                return true;
+            }
             else { return false; }
         }
 
@@ -740,7 +801,38 @@ namespace PCAB_Debugger_ACS
             ptu33 = _wrt3x.Result.ptux3;
             if (ptu11 != null && ptu12 != null && ptu13 != null &&
                 ptu21 != null && ptu22 != null && ptu23 != null &&
-                ptu31 != null && ptu23 != null && ptu33 != null) { return true; }
+                ptu31 != null && ptu23 != null && ptu33 != null)
+            {
+                List<float> ptuVal = new List<float>();
+                ptuVal.Clear();
+                foreach (uint val in ptu11) { ptuVal.Add(val * -5.625f); }
+                _ptp.unitIFs[0].UNITs[0].PHASE_MONITOR.VALUEs = ptuVal;
+                ptuVal.Clear();
+                foreach (uint val in ptu12) { ptuVal.Add(val * -5.625f); }
+                _ptp.unitIFs[0].UNITs[1].PHASE_MONITOR.VALUEs = ptuVal;
+                ptuVal.Clear();
+                foreach (uint val in ptu13) { ptuVal.Add(val * -5.625f); }
+                _ptp.unitIFs[0].UNITs[2].PHASE_MONITOR.VALUEs = ptuVal;
+                ptuVal.Clear();
+                foreach (uint val in ptu21) { ptuVal.Add(val * -5.625f); }
+                _ptp.unitIFs[1].UNITs[0].PHASE_MONITOR.VALUEs = ptuVal;
+                ptuVal.Clear();
+                foreach (uint val in ptu22) { ptuVal.Add(val * -5.625f); }
+                _ptp.unitIFs[1].UNITs[1].PHASE_MONITOR.VALUEs = ptuVal;
+                ptuVal.Clear();
+                foreach (uint val in ptu23) { ptuVal.Add(val * -5.625f); }
+                _ptp.unitIFs[1].UNITs[2].PHASE_MONITOR.VALUEs = ptuVal;
+                ptuVal.Clear();
+                foreach (uint val in ptu31) { ptuVal.Add(val * -5.625f); }
+                _ptp.unitIFs[2].UNITs[0].PHASE_MONITOR.VALUEs = ptuVal;
+                ptuVal.Clear();
+                foreach (uint val in ptu32) { ptuVal.Add(val * -5.625f); }
+                _ptp.unitIFs[2].UNITs[1].PHASE_MONITOR.VALUEs = ptuVal;
+                ptuVal.Clear();
+                foreach (uint val in ptu33) { ptuVal.Add(val * -5.625f); }
+                _ptp.unitIFs[2].UNITs[2].PHASE_MONITOR.VALUEs = ptuVal;
+                return true;
+            }
             else { return false; }
         }
 

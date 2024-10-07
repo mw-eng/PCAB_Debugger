@@ -187,7 +187,7 @@ namespace PCAB_Debugger_ACS
             public List<PORT> Ports { get; private set; }
             public cntConfigPorts CONFIG { get; private set; }
             public cntMonitor SENS_MONITOR { get; private set; }
-            public cntMonitorPHASE PHASE_MONITOR { get; private set; }
+            public cntMonitorMagPhase PHASE_MONITOR { get; private set; }
             public SensorValues SensorValuesNOW { get; set; }
             public UNIT(string _serialNumber, string _name, List<PORT> _ports, ROTATE angle)
             {
@@ -197,7 +197,7 @@ namespace PCAB_Debugger_ACS
                 SENS_MONITOR.TITLE = _name;
                 SENS_MONITOR.TEMPviewIDs = true;
                 SENS_MONITOR.TEMPviewIDratio = 2;
-                PHASE_MONITOR = new cntMonitorPHASE(angle, new ColorChart(-180, 180));
+                PHASE_MONITOR = new cntMonitorMagPhase(angle, new NormalizedColorChart(-180, 180));
             }
         }
 

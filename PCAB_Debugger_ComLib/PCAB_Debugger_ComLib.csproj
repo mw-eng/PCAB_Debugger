@@ -77,11 +77,8 @@
   <ItemGroup>
     <Compile Include="clsSERIAL.cs" />
     <Compile Include="clsSLIP.cs" />
-    <Compile Include="cntMonitorATT.xaml.cs">
-      <DependentUpon>cntMonitorATT.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="cntMonitorPHASE.xaml.cs">
-      <DependentUpon>cntMonitorPHASE.xaml</DependentUpon>
+    <Compile Include="cntMonitorMagPhase.xaml.cs">
+      <DependentUpon>cntMonitorMagPhase.xaml</DependentUpon>
     </Compile>
     <Compile Include="cntPOS.xaml.cs">
       <DependentUpon>cntPOS.xaml</DependentUpon>
@@ -134,11 +131,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="cntMonitorATT.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="cntMonitorPHASE.xaml">
+    <Page Include="cntMonitorMagPhase.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
