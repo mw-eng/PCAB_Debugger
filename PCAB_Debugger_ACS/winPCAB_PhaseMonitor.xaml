@@ -11,7 +11,7 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="100"/>
         </Grid.ColumnDefinitions>
-        <Grid x:Name="PM_GRID" Grid.Column="0" ShowGridLines="True"/>
+        <Grid x:Name="PM_GRID" Grid.Column="0" ShowGridLines="True" Margin="5" />
         <Grid Grid.Column="1" Margin="5">
             <Grid.RowDefinitions>
                 <RowDefinition Height="1*"/>

@@ -49,13 +49,14 @@ namespace PCAB_Debugger_ComLib
                     gridBF.Children[0].SetValue(Grid.RowProperty, 0);
                     gridBF.Children[1].SetValue(Grid.RowProperty, 1);
                     ((Viewbox)(gridBF.Children[0])).Child = new Label();
-                    ((Viewbox)(gridBF.Children[0])).Child = new Label();
+                    ((Viewbox)(gridBF.Children[1])).Child = new Label();
                     ((Label)((Viewbox)(gridBF.Children[0])).Child).Content = "Port " + (i * 4 + j + 1).ToString().PadLeft(2);
-                    ((Label)((Viewbox)(gridBF.Children[1])).Child).Content = "   0.000 deg";
+                    ((Label)((Viewbox)(gridBF.Children[1])).Child).Content = "   0.000";
+                    ports.Add(gridBF);
                 }
-                ports[15].Children.Clear();
-                ports[15].Background = new SolidColorBrush(Color.FromArgb(255, 255, 255, 255));
             }
+            ports[15].Children.Clear();
+            ports[15].Background = new SolidColorBrush(Color.FromArgb(255, 255, 255, 255));
         }
     }
 }

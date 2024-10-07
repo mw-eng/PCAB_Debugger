@@ -10,10 +10,13 @@ using static PCAB_Debugger_ComLib.cntConfigPorts;
 using static PCAB_Debugger_ComLib.ShowSerialPortName;
 using static PCAB_Debugger_ComLib.PCAB_TASK;
 using static PCAB_Debugger_ComLib.PCAB_SerialInterface;
+using System.Threading.Tasks;
 using System.Collections;
 using System.Threading;
 using static PCAB_Debugger_ComLib.POS;
 using System.Windows.Controls.Primitives;
+using System.IO;
+using static PCAB_Debugger_ACS.PANEL;
 
 namespace PCAB_Debugger_ACS
 {
@@ -23,9 +26,7 @@ namespace PCAB_Debugger_ACS
     public partial class winMain : Window
     {
         private POS _pos;
-        private PCAB _pcab1x;
-        private PCAB _pcab2x;
-        private PCAB _pcab3x;
+        private PANEL _ptp;
         private SerialPortTable[] ports;
         NormalizedColorChart cc;
         private winPOS winPOSmonitor;
@@ -150,8 +151,6 @@ namespace PCAB_Debugger_ACS
 
         private void DISCONNECT()
         {
-            _pos?.POS_AutoTaskStop();
-            _pos?.Close();
             winPOSmonitor?.WindowClose();
             PTU11.Children.Clear();
             PTU12.Children.Clear();
@@ -162,14 +161,14 @@ namespace PCAB_Debugger_ACS
             PTU31.Children.Clear();
             PTU32.Children.Clear();
             PTU33.Children.Clear();
-            _pcab1x?.Close();
-            _pcab2x?.Close();
-            _pcab3x?.Close();
             winPCABsensor?.WindowClose();
+
+            _pos?.POS_AutoTaskStop();
+            _ptp?.PANEL_SensorMonitor_TASK_Stop();
+            _pos?.Close();
+            _ptp?.Close();
             _pos = null;
-            _pcab1x = null;
-            _pcab2x = null;
-            _pcab3x = null;
+            _ptp = null;
             CONFIG_EXPANDER.IsExpanded = true;
             CONFIG_GRID.IsEnabled = true;
             CONTROL_GRID.IsEnabled = false;
@@ -183,6 +182,9 @@ namespace PCAB_Debugger_ACS
             if (isControl) { DISCONNECT();}
             else
             {
+                string sp1Name = "";
+                string sp2Name = "";
+                string sp3Name = "";
                 foreach (SerialPortTable port in GetDeviceNames())
                 {
                     if (port.Caption == SERIAL_PORTS_COMBOBOX0.Text)
@@ -191,90 +193,49 @@ namespace PCAB_Debugger_ACS
                     }
                     if (port.Caption == SERIAL_PORTS_COMBOBOX1.Text)
                     {
-                        _pcab1x = new PCABs(port.Name, UInt32.Parse(BAUD_RATE_COMBOBOX1.Text.Trim().Replace(",", "")));
+                        sp1Name = port.Name;
                     }
                     if (port.Caption == SERIAL_PORTS_COMBOBOX2.Text)
                     {
-                        _pcab2x = new PCABs(port.Name, UInt32.Parse(BAUD_RATE_COMBOBOX2.Text.Trim().Replace(",", "")));
+                        sp2Name = port.Name;
                     }
                     if (port.Caption == SERIAL_PORTS_COMBOBOX3.Text)
                     {
-                        _pcab3x = new PCABs(port.Name, UInt32.Parse(BAUD_RATE_COMBOBOX3.Text.Trim().Replace(",", "")));
+                        sp3Name = port.Name;
                     }
                 }
-                if(_pos != null && _pcab1x != null && _pcab2x != null && _pcab3x != null)
+                if (_pos != null && !string.IsNullOrWhiteSpace(sp1Name) && !string.IsNullOrWhiteSpace(sp2Name) && !string.IsNullOrWhiteSpace(sp3Name))
                 {
                     ROTATE ang1;
                     ROTATE ang2;
                     if (VIEW_COMBOBOX.SelectedIndex == 0) { ang1 = ROTATE.RIGHT_TURN; ang2 = ROTATE.ZERO; }
                     else if (VIEW_COMBOBOX.SelectedIndex == 1) { ang1 = ROTATE.MIRROR_RIGHT_TURN; ang2 = ROTATE.MIRROR_ZERO; }
-                    else{ ang1 = ROTATE.MATRIX; ang2 = ROTATE.MATRIX; }
-                    List<PCABs.SN_POSI> sn1x = new List<PCABs.SN_POSI>();
-                    sn1x.Add(new PCABs.SN_POSI(SERIAL_NUMBERS_TEXTBOX11.Text, ang1));
-                    sn1x.Add(new PCABs.SN_POSI(SERIAL_NUMBERS_TEXTBOX12.Text, ang1));
-                    sn1x.Add(new PCABs.SN_POSI(SERIAL_NUMBERS_TEXTBOX13.Text, ang1));
-                    _pcab1x.OnError += PCAB_OnError;
-                    _pcab1x.Open(sn1x, 100);
-                    if (_pcab1x.isOpen != true || _pcab1x.serial.UNITs.Count != 3)
+                    else { ang1 = ROTATE.MATRIX; ang2 = ROTATE.MATRIX; }
+                    List<PANEL.SerialInterface> panelIF = new List<PANEL.SerialInterface>();
+                    List<PANEL.UNIT> units1x = new List<PANEL.UNIT>();
+                    List<PANEL.UNIT> units2x = new List<PANEL.UNIT>();
+                    List<PANEL.UNIT> units3x = new List<PANEL.UNIT>();
+                    units1x.Add(new PANEL.UNIT(SERIAL_NUMBERS_TEXTBOX11.Text, "PTU11", new List<PANEL.PORT>(), ang1));
+                    units1x.Add(new PANEL.UNIT(SERIAL_NUMBERS_TEXTBOX12.Text, "PTU12", new List<PANEL.PORT>(), ang1));
+                    units1x.Add(new PANEL.UNIT(SERIAL_NUMBERS_TEXTBOX13.Text, "PTU13", new List<PANEL.PORT>(), ang1));
+                    units2x.Add(new PANEL.UNIT(SERIAL_NUMBERS_TEXTBOX21.Text, "PTU21", new List<PANEL.PORT>(), ang2));
+                    units2x.Add(new PANEL.UNIT(SERIAL_NUMBERS_TEXTBOX22.Text, "PTU22", new List<PANEL.PORT>(), ang2));
+                    units2x.Add(new PANEL.UNIT(SERIAL_NUMBERS_TEXTBOX23.Text, "PTU23", new List<PANEL.PORT>(), ang2));
+                    units3x.Add(new PANEL.UNIT(SERIAL_NUMBERS_TEXTBOX31.Text, "PTU31", new List<PANEL.PORT>(), ang2));
+                    units3x.Add(new PANEL.UNIT(SERIAL_NUMBERS_TEXTBOX32.Text, "PTU32", new List<PANEL.PORT>(), ang2));
+                    units3x.Add(new PANEL.UNIT(SERIAL_NUMBERS_TEXTBOX33.Text, "PTU33", new List<PANEL.PORT>(), ang2));
+                    panelIF.Add(new PANEL.SerialInterface(sp1Name, uint.Parse(BAUD_RATE_COMBOBOX1.Text.Trim().Replace(",", "")), units1x));
+                    panelIF.Add(new PANEL.SerialInterface(sp2Name, uint.Parse(BAUD_RATE_COMBOBOX2.Text.Trim().Replace(",", "")), units2x));
+                    panelIF.Add(new PANEL.SerialInterface(sp3Name, uint.Parse(BAUD_RATE_COMBOBOX3.Text.Trim().Replace(",", "")), units3x));
+                    _ptp = new PANEL(panelIF);
+                    _ptp.OnTaskError += PANEL_OnError;
+                    foreach (PANEL.UNIT_IF ui in _ptp.unitIFs)
                     {
-                        MessageBox.Show("Seriao Number detection error.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                        _pcab1x.Close();
-                        _pos = null;
-                        _pcab1x = null;
-                        _pcab2x = null;
-                        _pcab3x = null;
+                        foreach (PANEL.UNIT unit in ui.UNITs)
+                        {
+                            unit.CONFIG.STBLNA_CheckboxClickEvent += STBLNA_CheckboxClick;
+                        }
                     }
-                    List<PCABs.SN_POSI> sn2x = new List<PCABs.SN_POSI>();
-                    sn2x.Add(new PCABs.SN_POSI(SERIAL_NUMBERS_TEXTBOX21.Text, ang2));
-                    sn2x.Add(new PCABs.SN_POSI(SERIAL_NUMBERS_TEXTBOX22.Text, ang2));
-                    sn2x.Add(new PCABs.SN_POSI(SERIAL_NUMBERS_TEXTBOX23.Text, ang2));
-                    _pcab2x.OnError += PCAB_OnError;
-                    _pcab2x.Open(sn2x, 100);
-                    if (_pcab2x.isOpen != true || _pcab2x.serial.UNITs.Count != 3)
-                    {
-                        MessageBox.Show("Seriao Number detection error.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                        _pcab1x.Close();
-                        _pcab2x.Close();
-                        _pos = null;
-                        _pcab1x = null;
-                        _pcab2x = null;
-                        _pcab3x = null;
-                    }
-                    List<PCABs.SN_POSI> sn3x = new List<PCABs.SN_POSI>();
-                    sn3x.Add(new PCABs.SN_POSI(SERIAL_NUMBERS_TEXTBOX31.Text, ang2));
-                    sn3x.Add(new PCABs.SN_POSI(SERIAL_NUMBERS_TEXTBOX32.Text, ang2));
-                    sn3x.Add(new PCABs.SN_POSI(SERIAL_NUMBERS_TEXTBOX33.Text, ang2));
-                    _pcab3x.OnError += PCAB_OnError;
-                    _pcab3x.Open(sn3x, 100);
-                    if (_pcab3x.isOpen != true || _pcab3x.serial.UNITs.Count != 3)
-                    {
-                        MessageBox.Show("Seriao Number detection error.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                        _pcab1x.Close();
-                        _pcab2x.Close();
-                        _pcab3x.Close();
-                        _pos = null;
-                        _pcab1x = null;
-                        _pcab2x = null;
-                        _pcab3x = null;
-                    }
-                    _pcab1x.PCAB_Boards[0].STBLNA_CheckboxClickEvent += STBLNA_CheckboxClick;
-                    _pcab1x.PCAB_Boards[1].STBLNA_CheckboxClickEvent += STBLNA_CheckboxClick;
-                    _pcab1x.PCAB_Boards[2].STBLNA_CheckboxClickEvent += STBLNA_CheckboxClick;
-                    _pcab2x.PCAB_Boards[0].STBLNA_CheckboxClickEvent += STBLNA_CheckboxClick;
-                    _pcab2x.PCAB_Boards[1].STBLNA_CheckboxClickEvent += STBLNA_CheckboxClick;
-                    _pcab2x.PCAB_Boards[2].STBLNA_CheckboxClickEvent += STBLNA_CheckboxClick;
-                    _pcab3x.PCAB_Boards[0].STBLNA_CheckboxClickEvent += STBLNA_CheckboxClick;
-                    _pcab3x.PCAB_Boards[1].STBLNA_CheckboxClickEvent += STBLNA_CheckboxClick;
-                    _pcab3x.PCAB_Boards[2].STBLNA_CheckboxClickEvent += STBLNA_CheckboxClick;
-                    _pcab1x.PCAB_Monitors[0].TITLE = "PTU11";
-                    _pcab1x.PCAB_Monitors[1].TITLE = "PTU12";
-                    _pcab1x.PCAB_Monitors[2].TITLE = "PTU13";
-                    _pcab2x.PCAB_Monitors[0].TITLE = "PTU21";
-                    _pcab2x.PCAB_Monitors[1].TITLE = "PTU22";
-                    _pcab2x.PCAB_Monitors[2].TITLE = "PTU23";
-                    _pcab3x.PCAB_Monitors[0].TITLE = "PTU31";
-                    _pcab3x.PCAB_Monitors[1].TITLE = "PTU32";
-                    _pcab3x.PCAB_Monitors[2].TITLE = "PTU33";
 
                     PTU11.Children.Clear();
                     PTU12.Children.Clear();
@@ -285,26 +246,36 @@ namespace PCAB_Debugger_ACS
                     PTU31.Children.Clear();
                     PTU32.Children.Clear();
                     PTU33.Children.Clear();
-                    PTU11.Children.Add(_pcab1x.PCAB_Boards[0]);
-                    PTU12.Children.Add(_pcab1x.PCAB_Boards[1]);
-                    PTU13.Children.Add(_pcab1x.PCAB_Boards[2]);
-                    PTU21.Children.Add(_pcab2x.PCAB_Boards[0]);
-                    PTU22.Children.Add(_pcab2x.PCAB_Boards[1]);
-                    PTU23.Children.Add(_pcab2x.PCAB_Boards[2]);
-                    PTU31.Children.Add(_pcab3x.PCAB_Boards[0]);
-                    PTU32.Children.Add(_pcab3x.PCAB_Boards[1]);
-                    PTU33.Children.Add(_pcab3x.PCAB_Boards[2]);
+                    PTU11.Children.Add(_ptp.unitIFs[0].UNITs[0].CONFIG);
+                    PTU12.Children.Add(_ptp.unitIFs[0].UNITs[1].CONFIG);
+                    PTU13.Children.Add(_ptp.unitIFs[0].UNITs[2].CONFIG);
+                    PTU21.Children.Add(_ptp.unitIFs[1].UNITs[0].CONFIG);
+                    PTU22.Children.Add(_ptp.unitIFs[1].UNITs[1].CONFIG);
+                    PTU23.Children.Add(_ptp.unitIFs[1].UNITs[2].CONFIG);
+                    PTU31.Children.Add(_ptp.unitIFs[2].UNITs[0].CONFIG);
+                    PTU32.Children.Add(_ptp.unitIFs[2].UNITs[1].CONFIG);
+                    PTU33.Children.Add(_ptp.unitIFs[2].UNITs[2].CONFIG);
 
                     winPCABsensor = new winPCAB_SensorMonitor();
-                    winPCABsensor.PTU11.Children.Add(_pcab1x.PCAB_Monitors[0]);
-                    winPCABsensor.PTU12.Children.Add(_pcab1x.PCAB_Monitors[1]);
-                    winPCABsensor.PTU13.Children.Add(_pcab1x.PCAB_Monitors[2]);
-                    winPCABsensor.PTU21.Children.Add(_pcab2x.PCAB_Monitors[0]);
-                    winPCABsensor.PTU22.Children.Add(_pcab2x.PCAB_Monitors[1]);
-                    winPCABsensor.PTU23.Children.Add(_pcab2x.PCAB_Monitors[2]);
-                    winPCABsensor.PTU31.Children.Add(_pcab3x.PCAB_Monitors[0]);
-                    winPCABsensor.PTU32.Children.Add(_pcab3x.PCAB_Monitors[1]);
-                    winPCABsensor.PTU33.Children.Add(_pcab3x.PCAB_Monitors[2]);
+                    winPCABsensor.PTU11.Children.Add(_ptp.unitIFs[0].UNITs[0].SENS_MONITOR);
+                    winPCABsensor.PTU12.Children.Add(_ptp.unitIFs[0].UNITs[1].SENS_MONITOR);
+                    winPCABsensor.PTU13.Children.Add(_ptp.unitIFs[0].UNITs[2].SENS_MONITOR);
+                    winPCABsensor.PTU21.Children.Add(_ptp.unitIFs[1].UNITs[0].SENS_MONITOR);
+                    winPCABsensor.PTU22.Children.Add(_ptp.unitIFs[1].UNITs[1].SENS_MONITOR);
+                    winPCABsensor.PTU23.Children.Add(_ptp.unitIFs[1].UNITs[2].SENS_MONITOR);
+                    winPCABsensor.PTU31.Children.Add(_ptp.unitIFs[2].UNITs[0].SENS_MONITOR);
+                    winPCABsensor.PTU32.Children.Add(_ptp.unitIFs[2].UNITs[1].SENS_MONITOR);
+                    winPCABsensor.PTU33.Children.Add(_ptp.unitIFs[2].UNITs[2].SENS_MONITOR);
+
+                    if (!_ptp.Open())
+                    {
+                        _ptp.PANEL_SensorMonitor_TASK_Stop();
+                        _ptp.Close();
+                        _ptp = null;
+                        _pos = null;
+                        MessageBox.Show("Serial Number detection error.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                    _ptp.PANEL_SensorMonitor_TASK_Start(100);
                     winPCABsensor.Show();
 
                     winPOSmonitor = new winPOS();
@@ -314,6 +285,7 @@ namespace PCAB_Debugger_ACS
                     _pos.POS_AutoTaskStart();
                     winPOSmonitor.Show();
 
+                    READ_Click(null, null);
                     CONFIG_EXPANDER.IsExpanded = false;
                     CONFIG_GRID.IsEnabled = false;
                     CONTROL_GRID.IsEnabled = true;
@@ -324,9 +296,6 @@ namespace PCAB_Debugger_ACS
                 else
                 {
                     _pos = null;
-                    _pcab1x = null;
-                    _pcab2x = null;
-                    _pcab3x = null;
                     MessageBox.Show("Serial port detection error.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                     SERIAL_PORTS_COMBOBOX_RELOAD(null, null);
                 }
@@ -453,195 +422,158 @@ namespace PCAB_Debugger_ACS
 
         private void STBLNA_CheckboxClick(object sender, RoutedEventArgs e, bool? isChecked)
         {
-            bool ic;
+            bool ic = false;
+            bool result = false;
             if (isChecked == true) { ic = true; }
             else if (isChecked == false) { ic = false; }
-            else { return; }
-            try
+            if (sender is cntConfigPorts && isChecked != null)
             {
                 switch (((Grid)((cntConfigPorts)sender).Parent).Name)
                 {
                     case "PTU11":
-                        _pcab1x.serial.PCAB_SetSTB_LNA(_pcab1x.serial.UNITs[0], ic);
+                        _ptp.unitIFs[0].UNITs_SensorMonitor_TASK_Pause();
+                        result = _ptp.unitIFs[0].SerialInterface.SetSTB_LNA(0, ic);
+                        _ptp.unitIFs[0].UNITs_SensorMonitor_TASK_Restart();
                         break;
                     case "PTU12":
-                        _pcab1x.serial.PCAB_SetSTB_LNA(_pcab1x.serial.UNITs[1], ic);
+                        _ptp.unitIFs[0].UNITs_SensorMonitor_TASK_Pause();
+                        result = _ptp.unitIFs[0].SerialInterface.SetSTB_LNA(1, ic);
+                        _ptp.unitIFs[0].UNITs_SensorMonitor_TASK_Restart();
                         break;
                     case "PTU13":
-                        _pcab1x.serial.PCAB_SetSTB_LNA(_pcab1x.serial.UNITs[2], ic);
+                        _ptp.unitIFs[0].UNITs_SensorMonitor_TASK_Pause();
+                        result = _ptp.unitIFs[0].SerialInterface.SetSTB_LNA(2, ic);
+                        _ptp.unitIFs[0].UNITs_SensorMonitor_TASK_Restart();
                         break;
                     case "PTU21":
-                        _pcab2x.serial.PCAB_SetSTB_LNA(_pcab2x.serial.UNITs[0], ic);
+                        _ptp.unitIFs[1].UNITs_SensorMonitor_TASK_Pause();
+                        result = _ptp.unitIFs[1].SerialInterface.SetSTB_LNA(0, ic);
+                        _ptp.unitIFs[1].UNITs_SensorMonitor_TASK_Restart();
                         break;
                     case "PTU22":
-                        _pcab2x.serial.PCAB_SetSTB_LNA(_pcab2x.serial.UNITs[1], ic);
+                        _ptp.unitIFs[1].UNITs_SensorMonitor_TASK_Pause();
+                        result = _ptp.unitIFs[1].SerialInterface.SetSTB_LNA(1, ic);
+                        _ptp.unitIFs[1].UNITs_SensorMonitor_TASK_Restart();
                         break;
                     case "PTU23":
-                        _pcab2x.serial.PCAB_SetSTB_LNA(_pcab2x.serial.UNITs[2], ic);
+                        _ptp.unitIFs[1].UNITs_SensorMonitor_TASK_Pause();
+                        result = _ptp.unitIFs[1].SerialInterface.SetSTB_LNA(2, ic);
+                        _ptp.unitIFs[1].UNITs_SensorMonitor_TASK_Restart();
                         break;
                     case "PTU31":
-                        _pcab3x.serial.PCAB_SetSTB_LNA(_pcab3x.serial.UNITs[0], ic);
+                        _ptp.unitIFs[2].UNITs_SensorMonitor_TASK_Pause();
+                        result = _ptp.unitIFs[2].SerialInterface.SetSTB_LNA(0, ic);
+                        _ptp.unitIFs[2].UNITs_SensorMonitor_TASK_Restart();
                         break;
                     case "PTU32":
-                        _pcab3x.serial.PCAB_SetSTB_LNA(_pcab3x.serial.UNITs[1], ic);
+                        _ptp.unitIFs[2].UNITs_SensorMonitor_TASK_Pause();
+                        result = _ptp.unitIFs[2].SerialInterface.SetSTB_LNA(1, ic);
+                        _ptp.unitIFs[2].UNITs_SensorMonitor_TASK_Restart();
                         break;
                     case "PTU33":
-                        _pcab3x.serial.PCAB_SetSTB_LNA(_pcab3x.serial.UNITs[2], ic);
+                        _ptp.unitIFs[2].UNITs_SensorMonitor_TASK_Pause();
+                        result = _ptp.unitIFs[2].SerialInterface.SetSTB_LNA(2, ic);
+                        _ptp.unitIFs[2].UNITs_SensorMonitor_TASK_Restart();
                         break;
                 }
-            }catch(Exception ex)
+            }
+            if (!result)
             {
-                MessageBox.Show(ex.ToString(), "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                e.Handled = true;
+                MessageBox.Show("Stand by LNA switching failed.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
         private void STB_LPM_CheckboxClick(object sender, RoutedEventArgs e)
         {
-            bool ic;
-            if(e.RoutedEvent.Name == "Checked") { ic= true; }
-            else if(e.RoutedEvent.Name == "Unchecked") { ic= false; }
+            bool ic = false;
+            bool result = true;
+            if (e.RoutedEvent.Name == "Checked") { ic = true; }
+            else if (e.RoutedEvent.Name == "Unchecked") { ic = false; }
             else { return; }
-            if (sender == STBAMP_CHECKBOX)
+            if (sender is CheckBox)
             {
-                foreach (PCAB_UnitInterface unit in _pcab1x.serial.UNITs) { _pcab1x.serial.PCAB_SetSTB_AMP(unit, ic); }
-                foreach (PCAB_UnitInterface unit in _pcab2x.serial.UNITs) { _pcab2x.serial.PCAB_SetSTB_AMP(unit, ic); }
-                foreach (PCAB_UnitInterface unit in _pcab3x.serial.UNITs) { _pcab3x.serial.PCAB_SetSTB_AMP(unit, ic); }
-            }
-            if (sender == STBDRA_CHECKBOX)
-            {
-                foreach (PCAB_UnitInterface unit in _pcab1x.serial.UNITs) { _pcab1x.serial.PCAB_SetSTB_DRA(unit, ic); }
-                foreach (PCAB_UnitInterface unit in _pcab2x.serial.UNITs) { _pcab2x.serial.PCAB_SetSTB_DRA(unit, ic); }
-                foreach (PCAB_UnitInterface unit in _pcab3x.serial.UNITs) { _pcab3x.serial.PCAB_SetSTB_DRA(unit, ic); }
-            }
-            if (sender == SETLPM_CHECKBOX)
-            {
-                foreach (PCAB_UnitInterface unit in _pcab1x.serial.UNITs) { _pcab1x.serial.PCAB_SetLowPowerMode(unit, ic); }
-                foreach (PCAB_UnitInterface unit in _pcab2x.serial.UNITs) { _pcab2x.serial.PCAB_SetLowPowerMode(unit, ic); }
-                foreach (PCAB_UnitInterface unit in _pcab3x.serial.UNITs) { _pcab3x.serial.PCAB_SetLowPowerMode(unit, ic); }
+                _ptp.PANEL_SensorMonitor_TASK_Pause();
+                switch (((CheckBox)sender).Name)
+                {
+                    case "STBAMP_CHECKBOX":
+                        foreach (PANEL.UNIT_IF unitIF in _ptp.unitIFs)
+                        {
+                            foreach (PANEL.UNIT unit in unitIF.UNITs)
+                            {
+                                if (!unitIF.SerialInterface.SetSTB_AMP(new PCAB_UnitInterface(unit.SerialNumber), ic)) { result = false; }
+                            }
+                        }
+                        break;
+                    case "STBDRA_CHECKBOX":
+                        foreach (PANEL.UNIT_IF unitIF in _ptp.unitIFs)
+                        {
+                            foreach (PANEL.UNIT unit in unitIF.UNITs)
+                            {
+                                if (!unitIF.SerialInterface.SetSTB_DRA(new PCAB_UnitInterface(unit.SerialNumber), ic)) { result = false; }
+                            }
+                        }
+                        break;
+                    case "SETLPM_CHECKBOX":
+                        foreach (PANEL.UNIT_IF unitIF in _ptp.unitIFs)
+                        {
+                            foreach (PANEL.UNIT unit in unitIF.UNITs)
+                            {
+                                if (!unitIF.SerialInterface.SetLowPowerMode(new PCAB_UnitInterface(unit.SerialNumber), ic)) { result = false; }
+                            }
+                        }
+                        break;
+                }
+                _ptp.PANEL_SensorMonitor_TASK_Restart();
+                if (!result)
+                {
+                    MessageBox.Show("Switching failed.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
         }
 
         private void WRITEDSA_Click(object sender, RoutedEventArgs e)
         {
-            List<uint> dsa = new List<uint>();
-            dsa.Clear();
-            for (uint i = 0; i < 15; i++)
-            { dsa.Add((uint)((cntConfigPorts)PTU11.Children[0]).GetDSA(i + 1)); }
-            if (_pcab1x.serial.PCAB_WriteDSAin(_pcab1x.serial.UNITs[0], (uint)((cntConfigPorts)PTU11.Children[0]).GetDSA(0)))
-            { MessageBox.Show("PTU11 DSA in write Failure.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
-            if (_pcab1x.serial.PCAB_WriteDSA(_pcab1x.serial.UNITs[0], dsa))
-            { MessageBox.Show("PTU11 DSA write Failure.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
-            dsa.Clear();
-            for (uint i = 0; i < 15; i++)
-            { dsa.Add((uint)((cntConfigPorts)PTU12.Children[0]).GetDSA(i + 1)); }
-            if (_pcab1x.serial.PCAB_WriteDSAin(_pcab1x.serial.UNITs[0], (uint)((cntConfigPorts)PTU12.Children[0]).GetDSA(0)))
-            { MessageBox.Show("PTU12 DSA in write Failure.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
-            if (_pcab1x.serial.PCAB_WriteDSA(_pcab1x.serial.UNITs[0], dsa))
-            { MessageBox.Show("PTU12 DSA write Failure.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
-            dsa.Clear();
-            for (uint i = 0; i < 15; i++)
-            { dsa.Add((uint)((cntConfigPorts)PTU13.Children[0]).GetDSA(i + 1)); }
-            if (_pcab1x.serial.PCAB_WriteDSAin(_pcab1x.serial.UNITs[0], (uint)((cntConfigPorts)PTU13.Children[0]).GetDSA(0)))
-            { MessageBox.Show("PTU13 DSA in write Failure.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
-            if (_pcab1x.serial.PCAB_WriteDSA(_pcab1x.serial.UNITs[0], dsa))
-            { MessageBox.Show("PTU13 DSA write Failure.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
-            dsa.Clear();
-            for (uint i = 0; i < 15; i++)
-            { dsa.Add((uint)((cntConfigPorts)PTU21.Children[0]).GetDSA(i + 1)); }
-            if (_pcab1x.serial.PCAB_WriteDSAin(_pcab2x.serial.UNITs[0], (uint)((cntConfigPorts)PTU21.Children[0]).GetDSA(0)))
-            { MessageBox.Show("PTU21 DSA in write Failure.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
-            if (_pcab1x.serial.PCAB_WriteDSA(_pcab2x.serial.UNITs[0], dsa))
-            { MessageBox.Show("PTU21 DSA write Failure.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
-            dsa.Clear();
-            for (uint i = 0; i < 15; i++)
-            { dsa.Add((uint)((cntConfigPorts)PTU22.Children[0]).GetDSA(i + 1)); }
-            if (_pcab1x.serial.PCAB_WriteDSAin(_pcab2x.serial.UNITs[0], (uint)((cntConfigPorts)PTU22.Children[0]).GetDSA(0)))
-            { MessageBox.Show("PTU22 DSA in write Failure.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
-            if (_pcab1x.serial.PCAB_WriteDSA(_pcab2x.serial.UNITs[0], dsa))
-            { MessageBox.Show("PTU22 DSA write Failure.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
-            dsa.Clear();
-            for (uint i = 0; i < 15; i++)
-            { dsa.Add((uint)((cntConfigPorts)PTU23.Children[0]).GetDSA(i + 1)); }
-            if (_pcab1x.serial.PCAB_WriteDSAin(_pcab2x.serial.UNITs[0], (uint)((cntConfigPorts)PTU23.Children[0]).GetDSA(0)))
-            { MessageBox.Show("PTU23 DSA in write Failure.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
-            if (_pcab1x.serial.PCAB_WriteDSA(_pcab2x.serial.UNITs[0], dsa))
-            { MessageBox.Show("PTU23 DSA write Failure.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
-            dsa.Clear();
-            for (uint i = 0; i < 15; i++)
-            { dsa.Add((uint)((cntConfigPorts)PTU31.Children[0]).GetDSA(i + 1)); }
-            if (_pcab1x.serial.PCAB_WriteDSAin(_pcab3x.serial.UNITs[0], (uint)((cntConfigPorts)PTU31.Children[0]).GetDSA(0)))
-            { MessageBox.Show("PTU31 DSA in write Failure.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
-            if (_pcab1x.serial.PCAB_WriteDSA(_pcab3x.serial.UNITs[0], dsa))
-            { MessageBox.Show("PTU31 DSA write Failure.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
-            dsa.Clear();
-            for (uint i = 0; i < 15; i++)
-            { dsa.Add((uint)((cntConfigPorts)PTU32.Children[0]).GetDSA(i + 1)); }
-            if (_pcab1x.serial.PCAB_WriteDSAin(_pcab3x.serial.UNITs[0], (uint)((cntConfigPorts)PTU32.Children[0]).GetDSA(0)))
-            { MessageBox.Show("PTU32 DSA in write Failure.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
-            if (_pcab1x.serial.PCAB_WriteDSA(_pcab3x.serial.UNITs[0], dsa))
-            { MessageBox.Show("PTU32 DSA write Failure.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
-            dsa.Clear();
-            for (uint i = 0; i < 15; i++)
-            { dsa.Add((uint)((cntConfigPorts)PTU33.Children[0]).GetDSA(i + 1)); }
-            if (_pcab1x.serial.PCAB_WriteDSAin(_pcab3x.serial.UNITs[0], (uint)((cntConfigPorts)PTU33.Children[0]).GetDSA(0)))
-            { MessageBox.Show("PTU33 DSA in write Failure.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
-            if (_pcab1x.serial.PCAB_WriteDSA(_pcab3x.serial.UNITs[0], dsa))
-            { MessageBox.Show("PTU33 DSA write Failure.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
-            if(sender == WRITEDSA)
-            { MessageBox.Show("ATT config write done.", "Success", MessageBoxButton.OK, MessageBoxImage.Information); }
+            bool result = true;
+            _ptp.PANEL_SensorMonitor_TASK_Pause();
+            foreach (PANEL.UNIT_IF unitIF in _ptp.unitIFs)
+            {
+                foreach (PANEL.UNIT unit in unitIF.UNITs)
+                {
+                    if (!unitIF.SerialInterface.WriteDSAin(new PCAB_UnitInterface(unit.SerialNumber), (uint)unit.CONFIG.GetDSA(0))) { result = false; }
+                    if (!unitIF.SerialInterface.WriteDSA(new PCAB_UnitInterface(unit.SerialNumber), unit.CONFIG.GetDSA())) { result = false; }
+                }
+            }
+            _ptp.PANEL_SensorMonitor_TASK_Restart();
+            if (!result)
+            {
+                MessageBox.Show("Write DSA failed.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            if(result && ((Button)sender).Name == "WRITEDSA")
+            {
+                MessageBox.Show("Set ATT Config write done.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
         }
 
         private void WRITEDPS_Click(object sender, RoutedEventArgs e)
         {
-            List<uint> dps = new List<uint>();
-            dps.Clear();
-            for (uint i = 0; i < 15; i++)
-            { dps.Add((uint)((cntConfigPorts)PTU11.Children[0]).GetDPS(i + 1)); }
-            if (_pcab1x.serial.PCAB_WriteDPS(_pcab1x.serial.UNITs[0], dps))
-            { MessageBox.Show("PTU11 DSA write Failure.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
-            dps.Clear();
-            for (uint i = 0; i < 15; i++)
-            { dps.Add((uint)((cntConfigPorts)PTU12.Children[0]).GetDPS(i + 1)); }
-            if (_pcab1x.serial.PCAB_WriteDPS(_pcab1x.serial.UNITs[0], dps))
-            { MessageBox.Show("PTU12 DSA write Failure.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
-            dps.Clear();
-            for (uint i = 0; i < 15; i++)
-            { dps.Add((uint)((cntConfigPorts)PTU13.Children[0]).GetDPS(i + 1)); }
-            if (_pcab1x.serial.PCAB_WriteDPS(_pcab1x.serial.UNITs[0], dps))
-            { MessageBox.Show("PTU13 DSA write Failure.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
-            dps.Clear();
-            for (uint i = 0; i < 15; i++)
-            { dps.Add((uint)((cntConfigPorts)PTU21.Children[0]).GetDPS(i + 1)); }
-            if (_pcab1x.serial.PCAB_WriteDPS(_pcab2x.serial.UNITs[0], dps))
-            { MessageBox.Show("PTU21 DSA write Failure.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
-            dps.Clear();
-            for (uint i = 0; i < 15; i++)
-            { dps.Add((uint)((cntConfigPorts)PTU22.Children[0]).GetDPS(i + 1)); }
-            if (_pcab1x.serial.PCAB_WriteDPS(_pcab2x.serial.UNITs[0], dps))
-            { MessageBox.Show("PTU22 DSA write Failure.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
-            dps.Clear();
-            for (uint i = 0; i < 15; i++)
-            { dps.Add((uint)((cntConfigPorts)PTU23.Children[0]).GetDPS(i + 1)); }
-            if (_pcab1x.serial.PCAB_WriteDPS(_pcab2x.serial.UNITs[0], dps))
-            { MessageBox.Show("PTU23 DSA write Failure.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
-            dps.Clear();
-            for (uint i = 0; i < 15; i++)
-            { dps.Add((uint)((cntConfigPorts)PTU31.Children[0]).GetDPS(i + 1)); }
-            if (_pcab1x.serial.PCAB_WriteDPS(_pcab3x.serial.UNITs[0], dps))
-            { MessageBox.Show("PTU31 DSA write Failure.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
-            dps.Clear();
-            for (uint i = 0; i < 15; i++)
-            { dps.Add((uint)((cntConfigPorts)PTU32.Children[0]).GetDPS(i + 1)); }
-            if (_pcab1x.serial.PCAB_WriteDPS(_pcab3x.serial.UNITs[0], dps))
-            { MessageBox.Show("PTU32 DSA write Failure.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
-            dps.Clear();
-            for (uint i = 0; i < 15; i++)
-            { dps.Add((uint)((cntConfigPorts)PTU33.Children[0]).GetDPS(i + 1)); }
-            if (_pcab1x.serial.PCAB_WriteDPS(_pcab3x.serial.UNITs[0], dps))
-            { MessageBox.Show("PTU33 DSA write Failure.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
-            if (sender == WRITEDPS)
-            { MessageBox.Show("Phase config write done.", "Success", MessageBoxButton.OK, MessageBoxImage.Information); }
+            bool result = true;
+            _ptp.PANEL_SensorMonitor_TASK_Pause();
+            foreach (PANEL.UNIT_IF unitIF in _ptp.unitIFs)
+            {
+                foreach (PANEL.UNIT unit in unitIF.UNITs)
+                {
+                    if (!unitIF.SerialInterface.WriteDPS(new PCAB_UnitInterface(unit.SerialNumber), unit.CONFIG.GetDPS())) { result = false; }
+                }
+            }
+            _ptp.PANEL_SensorMonitor_TASK_Restart();
+            if (!result)
+            {
+                MessageBox.Show("Write DPS failed.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            if (result && ((Button)sender).Name == "WRITEDPS")
+            {
+                MessageBox.Show("Set Phase Config write done.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
         }
 
         private void WRITE_Click(object sender, RoutedEventArgs e)
@@ -653,6 +585,70 @@ namespace PCAB_Debugger_ACS
 
         private void READ_Click(object sender, RoutedEventArgs e)
         {
+            _ptp.PANEL_SensorMonitor_TASK_Pause();
+            List<uint> ptu11, ptu12, ptu13, ptu21, ptu22, ptu23, ptu31, ptu32, ptu33;
+            try
+            {
+                if (ReadDPSxx(out ptu11, out ptu12, out ptu13, out ptu21, out ptu22, out ptu23, out ptu31, out ptu32, out ptu33))
+                {
+                    _ptp.unitIFs[0].UNITs[0].CONFIG.SetDPS(ptu11);
+                    _ptp.unitIFs[0].UNITs[1].CONFIG.SetDPS(ptu12);
+                    _ptp.unitIFs[0].UNITs[2].CONFIG.SetDPS(ptu13);
+                    _ptp.unitIFs[1].UNITs[0].CONFIG.SetDPS(ptu21);
+                    _ptp.unitIFs[1].UNITs[1].CONFIG.SetDPS(ptu22);
+                    _ptp.unitIFs[1].UNITs[2].CONFIG.SetDPS(ptu23);
+                    _ptp.unitIFs[2].UNITs[0].CONFIG.SetDPS(ptu31);
+                    _ptp.unitIFs[2].UNITs[1].CONFIG.SetDPS(ptu32);
+                    _ptp.unitIFs[2].UNITs[2].CONFIG.SetDPS(ptu33);
+                }
+                if (ReadDSAxx(out ptu11, out ptu12, out ptu13, out ptu21, out ptu22, out ptu23, out ptu31, out ptu32, out ptu33))
+                {
+                    _ptp.unitIFs[0].UNITs[0].CONFIG.SetDSA(ptu11);
+                    _ptp.unitIFs[0].UNITs[1].CONFIG.SetDSA(ptu12);
+                    _ptp.unitIFs[0].UNITs[2].CONFIG.SetDSA(ptu13);
+                    _ptp.unitIFs[1].UNITs[0].CONFIG.SetDSA(ptu21);
+                    _ptp.unitIFs[1].UNITs[1].CONFIG.SetDSA(ptu22);
+                    _ptp.unitIFs[1].UNITs[2].CONFIG.SetDSA(ptu23);
+                    _ptp.unitIFs[2].UNITs[0].CONFIG.SetDSA(ptu31);
+                    _ptp.unitIFs[2].UNITs[1].CONFIG.SetDSA(ptu32);
+                    _ptp.unitIFs[2].UNITs[2].CONFIG.SetDSA(ptu33);
+                }
+                foreach (PANEL.UNIT_IF unitIF in _ptp.unitIFs)
+                {
+                    foreach (PANEL.UNIT unit in unitIF.UNITs)
+                    {
+                        unit.CONFIG.SetDSA(0, unitIF.SerialInterface.GetDSAin(new PCAB_UnitInterface(unit.SerialNumber)));
+                        unit.CONFIG.StandbyLNA = unitIF.SerialInterface.GetSTB_LNA(new PCAB_UnitInterface(unit.SerialNumber));
+                    }
+                }
+                for (int i = 0; i < _ptp.unitIFs.Count; i++)
+                {
+                    for (uint j = 0; j < _ptp.unitIFs[i].UNITs.Count; j++)
+                    {
+                        if (i == 0 && j == 0)
+                        {
+                            STBAMP_CHECKBOX.IsChecked = _ptp.unitIFs[i].SerialInterface.GetSTB_AMP(j);
+                            STBDRA_CHECKBOX.IsChecked = _ptp.unitIFs[i].SerialInterface.GetSTB_DRA(j);
+                            SETLPM_CHECKBOX.IsChecked = _ptp.unitIFs[i].SerialInterface.GetLowPowerMode(j);
+                        }
+                        else
+                        {
+                            if (STBAMP_CHECKBOX.IsChecked == null || STBAMP_CHECKBOX.IsChecked != _ptp.unitIFs[i].SerialInterface.GetSTB_AMP(j))
+                                { STBAMP_CHECKBOX.IsChecked = null; }
+                            if (STBDRA_CHECKBOX.IsChecked == null || STBDRA_CHECKBOX.IsChecked != _ptp.unitIFs[i].SerialInterface.GetSTB_DRA(j))
+                                { STBDRA_CHECKBOX.IsChecked = null; }
+                            if (SETLPM_CHECKBOX.IsChecked == null || SETLPM_CHECKBOX.IsChecked != _ptp.unitIFs[i].SerialInterface.GetLowPowerMode(j))
+                                { SETLPM_CHECKBOX.IsChecked = null; }
+                        }
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message,"Error",MessageBoxButton.OK,MessageBoxImage.Error);
+            }
+
+            _ptp.PANEL_SensorMonitor_TASK_Restart();
 
         }
 
@@ -666,7 +662,7 @@ namespace PCAB_Debugger_ACS
 
         }
 
-        private void PCAB_OnError(object sender, PCABEventArgs e)
+        private void PANEL_OnError(object sender, ErrorEventArgs e)
         {
 
         }
@@ -676,14 +672,137 @@ namespace PCAB_Debugger_ACS
 
         }
 
-        private void readConfig()
+        #region private Tasks
+        private bool WriteDPSxx(
+            List<uint> ptu11, List<uint> ptu12, List<uint> ptu13,
+            List<uint> ptu21, List<uint> ptu22, List<uint> ptu23,
+            List<uint> ptu31, List<uint> ptu32, List<uint> ptu33
+            )
         {
-
+            Task<bool> _wrt1x = Task.Factory.StartNew(() => { return WriteDPSxx(0, ptu11, ptu12, ptu13); });
+            Task<bool> _wrt2x = Task.Factory.StartNew(() => { return WriteDPSxx(1, ptu21, ptu22, ptu23); });
+            Task<bool> _wrt3x = Task.Factory.StartNew(() => { return WriteDPSxx(2, ptu31, ptu32, ptu33); });
+            Task.WaitAll(_wrt1x, _wrt2x, _wrt3x);
+            if (_wrt1x.Result && _wrt2x.Result && _wrt3x.Result) { return true; }
+            else { return false; }
         }
 
-        private void writeConfig()
+        private bool WriteDPSxx(int interfaceNum, List<uint> ptux1, List<uint> ptux2, List<uint> ptux3)
         {
-
+            bool result = true;
+            if (!_ptp.unitIFs[interfaceNum].SerialInterface.WriteDPS(0, ptux1)) { result = false; }
+            if (!_ptp.unitIFs[interfaceNum].SerialInterface.WriteDPS(1, ptux2)) { result = false; }
+            if (!_ptp.unitIFs[interfaceNum].SerialInterface.WriteDPS(2, ptux3)) { result = false; }
+            return result;
         }
+
+        private bool WriteDSAxx(
+            List<uint> ptu11, List<uint> ptu12, List<uint> ptu13,
+            List<uint> ptu21, List<uint> ptu22, List<uint> ptu23,
+            List<uint> ptu31, List<uint> ptu32, List<uint> ptu33
+            )
+        {
+            Task<bool> _wrt1x = Task.Factory.StartNew(() => { return WriteDSAxx(0, ptu11, ptu12, ptu13); });
+            Task<bool> _wrt2x = Task.Factory.StartNew(() => { return WriteDSAxx(1, ptu21, ptu22, ptu23); });
+            Task<bool> _wrt3x = Task.Factory.StartNew(() => { return WriteDSAxx(2, ptu31, ptu32, ptu33); });
+            Task.WaitAll(_wrt1x, _wrt2x, _wrt3x);
+            if (_wrt1x.Result && _wrt2x.Result && _wrt3x.Result) { return true; }
+            else { return false; }
+        }
+
+        private bool WriteDSAxx(int interfaceNum, List<uint> ptux1, List<uint> ptux2, List<uint> ptux3)
+        {
+            bool result = true;
+            if (!_ptp.unitIFs[interfaceNum].SerialInterface.WriteDSA(0, ptux1)) { result = false; }
+            if (!_ptp.unitIFs[interfaceNum].SerialInterface.WriteDSA(1, ptux2)) { result = false; }
+            if (!_ptp.unitIFs[interfaceNum].SerialInterface.WriteDSA(2, ptux3)) { result = false; }
+            return result;
+        }
+
+        private bool ReadDPSxx(
+            out List<uint> ptu11, out List<uint> ptu12, out List<uint> ptu13,
+            out List<uint> ptu21, out List<uint> ptu22, out List<uint> ptu23,
+            out List<uint> ptu31, out List<uint> ptu32, out List<uint> ptu33
+            )
+        {
+            Task<ptuxx> _wrt1x = Task.Factory.StartNew(() => { return ReadDPSxx(0); });
+            Task<ptuxx> _wrt2x = Task.Factory.StartNew(() => { return ReadDPSxx(1); });
+            Task<ptuxx> _wrt3x = Task.Factory.StartNew(() => { return ReadDPSxx(2); });
+            Task.WaitAll(_wrt1x, _wrt2x, _wrt3x);
+            ptu11 = _wrt1x.Result.ptux1;
+            ptu12 = _wrt1x.Result.ptux2;
+            ptu13 = _wrt1x.Result.ptux3;
+            ptu21 = _wrt2x.Result.ptux1;
+            ptu22 = _wrt2x.Result.ptux2;
+            ptu23 = _wrt2x.Result.ptux3;
+            ptu31 = _wrt3x.Result.ptux1;
+            ptu32 = _wrt3x.Result.ptux2;
+            ptu33 = _wrt3x.Result.ptux3;
+            if (ptu11 != null && ptu12 != null && ptu13 != null &&
+                ptu21 != null && ptu22 != null && ptu23 != null &&
+                ptu31 != null && ptu23 != null && ptu33 != null) { return true; }
+            else { return false; }
+        }
+
+        private ptuxx ReadDPSxx(int interfaceNum)
+        {
+            ptuxx ptuDAT = new ptuxx();
+            try { ptuDAT.ptux1 = _ptp.unitIFs[interfaceNum].SerialInterface.GetDPS(0); }
+            catch { ptuDAT.ptux1 = null; }
+            try { ptuDAT.ptux2 = _ptp.unitIFs[interfaceNum].SerialInterface.GetDPS(1); }
+            catch { ptuDAT.ptux2 = null; }
+            try { ptuDAT.ptux3 = _ptp.unitIFs[interfaceNum].SerialInterface.GetDPS(2); }
+            catch { ptuDAT.ptux3 = null; }
+            return ptuDAT;
+        }
+
+        private bool ReadDSAxx(
+            out List<uint> ptu11, out List<uint> ptu12, out List<uint> ptu13,
+            out List<uint> ptu21, out List<uint> ptu22, out List<uint> ptu23,
+            out List<uint> ptu31, out List<uint> ptu32, out List<uint> ptu33
+            )
+        {
+            Task<ptuxx> _wrt1x = Task.Factory.StartNew(() => { return ReadDSAxx(0); });
+            Task<ptuxx> _wrt2x = Task.Factory.StartNew(() => { return ReadDSAxx(1); });
+            Task<ptuxx> _wrt3x = Task.Factory.StartNew(() => { return ReadDSAxx(2); });
+            Task.WaitAll(_wrt1x, _wrt2x, _wrt3x);
+            ptu11 = _wrt1x.Result.ptux1;
+            ptu12 = _wrt1x.Result.ptux2;
+            ptu13 = _wrt1x.Result.ptux3;
+            ptu21 = _wrt2x.Result.ptux1;
+            ptu22 = _wrt2x.Result.ptux2;
+            ptu23 = _wrt2x.Result.ptux3;
+            ptu31 = _wrt3x.Result.ptux1;
+            ptu32 = _wrt3x.Result.ptux2;
+            ptu33 = _wrt3x.Result.ptux3;
+            if (ptu11 != null && ptu12 != null && ptu13 != null &&
+                ptu21 != null && ptu22 != null && ptu23 != null &&
+                ptu31 != null && ptu23 != null && ptu33 != null) { return true; }
+            else { return false; }
+        }
+
+        private ptuxx ReadDSAxx(int interfaceNum)
+        {
+            ptuxx ptuDAT = new ptuxx();
+            try { ptuDAT.ptux1 = _ptp.unitIFs[interfaceNum].SerialInterface.GetDSA(0); }
+            catch { ptuDAT.ptux1 = null; }
+            try { ptuDAT.ptux2 = _ptp.unitIFs[interfaceNum].SerialInterface.GetDSA(1); }
+            catch { ptuDAT.ptux2 = null; }
+            try { ptuDAT.ptux3 = _ptp.unitIFs[interfaceNum].SerialInterface.GetDSA(2); }
+            catch { ptuDAT.ptux3 = null; }
+            return ptuDAT;
+        }
+
+        private struct ptuxx
+        {
+            public List<uint> ptux1;
+            public List<uint> ptux2;
+            public List<uint> ptux3;
+            public ptuxx(List<uint> ptux1, List<uint> ptux2, List<uint> ptux3)
+            {
+                this.ptux1 = ptux1; this.ptux2 = ptux2; this.ptux3 = ptux3;
+            }
+        }
+        #endregion
     }
 }

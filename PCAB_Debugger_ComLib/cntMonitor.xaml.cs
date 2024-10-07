@@ -30,16 +30,20 @@ namespace PCAB_Debugger_ComLib
         public string TEMPcpu
         {
             get { return SNS_CPU_TEMP_LABEL.Content.ToString(); }
-            set { Dispatcher.BeginInvoke(new Action(() => {
-                SNS_CPU_TEMP_LABEL.Content = value;
-                try
+            set
+            {
+                Dispatcher.BeginInvoke(new Action(() =>
                 {
-                    if (float.Parse(value) > maxTMP) { SNS_CPU_TEMP_LABEL.Background = maxColor; }
-                    else if (float.Parse(value) < minTMP) { SNS_CPU_TEMP_LABEL.Background = minColor; }
-                    else{ SNS_CPU_TEMP_LABEL.Background = normColor; }
-                }
-                catch { SNS_CPU_TEMP_LABEL.Background = errColor; }
-            })); }
+                    SNS_CPU_TEMP_LABEL.Content = value;
+                    try
+                    {
+                        if (float.Parse(value) > maxTMP) { SNS_CPU_TEMP_LABEL.Background = maxColor; }
+                        else if (float.Parse(value) < minTMP) { SNS_CPU_TEMP_LABEL.Background = minColor; }
+                        else { SNS_CPU_TEMP_LABEL.Background = normColor; }
+                    }
+                    catch { SNS_CPU_TEMP_LABEL.Background = errColor; }
+                }));
+            }
         }
         public string SNSvin
         {

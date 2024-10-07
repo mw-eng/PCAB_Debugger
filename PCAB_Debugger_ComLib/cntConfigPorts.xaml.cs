@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Collections.Generic;
 
 namespace PCAB_Debugger_ComLib
 {
@@ -40,6 +41,16 @@ namespace PCAB_Debugger_ComLib
                     default:
                         STBLNA_CHECKBOX_Indeterminate("STBLNA", null);
                         break;
+                }
+            }
+        }
+        public void SetDSA(List<uint> value)
+        {
+            if(value.Count == 15)
+            {
+                for(int i=0;i<value.Count; i++)
+                {
+                    SetDSA((uint)(i + 1), (int)value[i]);
                 }
             }
         }
@@ -147,6 +158,22 @@ namespace PCAB_Debugger_ComLib
                     throw new ArgumentException("A non-existent DSA number was specified.", "GetDSA[" + number + "]");
             }
         }
+        public List<uint> GetDSA()
+        {
+            List<uint> dsa = new List<uint>();
+            for(uint i = 0; i < 15; i++) { dsa.Add((uint)GetDSA(i + 1)); }
+            return dsa;
+        }
+        public void SetDPS(List<uint> value)
+        {
+            if (value.Count == 15)
+            {
+                for (int i = 0; i < value.Count; i++)
+                {
+                    SetDPS((uint)(i + 1), (int)value[i]);
+                }
+            }
+        }
         public void SetDPS(uint number, int value)
         {
             try
@@ -245,6 +272,12 @@ namespace PCAB_Debugger_ComLib
                 default:
                     throw new ArgumentException("A non-existent DPS number was specified.", "GetDPS[" + number + "]");
             }
+        }
+        public List<uint> GetDPS()
+        {
+            List<uint> dsa = new List<uint>();
+            for (uint i = 0; i < 15; i++) { dsa.Add((uint)GetDPS(i + 1)); }
+            return dsa;
         }
         public string SerialNumber { get; private set; }
         private ROTATE angle;
@@ -568,7 +601,6 @@ namespace PCAB_Debugger_ComLib
 
         public bool? ALL_DPS { get { return ALL_DPS_CHECKBOX.IsChecked; } set { ALL_DPS_CHECKBOX.IsChecked = value; } }
         public bool? ALL_DSA { get { return ALL_DSA_CHECKBOX.IsChecked; } set { ALL_DSA_CHECKBOX.IsChecked = value; } }
-
 
         public cntConfigPorts() : this("SN", ROTATE.ZERO) { }
         public cntConfigPorts(string serialNumber, ROTATE _turn)
