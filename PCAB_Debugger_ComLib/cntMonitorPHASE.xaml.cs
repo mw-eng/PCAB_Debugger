@@ -27,11 +27,17 @@ namespace PCAB_Debugger_ComLib
 
         public cntMonitorPHASE()
         {
+        }
+
+        public cntMonitorPHASE(ROTATE angle, ColorChart colorChart)
+        {
+            this.angle = angle;
+            this.colorChart = colorChart;
             InitializeComponent();
             GRID_MAIN.Children.Clear();
             for (int i = 0; i < 4; i++)
             {
-                for (int j = 0; j < 4; j ++)
+                for (int j = 0; j < 4; j++)
                 {
                     Grid gridBF = new Grid();
                     gridBF.SetValue(Grid.RowProperty, i);
@@ -48,7 +54,7 @@ namespace PCAB_Debugger_ComLib
                     ((Label)((Viewbox)(gridBF.Children[1])).Child).Content = "   0.000 deg";
                 }
                 ports[15].Children.Clear();
-                ports[15].Background = new SolidColorBrush(Color.FromArgb(255,255,255,255));
+                ports[15].Background = new SolidColorBrush(Color.FromArgb(255, 255, 255, 255));
             }
         }
     }

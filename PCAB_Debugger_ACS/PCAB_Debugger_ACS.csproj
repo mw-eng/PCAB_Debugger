@@ -52,7 +52,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="clsPCAB.cs" />
+    <Compile Include="clsPANEL.cs" />
     <Compile Include="winPCAB_PhaseMonitor.xaml.cs">
       <DependentUpon>winPCAB_PhaseMonitor.xaml</DependentUpon>
     </Compile>

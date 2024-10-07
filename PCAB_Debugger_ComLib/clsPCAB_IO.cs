@@ -48,7 +48,6 @@ namespace PCAB_Debugger_ComLib
 
         private void PCAB_Task(UInt32 waiteTime)
         {
-            uint ErrCount = 0;
             try
             {
                 if(_task == true)
@@ -88,7 +87,7 @@ namespace PCAB_Debugger_ComLib
                                 values.Temprature.Values != unit.SensorValuesNOW.Temprature.Values)
                             { updateFLG = true; unit.SensorValuesNOW = new SensorValues(values.Analog,values.Temprature, unit.SensorValuesNOW.ID); }
                             }
-                            catch (Exception e) { ErrCount++; if (ErrCount > 5) { OnTaskError?.Invoke(this, new PCABEventArgs(null, e.Message)); } break; }
+                            catch (Exception e) {OnTaskError?.Invoke(this, new PCABEventArgs(null, e.Message));  }
                         }
                         if (updateFLG)
                         {
@@ -741,6 +740,7 @@ namespace PCAB_Debugger_ComLib
             return ReadSLIP();
         }
 
+        public bool WriteDSAin(uint unitNum, uint config) { try { return WriteDSAin(pcabUNITs[(int)unitNum], config); } catch (Exception ex) { throw; } }
         public bool WriteDSAin(PCAB_UnitInterface unit, uint config)
         { return WriteDSAin(unit, (byte)config); }
         public bool WriteDSAin(PCAB_UnitInterface unit, byte config)
@@ -753,6 +753,7 @@ namespace PCAB_Debugger_ComLib
             }
             catch (Exception ex) { throw; }
         }
+        public bool WriteDSA(uint unitNum, List<uint> config) { try { return WriteDSA(pcabUNITs[(int)unitNum], config); } catch (Exception ex) { throw; } }
         public bool WriteDSA(PCAB_UnitInterface unit, List<uint> configs)
         { return WriteDSA(unit, configs.ConvertAll(x => (byte)x)); }
         public bool WriteDSA(PCAB_UnitInterface unit, List<byte> configs)
@@ -766,6 +767,7 @@ namespace PCAB_Debugger_ComLib
             }
             catch (Exception ex) { throw; }
         }
+        public bool WriteDPS(uint unitNum, List<uint> config) { try { return WriteDPS(pcabUNITs[(int)unitNum], config); } catch (Exception ex) { throw; } }
         public bool WriteDPS(PCAB_UnitInterface unit, List<uint> configs)
         { return WriteDPS(unit, configs.ConvertAll(x => (byte)x)); }
         public bool WriteDPS(PCAB_UnitInterface unit, List<byte> configs)
@@ -780,6 +782,7 @@ namespace PCAB_Debugger_ComLib
             catch (Exception ex) { throw; }
         }
 
+        public bool SetSTB_AMP(uint unitNum, bool config) { try { return SetSTB_AMP(pcabUNITs[(int)unitNum], config); } catch (Exception ex) { throw; } }
         public bool SetSTB_AMP(PCAB_UnitInterface unit, bool mode)
         {
             try
@@ -792,6 +795,7 @@ namespace PCAB_Debugger_ComLib
             }
             catch (Exception ex) { throw; }
         }
+        public bool SetSTB_DRA(uint unitNum, bool config) { try { return SetSTB_DRA(pcabUNITs[(int)unitNum], config); } catch (Exception ex) { throw; } }
         public bool SetSTB_DRA(PCAB_UnitInterface unit, bool mode)
         {
             try
@@ -804,6 +808,7 @@ namespace PCAB_Debugger_ComLib
             }
             catch (Exception ex) { throw; }
         }
+        public bool SetSTB_LNA(uint unitNum, bool config) { try { return SetSTB_LNA(pcabUNITs[(int)unitNum], config); } catch (Exception ex) { throw; } }
         public bool SetSTB_LNA(PCAB_UnitInterface unit, bool mode)
         {
             try
@@ -828,7 +833,9 @@ namespace PCAB_Debugger_ComLib
             }
             catch (Exception ex) { throw; }
         }
+        public bool SetLowPowerMode(uint unitNum, bool config) { try { return SetLowPowerMode(pcabUNITs[(int)unitNum], config); } catch (Exception ex) { throw; } }
 
+        public int GetDSAin(uint unitNum) { try { return GetDSAin(pcabUNITs[(int)unitNum]); } catch (Exception ex) { throw; } }
         public int GetDSAin(PCAB_UnitInterface unit)
         {
             try
@@ -839,6 +846,7 @@ namespace PCAB_Debugger_ComLib
             }
             catch (Exception ex) { throw; }
         }
+        public List<uint> GetDSA(uint unitNum) { try { return GetDSA(pcabUNITs[(int)unitNum]); } catch (Exception ex) { throw; } }
         public List<uint> GetDSA(PCAB_UnitInterface unit)
         {
             try
@@ -849,6 +857,7 @@ namespace PCAB_Debugger_ComLib
             }
             catch (Exception ex) { throw; }
         }
+        public List<uint> GetDPS(uint unitNum) { try { return GetDPS(pcabUNITs[(int)unitNum]); } catch (Exception ex) { throw; } }
         public List<uint> GetDPS(PCAB_UnitInterface unit)
         {
             try
@@ -859,6 +868,7 @@ namespace PCAB_Debugger_ComLib
             }
             catch (Exception ex) { throw; }
         }
+        public bool GetSTB_AMP(uint unitNum) { try { return GetSTB_AMP(pcabUNITs[(int)unitNum]); } catch (Exception ex) { throw; } }
         public bool GetSTB_AMP(PCAB_UnitInterface unit)
         {
             try
@@ -870,6 +880,7 @@ namespace PCAB_Debugger_ComLib
             }
             catch (Exception ex) { throw; }
         }
+        public bool GetSTB_DRA(uint unitNum) { try { return GetSTB_DRA(pcabUNITs[(int)unitNum]); } catch (Exception ex) { throw; } }
         public bool GetSTB_DRA(PCAB_UnitInterface unit)
         {
             try
@@ -881,6 +892,7 @@ namespace PCAB_Debugger_ComLib
             }
             catch (Exception ex) { throw; }
         }
+        public bool GetSTB_LNA(uint unitNum) { try { return GetSTB_LNA(pcabUNITs[(int)unitNum]); } catch (Exception ex) { throw; } }
         public bool GetSTB_LNA(PCAB_UnitInterface unit)
         {
             try
@@ -892,6 +904,7 @@ namespace PCAB_Debugger_ComLib
             }
             catch (Exception ex) { throw; }
         }
+        public bool GetLowPowerMode(uint unitNum) { try { return GetLowPowerMode(pcabUNITs[(int)unitNum]); } catch (Exception ex) { throw; } }
         public bool GetLowPowerMode(PCAB_UnitInterface unit)
         {
             try
@@ -903,6 +916,7 @@ namespace PCAB_Debugger_ComLib
             }
             catch (Exception ex) { throw; }
         }
+        public TempratureID GetTempID(uint unitNum) { try { return GetTempID(pcabUNITs[(int)unitNum]); } catch (Exception ex) { throw; } }
         public TempratureID GetTempID(PCAB_UnitInterface unit)
         {
             try
@@ -929,6 +943,7 @@ namespace PCAB_Debugger_ComLib
             }
             catch (Exception ex) { throw; }
         }
+        public TempratureValue GetTempValue(uint unitNum) { try { return GetTempValue(pcabUNITs[(int)unitNum]); } catch (Exception ex) { throw; } }
         public TempratureValue GetTempValue(PCAB_UnitInterface unit)
         {
             try
@@ -938,6 +953,7 @@ namespace PCAB_Debugger_ComLib
             }
             catch (Exception ex) { throw; }
         }
+        public byte GetMode(uint unitNum) { try { return GetMode(pcabUNITs[(int)unitNum]); } catch (Exception ex) { throw; } }
         public byte GetMode(PCAB_UnitInterface unit)
         {
             try
@@ -948,6 +964,7 @@ namespace PCAB_Debugger_ComLib
             }
             catch (Exception ex) { throw; }
         }
+        public AnalogValues GetAnalogValue(uint unitNum) { try { return GetAnalogValue(pcabUNITs[(int)unitNum]); } catch (Exception ex) { throw; } }
         public AnalogValues GetAnalogValue(PCAB_UnitInterface unit)
         {
             try
@@ -957,6 +974,7 @@ namespace PCAB_Debugger_ComLib
             }
             catch (Exception ex) { throw; }
         }
+        public SensorValues GetSensorValue(uint unitNum) { try { return GetSensorValue(pcabUNITs[(int)unitNum]); } catch (Exception ex) { throw; } }
         public SensorValues GetSensorValue(PCAB_UnitInterface unit)
         {
             try
@@ -968,6 +986,7 @@ namespace PCAB_Debugger_ComLib
             catch (Exception ex) { throw; }
         }
 
+        public string GetIDN(uint unitNum) { try { return GetIDN(pcabUNITs[(int)unitNum]); } catch (Exception ex) { throw; } }
         public string GetIDN(PCAB_UnitInterface unit)
         {
             try
@@ -978,6 +997,7 @@ namespace PCAB_Debugger_ComLib
             }
             catch (Exception ex) { throw; }
         }
+        public bool LoadFactoryDefault(uint unitNum) { try { return LoadFactoryDefault(pcabUNITs[(int)unitNum]); } catch (Exception ex) { throw; } }
         public bool LoadFactoryDefault(PCAB_UnitInterface unit)
         {
             try

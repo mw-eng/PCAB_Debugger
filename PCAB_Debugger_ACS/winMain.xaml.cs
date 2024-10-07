@@ -9,9 +9,11 @@ using System.Collections.Generic;
 using static PCAB_Debugger_ComLib.cntConfigPorts;
 using static PCAB_Debugger_ComLib.ShowSerialPortName;
 using static PCAB_Debugger_ComLib.PCAB_TASK;
+using static PCAB_Debugger_ComLib.PCAB_SerialInterface;
 using System.Collections;
 using System.Threading;
 using static PCAB_Debugger_ComLib.POS;
+using System.Windows.Controls.Primitives;
 
 namespace PCAB_Debugger_ACS
 {
@@ -21,9 +23,9 @@ namespace PCAB_Debugger_ACS
     public partial class winMain : Window
     {
         private POS _pos;
-        private PCABs _pcab1x;
-        private PCABs _pcab2x;
-        private PCABs _pcab3x;
+        private PCAB _pcab1x;
+        private PCAB _pcab2x;
+        private PCAB _pcab3x;
         private SerialPortTable[] ports;
         NormalizedColorChart cc;
         private winPOS winPOSmonitor;
@@ -72,7 +74,7 @@ namespace PCAB_Debugger_ACS
 #if DEBUG
             Settings.Default.Reset();
             this.Title += "_DEBUG MODE";
-            //CONTROL_GRID.IsEnabled = true;
+            CONTROL_GRID.IsEnabled = true;
 #endif
             SERIAL_PORTS_COMBOBOX_RELOAD(sender, e);
             SERIAL_PORTS_COMBOBOX0.SelectedIndex = Settings.Default.spBaudRate0;
@@ -112,20 +114,13 @@ namespace PCAB_Debugger_ACS
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            //if (_ioList.Count > 0)
-            //{
-            //    foreach (clsSerialIO _io in _ioList)
-            //    {
-            //        if (_io?.isOpen == true)
-            //        {
-            //            if (MessageBox.Show("Communication with PCAB\nDo you want to disconnect and exit?", "Worning", MessageBoxButton.OKCancel, MessageBoxImage.Warning) == MessageBoxResult.OK)
-            //            {
-            //                OnError(null, null);
-            //            }
-            //            else { e.Cancel = true; return; }
-            //        }
-            //    }
-            //}
+            if (isControl)
+            {
+                if (MessageBox.Show("Communication with PCAB\nDo you want to disconnect and exit?", "Worning", MessageBoxButton.OKCancel, MessageBoxImage.Warning) == MessageBoxResult.OK)
+                {
+                    DISCONNECT();
+                }
+            }
             Settings.Default.spCaption0 = SERIAL_PORTS_COMBOBOX1.Text;
             Settings.Default.spCaption1 = SERIAL_PORTS_COMBOBOX1.Text;
             Settings.Default.spCaption2 = SERIAL_PORTS_COMBOBOX2.Text;
@@ -153,37 +148,39 @@ namespace PCAB_Debugger_ACS
             Settings.Default.Save();
         }
 
+        private void DISCONNECT()
+        {
+            _pos?.POS_AutoTaskStop();
+            _pos?.Close();
+            winPOSmonitor?.WindowClose();
+            PTU11.Children.Clear();
+            PTU12.Children.Clear();
+            PTU13.Children.Clear();
+            PTU21.Children.Clear();
+            PTU22.Children.Clear();
+            PTU23.Children.Clear();
+            PTU31.Children.Clear();
+            PTU32.Children.Clear();
+            PTU33.Children.Clear();
+            _pcab1x?.Close();
+            _pcab2x?.Close();
+            _pcab3x?.Close();
+            winPCABsensor?.WindowClose();
+            _pos = null;
+            _pcab1x = null;
+            _pcab2x = null;
+            _pcab3x = null;
+            CONFIG_EXPANDER.IsExpanded = true;
+            CONFIG_GRID.IsEnabled = true;
+            CONTROL_GRID.IsEnabled = false;
+            BOARD_CONFIG_EXPANDER.IsExpanded = false;
+            CONNECT_BUTTON_CONTENT.Text = "Connect";
+            isControl = false;
+        }
+
         private void CONNECT_BUTTON_Click(object sender, RoutedEventArgs e)
         {
-            if (isControl)
-            {
-                _pos.POS_AutoTaskStop();
-                _pos.Close();
-                winPOSmonitor.WindowClose();
-                PTU11.Children.Clear();
-                PTU12.Children.Clear();
-                PTU13.Children.Clear();
-                PTU21.Children.Clear();
-                PTU22.Children.Clear();
-                PTU23.Children.Clear();
-                PTU31.Children.Clear();
-                PTU32.Children.Clear();
-                PTU33.Children.Clear();
-                _pcab1x.Close();
-                _pcab2x.Close();
-                _pcab3x.Close();
-                winPCABsensor.WindowClose();
-                _pos = null;
-                _pcab1x = null;
-                _pcab2x = null;
-                _pcab3x = null;
-                CONFIG_EXPANDER.IsExpanded = true;
-                CONFIG_GRID.IsEnabled = true;
-                CONTROL_GRID.IsEnabled = false;
-                BOARD_CONFIG_EXPANDER.IsExpanded = false;
-                CONNECT_BUTTON_CONTENT.Text = "Connect";
-                isControl = false;
-            }
+            if (isControl) { DISCONNECT();}
             else
             {
                 foreach (SerialPortTable port in GetDeviceNames())
@@ -336,68 +333,6 @@ namespace PCAB_Debugger_ACS
             }
         }
 
-        /*
-        private void RUN_BUTTON_Click(object sender, RoutedEventArgs e)
-        {
-            if (_pos != null)
-            {
-                _pos.OnReadDAT -= winPOSmonitor.OnReadDAT;
-                _pos.OnTimeoutError -= winPOSmonitor.OnTimeoutError;
-                winPOSmonitor.WindowClose();
-                _pos.OnTaskError -= OnTaskError;
-                _pos.POS_AutoTaskStop();
-                _pos.Close();
-                _pos = null;
-                SERIAL_PORTS_COMBOBOX.IsEnabled = true;
-                RUN_BUTTON.Content = "RUN";
-            }
-            else
-            {
-                SerialPort _serialPort = new SerialPort();
-                _serialPort.PortName = ports[SERIAL_PORTS_COMBOBOX.SelectedIndex].Name;
-                _serialPort.BaudRate = 115200;
-                _serialPort.DataBits = 8;
-                _serialPort.Parity = Parity.None;
-                _serialPort.StopBits = StopBits.One;
-                _serialPort.Handshake = Handshake.None;
-                _serialPort.DtrEnable = true;
-                _serialPort.Encoding = Encoding.ASCII;
-                _serialPort.NewLine = "\r\n";
-                _pos = new POS(_serialPort);
-                winPOSmonitor = new winPOS();
-                _pos.OnTaskError += OnTaskError;
-                _pos.OnReadDAT += winPOSmonitor.OnReadDAT;
-                _pos.OnTimeoutError += winPOSmonitor.OnTimeoutError;
-                try
-                {
-                    _pos.Open();
-                    _pos.POS_AutoTaskStart();
-                    winPOSmonitor.Show();
-                    SERIAL_PORTS_COMBOBOX.IsEnabled = false;
-                    LOG_TEXTBOX.Text = "";
-                    RUN_BUTTON.Content = "STOP";
-                }
-                catch
-                {
-                    _pos.Close();
-                    _pos = null;
-                    SERIAL_PORTS_COMBOBOX_RELOAD(this, null);
-                }
-            }
-        }
-
-        private void OnTaskError(object sender, POSEventArgs e)
-        {
-            Dispatcher.BeginInvoke(new Action(() => {
-                winPOSmonitor.WindowClose();
-                _pos?.POS_AutoTaskStop();
-                _pos?.Close();
-                _pos = null;
-                SERIAL_PORTS_COMBOBOX.IsEnabled = true;
-                RUN_BUTTON.Content = "RUN";
-            }));
-        }
-        */
         private void SERIAL_PORTS_COMBOBOX_RELOAD(object sender, EventArgs e)
         {
             ports = GetDeviceNames();
@@ -502,20 +437,253 @@ namespace PCAB_Debugger_ACS
 
         private void EXPANDER_Expanded(object sender, RoutedEventArgs e)
         {
+            double thisHeight = this.Height;
+            if(this.WindowState == WindowState.Maximized) { thisHeight = System.Windows.SystemParameters.WorkArea.Height - 50; }
+            if (sender == CONFIG_EXPANDER) { CONFIG_GRID.Height = thisHeight * 0.7; }
+            if (sender == BOARD_CONFIG_EXPANDER){ BOARD_CONFIG_GRID.Height = thisHeight * 0.7;}
+        }
 
+        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            double thisHeight = this.Height;
+            if (this.WindowState == WindowState.Maximized) { thisHeight = System.Windows.SystemParameters.WorkArea.Height - 50; }
+            if (CONFIG_EXPANDER.IsExpanded) { CONFIG_GRID.Height = thisHeight * 0.7; }
+            if (BOARD_CONFIG_EXPANDER.IsExpanded) { BOARD_CONFIG_GRID.Height = thisHeight * 0.7; }
         }
 
         private void STBLNA_CheckboxClick(object sender, RoutedEventArgs e, bool? isChecked)
+        {
+            bool ic;
+            if (isChecked == true) { ic = true; }
+            else if (isChecked == false) { ic = false; }
+            else { return; }
+            try
+            {
+                switch (((Grid)((cntConfigPorts)sender).Parent).Name)
+                {
+                    case "PTU11":
+                        _pcab1x.serial.PCAB_SetSTB_LNA(_pcab1x.serial.UNITs[0], ic);
+                        break;
+                    case "PTU12":
+                        _pcab1x.serial.PCAB_SetSTB_LNA(_pcab1x.serial.UNITs[1], ic);
+                        break;
+                    case "PTU13":
+                        _pcab1x.serial.PCAB_SetSTB_LNA(_pcab1x.serial.UNITs[2], ic);
+                        break;
+                    case "PTU21":
+                        _pcab2x.serial.PCAB_SetSTB_LNA(_pcab2x.serial.UNITs[0], ic);
+                        break;
+                    case "PTU22":
+                        _pcab2x.serial.PCAB_SetSTB_LNA(_pcab2x.serial.UNITs[1], ic);
+                        break;
+                    case "PTU23":
+                        _pcab2x.serial.PCAB_SetSTB_LNA(_pcab2x.serial.UNITs[2], ic);
+                        break;
+                    case "PTU31":
+                        _pcab3x.serial.PCAB_SetSTB_LNA(_pcab3x.serial.UNITs[0], ic);
+                        break;
+                    case "PTU32":
+                        _pcab3x.serial.PCAB_SetSTB_LNA(_pcab3x.serial.UNITs[1], ic);
+                        break;
+                    case "PTU33":
+                        _pcab3x.serial.PCAB_SetSTB_LNA(_pcab3x.serial.UNITs[2], ic);
+                        break;
+                }
+            }catch(Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                e.Handled = true;
+            }
+        }
+
+        private void STB_LPM_CheckboxClick(object sender, RoutedEventArgs e)
+        {
+            bool ic;
+            if(e.RoutedEvent.Name == "Checked") { ic= true; }
+            else if(e.RoutedEvent.Name == "Unchecked") { ic= false; }
+            else { return; }
+            if (sender == STBAMP_CHECKBOX)
+            {
+                foreach (PCAB_UnitInterface unit in _pcab1x.serial.UNITs) { _pcab1x.serial.PCAB_SetSTB_AMP(unit, ic); }
+                foreach (PCAB_UnitInterface unit in _pcab2x.serial.UNITs) { _pcab2x.serial.PCAB_SetSTB_AMP(unit, ic); }
+                foreach (PCAB_UnitInterface unit in _pcab3x.serial.UNITs) { _pcab3x.serial.PCAB_SetSTB_AMP(unit, ic); }
+            }
+            if (sender == STBDRA_CHECKBOX)
+            {
+                foreach (PCAB_UnitInterface unit in _pcab1x.serial.UNITs) { _pcab1x.serial.PCAB_SetSTB_DRA(unit, ic); }
+                foreach (PCAB_UnitInterface unit in _pcab2x.serial.UNITs) { _pcab2x.serial.PCAB_SetSTB_DRA(unit, ic); }
+                foreach (PCAB_UnitInterface unit in _pcab3x.serial.UNITs) { _pcab3x.serial.PCAB_SetSTB_DRA(unit, ic); }
+            }
+            if (sender == SETLPM_CHECKBOX)
+            {
+                foreach (PCAB_UnitInterface unit in _pcab1x.serial.UNITs) { _pcab1x.serial.PCAB_SetLowPowerMode(unit, ic); }
+                foreach (PCAB_UnitInterface unit in _pcab2x.serial.UNITs) { _pcab2x.serial.PCAB_SetLowPowerMode(unit, ic); }
+                foreach (PCAB_UnitInterface unit in _pcab3x.serial.UNITs) { _pcab3x.serial.PCAB_SetLowPowerMode(unit, ic); }
+            }
+        }
+
+        private void WRITEDSA_Click(object sender, RoutedEventArgs e)
+        {
+            List<uint> dsa = new List<uint>();
+            dsa.Clear();
+            for (uint i = 0; i < 15; i++)
+            { dsa.Add((uint)((cntConfigPorts)PTU11.Children[0]).GetDSA(i + 1)); }
+            if (_pcab1x.serial.PCAB_WriteDSAin(_pcab1x.serial.UNITs[0], (uint)((cntConfigPorts)PTU11.Children[0]).GetDSA(0)))
+            { MessageBox.Show("PTU11 DSA in write Failure.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
+            if (_pcab1x.serial.PCAB_WriteDSA(_pcab1x.serial.UNITs[0], dsa))
+            { MessageBox.Show("PTU11 DSA write Failure.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
+            dsa.Clear();
+            for (uint i = 0; i < 15; i++)
+            { dsa.Add((uint)((cntConfigPorts)PTU12.Children[0]).GetDSA(i + 1)); }
+            if (_pcab1x.serial.PCAB_WriteDSAin(_pcab1x.serial.UNITs[0], (uint)((cntConfigPorts)PTU12.Children[0]).GetDSA(0)))
+            { MessageBox.Show("PTU12 DSA in write Failure.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
+            if (_pcab1x.serial.PCAB_WriteDSA(_pcab1x.serial.UNITs[0], dsa))
+            { MessageBox.Show("PTU12 DSA write Failure.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
+            dsa.Clear();
+            for (uint i = 0; i < 15; i++)
+            { dsa.Add((uint)((cntConfigPorts)PTU13.Children[0]).GetDSA(i + 1)); }
+            if (_pcab1x.serial.PCAB_WriteDSAin(_pcab1x.serial.UNITs[0], (uint)((cntConfigPorts)PTU13.Children[0]).GetDSA(0)))
+            { MessageBox.Show("PTU13 DSA in write Failure.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
+            if (_pcab1x.serial.PCAB_WriteDSA(_pcab1x.serial.UNITs[0], dsa))
+            { MessageBox.Show("PTU13 DSA write Failure.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
+            dsa.Clear();
+            for (uint i = 0; i < 15; i++)
+            { dsa.Add((uint)((cntConfigPorts)PTU21.Children[0]).GetDSA(i + 1)); }
+            if (_pcab1x.serial.PCAB_WriteDSAin(_pcab2x.serial.UNITs[0], (uint)((cntConfigPorts)PTU21.Children[0]).GetDSA(0)))
+            { MessageBox.Show("PTU21 DSA in write Failure.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
+            if (_pcab1x.serial.PCAB_WriteDSA(_pcab2x.serial.UNITs[0], dsa))
+            { MessageBox.Show("PTU21 DSA write Failure.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
+            dsa.Clear();
+            for (uint i = 0; i < 15; i++)
+            { dsa.Add((uint)((cntConfigPorts)PTU22.Children[0]).GetDSA(i + 1)); }
+            if (_pcab1x.serial.PCAB_WriteDSAin(_pcab2x.serial.UNITs[0], (uint)((cntConfigPorts)PTU22.Children[0]).GetDSA(0)))
+            { MessageBox.Show("PTU22 DSA in write Failure.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
+            if (_pcab1x.serial.PCAB_WriteDSA(_pcab2x.serial.UNITs[0], dsa))
+            { MessageBox.Show("PTU22 DSA write Failure.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
+            dsa.Clear();
+            for (uint i = 0; i < 15; i++)
+            { dsa.Add((uint)((cntConfigPorts)PTU23.Children[0]).GetDSA(i + 1)); }
+            if (_pcab1x.serial.PCAB_WriteDSAin(_pcab2x.serial.UNITs[0], (uint)((cntConfigPorts)PTU23.Children[0]).GetDSA(0)))
+            { MessageBox.Show("PTU23 DSA in write Failure.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
+            if (_pcab1x.serial.PCAB_WriteDSA(_pcab2x.serial.UNITs[0], dsa))
+            { MessageBox.Show("PTU23 DSA write Failure.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
+            dsa.Clear();
+            for (uint i = 0; i < 15; i++)
+            { dsa.Add((uint)((cntConfigPorts)PTU31.Children[0]).GetDSA(i + 1)); }
+            if (_pcab1x.serial.PCAB_WriteDSAin(_pcab3x.serial.UNITs[0], (uint)((cntConfigPorts)PTU31.Children[0]).GetDSA(0)))
+            { MessageBox.Show("PTU31 DSA in write Failure.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
+            if (_pcab1x.serial.PCAB_WriteDSA(_pcab3x.serial.UNITs[0], dsa))
+            { MessageBox.Show("PTU31 DSA write Failure.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
+            dsa.Clear();
+            for (uint i = 0; i < 15; i++)
+            { dsa.Add((uint)((cntConfigPorts)PTU32.Children[0]).GetDSA(i + 1)); }
+            if (_pcab1x.serial.PCAB_WriteDSAin(_pcab3x.serial.UNITs[0], (uint)((cntConfigPorts)PTU32.Children[0]).GetDSA(0)))
+            { MessageBox.Show("PTU32 DSA in write Failure.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
+            if (_pcab1x.serial.PCAB_WriteDSA(_pcab3x.serial.UNITs[0], dsa))
+            { MessageBox.Show("PTU32 DSA write Failure.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
+            dsa.Clear();
+            for (uint i = 0; i < 15; i++)
+            { dsa.Add((uint)((cntConfigPorts)PTU33.Children[0]).GetDSA(i + 1)); }
+            if (_pcab1x.serial.PCAB_WriteDSAin(_pcab3x.serial.UNITs[0], (uint)((cntConfigPorts)PTU33.Children[0]).GetDSA(0)))
+            { MessageBox.Show("PTU33 DSA in write Failure.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
+            if (_pcab1x.serial.PCAB_WriteDSA(_pcab3x.serial.UNITs[0], dsa))
+            { MessageBox.Show("PTU33 DSA write Failure.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
+            if(sender == WRITEDSA)
+            { MessageBox.Show("ATT config write done.", "Success", MessageBoxButton.OK, MessageBoxImage.Information); }
+        }
+
+        private void WRITEDPS_Click(object sender, RoutedEventArgs e)
+        {
+            List<uint> dps = new List<uint>();
+            dps.Clear();
+            for (uint i = 0; i < 15; i++)
+            { dps.Add((uint)((cntConfigPorts)PTU11.Children[0]).GetDPS(i + 1)); }
+            if (_pcab1x.serial.PCAB_WriteDPS(_pcab1x.serial.UNITs[0], dps))
+            { MessageBox.Show("PTU11 DSA write Failure.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
+            dps.Clear();
+            for (uint i = 0; i < 15; i++)
+            { dps.Add((uint)((cntConfigPorts)PTU12.Children[0]).GetDPS(i + 1)); }
+            if (_pcab1x.serial.PCAB_WriteDPS(_pcab1x.serial.UNITs[0], dps))
+            { MessageBox.Show("PTU12 DSA write Failure.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
+            dps.Clear();
+            for (uint i = 0; i < 15; i++)
+            { dps.Add((uint)((cntConfigPorts)PTU13.Children[0]).GetDPS(i + 1)); }
+            if (_pcab1x.serial.PCAB_WriteDPS(_pcab1x.serial.UNITs[0], dps))
+            { MessageBox.Show("PTU13 DSA write Failure.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
+            dps.Clear();
+            for (uint i = 0; i < 15; i++)
+            { dps.Add((uint)((cntConfigPorts)PTU21.Children[0]).GetDPS(i + 1)); }
+            if (_pcab1x.serial.PCAB_WriteDPS(_pcab2x.serial.UNITs[0], dps))
+            { MessageBox.Show("PTU21 DSA write Failure.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
+            dps.Clear();
+            for (uint i = 0; i < 15; i++)
+            { dps.Add((uint)((cntConfigPorts)PTU22.Children[0]).GetDPS(i + 1)); }
+            if (_pcab1x.serial.PCAB_WriteDPS(_pcab2x.serial.UNITs[0], dps))
+            { MessageBox.Show("PTU22 DSA write Failure.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
+            dps.Clear();
+            for (uint i = 0; i < 15; i++)
+            { dps.Add((uint)((cntConfigPorts)PTU23.Children[0]).GetDPS(i + 1)); }
+            if (_pcab1x.serial.PCAB_WriteDPS(_pcab2x.serial.UNITs[0], dps))
+            { MessageBox.Show("PTU23 DSA write Failure.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
+            dps.Clear();
+            for (uint i = 0; i < 15; i++)
+            { dps.Add((uint)((cntConfigPorts)PTU31.Children[0]).GetDPS(i + 1)); }
+            if (_pcab1x.serial.PCAB_WriteDPS(_pcab3x.serial.UNITs[0], dps))
+            { MessageBox.Show("PTU31 DSA write Failure.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
+            dps.Clear();
+            for (uint i = 0; i < 15; i++)
+            { dps.Add((uint)((cntConfigPorts)PTU32.Children[0]).GetDPS(i + 1)); }
+            if (_pcab1x.serial.PCAB_WriteDPS(_pcab3x.serial.UNITs[0], dps))
+            { MessageBox.Show("PTU32 DSA write Failure.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
+            dps.Clear();
+            for (uint i = 0; i < 15; i++)
+            { dps.Add((uint)((cntConfigPorts)PTU33.Children[0]).GetDPS(i + 1)); }
+            if (_pcab1x.serial.PCAB_WriteDPS(_pcab3x.serial.UNITs[0], dps))
+            { MessageBox.Show("PTU33 DSA write Failure.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
+            if (sender == WRITEDPS)
+            { MessageBox.Show("Phase config write done.", "Success", MessageBoxButton.OK, MessageBoxImage.Information); }
+        }
+
+        private void WRITE_Click(object sender, RoutedEventArgs e)
+        {
+            WRITEDSA_Click(sender, e);
+            WRITEDPS_Click(sender, e);
+            MessageBox.Show("Config write done.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        private void READ_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void LOADDMEM_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void SAVEMEM_Click(object sender, RoutedEventArgs e)
         {
 
         }
 
         private void PCAB_OnError(object sender, PCABEventArgs e)
         {
+
         }
 
         private void POS_OnError(object sender, POSEventArgs e)
         {
+
+        }
+
+        private void readConfig()
+        {
+
+        }
+
+        private void writeConfig()
+        {
+
         }
     }
 }
