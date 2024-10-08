@@ -1250,7 +1250,7 @@
                                             <ColumnDefinition Width="1*"/>
                                         </Grid.ColumnDefinitions>
                                         <Viewbox Grid.Column="0" Margin="5"><Label Content="Frequency [MHz]"/></Viewbox>
-                                        <Viewbox Grid.Column="1" Margin="5"><TextBox MinWidth="100" Text="5758" x:Name="CALCULATE_FREQUENCY_TEXTBOX" HorizontalContentAlignment="Right" PreviewTextInput="DEC_TextBox_PreviewTextInput" CommandManager.PreviewExecuted="DEC_TextBox_PreviewExecuted" PreviewLostKeyboardFocus="DEC_TextBox_PreviewLostKeyboardForcus"/></Viewbox>
+                                        <Viewbox Grid.Column="1" Margin="5"><TextBox MinWidth="100" Text="5800" x:Name="CALCULATE_FREQUENCY_TEXTBOX" HorizontalContentAlignment="Right" PreviewTextInput="DEC_TextBox_PreviewTextInput" CommandManager.PreviewExecuted="DEC_TextBox_PreviewExecuted" PreviewLostKeyboardFocus="DEC_TextBox_PreviewLostKeyboardForcus"/></Viewbox>
                                         <Viewbox Grid.Column="3" Margin="5"><Label Content="Azimuth [deg]"/></Viewbox>
                                         <Viewbox Grid.Column="4" Margin="5"><TextBox MinWidth="100" Text="0" x:Name="CALCULATE_AZIMUTH_TEXTBOX" HorizontalContentAlignment="Right" PreviewTextInput="ANGLE_TextBox_PreviewTextInput" CommandManager.PreviewExecuted="ANGLE_TextBox_PreviewExecuted" PreviewLostKeyboardFocus="ANGLE_TextBox_PreviewLostKeyboardForcus"/></Viewbox>
                                         <Viewbox Grid.Column="6" Margin="5"><Label Content="Elevation [deg]"/></Viewbox>
