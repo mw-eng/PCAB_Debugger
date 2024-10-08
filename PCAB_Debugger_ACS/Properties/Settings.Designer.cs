@@ -478,5 +478,29 @@ namespace PCAB_Debugger_ACS.Properties {
                 this["winPhaseMonitorMaximized"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string logSaveDirPath {
+            get {
+                return ((string)(this["logSaveDirPath"]));
+            }
+            set {
+                this["logSaveDirPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool saveLogs {
+            get {
+                return ((bool)(this["saveLogs"]));
+            }
+            set {
+                this["saveLogs"] = value;
+            }
+        }
     }
 }

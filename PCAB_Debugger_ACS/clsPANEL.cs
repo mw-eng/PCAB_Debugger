@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Windows;
-using static PCAB_Debugger_ComLib.cntConfigPorts;
+﻿using MWComLibCS.CoordinateSystem;
+using MWComLibCS;
 using PCAB_Debugger_ComLib;
+using System;
+using System.Collections.Generic;
 using System.IO;
-using System.Threading.Tasks;
 using System.Threading;
+using System.Threading.Tasks;
+using static PCAB_Debugger_ComLib.cntConfigPorts;
 using static PCAB_Debugger_ComLib.PCAB_SerialInterface;
-using System.Linq;
-using static PCAB_Debugger_ComLib.PCAB_TASK;
 
 namespace PCAB_Debugger_ACS
 {
@@ -184,12 +183,36 @@ namespace PCAB_Debugger_ACS
         {
             public string SerialNumber { get; private set; }
             public string Name { get; private set; }
-            public List<PORT> Ports { get; private set; }
             public cntConfigPorts CONFIG { get; private set; }
             public cntMonitor SENS_MONITOR { get; private set; }
             public cntMonitorMagPhase PHASE_MONITOR { get; private set; }
             public SensorValues SensorValuesNOW { get; set; }
-            public UNIT(string _serialNumber, string _name, List<PORT> _ports, ROTATE angle)
+            private List<PORT> _ports;
+            public List<PORT> Ports
+            {
+                get { return _ports; }
+                set
+                {
+                    if (value.Count == 15)
+                    {
+                        _ports = value;
+                        List<float> values = new List<float>();
+                        foreach(PORT port in value) { values.Add((float)(port.Offset.Phase.Degree)); }
+                        PHASE_MONITOR.OFFSETs = values;
+                    }
+                }
+            }
+            public void ReloadPorts()
+            {
+                if (_ports.Count == 15)
+                {
+                    List<float> values = new List<float>();
+                    foreach (PORT port in _ports) { values.Add((float)(port.Offset.Phase.Degree)); }
+                    PHASE_MONITOR.OFFSETs = values;
+                }
+            }
+
+            public UNIT(string _serialNumber, string _name, ROTATE angle)
             {
                 SerialNumber = _serialNumber;  Name = _name;
                 CONFIG = new cntConfigPorts(SerialNumber, angle);
@@ -199,21 +222,48 @@ namespace PCAB_Debugger_ACS
                 SENS_MONITOR.TEMPviewIDratio = 2;
                 PHASE_MONITOR = new cntMonitorMagPhase(angle, new NormalizedColorChart(-180, 180));
             }
+
+            public List<uint> GetPhaseDelay(double Frequency, AntennaCS BeamDirection)
+            {
+                List<uint> resutlt = new List<uint>();
+                foreach (PORT port in _ports) { resutlt.Add(port.PhaseDelayConfig(Frequency, BeamDirection)); }
+                return resutlt;
+            }
         }
 
         public class PORT
         {
             public uint PortNumber { get; set; }
-            public double Xposi { get; set; }
-            public double Yposi { get; set; }
-            public double Zposi { get; set; }
+            public MWComLibCS.CoordinateSystem.CoordinateSystem3D Position { get; set; }
+            public MWComLibCS.ComplexAngle Offset { get; set; }
 
-            public PORT(uint portNumber, double X, double Y, double Z)
+            public PORT(uint portNumber, MWComLibCS.CoordinateSystem.CoordinateSystem3D _position, MWComLibCS.ComplexAngle _offset)
             {
                 PortNumber = portNumber;
-                Xposi = X;
-                Yposi = Y;
-                Zposi = Z;
+                Position = _position;
+                Offset = _offset;
+            }
+
+            public Angle PhaseDelay(double Frequency, AntennaCS BeamDirection)
+            {
+                CoordinateSystem3D csBD = new CoordinateSystem3D(BeamDirection.OrthogonalCoordinate);
+                if ((float)Position.Abs == 0.000000f) { return new Angle(0); }
+                double phase = CoordinateSystem3D.Dot(csBD, Position);
+                phase /= (csBD.Abs * Position.Abs);
+                phase = Math.Acos(phase);
+                phase = Position.Abs * Math.Cos(phase);
+                phase *= 2.0 * Math.PI * Frequency / PhysicalConstant.c0;
+                return new Angle(-phase);
+            }
+
+            public Angle OffsetPhaseDelay(double Frequency, AntennaCS BeamDirection)
+            {
+                return Offset.Phase + PhaseDelay(Frequency, BeamDirection);
+            }
+
+            public byte PhaseDelayConfig(double Frequency, AntennaCS BeamDirection)
+            {
+                return (byte)Math.Round(Angle.Normalize360(OffsetPhaseDelay(Frequency, BeamDirection)).Degree / 5.625, MidpointRounding.AwayFromZero);
             }
         }
 

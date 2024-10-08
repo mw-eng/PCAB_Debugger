@@ -1,0 +1,1335 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>MWComLibCS.FileFormats</name>
+    </assembly>
+    <members>
+        <member name="T:OMCComLib.FileFormats.CellDataType">
+            <summary>セルのデータ型</summary>
+        </member>
+        <member name="T:OMCComLib.FileFormats.OpenXlsx">
+            <summary>
+            OpenXml Xlsx Wrapper Class
+            </summary>
+        </member>
+        <member name="M:OMCComLib.FileFormats.OpenXlsx.CreateBook(System.String)">
+            <summary>Xlsxファイルの新規作成</summary>
+            <param name="filePath">ファイル保存先</param>
+            <returns></returns>
+        </member>
+        <member name="M:OMCComLib.FileFormats.OpenXlsx.CreateBook(System.String,System.Boolean)">
+            <summary>Xlsxファイルの新規作成</summary>
+            <param name="filePath">ファイル保存先</param>
+            <param name="autoSave">自動保存を行うか(falseの場合、閉じる前にCloneを呼び出す必要が有る？)</param>
+            <returns></returns>
+        </member>
+        <member name="M:OMCComLib.FileFormats.OpenXlsx.CreateBook(System.IO.Stream)">
+            <summary>XLSXファイルの新規作成</summary>
+            <param name="stream">ファイルの出力先</param>
+            <returns></returns>
+        </member>
+        <member name="M:OMCComLib.FileFormats.OpenXlsx.CreateBook(System.IO.Stream,System.Boolean)">
+            <summary>XLSXファイルの新規作成</summary>
+            <param name="stream">ファイルの出力先</param>
+            <param name="autoSave">自動保存を行うか(falseの場合、閉じる前にCloneを呼び出す必要が有る？)</param>
+            <returns></returns>
+        </member>
+        <member name="M:OMCComLib.FileFormats.OpenXlsx.CreateBook(OMCComLib.FileFormats.OpenXlsx)">
+            <summary>XLSXファイルの新規作成(ワークブックおよびsheets生成)</summary>
+            <param name="_openXmlXlsx"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OMCComLib.FileFormats.OpenXlsx.Open(System.String,System.Boolean)">
+            <summary>XLSXファイルを開く</summary>
+            <param name="FilePath">ファイルの入力元</param>
+            <param name="isEditable">読書モード(読取専用はfalse)</param>
+            <returns></returns>
+        </member>
+        <member name="M:OMCComLib.FileFormats.OpenXlsx.Open(System.IO.Stream,System.Boolean)">
+            <summary>XLSXファイルを開く</summary>
+            <param name="FilePath">ファイルの入力元</param>
+            <param name="isEditable">読書モード(読取専用はfalse)</param>
+            <returns></returns>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:OMCComLib.FileFormats.OpenXlsx.Open(OMCComLib.FileFormats.OpenXlsx)" -->
+        <member name="M:OMCComLib.FileFormats.OpenXlsx.SetWorkbookAutoCalculation">
+            <summary>ワークブック内の式を自動計算に設定</summary>
+        </member>
+        <member name="M:OMCComLib.FileFormats.OpenXlsx.CreateSheet(System.String)">
+            <summary>シート追加後に選択状態とする</summary>
+            <param name="SheetName">シート名</param>
+        </member>
+        <member name="M:OMCComLib.FileFormats.OpenXlsx.CreateSheet(System.String,System.Boolean)">
+            <summary>シート追加</summary>
+            <param name="SheetName">シート名</param>
+            <param name="Select">生成後、シートを選択状態とする場合True</param>
+        </member>
+        <member name="M:OMCComLib.FileFormats.OpenXlsx.SelectSheet(System.String)">
+            <summary>シート選択(シートが存在しない場合は生成して選択する)</summary>
+            <param name="SheetName">シート名</param>
+        </member>
+        <member name="M:OMCComLib.FileFormats.OpenXlsx.GetSheetNames">
+            <summary>シート名一覧取得</summary>
+            <returns>シート名リスト</returns>
+        </member>
+        <member name="M:OMCComLib.FileFormats.OpenXlsx.CreateCell(System.UInt32,System.UInt32)">
+            <summary>セル領域の作成(存在する場合はセル返却のみ)</summary>
+            <param name="rowIndex">行番号</param>
+            <param name="columnIndex">列番号</param>
+            <returns>作成したセル</returns>
+        </member>
+        <member name="M:OMCComLib.FileFormats.OpenXlsx.CreateCell(System.String,System.UInt32)">
+            <summary>セル領域の作成(存在する場合はセル返却のみ)</summary>
+            <param name="columnName">列名称</param>
+            <param name="rowIndex">行番号</param>
+            <returns>作成したセル</returns>
+        </member>
+        <member name="M:OMCComLib.FileFormats.OpenXlsx.CreateCell(System.String,System.UInt32,System.UInt32)">
+            <summary>セル領域の作成(存在する場合はセル返却のみ)</summary>
+            <param name="SheetName">シート名</param>
+            <param name="columnName">列名称</param>
+            <param name="rowIndex">行番号</param>
+            <returns>作成したセル</returns>
+        </member>
+        <member name="M:OMCComLib.FileFormats.OpenXlsx.GetCell(System.UInt32,System.UInt32)">
+            <summary>セルオブジェクト取得</summary>
+            <param name="rowIndex">行番号</param>
+            <param name="columnIndex">列番号</param>
+            <returns>セルオブジェクト</returns>
+        </member>
+        <member name="M:OMCComLib.FileFormats.OpenXlsx.GetCell(System.String,System.UInt32)">
+            <summary>セルオブジェクト取得</summary>
+            <param name="columnName">列名</param>
+            <param name="rowIndex">行番号</param>
+            <returns>セルオブジェクト</returns>
+        </member>
+        <member name="M:OMCComLib.FileFormats.OpenXlsx.GetCell(System.String,System.UInt32,System.UInt32)">
+            <summary>セルオブジェクト取得</summary>
+            <param name="SheetName">シート名</param>
+            <param name="rowIndex">行番号</param>
+            <param name="columnIndex">列番号</param>
+            <returns>セルオブジェクト</returns>
+        </member>
+        <member name="M:OMCComLib.FileFormats.OpenXlsx.SetValue(System.String,System.UInt32,System.UInt32,System.Boolean)">
+            <summary>セルに値入力</summary>
+            <param name="SheetName">シート名</param>
+            <param name="rowIndex">行番号</param>
+            <param name="columnIndex">列番号</param>
+            <param name="value">値</param>
+        </member>
+        <member name="M:OMCComLib.FileFormats.OpenXlsx.SetValue(System.String,System.UInt32,System.UInt32,System.DateTime)">
+            <summary>セルに値入力</summary>
+            <param name="SheetName">シート名</param>
+            <param name="rowIndex">行番号</param>
+            <param name="columnIndex">列番号</param>
+            <param name="value">値</param>
+        </member>
+        <member name="M:OMCComLib.FileFormats.OpenXlsx.SetValue(System.String,System.UInt32,System.UInt32,System.DateTimeOffset)">
+            <summary>セルに値入力</summary>
+            <param name="SheetName">シート名</param>
+            <param name="rowIndex">行番号</param>
+            <param name="columnIndex">列番号</param>
+            <param name="value">値</param>
+        </member>
+        <member name="M:OMCComLib.FileFormats.OpenXlsx.SetValue(System.String,System.UInt32,System.UInt32,System.Decimal)">
+            <summary>セルに値入力</summary>
+            <param name="SheetName">シート名</param>
+            <param name="rowIndex">行番号</param>
+            <param name="columnIndex">列番号</param>
+            <param name="value">値</param>
+        </member>
+        <member name="M:OMCComLib.FileFormats.OpenXlsx.SetValue(System.String,System.UInt32,System.UInt32,System.Double)">
+            <summary>セルに値入力</summary>
+            <param name="SheetName">シート名</param>
+            <param name="rowIndex">行番号</param>
+            <param name="columnIndex">列番号</param>
+            <param name="value">値</param>
+        </member>
+        <member name="M:OMCComLib.FileFormats.OpenXlsx.SetValue(System.String,System.UInt32,System.UInt32,System.Int32)">
+            <summary>セルに値入力</summary>
+            <param name="SheetName">シート名</param>
+            <param name="rowIndex">行番号</param>
+            <param name="columnIndex">列番号</param>
+            <param name="value">値</param>
+        </member>
+        <member name="M:OMCComLib.FileFormats.OpenXlsx.SetValue(System.String,System.UInt32,System.UInt32,System.String)">
+            <summary>セルに値入力</summary>
+            <param name="SheetName">シート名</param>
+            <param name="rowIndex">行番号</param>
+            <param name="columnIndex">列番号</param>
+            <param name="value">値</param>
+        </member>
+        <member name="M:OMCComLib.FileFormats.OpenXlsx.SetValue(DocumentFormat.OpenXml.Spreadsheet.Cell,System.Boolean)">
+            <summary>セルに値入力</summary>
+            <param name="cell">セルオブジェクト</param>
+            <param name="value">値</param>
+        </member>
+        <member name="M:OMCComLib.FileFormats.OpenXlsx.SetValue(DocumentFormat.OpenXml.Spreadsheet.Cell,System.DateTime)">
+            <summary>セルに値入力</summary>
+            <param name="cell">セルオブジェクト</param>
+            <param name="value">値</param>
+        </member>
+        <member name="M:OMCComLib.FileFormats.OpenXlsx.SetValue(DocumentFormat.OpenXml.Spreadsheet.Cell,System.DateTimeOffset)">
+            <summary>セルに値入力</summary>
+            <param name="cell">セルオブジェクト</param>
+            <param name="value">値</param>
+        </member>
+        <member name="M:OMCComLib.FileFormats.OpenXlsx.SetValue(DocumentFormat.OpenXml.Spreadsheet.Cell,System.Decimal)">
+            <summary>セルに値入力</summary>
+            <param name="cell">セルオブジェクト</param>
+            <param name="value">値</param>
+        </member>
+        <member name="M:OMCComLib.FileFormats.OpenXlsx.SetValue(DocumentFormat.OpenXml.Spreadsheet.Cell,System.Double)">
+            <summary>セルに値入力</summary>
+            <param name="cell">セルオブジェクト</param>
+            <param name="value">値</param>
+        </member>
+        <member name="M:OMCComLib.FileFormats.OpenXlsx.SetValue(DocumentFormat.OpenXml.Spreadsheet.Cell,System.Int32)">
+            <summary>セルに値入力</summary>
+            <param name="cell">セルオブジェクト</param>
+            <param name="value">値</param>
+        </member>
+        <member name="M:OMCComLib.FileFormats.OpenXlsx.SetValue(DocumentFormat.OpenXml.Spreadsheet.Cell,System.String)">
+            <summary>セルに値入力</summary>
+            <param name="cell">セルオブジェクト</param>
+            <param name="value">値</param>
+        </member>
+        <member name="M:OMCComLib.FileFormats.OpenXlsx.GetValue(DocumentFormat.OpenXml.Spreadsheet.Cell)">
+            <summary>セルの値を文字列で取得</summary>
+            <param name="cell">取得対象セル</param>
+            <returns></returns>
+        </member>
+        <member name="M:OMCComLib.FileFormats.OpenXlsx.GetValue(System.String,System.UInt32,System.Boolean,OMCComLib.FileFormats.CellDataType@)">
+            <summary>セルの値を文字列で取得</summary>
+            <param name="columnName">列名</param>
+            <param name="rowIndex">行番号</param>
+            <param name="isText">式の場合に値をoutするか(falseで式をout)</param>
+            <param name="dataType">out セルのデータタイプ</param>
+            <returns>セルの値(文字列)</returns>
+        </member>
+        <member name="M:OMCComLib.FileFormats.OpenXlsx.GetValue(System.UInt32,System.UInt32,System.Boolean,OMCComLib.FileFormats.CellDataType@)">
+            <summary>セルの値を文字列で取得</summary>
+            <param name="rowIndex">行番号</param>
+            <param name="columnIndex">列番号</param>
+            <param name="isText">式の場合に値をoutするか(falseで式をout)</param>
+            <param name="dataType">out セルのデータタイプ</param>
+            <returns>セルの値(文字列)</returns>
+        </member>
+        <member name="M:OMCComLib.FileFormats.OpenXlsx.GetValue(System.String,System.UInt32,System.UInt32,System.Boolean,OMCComLib.FileFormats.CellDataType@)">
+            <summary>セルの値を文字列で取得</summary>
+            <param name="SheetName">シート名</param>
+            <param name="rowIndex">行番号</param>
+            <param name="columnIndex">列番号</param>
+            <param name="isText">式の場合に値をoutするか(falseで式をout)</param>
+            <param name="dataType">out セルのデータタイプ</param>
+            <returns>セルの値(文字列)</returns>
+        </member>
+        <member name="M:OMCComLib.FileFormats.OpenXlsx.GetValue(DocumentFormat.OpenXml.Spreadsheet.Cell,System.Boolean,OMCComLib.FileFormats.CellDataType@)">
+            <summary>セルの値を文字列で取得</summary>
+            <param name="cell">取得対象セル</param>
+            <param name="isText">式の場合に値をoutするか(falseで式をout)</param>
+            <param name="dataType">out セルのデータタイプ</param>
+            <returns>セルの値(文字列)</returns>
+        </member>
+        <member name="M:OMCComLib.FileFormats.OpenXlsx.GetRowIndex(DocumentFormat.OpenXml.Spreadsheet.Cell)">
+            <summary>セルオブジェクトの行番号取得</summary>
+            <param name="cell"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OMCComLib.FileFormats.OpenXlsx.GetColumnIndex(DocumentFormat.OpenXml.Spreadsheet.Cell)">
+            <summary>セルオブジェクトの列番号取得</summary>
+            <param name="cell"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OMCComLib.FileFormats.OpenXlsx.GetColumnName(DocumentFormat.OpenXml.Spreadsheet.Cell)">
+            <summary>セルオブジェクトの列番号取得</summary>
+            <param name="cell"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OMCComLib.FileFormats.OpenXlsx.ToColumnName(System.UInt32)">
+            <summary>ColumnIndex to String Convert</summary>
+            <param name="columnIndex">IndexNumber</param>
+            <returns>ColumnName</returns>
+        </member>
+        <member name="M:OMCComLib.FileFormats.OpenXlsx.ToColumnNumber(System.String)">
+            <summary>ColumnName To Uint</summary>
+            <param name="columnName">ColumnName</param>
+            <returns>ColumnIndex</returns>
+            <exception cref="T:System.FormatException"></exception>
+            <exception cref="T:System.ArgumentOutOfRangeException"></exception>
+        </member>
+        <member name="M:OMCComLib.FileFormats.OpenXlsx.ToColumnNumber(System.String,System.Int32)">
+            <summary>ToColumnNumber関数実体</summary>
+            <param name="columnName"></param>
+            <param name="call_num"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OMCComLib.FileFormats.OpenXlsx.ToDateTime(System.Double)">
+            <summary>日付データ(数字文字列)をデータ型に変換</summary>
+            <param name="date">日付データ(数字文字列)</param>
+            <returns></returns>
+        </member>
+        <member name="M:OMCComLib.FileFormats.OpenXlsx.ToDateTime(System.String)">
+            <summary>日付データ(数字文字列)をデータ型に変換</summary>
+            <param name="date">日付データ(数字文字列)</param>
+            <returns></returns>
+        </member>
+        <member name="M:OMCComLib.FileFormats.OpenXlsx.Save">
+            <summary>Workbookの保存</summary>
+        </member>
+        <member name="M:OMCComLib.FileFormats.OpenXlsx.Clone">
+            <summary>SpreadsheetDocument Clone</summary>
+        </member>
+        <member name="M:OMCComLib.FileFormats.OpenXlsx.Close">
+            <summary>SpreadsheetDocumentを閉じる</summary>
+        </member>
+        <member name="T:MWComLibCS.FileFormats.ParameterMatrix">
+            <summary>回路網行列</summary>
+        </member>
+        <member name="P:MWComLibCS.FileFormats.ParameterMatrix.Frequency">
+            <summary>周波数[Hz]</summary>
+        </member>
+        <member name="P:MWComLibCS.FileFormats.ParameterMatrix.Z0">
+            <summary>正規化インピーダンス[Ω]</summary>
+        </member>
+        <member name="P:MWComLibCS.FileFormats.ParameterMatrix.Parameter">
+            <summary>回路網行列</summary>
+        </member>
+        <member name="P:MWComLibCS.FileFormats.ParameterMatrix.Type">
+            <summary>回路網行列種</summary>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.ParameterMatrix.#ctor(MWComLibCS.Frequency,MWComLibCS.ComplexAngle,MWComLibCS.ComplexMatrix,MWComLibCS.FileFormats.ParameterMatrix.ParameterType)">
+            <summary>コンストラクタ</summary>
+            <param name="frequency">周波数</param>
+            <param name="z0">正規化インピーダンス[Ω]</param>
+            <param name="parameter">回路網パラメータ</param>
+            <param name="type">回路網行列種</param>
+        </member>
+        <member name="P:MWComLibCS.FileFormats.ParameterMatrix.Sparameter">
+            <summary>Sパラメータ取得</summary>
+        </member>
+        <member name="P:MWComLibCS.FileFormats.ParameterMatrix.Yparameter">
+            <summary>Yパラメータ取得</summary>
+        </member>
+        <member name="P:MWComLibCS.FileFormats.ParameterMatrix.Zparameter">
+            <summary>Zパラメータ取得</summary>
+        </member>
+        <member name="P:MWComLibCS.FileFormats.ParameterMatrix.Gparameter">
+            <summary>Gパラメータ取得</summary>
+        </member>
+        <member name="P:MWComLibCS.FileFormats.ParameterMatrix.Hparameter">
+            <summary>Hパラメータ取得</summary>
+        </member>
+        <member name="T:MWComLibCS.FileFormats.ParameterMatrix.Convert">
+            <summary>回路網パラメータ変換クラス</summary>
+        </member>
+        <member name="T:MWComLibCS.FileFormats.ParameterMatrix.Convert.Sparameter">
+            <summary> Sパラメータ変換クラス</summary>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.ParameterMatrix.Convert.Sparameter.ToYparameter(MWComLibCS.ComplexAngle,MWComLibCS.ComplexMatrix)">
+            <summary>Yパラメータ変換</summary>
+            <param name="Y0">換算アドミタンス</param>
+            <param name="Sparameter">対象Sパラメータ</param>
+            <returns>Yパラメータ変換結果</returns>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.ParameterMatrix.Convert.Sparameter.ToYparameter(MWComLibCS.ComplexAngle,MWComLibCS.ComplexMatrix,MWComLibCS.ComplexMatrix@)">
+            <summary>Yパラメータ変換</summary>
+            <param name="Y0">換算アドミタンス</param>
+            <param name="Sparameter">対象Sパラメータ</param>
+            <param name="Yparameter">Yパラメータ変換結果</param>
+            <returns>変換成否</returns>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.ParameterMatrix.Convert.Sparameter.ToZparameter(MWComLibCS.ComplexAngle,MWComLibCS.ComplexMatrix)">
+            <summary>Zパラメータ変換</summary>
+            <param name="Z0">換算インピーダンス</param>
+            <param name="Sparameter">対象Sパラメータ</param>
+            <returns>Zパラメータ変換結果</returns>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.ParameterMatrix.Convert.Sparameter.ToZparameter(MWComLibCS.ComplexAngle,MWComLibCS.ComplexMatrix,MWComLibCS.ComplexMatrix@)">
+            <summary>Zパラメータ変換</summary>
+            <param name="Z0">換算インピーダンス</param>
+            <param name="Sparameter">対象Sパラメータ</param>
+            <param name="Zparameter">Zパラメータ変換結果</param>
+            <returns>変換成否</returns>
+        </member>
+        <member name="T:MWComLibCS.FileFormats.ParameterMatrix.Convert.Yparameter">
+            <summary> Yパラメータ変換クラス</summary>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.ParameterMatrix.Convert.Yparameter.ToSparameter(MWComLibCS.ComplexAngle,MWComLibCS.ComplexMatrix)">
+            <summary>Sパラメータ変換</summary>
+            <param name="Y0">換算アドミタンス</param>
+            <param name="Yparameter">対象Yパラメータ</param>
+            <returns>Yパラメータ変換結果</returns>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.ParameterMatrix.Convert.Yparameter.ToYparameter(MWComLibCS.ComplexAngle,MWComLibCS.ComplexMatrix,MWComLibCS.ComplexMatrix@)">
+            <summary>Sパラメータ変換</summary>
+            <param name="Y0">換算アドミタンス</param>
+            <param name="Yparameter">対象Yパラメータ</param>
+            <param name="Sparameter">Sパラメータ変換結果</param>
+            <returns>変換成否</returns>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.ParameterMatrix.Convert.Yparameter.ToZparameter(MWComLibCS.ComplexMatrix)">
+            <summary>Zパラメータ変換</summary>
+            <param name="Yparameter">対象Yパラメータ</param>
+            <returns>Zパラメータ変換結果</returns>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.ParameterMatrix.Convert.Yparameter.ToZparameter(MWComLibCS.ComplexMatrix,MWComLibCS.ComplexMatrix@)">
+            <summary>Zパラメータ変換</summary>
+            <param name="Yparameter">対象Yパラメータ</param>
+            <param name="Zparameter">Zパラメータ変換結果</param>
+            <returns>変換成否</returns>
+        </member>
+        <member name="T:MWComLibCS.FileFormats.ParameterMatrix.Convert.Zparameter">
+            <summary> Zパラメータ変換クラス</summary>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.ParameterMatrix.Convert.Zparameter.ToSparameter(MWComLibCS.ComplexAngle,MWComLibCS.ComplexMatrix)">
+            <summary>Sパラメータ変換</summary>
+            <param name="Z0">換算インピーダンス</param>
+            <param name="Zparameter">対象Zパラメータ</param>
+            <returns>Yパラメータ変換結果</returns>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.ParameterMatrix.Convert.Zparameter.ToYparameter(MWComLibCS.ComplexAngle,MWComLibCS.ComplexMatrix,MWComLibCS.ComplexMatrix@)">
+            <summary>Sパラメータ変換</summary>
+            <param name="Z0">換算インピーダンス</param>
+            <param name="Zparameter">対象Zパラメータ</param>
+            <param name="Sparameter">Sパラメータ変換結果</param>
+            <returns>変換成否</returns>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.ParameterMatrix.Convert.Zparameter.ToYparameter(MWComLibCS.ComplexMatrix)">
+            <summary>Yパラメータ変換</summary>
+            <param name="Zparameter">対象Zパラメータ</param>
+            <returns>Yパラメータ変換結果</returns>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.ParameterMatrix.Convert.Zparameter.ToYparameter(MWComLibCS.ComplexMatrix,MWComLibCS.ComplexMatrix@)">
+            <summary>Yパラメータ変換</summary>
+            <param name="Zparameter">対象Zパラメータ</param>
+            <param name="Yparameter">Yパラメータ変換結果</param>
+            <returns>変換成否</returns>
+        </member>
+        <member name="T:MWComLibCS.FileFormats.ParameterMatrix.Convert.Hparameter">
+            <summary> Hパラメータ変換クラス</summary>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.ParameterMatrix.Convert.Hparameter.ToGparameter(MWComLibCS.ComplexMatrix)">
+            <summary>Gパラメータ変換</summary>
+            <param name="Hparameter">対象Hパラメータ</param>
+            <returns>Gパラメータ変換結果</returns>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.ParameterMatrix.Convert.Hparameter.ToGparameter(MWComLibCS.ComplexMatrix,MWComLibCS.ComplexMatrix@)">
+            <summary>Gパラメータ変換</summary>
+            <param name="Hparameter">対象Hパラメータ</param>
+            <param name="Gparameter">Gパラメータ変換結果</param>
+            <returns>変換成否</returns>
+        </member>
+        <member name="T:MWComLibCS.FileFormats.ParameterMatrix.Convert.Gparameter">
+            <summary> Gパラメータデータクラス</summary>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.ParameterMatrix.Convert.Gparameter.ToHparameter(MWComLibCS.ComplexMatrix)">
+            <summary>Hパラメータ変換</summary>
+            <param name="Gparameter">対象Gパラメータ</param>
+            <returns>Hパラメータ変換結果</returns>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.ParameterMatrix.Convert.Gparameter.ToHparameter(MWComLibCS.ComplexMatrix,MWComLibCS.ComplexMatrix@)">
+            <summary>Hパラメータ変換</summary>
+            <param name="Gparameter">対象Gパラメータ</param>
+            <param name="Hparameter">Hパラメータ変換結果</param>
+            <returns>変換成否</returns>
+        </member>
+        <member name="T:MWComLibCS.FileFormats.ParameterMatrix.ParameterType">
+            <summary>パラメータ種列挙型</summary>
+        </member>
+        <member name="P:MWComLibCS.FileFormats.Touchstone.Z0">
+            <summary>正規化インピーダンス[Ω]</summary>
+        </member>
+        <member name="P:MWComLibCS.FileFormats.Touchstone.Lists">
+            <summary>パラメータリスト</summary>
+        </member>
+        <member name="P:MWComLibCS.FileFormats.Touchstone.Type">
+            <summary>回路網行列種</summary>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.Touchstone.#ctor(System.Double,MWComLibCS.FileFormats.ParameterMatrix.ParameterType,MWComLibCS.FileFormats.ParameterMatrix[])">
+            <summary>コンストラクタ</summary>
+            <param name="z0">正規化インピーダンス[Ω]</param>
+            <param name="type">回路網行列種</param>
+            <param name="lists">パラメータリスト</param>
+        </member>
+        <member name="T:MWComLibCS.FileFormats.BinaryStream">
+            <summary>
+            <para>Stream継承クラス(バイナリデータの読書き)</para>
+            <para>詳細はFileStreamとMemoryStreamを参照</para>
+            </summary>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.BinaryStream.#ctor(System.Byte[])">
+            <summary>
+            コンストラクタ(MemoryStreamで初期化)
+            </summary>
+            <param name="buffer"></param>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.BinaryStream.#ctor(System.Byte[],System.Boolean)">
+            <summary>
+            コンストラクタ(MemoryStreamで初期化)
+            </summary>
+            <param name="buffer"></param>
+            <param name="writable"></param>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.BinaryStream.#ctor(System.String,System.IO.FileMode)">
+            <summary>
+            コンストラクタ(FileStreamで初期化)
+            </summary>
+            <param name="path"></param>
+            <param name="mode"></param>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.BinaryStream.#ctor(System.String,System.IO.FileMode,System.IO.FileAccess)">
+            <summary>
+            コンストラクタ(FileStreamで初期化)
+            </summary>
+            <param name="path"></param>
+            <param name="mode"></param>
+            <param name="access"></param>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.BinaryStream.#ctor(System.String,System.IO.FileMode,System.IO.FileAccess,System.IO.FileShare)">
+            <summary>
+            コンストラクタ(FileStreamで初期化)
+            </summary>
+            <param name="path"></param>
+            <param name="mode"></param>
+            <param name="access"></param>
+            <param name="share"></param>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.BinaryStream.#ctor(System.String,System.IO.FileMode,System.IO.FileAccess,System.IO.FileShare,System.Int32)">
+            <summary>
+            コンストラクタ(FileStreamで初期化)
+            </summary>
+            <param name="path"></param>
+            <param name="mode"></param>
+            <param name="access"></param>
+            <param name="share"></param>
+            <param name="bufferSize"></param>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.BinaryStream.#ctor(System.String,System.IO.FileMode,System.IO.FileAccess,System.IO.FileShare,System.Int32,System.Boolean)">
+            <summary>
+            コンストラクタ(FileStreamで初期化)
+            </summary>
+            <param name="path"></param>
+            <param name="mode"></param>
+            <param name="access"></param>
+            <param name="share"></param>
+            <param name="bufferSize"></param>
+            <param name="useAsync"></param>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.BinaryStream.Finalize">
+            <summary>
+            デストラクタ
+            </summary>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.BinaryStream.Dispose">
+            <summary>
+            BinaryStream によって使用されているすべてのリソースを解放
+            </summary>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.BinaryStream.Close">
+            <summary>
+            現在のストリームを閉じ、現在のストリームに関連付けられているすべてのリソース (ソケット、ファイル ハンドルなど) を解放
+            </summary>
+        </member>
+        <member name="P:MWComLibCS.FileFormats.BinaryStream.CanRead">
+            <summary>Stream CanRead</summary>
+        </member>
+        <member name="P:MWComLibCS.FileFormats.BinaryStream.CanSeek">
+            <summary>Stream CanSeek</summary>
+        </member>
+        <member name="P:MWComLibCS.FileFormats.BinaryStream.CanWrite">
+            <summary>Stream CanWrite</summary>
+        </member>
+        <member name="P:MWComLibCS.FileFormats.BinaryStream.Length">
+            <summary>Stream Length</summary>
+        </member>
+        <member name="P:MWComLibCS.FileFormats.BinaryStream.Position">
+            <summary>Stream Position</summary>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.BinaryStream.Flush">
+            <summary>Stream Flush</summary>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.BinaryStream.Read(System.Byte[],System.Int32,System.Int32)">
+            <summary>Stream Read</summary>
+            <param name="buffer"></param>
+            <param name="offset"></param>
+            <param name="count"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.BinaryStream.Seek(System.Int64,System.IO.SeekOrigin)">
+            <summary>Stream Seek</summary>
+            <param name="offset"></param>
+            <param name="origin"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.BinaryStream.SetLength(System.Int64)">
+            <summary>Stream SetLength</summary>
+            <param name="value"></param>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.BinaryStream.Write(System.Byte[],System.Int32,System.Int32)">
+            <summary>Stream Write</summary>
+            <param name="buffer"></param>
+            <param name="offset"></param>
+            <param name="count"></param>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.BinaryStream.ReadBlockSearch(System.Byte,System.Int32)">
+            <summary>
+            <para>バイトブロック取得メソッド</para>
+            <para>Targetで指定したbyteに一致した場所までbyteブロックとして読込み</para>
+            </summary>
+            <param name="Target">検索byte</param>
+            <param name="MaxCount">読込み最大Byte</param>
+            <returns>取得byte配列</returns>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.BinaryStream.ReadBlockSearch(System.Byte)">
+            <summary>
+            <para>バイトブロック取得メソッド</para>
+            <para>Targetで指定したbyteに一致した場所までbyteブロックとして読込み</para>
+            <para>最大で1024byteまで読込とする</para>
+            </summary>
+            <param name="Target">検索byte</param>
+            <returns>取得byte配列</returns>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.BinaryStream.ReadBlockSearch(System.Byte[])">
+            <summary>
+            <para>バイトブロック取得メソッド</para>
+            <para>Targetで指定したbyte配列の何れかに一致した場所までbyteブロックとして読込み</para>
+            <para>最大で1024byteまで読込とする</para>
+            </summary>
+            <param name="Target">検索byte</param>
+            <returns>取得byte配列</returns>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.BinaryStream.ReadBlockSearch(System.Byte[],System.Int32)">
+            <summary>
+            <para>バイトブロック取得メソッド</para>
+            <para>Targetで指定したbyte配列の何れかに一致した場所までbyteブロックとして読込み</para>
+            </summary>
+            <param name="Target">検索byte</param>
+            <param name="MaxCount">読込み最大Byte</param>
+            <returns>取得byte配列</returns>
+        </member>
+        <member name="T:MWComLibCS.FileFormats.CSVformatStreamReader">
+            <summary>
+            CSV形式で読込むStreamReader継承クラス
+            </summary>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.CSVformatStreamReader.#ctor(System.IO.Stream)">
+            <summary>指定したストリーム用の新しいインスタンスを初期化</summary>
+            <param name="stream">読み込まれるストリーム</param>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.CSVformatStreamReader.#ctor(System.String)">
+            <summary>指定したファイル名用の新しいインスタンスを初期化</summary>
+            <param name="path">読み込まれる完全なファイルパス</param>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.CSVformatStreamReader.#ctor(System.IO.Stream,System.Boolean)">
+            <summary>指定したストリーム用の新しいインスタンスを初期化</summary>
+            <param name="stream">読み込まれるストリーム</param>
+            <param name="detectEncodingFromByteOrderMarks">ファイルの先頭にあるバイト順序マークを検索する場合は true</param>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.CSVformatStreamReader.#ctor(System.IO.Stream,System.Text.Encoding)">
+            <summary>指定したファイル名用の新しいインスタンスを初期化</summary>
+            <param name="stream">読み込まれるストリーム</param>
+            <param name="encoding">使用する文字エンコーディング</param>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.CSVformatStreamReader.#ctor(System.String,System.Boolean)">
+            <summary>指定したファイル名用の新しいインスタンスを初期化</summary>
+            <param name="path">読み込まれる完全なファイルパス</param>
+            <param name="detectEncodingFromByteOrderMarks">ファイルの先頭にあるバイト順序マークを検索する場合は true</param>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.CSVformatStreamReader.#ctor(System.String,System.Text.Encoding)">
+            <summary>指定したファイル名用の新しいインスタンスを初期化</summary>
+            <param name="path">読み込まれる完全なファイルパス</param>
+            <param name="encoding">使用する文字エンコーディング</param>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.CSVformatStreamReader.#ctor(System.IO.Stream,System.Text.Encoding,System.Boolean)">
+            <summary>指定したストリーム用の新しいインスタンスを初期化</summary>
+            <param name="stream">読み込まれるストリーム</param>
+            <param name="encoding">使用する文字エンコーディング</param>
+            <param name="detectEncodingFromByteOrderMarks">ファイルの先頭にあるバイト順序マークを検索する場合は true</param>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.CSVformatStreamReader.#ctor(System.String,System.Text.Encoding,System.Boolean)">
+            <summary>指定したファイル名用の新しいインスタンスを初期化</summary>
+            <param name="path">読み込まれる完全なファイルパス</param>
+            <param name="encoding">使用する文字エンコーディング</param>
+            <param name="detectEncodingFromByteOrderMarks">ファイルの先頭にあるバイト順序マークを検索する場合は true</param>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.CSVformatStreamReader.#ctor(System.IO.Stream,System.Text.Encoding,System.Boolean,System.Int32)">
+            <summary>指定したストリーム用の新しいインスタンスを初期化</summary>
+            <param name="stream">読み込まれるストリーム</param>
+            <param name="encoding">使用する文字エンコーディング</param>
+            <param name="detectEncodingFromByteOrderMarks">ファイルの先頭にあるバイト順序マークを検索する場合は true</param>
+            <param name="bufferSize">最小バッファー サイズ</param>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.CSVformatStreamReader.#ctor(System.String,System.Text.Encoding,System.Boolean,System.Int32)">
+            <summary>指定したファイル名用の新しいインスタンスを初期化</summary>
+            <param name="path">読み込まれる完全なファイルパス</param>
+            <param name="encoding">使用する文字エンコーディング</param>
+            <param name="detectEncodingFromByteOrderMarks">ファイルの先頭にあるバイト順序マークを検索する場合は true</param>
+            <param name="bufferSize">最小バッファー サイズ</param>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.CSVformatStreamReader.#ctor(System.IO.Stream,System.Text.Encoding,System.Boolean,System.Int32,System.Boolean)">
+            <summary>指定したストリーム用の新しいインスタンスを初期化</summary>
+            <param name="stream">読み込まれるストリーム</param>
+            <param name="encoding">使用する文字エンコーディング</param>
+            <param name="detectEncodingFromByteOrderMarks">ファイルの先頭にあるバイト順序マークを検索する場合は true</param>
+            <param name="bufferSize">最小バッファー サイズ</param>
+            <param name="leaveOpen">オブジェクトを破棄した後にストリームを開いたままにする場合は true</param>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.CSVformatStreamReader.ReadLine">
+            <summary>
+            現在のストリームから 1 行分の文字データをカンマ区切りcsvフォーマットの行データとして読み取り、そのデータを文字列配列として返す
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.CSVformatStreamReader.ReadLine(System.Char)">
+            <summary>
+            現在のストリームから 1 行分の文字データをcsvフォーマットの行データとして読み取り、そのデータを文字列配列として返す
+            </summary>
+            <param name="separator">区切り文字指定</param>
+            <returns></returns>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.CSVformatStreamReader.ReadToEnd">
+            <summary>
+            ストリームの現在位置から末尾までのすべての文字データをカンマ区切りcsvフォーマットデータとして読み取り、そのデータを文字列(1次元)配列として返す
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.CSVformatStreamReader.ReadToEnd(System.Char,System.Char)">
+            <summary>
+            ストリームの現在位置から末尾までのすべての文字データをcsvフォーマットデータとして読み取り、そのデータを文字列(1次元)配列として返す
+            </summary>
+            <param name="separator">区切り文字指定</param>
+            <param name="newline">改行文字指定</param>
+            <returns></returns>
+        </member>
+        <member name="T:MWComLibCS.FileFormats.StructureSerializer">
+            <summary>
+            <para>Serializer変換クラス (シリアル化対象の構造体は[SerializableAttribute]宣言必須/非対称は[System.Xml.Serialization.XmlIgnore]宣言をする)</para>
+            <para>JSONの場合は[DataContract]/[DataMember]宣言/非対称は[IgnoreDataMember]でも可</para>
+            <para>JSONは互換性担保のためDataContractAttributeを使用しているのでファイルから読込む場合は注意</para>
+            </summary>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.StructureSerializer.JsonSerialize``1(``0)">
+            <summary>
+            <para>構造体配列をJSON形式でシリアル化</para>
+            </summary>
+            <typeparam name="T">構造体名</typeparam>
+            <param name="Structure">対象構造体</param>
+            <returns>シリアルデータ</returns>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.StructureSerializer.JsonSerialize``1(``0[])">
+            <summary>
+            <para>構造体をJSON形式でシリアル化</para>
+            </summary>
+            <typeparam name="T">構造体名</typeparam>
+            <param name="StructureArray">対象構造体配列</param>
+            <returns>シリアルデータ</returns>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.StructureSerializer.XmlSerialize``1(``0)">
+            <summary>
+            構造体をXml形式でシリアル化
+            </summary>
+            <typeparam name="T">構造体名</typeparam>
+            <param name="Structure">対象構造体</param>
+            <returns>シリアルデータ</returns>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.StructureSerializer.XmlSerialize``1(``0[])">
+            <summary>
+            構造体配列をXml形式でシリアル化
+            </summary>
+            <typeparam name="T">構造体名</typeparam>
+            <param name="StructureArray">対象構造体配列</param>
+            <returns>シリアルデータ</returns>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.StructureSerializer.JsonSerialize``1(``0,System.Byte[]@)">
+            <summary>
+            <para>構造体をJSON形式でシリアル化</para>
+            </summary>
+            <typeparam name="T">構造体名</typeparam>
+            <param name="Structure">対象構造体</param>
+            <param name="ByteDAT"></param>
+            <returns>成否結果</returns>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.StructureSerializer.JsonSerialize``1(``0,System.String)">
+            <summary>
+            構造体をJSON形式でシリアル化してファイルに保存(同期/Buffer1024/UTF8/indent2文字スペース固定)
+            </summary>
+            <typeparam name="T">構造体名</typeparam>
+            <param name="Structure">対象構造体</param>
+            <param name="FilePath">保存先ファイルパス(強制上書き)</param>
+            <returns>出力成否</returns>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.StructureSerializer.JsonSerialize``1(``0,System.String,System.Text.Encoding,System.Int32,System.Boolean,System.String)">
+            <summary>
+            構造体をJSON形式でシリアル化してファイルに保存
+            </summary>
+            <typeparam name="T">構造体名</typeparam>
+            <param name="Structure">対象構造体</param>
+            <param name="FilePath">保存先ファイルパス(強制上書き)</param>
+            <param name="enc">ファイルエンコード</param>
+            <param name="bufferSize">FileStreamバッファ設定値</param>
+            <param name="useAsync">FileStream非同期処理</param>
+            <param name="indentChars">各レベルのインデントに使用される文字列(nullまたは""以外で複数行形式を使用)</param>
+            <returns>出力成否</returns>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.StructureSerializer.JsonSerialize``1(``0[],System.Byte[]@)">
+            <summary>
+            <para>構造体配列をJSON形式でシリアル化</para>
+            </summary>
+            <typeparam name="T">構造体名</typeparam>
+            <param name="StructureArray">対象構造体配列</param>
+            <param name="ByteDAT"></param>
+            <returns>成否結果</returns>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.StructureSerializer.JsonSerialize``1(``0[],System.String)">
+            <summary>
+            構造体配列をJSON形式でシリアル化してファイルに保存(同期/Buffer1024/UTF8/indent2文字スペース固定)
+            </summary>
+            <typeparam name="T">構造体名</typeparam>
+            <param name="StructureArray">対象構造体配列</param>
+            <param name="FilePath">保存先ファイルパス(強制上書き)</param>
+            <returns>出力成否</returns>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.StructureSerializer.JsonSerialize``1(``0[],System.String,System.Text.Encoding,System.Int32,System.Boolean,System.String)">
+            <summary>
+            構造体配列をJSON形式でシリアル化してファイルに保存
+            </summary>
+            <typeparam name="T">構造体名</typeparam>
+            <param name="StructureArray">対象構造体配列</param>
+            <param name="FilePath">保存先ファイルパス(強制上書き)</param>
+            <param name="enc">ファイルエンコード</param>
+            <param name="bufferSize">FileStreamバッファ設定値</param>
+            <param name="useAsync">FileStream非同期処理</param>
+            <param name="indentChars">各レベルのインデントに使用される文字列(nullまたは""以外で複数行形式を使用)</param>
+            <returns>出力成否</returns>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.StructureSerializer.XmlSerialize``1(``0,System.Byte[]@)">
+            <summary>
+            構造体をXml形式でシリアル化
+            </summary>
+            <typeparam name="T">構造体名</typeparam>
+            <param name="Structure">対象構造体</param>
+            <param name="ByteDAT">シリアル化データ結果</param>
+            <returns>成否結果</returns>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.StructureSerializer.XmlSerialize``1(``0,System.String)">
+            <summary>
+            構造体をXml形式でシリアル化してファイルに保存(同期/Buffer1024/UTF8固定)
+            </summary>
+            <typeparam name="T">構造体名</typeparam>
+            <param name="Structure">対象構造体</param>
+            <param name="FilePath">保存先ファイルパス(強制上書き)</param>
+            <returns>出力成否</returns>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.StructureSerializer.XmlSerialize``1(``0,System.String,System.Text.Encoding,System.Int32,System.Boolean)">
+            <summary>
+            構造体をXml形式でシリアル化してファイルに保存
+            </summary>
+            <typeparam name="T">構造体名</typeparam>
+            <param name="Structure">対象構造体</param>
+            <param name="FilePath">保存先ファイルパス(強制上書き)</param>
+            <param name="enc">ファイルエンコード</param>
+            <param name="bufferSize">FileStreamバッファ設定値</param>
+            <param name="useAsync">FileStream非同期処理</param>
+            <returns>出力成否</returns>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.StructureSerializer.XmlSerialize``1(``0[],System.Byte[]@)">
+            <summary>
+            構造体配列をXml形式でシリアル化
+            </summary>
+            <typeparam name="T">構造体名</typeparam>
+            <param name="StructureArray">対象構造体配列</param>
+            <param name="ByteDAT">シリアル化データ結果</param>
+            <returns>成否結果</returns>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.StructureSerializer.XmlSerialize``1(``0[],System.String)">
+            <summary>
+            構造体配列をXml形式でシリアル化してファイルに保存(同期/Buffer1024/UTF8固定)
+            </summary>
+            <typeparam name="T">構造体名</typeparam>
+            <param name="StructureArray">対象構造体配列</param>
+            <param name="FilePath">保存先ファイルパス(強制上書き)</param>
+            <returns>出力成否</returns>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.StructureSerializer.XmlSerialize``1(``0[],System.String,System.Text.Encoding,System.Int32,System.Boolean)">
+            <summary>
+            構造体配列をXml形式でシリアル化してファイルに保存
+            </summary>
+            <typeparam name="T">構造体名</typeparam>
+            <param name="StructureArray">対象構造体配列</param>
+            <param name="FilePath">保存先ファイルパス(強制上書き)</param>
+            <param name="enc">ファイルエンコード</param>
+            <param name="bufferSize">FileStreamバッファ設定値</param>
+            <param name="useAsync">FileStream非同期処理</param>
+            <returns>出力成否</returns>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.StructureSerializer.BinarySerialize``1(``0)">
+            <summary>
+            <para>構造体をBinary形式でシリアル化</para>
+            <para>※TARGET_NAME違いなどではデシリアライズ不可能なため、一時的な通信やプロジェクト内での受渡でのみ使用すること</para>
+            <para>通信等プロジェクト間でシリアル化/デシリアル化を行う場合はdll参照等で同一アセンブリが担保されるように実装すること</para>
+            <para>設定保存などの場合はXmlやJson形式を選択すること</para>
+            </summary>
+            <typeparam name="T">構造体名</typeparam>
+            <param name="Structure">対象構造体</param>
+            <returns>シリアルデータ</returns>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.StructureSerializer.BinarySerialize``1(``0[])">
+            <summary>
+            <para>構造体配列をBinary形式でシリアル化</para>
+            <para>※TARGET_NAME違いなどではデシリアライズ不可能なため、一時的な通信やプロジェクト内での受渡でのみ使用すること</para>
+            <para>通信等プロジェクト間でシリアル化/デシリアル化を行う場合はdll参照等で同一アセンブリが担保されるように実装すること</para>
+            <para>設定保存などの場合はXmlやJson形式を選択すること</para>
+            </summary>
+            <typeparam name="T">構造体名</typeparam>
+            <param name="StructureArray">対象構造体配列</param>
+            <returns>シリアルデータ</returns>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.StructureSerializer.BinarySerialize``1(``0,System.Byte[]@)">
+            <summary>
+            <para>構造体配列をBinary形式でシリアル化</para>
+            <para>※TARGET_NAME違いなどではデシリアライズ不可能なため、一時的な通信やプロジェクト内での受渡でのみ使用すること</para>
+            <para>通信等プロジェクト間でシリアル化/デシリアル化を行う場合はdll参照等で同一アセンブリが担保されるように実装すること</para>
+            <para>設定保存などの場合はXmlやJson形式を選択すること</para>
+            </summary>
+            <typeparam name="T">構造体名</typeparam>
+            <param name="Structure">対象構造体</param>
+            <param name="ByteDAT">シリアル化データ結果</param>
+            <returns>成否結果</returns>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.StructureSerializer.BinarySerialize``1(``0,System.String)">
+            <summary>
+            <para>構造体をBinary形式でシリアル化してファイルに保存(同期/Buffer1024固定)</para>
+            <para>※TARGET_NAME違いなどでデシリアライズ不可能なため一時的な保存やプロジェクト内での受渡でのみ使用すること</para>
+            <para>通信等プロジェクト間でシリアル化/デシリアル化を行う場合はdll参照等で同一アセンブリが担保されるように実装すること</para>
+            <para>設定保存などの場合はXmlやJson形式が良い</para>
+            </summary>
+            <typeparam name="T">構造体名</typeparam>
+            <param name="Structure">対象構造体</param>
+            <param name="FilePath">保存先ファイルパス(強制上書き)</param>
+            <returns>出力成否</returns>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.StructureSerializer.BinarySerialize``1(``0,System.String,System.Int32,System.Boolean)">
+            <summary>
+            <para>構造体をBinary形式でシリアル化してファイルに保存</para>
+            <para>※TARGET_NAME違いなどでデシリアライズ不可能なため一時的な保存やプロジェクト内での受渡でのみ使用すること</para>
+            <para>通信等プロジェクト間でシリアル化/デシリアル化を行う場合はdll参照等で同一アセンブリが担保されるように実装すること</para>
+            <para>設定保存などの場合はXmlやJson形式が良い</para>
+            </summary>
+            <typeparam name="T">構造体名</typeparam>
+            <param name="Structure">対象構造体</param>
+            <param name="FilePath">保存先ファイルパス(強制上書き)</param>
+            <param name="bufferSize">FileStreamバッファ設定値</param>
+            <param name="useAsync">FileStream非同期処理</param>
+            <returns>出力成否</returns>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.StructureSerializer.BinarySerialize``1(``0[],System.Byte[]@)">
+            <summary>
+            <para>構造体配列をBinary形式でシリアル化</para>
+            <para>※TARGET_NAME違いなどではデシリアライズ不可能なため、一時的な通信やプロジェクト内での受渡でのみ使用すること</para>
+            <para>通信等プロジェクト間でシリアル化/デシリアル化を行う場合はdll参照等で同一アセンブリが担保されるように実装すること</para>
+            <para>設定保存などの場合はXmlやJson形式を選択すること</para>
+            </summary>
+            <typeparam name="T">構造体名</typeparam>
+            <param name="StructureArray">対象構造体配列</param>
+            <param name="ByteDAT">シリアル化データ結果</param>
+            <returns>成否結果</returns>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.StructureSerializer.BinarySerialize``1(``0[],System.String)">
+            <summary>
+            <para>構造体配列をBinary形式でシリアル化してファイルに保存(同期/Buffer1024固定)</para>
+            <para>※TARGET_NAME違いなどでデシリアライズ不可能なため一時的な保存やプロジェクト内での受渡でのみ使用すること</para>
+            <para>通信等プロジェクト間でシリアル化/デシリアル化を行う場合はdll参照等で同一アセンブリが担保されるように実装すること</para>
+            <para>設定保存などの場合はXmlやJson形式が良い</para>
+            </summary>
+            <typeparam name="T">構造体名</typeparam>
+            <param name="StructureArray">対象構造体配列</param>
+            <param name="FilePath">保存先ファイルパス(強制上書き)</param>
+            <returns>出力成否</returns>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.StructureSerializer.BinarySerialize``1(``0[],System.String,System.Int32,System.Boolean)">
+            <summary>
+            <para>構造体配列をBinary形式でシリアル化してファイルに保存</para>
+            <para>※TARGET_NAME違いなどでデシリアライズ不可能なため一時的な保存やプロジェクト内での受渡でのみ使用すること</para>
+            <para>通信等プロジェクト間でシリアル化/デシリアル化を行う場合はdll参照等で同一アセンブリが担保されるように実装すること</para>
+            <para>設定保存などの場合はXmlやJson形式が良い</para>
+            </summary>
+            <typeparam name="T">構造体名</typeparam>
+            <param name="StructureArray">対象構造体配列</param>
+            <param name="FilePath">保存先ファイルパス(強制上書き)</param>
+            <param name="bufferSize">FileStreamバッファ設定値</param>
+            <param name="useAsync">FileStream非同期処理</param>
+            <returns>出力成否</returns>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.StructureSerializer.JsonDeserialize``1(System.Byte[])">
+            <summary>
+            JSON形式のシリアルデータを構造体にデシリアライズ
+            </summary>
+            <typeparam name="T">構造体名</typeparam>
+            <param name="ByteDAT">シリアルデータ</param>
+            <returns>構造体</returns>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.StructureSerializer.JsonDeserialize``1(System.String)">
+            <summary>
+            JSON形式のシリアルデータを構造体にデシリアライズ(同期/Buffer1024/UTF8固定)
+            </summary>
+            <param name="FilePath">対象ファイルパス</param>
+            <returns>構造体</returns>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.StructureSerializer.JsonDeserialize``1(System.String,System.Text.Encoding,System.Int32,System.Boolean)">
+            <summary>
+            JSON形式のシリアルデータを構造体にデシリアライズ
+            </summary>
+            <param name="FilePath">対象ファイルパス</param>
+            <param name="enc">ファイルエンコード</param>
+            <param name="bufferSize">FileStreamバッファ設定値</param>
+            <param name="useAsync">FileStream非同期処理</param>
+            <returns>構造体</returns>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.StructureSerializer.JsonDeserializeArray``1(System.Byte[])">
+            <summary>
+            JSON形式のシリアルデータを構造体配列にデシリアライズ
+            </summary>
+            <typeparam name="T">構造体名</typeparam>
+            <param name="ByteDAT">シリアルデータ</param>
+            <returns>構造体配列</returns>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.StructureSerializer.JsonDeserializeArray``1(System.String)">
+            <summary>
+            JSON形式のシリアルデータを構造体配列にデシリアライズ(同期/Buffer1024/UTF8固定)
+            </summary>
+            <param name="FilePath">対象ファイルパス</param>
+            <returns>構造体配列</returns>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.StructureSerializer.JsonDeserializeArray``1(System.String,System.Text.Encoding,System.Int32,System.Boolean)">
+            <summary>
+            JSON形式のシリアルデータを構造体配列にデシリアライズ
+            </summary>
+            <param name="FilePath">対象ファイルパス</param>
+            <param name="enc">ファイルエンコード</param>
+            <param name="bufferSize">FileStreamバッファ設定値</param>
+            <param name="useAsync">FileStream非同期処理</param>
+            <returns>構造体配列</returns>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.StructureSerializer.JsonDeserialize``1(System.Byte[],``0@)">
+            <summary>
+            JSON形式のシリアルデータを構造体配列にデシリアライズ
+            </summary>
+            <typeparam name="T">構造体名</typeparam>
+            <param name="ByteDAT">対象シリアルデータ</param>
+            <param name="Structure">構造体化結果</param>
+            <returns>成否結果</returns>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.StructureSerializer.JsonDeserialize``1(System.String,``0@)">
+            <summary>
+            JSON形式のシリアルデータを構造体にデシリアライズ(同期/Buffer1024/UTF8固定)
+            </summary>
+            <typeparam name="T">構造体名</typeparam>
+            <param name="FilePath">対象ファイルパス</param>
+            <param name="Structure">構造体化結果</param>
+            <returns>成否結果</returns>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.StructureSerializer.JsonDeserialize``1(System.String,System.Text.Encoding,``0@,System.Int32,System.Boolean)">
+            <summary>
+            JSON形式のシリアルデータを構造体にデシリアライズ
+            </summary>
+            <typeparam name="T">構造体名</typeparam>
+            <param name="FilePath">対象ファイルパス</param>
+            <param name="enc">ファイルエンコード</param>
+            <param name="Structure">構造体化結果</param>
+            <param name="bufferSize">FileStreamバッファ設定値</param>
+            <param name="useAsync">FileStream非同期処理</param>
+            <returns>成否結果</returns>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.StructureSerializer.JsonDeserialize``1(System.Byte[],``0[]@)">
+            <summary>
+            JSON形式のシリアルデータを構造体配列にデシリアライズ
+            </summary>
+            <typeparam name="T">構造体名</typeparam>
+            <param name="ByteDAT">対象シリアルデータ</param>
+            <param name="StructureArray">構造体配列化結果</param>
+            <returns>成否結果</returns>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.StructureSerializer.JsonDeserialize``1(System.String,``0[]@)">
+            <summary>
+            JSON形式のシリアルデータを構造体配列にデシリアライズ(同期/Buffer1024/UTF8/indent2文字スペース固定)
+            </summary>
+            <typeparam name="T">構造体名</typeparam>
+            <param name="FilePath">対象ファイルパス</param>
+            <param name="StructureArray">構造体配列化結果</param>
+            <returns>成否結果</returns>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.StructureSerializer.JsonDeserialize``1(System.String,System.Text.Encoding,``0[]@,System.Int32,System.Boolean)">
+            <summary>
+            JSON形式のシリアルデータを構造体配列にデシリアライズ
+            </summary>
+            <typeparam name="T">構造体名</typeparam>
+            <param name="FilePath">対象ファイルパス</param>
+            <param name="enc">ファイルエンコード</param>
+            <param name="StructureArray">構造体配列化結果</param>
+            <param name="bufferSize">FileStreamバッファ設定値</param>
+            <param name="useAsync">FileStream非同期処理</param>
+            <returns>成否結果</returns>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.StructureSerializer.XmlDeserialize``1(System.Byte[])">
+            <summary>
+            Xml形式のシリアルデータを構造体にデシリアライズ
+            </summary>
+            <typeparam name="T">構造体名</typeparam>
+            <param name="ByteDAT">シリアルデータ</param>
+            <returns>構造体</returns>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.StructureSerializer.XmlDeserialize``1(System.String)">
+            <summary>
+            Xml形式のシリアルデータを構造体にデシリアライズ(同期/Buffer1024/UTF8固定)
+            </summary>
+            <typeparam name="T">構造体名</typeparam>
+            <param name="FilePath">対象ファイルパス</param>
+            <returns>構造体</returns>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.StructureSerializer.XmlDeserialize``1(System.String,System.Text.Encoding,System.Int32,System.Boolean)">
+            <summary>
+            Xml形式のシリアルデータを構造体にデシリアライズ
+            </summary>
+            <typeparam name="T">構造体名</typeparam>
+            <param name="FilePath">対象ファイルパス</param>
+            <param name="enc">ファイルエンコード</param>
+            <param name="bufferSize">FileStreamバッファ設定値</param>
+            <param name="useAsync">FileStream非同期処理</param>
+            <returns>構造体</returns>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.StructureSerializer.XmlDeserializeArray``1(System.Byte[])">
+            <summary>
+            Xml形式のシリアルデータを構造体配列にデシリアライズ
+            </summary>
+            <typeparam name="T">構造体名</typeparam>
+            <param name="ByteDAT">シリアルデータ</param>
+            <returns>構造体配列</returns>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.StructureSerializer.XmlDeserializeArray``1(System.String)">
+            <summary>
+            Xml形式のシリアルデータを構造体配列にデシリアライズ(同期/Buffer1024/UTF8固定)
+            </summary>
+            <typeparam name="T">構造体名</typeparam>
+            <param name="FilePath">対象ファイルパス</param>
+            <returns>構造体配列</returns>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.StructureSerializer.XmlDeserializeArray``1(System.String,System.Text.Encoding,System.Int32,System.Boolean)">
+            <summary>
+            Xml形式のシリアルデータを構造体配列にデシリアライズ
+            </summary>
+            <typeparam name="T">構造体名</typeparam>
+            <param name="FilePath">対象ファイルパス</param>
+            <param name="enc">ファイルエンコード</param>
+            <param name="bufferSize">FileStreamバッファ設定値</param>
+            <param name="useAsync">FileStream非同期処理</param>
+            <returns>構造体配列</returns>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.StructureSerializer.XmlDeserialize``1(System.Byte[],``0@)">
+            <summary>
+            Xml形式のシリアルデータを構造体にデシリアライズ
+            </summary>
+            <typeparam name="T">構造体名</typeparam>
+            <param name="ByteDAT">対象シリアルデータ</param>
+            <param name="Structure">構造体化結果</param>
+            <returns>成否結果</returns>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.StructureSerializer.XmlDeserialize``1(System.String,``0@)">
+            <summary>
+            Xml形式のシリアルデータを構造体にデシリアライズ(同期/Buffer1024/UTF8固定)
+            </summary>
+            <typeparam name="T">構造体名</typeparam>
+            <param name="FilePath">対象ファイルパス</param>
+            <param name="Structure">構造体化結果</param>
+            <returns>成否結果</returns>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.StructureSerializer.XmlDeserialize``1(System.String,System.Text.Encoding,``0@,System.Int32,System.Boolean)">
+            <summary>
+            Xml形式のシリアルデータを構造体にデシリアライズ
+            </summary>
+            <typeparam name="T">構造体名</typeparam>
+            <param name="FilePath">対象ファイルパス</param>
+            <param name="enc">ファイルエンコード</param>
+            <param name="Structure">構造体化結果</param>
+            <param name="bufferSize">FileStreamバッファ設定値</param>
+            <param name="useAsync">FileStream非同期処理</param>
+            <returns>成否結果</returns>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.StructureSerializer.XmlDeserialize``1(System.Byte[],``0[]@)">
+            <summary>
+            Xml形式のシリアルデータを構造体配列にデシリアライズ
+            </summary>
+            <typeparam name="T">構造体名</typeparam>
+            <param name="ByteDAT">対象シリアルデータ</param>
+            <param name="StructureArray">構造体配列化結果</param>
+            <returns>成否結果</returns>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.StructureSerializer.XmlDeserialize``1(System.String,``0[]@)">
+            <summary>
+            Xml形式のシリアルデータを構造体配列にデシリアライズ(同期/Buffer1024/UTF8固定)
+            </summary>
+            <typeparam name="T">構造体名</typeparam>
+            <param name="FilePath">対象ファイルパス</param>
+            <param name="StructureArray">構造体配列化結果</param>
+            <returns>成否結果</returns>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.StructureSerializer.XmlDeserialize``1(System.String,System.Text.Encoding,``0[]@,System.Int32,System.Boolean)">
+            <summary>
+            Xml形式のシリアルデータを構造体配列にデシリアライズ
+            </summary>
+            <typeparam name="T">構造体名</typeparam>
+            <param name="FilePath">対象ファイルパス</param>
+            <param name="enc">ファイルエンコード</param>
+            <param name="StructureArray">構造体配列化結果</param>
+            <param name="bufferSize">FileStreamバッファ設定値</param>
+            <param name="useAsync">FileStream非同期処理</param>
+            <returns>成否結果</returns>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.StructureSerializer.BinaryDeserialize``1(System.Byte[])">
+            <summary>
+            <para>Binary形式のシリアルデータを構造体にデシリアライズ</para>
+            <para>※TARGET_NAME違いなどでは例外が発生して失敗するため注意</para>
+            <para>通信等プロジェクト間でシリアル化/デシリアル化を行う場合はdll参照等で同一アセンブリが担保されるように実装すること</para>
+            <para>設定保存などの場合はXmlやJson形式を選択すること</para>
+            </summary>
+            <typeparam name="T">構造体名</typeparam>
+            <param name="ByteDAT">シリアルデータ</param>
+            <returns>構造体</returns>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.StructureSerializer.BinaryDeserialize``1(System.String)">
+             <summary>
+            <para> Binary形式のファイルを構造体にデシリアライズ(同期/Buffer1024固定)</para>
+             <para>※TARGET_NAME違いなどでは例外が発生して失敗するため注意</para>
+             <para>通信等プロジェクト間でシリアル化/デシリアル化を行う場合はdll参照等で同一アセンブリが担保されるように実装すること</para>
+             <para>設定保存などの場合はXmlやJson形式が良い</para>
+             </summary>
+             <typeparam name="T">構造体名</typeparam>
+             <param name="FilePath">対象ファイルパス</param>
+             <returns>構造体</returns>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.StructureSerializer.BinaryDeserialize``1(System.String,System.Int32,System.Boolean)">
+             <summary>
+            <para> Binary形式のファイルを構造体にデシリアライズ</para>
+             <para>※TARGET_NAME違いなどでは例外が発生して失敗するため注意</para>
+             <para>通信等プロジェクト間でシリアル化/デシリアル化を行う場合はdll参照等で同一アセンブリが担保されるように実装すること</para>
+             <para>設定保存などの場合はXmlやJson形式が良い</para>
+             </summary>
+             <typeparam name="T">構造体名</typeparam>
+             <param name="FilePath">対象ファイルパス</param>
+             <param name="bufferSize">FileStreamバッファ設定値</param>
+             <param name="useAsync">FileStream非同期処理</param>
+             <returns>構造体</returns>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.StructureSerializer.BinaryDeserializeArray``1(System.Byte[])">
+            <summary>
+            <para>Binary形式のシリアルデータを構造体配列にデシリアライズ</para>
+            <para>※TARGET_NAME違いなどでは例外が発生して失敗するため注意</para>
+            <para>通信等プロジェクト間でシリアル化/デシリアル化を行う場合はdll参照等で同一アセンブリが担保されるように実装すること</para>
+            <para>設定保存などの場合はXmlやJson形式を選択すること</para>
+            </summary>
+            <typeparam name="T">構造体名</typeparam>
+            <param name="ByteDAT">シリアルデータ</param>
+            <returns>構造体配列</returns>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.StructureSerializer.BinaryDeserializeArray``1(System.String)">
+             <summary>
+            <para> Binary形式のファイルを構造体配列にデシリアライズ</para>
+             <para>※TARGET_NAME違いなどでは例外が発生して失敗するため注意</para>
+             <para>通信等プロジェクト間でシリアル化/デシリアル化を行う場合はdll参照等で同一アセンブリが担保されるように実装すること</para>
+             <para>設定保存などの場合はXmlやJson形式が良い</para>
+             </summary>
+             <typeparam name="T">構造体名</typeparam>
+             <param name="FilePath">対象ファイルパス</param>
+             <returns>構造体配列</returns>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.StructureSerializer.BinaryDeserializeArray``1(System.String,System.Int32,System.Boolean)">
+             <summary>
+            <para> Binary形式のファイルを構造体配列にデシリアライズ</para>
+             <para>※TARGET_NAME違いなどでは例外が発生して失敗するため注意</para>
+             <para>通信等プロジェクト間でシリアル化/デシリアル化を行う場合はdll参照等で同一アセンブリが担保されるように実装すること</para>
+             <para>設定保存などの場合はXmlやJson形式が良い</para>
+             </summary>
+             <typeparam name="T">構造体名</typeparam>
+             <param name="FilePath">対象ファイルパス</param>
+             <param name="bufferSize">FileStreamバッファ設定値</param>
+             <param name="useAsync">FileStream非同期処理</param>
+             <returns>構造体配列</returns>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.StructureSerializer.BinaryDeserialize``1(System.Byte[],``0@)">
+            <summary>
+            <para>Binary形式のシリアルデータを構造体にデシリアライズ</para>
+            <para>※TARGET_NAME違いなどでは例外が発生して失敗するため注意</para>
+            <para>通信等プロジェクト間でシリアル化/デシリアル化を行う場合はdll参照等で同一アセンブリが担保されるように実装すること</para>
+            <para>設定保存などの場合はXmlやJson形式を選択すること</para>
+            </summary>
+            <typeparam name="T">構造体名</typeparam>
+            <param name="ByteDAT">対象シリアルデータ</param>
+            <param name="Structure">構造体化結果</param>
+            <returns>成否結果</returns>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.StructureSerializer.BinaryDeserialize``1(System.String,``0@)">
+             <summary>
+            <para> Binary形式のファイルを構造体にデシリアライズ</para>
+             <para>※TARGET_NAME違いなどでは例外が発生して失敗するため注意</para>
+             <para>通信等プロジェクト間でシリアル化/デシリアル化を行う場合はdll参照等で同一アセンブリが担保されるように実装すること</para>
+             <para>設定保存などの場合はXmlやJson形式が良い</para>
+             </summary>
+             <typeparam name="T">構造体名</typeparam>
+             <param name="FilePath">対象ファイルパス</param>
+             <param name="Structure">構造体化結果</param>
+             <returns>成否結果</returns>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.StructureSerializer.BinaryDeserialize``1(System.String,``0@,System.Int32,System.Boolean)">
+             <summary>
+            <para> Binary形式のファイルを構造体にデシリアライズ</para>
+             <para>※TARGET_NAME違いなどでは例外が発生して失敗するため注意</para>
+             <para>通信等プロジェクト間でシリアル化/デシリアル化を行う場合はdll参照等で同一アセンブリが担保されるように実装すること</para>
+             <para>設定保存などの場合はXmlやJson形式が良い</para>
+             </summary>
+             <typeparam name="T">構造体名</typeparam>
+             <param name="FilePath">対象ファイルパス</param>
+             <param name="Structure">構造体化結果</param>
+             <param name="bufferSize">FileStreamバッファ設定値</param>
+             <param name="useAsync">FileStream非同期処理</param>
+             <returns>成否結果</returns>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.StructureSerializer.BinaryDeserialize``1(System.Byte[],``0[]@)">
+             <summary>
+            <para> Binary形式のシリアルデータを構造体配列にデシリアライズ</para>
+             <para>※TARGET_NAME違いなどでは例外が発生して失敗するため注意</para>
+             <para>通信等プロジェクト間でシリアル化/デシリアル化を行う場合はdll参照等で同一アセンブリが担保されるように実装すること</para>
+             <para>設定保存などの場合はXmlやJson形式を選択すること</para>
+             </summary>
+             <typeparam name="T">構造体名</typeparam>
+             <param name="ByteDAT">対象シリアルデータ</param>
+             <param name="StructureArray">構造体配列化結果</param>
+             <returns>成否結果</returns>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.StructureSerializer.BinaryDeserialize``1(System.String,``0[]@)">
+             <summary>
+            <para> Binary形式のファイルを構造体配列にデシリアライズ(同期/Buffer1024固定)</para>
+             <para>※TARGET_NAME違いなどでは例外が発生して失敗するため注意</para>
+             <para>通信等プロジェクト間でシリアル化/デシリアル化を行う場合はdll参照等で同一アセンブリが担保されるように実装すること</para>
+             <para>設定保存などの場合はXmlやJson形式が良い</para>
+             </summary>
+             <typeparam name="T">構造体名</typeparam>
+             <param name="FilePath">対象ファイルパス</param>
+             <param name="StructureArray">構造体配列化結果</param>
+             <returns>成否結果</returns>
+        </member>
+        <member name="M:MWComLibCS.FileFormats.StructureSerializer.BinaryDeserialize``1(System.String,``0[]@,System.Int32,System.Boolean)">
+             <summary>
+            <para> Binary形式のファイルを構造体配列にデシリアライズ</para>
+             <para>※TARGET_NAME違いなどでは例外が発生して失敗するため注意</para>
+             <para>通信等プロジェクト間でシリアル化/デシリアル化を行う場合はdll参照等で同一アセンブリが担保されるように実装すること</para>
+             <para>設定保存などの場合はXmlやJson形式が良い</para>
+             </summary>
+             <typeparam name="T">構造体名</typeparam>
+             <param name="FilePath">対象ファイルパス</param>
+             <param name="StructureArray">構造体配列化結果</param>
+             <param name="bufferSize">FileStreamバッファ設定値</param>
+             <param name="useAsync">FileStream非同期処理</param>
+             <returns>成否結果</returns>
+        </member>
+    </members>
+</doc>

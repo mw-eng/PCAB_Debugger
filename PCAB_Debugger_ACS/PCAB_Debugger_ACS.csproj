@@ -38,8 +38,18 @@
     <ApplicationIcon>PCAB_Debugger_ACS.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MWComLibCS">
+      <HintPath>MWComLibCS\MWComLibCS.dll</HintPath>
+    </Reference>
+    <Reference Include="MWComLibCS.CoordinateSystem">
+      <HintPath>MWComLibCS\MWComLibCS.CoordinateSystem.dll</HintPath>
+    </Reference>
+    <Reference Include="MWComLibCS.FileFormats">
+      <HintPath>MWComLibCS\MWComLibCS.FileFormats.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
@@ -53,6 +63,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="clsPANEL.cs" />
+    <Compile Include="clsReadDAT.cs" />
     <Compile Include="winPCAB_PhaseMonitor.xaml.cs">
       <DependentUpon>winPCAB_PhaseMonitor.xaml</DependentUpon>
     </Compile>

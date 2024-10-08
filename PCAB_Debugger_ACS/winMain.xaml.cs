@@ -106,6 +106,8 @@ namespace PCAB_Debugger_ACS
             SERIAL_NUMBERS_TEXTBOX32.Text = Settings.Default.sn32;
             SERIAL_NUMBERS_TEXTBOX33.Text = Settings.Default.sn33;
             VIEW_COMBOBOX.SelectedIndex = Settings.Default.view;
+            SAVELOGs_CHECKBOX.IsChecked = Settings.Default.saveLogs;
+            LogDirPath_TextBox.Text = Settings.Default.logSaveDirPath;
             SERIAL_PORTS_COMBOBOX_DropDownClosed(null, null);
         }
 
@@ -136,6 +138,9 @@ namespace PCAB_Debugger_ACS
             Settings.Default.sn32 = SERIAL_NUMBERS_TEXTBOX32.Text;
             Settings.Default.sn33 = SERIAL_NUMBERS_TEXTBOX33.Text;
             Settings.Default.view = VIEW_COMBOBOX.SelectedIndex;
+            if(SAVELOGs_CHECKBOX.IsChecked == true) { Settings.Default.saveLogs = true; }
+            else { Settings.Default.saveLogs = false; }
+            Settings.Default.logSaveDirPath = LogDirPath_TextBox.Text;
             Settings.Default.winMainTop = this.Top;
             Settings.Default.winMainLeft = this.Left;
             Settings.Default.winMainHeight = this.Height;
@@ -212,15 +217,15 @@ namespace PCAB_Debugger_ACS
                     List<PANEL.UNIT> units1x = new List<PANEL.UNIT>();
                     List<PANEL.UNIT> units2x = new List<PANEL.UNIT>();
                     List<PANEL.UNIT> units3x = new List<PANEL.UNIT>();
-                    units1x.Add(new PANEL.UNIT(SERIAL_NUMBERS_TEXTBOX11.Text, "PTU11", new List<PANEL.PORT>(), ang1));
-                    units1x.Add(new PANEL.UNIT(SERIAL_NUMBERS_TEXTBOX12.Text, "PTU12", new List<PANEL.PORT>(), ang1));
-                    units1x.Add(new PANEL.UNIT(SERIAL_NUMBERS_TEXTBOX13.Text, "PTU13", new List<PANEL.PORT>(), ang1));
-                    units2x.Add(new PANEL.UNIT(SERIAL_NUMBERS_TEXTBOX21.Text, "PTU21", new List<PANEL.PORT>(), ang2));
-                    units2x.Add(new PANEL.UNIT(SERIAL_NUMBERS_TEXTBOX22.Text, "PTU22", new List<PANEL.PORT>(), ang2));
-                    units2x.Add(new PANEL.UNIT(SERIAL_NUMBERS_TEXTBOX23.Text, "PTU23", new List<PANEL.PORT>(), ang2));
-                    units3x.Add(new PANEL.UNIT(SERIAL_NUMBERS_TEXTBOX31.Text, "PTU31", new List<PANEL.PORT>(), ang2));
-                    units3x.Add(new PANEL.UNIT(SERIAL_NUMBERS_TEXTBOX32.Text, "PTU32", new List<PANEL.PORT>(), ang2));
-                    units3x.Add(new PANEL.UNIT(SERIAL_NUMBERS_TEXTBOX33.Text, "PTU33", new List<PANEL.PORT>(), ang2));
+                    units1x.Add(new PANEL.UNIT(SERIAL_NUMBERS_TEXTBOX11.Text, "PTU11", ang1));
+                    units1x.Add(new PANEL.UNIT(SERIAL_NUMBERS_TEXTBOX12.Text, "PTU12", ang1));
+                    units1x.Add(new PANEL.UNIT(SERIAL_NUMBERS_TEXTBOX13.Text, "PTU13", ang1));
+                    units2x.Add(new PANEL.UNIT(SERIAL_NUMBERS_TEXTBOX21.Text, "PTU21", ang2));
+                    units2x.Add(new PANEL.UNIT(SERIAL_NUMBERS_TEXTBOX22.Text, "PTU22", ang2));
+                    units2x.Add(new PANEL.UNIT(SERIAL_NUMBERS_TEXTBOX23.Text, "PTU23", ang2));
+                    units3x.Add(new PANEL.UNIT(SERIAL_NUMBERS_TEXTBOX31.Text, "PTU31", ang2));
+                    units3x.Add(new PANEL.UNIT(SERIAL_NUMBERS_TEXTBOX32.Text, "PTU32", ang2));
+                    units3x.Add(new PANEL.UNIT(SERIAL_NUMBERS_TEXTBOX33.Text, "PTU33", ang2));
                     panelIF.Add(new PANEL.SerialInterface(sp1Name, uint.Parse(BAUD_RATE_COMBOBOX1.Text.Trim().Replace(",", "")), units1x));
                     panelIF.Add(new PANEL.SerialInterface(sp2Name, uint.Parse(BAUD_RATE_COMBOBOX2.Text.Trim().Replace(",", "")), units2x));
                     panelIF.Add(new PANEL.SerialInterface(sp3Name, uint.Parse(BAUD_RATE_COMBOBOX3.Text.Trim().Replace(",", "")), units3x));
@@ -288,23 +293,6 @@ namespace PCAB_Debugger_ACS
                         winPCABphase.GRID32.Children.Add(_ptp.unitIFs[2].UNITs[1].PHASE_MONITOR);
                         winPCABphase.GRID33.Children.Add(_ptp.unitIFs[2].UNITs[2].PHASE_MONITOR);
                     }
-                    double pitch = 31.25;
-                    _ptp.unitIFs[0].UNITs[0].Ports.Clear();
-                    _ptp.unitIFs[0].UNITs[0].Ports.Add(new PANEL.PORT(1, 0, 0, 0));
-                    _ptp.unitIFs[0].UNITs[0].Ports.Add(new PANEL.PORT(1, 0, 0, 0));
-                    _ptp.unitIFs[0].UNITs[0].Ports.Add(new PANEL.PORT(1, 0, 0, 0));
-                    _ptp.unitIFs[0].UNITs[0].Ports.Add(new PANEL.PORT(1, 0, 0, 0));
-                    _ptp.unitIFs[0].UNITs[0].Ports.Add(new PANEL.PORT(1, 0, 0, 0));
-                    _ptp.unitIFs[0].UNITs[0].Ports.Add(new PANEL.PORT(1, 0, 0, 0));
-                    _ptp.unitIFs[0].UNITs[0].Ports.Add(new PANEL.PORT(1, 0, 0, 0));
-                    _ptp.unitIFs[0].UNITs[0].Ports.Add(new PANEL.PORT(1, 0, 0, 0));
-                    _ptp.unitIFs[0].UNITs[0].Ports.Add(new PANEL.PORT(1, 0, 0, 0));
-                    _ptp.unitIFs[0].UNITs[0].Ports.Add(new PANEL.PORT(1, 0, 0, 0));
-                    _ptp.unitIFs[0].UNITs[0].Ports.Add(new PANEL.PORT(1, 0, 0, 0));
-                    _ptp.unitIFs[0].UNITs[0].Ports.Add(new PANEL.PORT(1, 0, 0, 0));
-                    _ptp.unitIFs[0].UNITs[0].Ports.Add(new PANEL.PORT(1, 0, 0, 0));
-                    _ptp.unitIFs[0].UNITs[0].Ports.Add(new PANEL.PORT(1, 0, 0, 0));
-                    _ptp.unitIFs[0].UNITs[0].Ports.Add(new PANEL.PORT(1, 0, 0, 0));
 
                     if (!_ptp.Open())
                     {
@@ -314,7 +302,7 @@ namespace PCAB_Debugger_ACS
                         _pos = null;
                         MessageBox.Show("Serial Number detection error.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                     }
-                    _ptp.PANEL_SensorMonitor_TASK_Start(100);
+                    _ptp.PANEL_SensorMonitor_TASK_Start(uint.Parse(INTERVAL_TIME_TEXTBOX.Text));
                     winPCABsensor.Show();
                     winPCABphase.Show();
 
@@ -341,6 +329,29 @@ namespace PCAB_Debugger_ACS
                 }
             }
         }
+
+        private void LogDirSelectButton_Click(object sender, RoutedEventArgs e)
+        {
+            //LogDirPath_TextBox
+            using (System.Windows.Forms.FolderBrowserDialog fdb = new System.Windows.Forms.FolderBrowserDialog())
+            {
+                fdb.Description = "Please select a log save folder.";
+                fdb.RootFolder = Environment.SpecialFolder.Desktop;
+                fdb.ShowNewFolderButton = true;
+                if (fdb.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    LogDirPath_TextBox.Text = fdb.SelectedPath;
+                }
+            }
+        }
+
+        private void SAVELOGs_CHECKBOX_Click(object sender, RoutedEventArgs e)
+        {
+            if (e.RoutedEvent.Name == "Checked") { LogDirPathSelect_BUTTON.IsEnabled = true; LogDirPath_TextBox.IsEnabled = true; }
+            else if (e.RoutedEvent.Name == "Unchecked") { LogDirPathSelect_BUTTON.IsEnabled = false; LogDirPath_TextBox.IsEnabled = false; }
+        }
+
+        #region CONTROL EVENTs
 
         private void SERIAL_PORTS_COMBOBOX_RELOAD(object sender, EventArgs e)
         {
@@ -439,6 +450,86 @@ namespace PCAB_Debugger_ACS
             SERIAL_PORTS_COMBOBOX_DropDownClosed(null, null);
         }
 
+        private void DEC_TextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            // 0-9のみ
+            e.Handled = !new Regex("[0-9]").IsMatch(e.Text);
+        }
+
+        private void DEC_TextBox_PreviewExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            // 貼付け場合
+            if (e.Command == ApplicationCommands.Paste)
+            {
+                string strTXT = Clipboard.GetText();
+                for (int cnt = 0; cnt < strTXT.Length; cnt++)
+                {
+                    if (!new Regex("[0-9]|[ ]").IsMatch(strTXT[cnt].ToString()))
+                    {
+                        // 処理済み
+                        e.Handled = true;
+                        break;
+                    }
+                }
+            }
+        }
+
+        private void DEC_TextBox_PreviewLostKeyboardForcus(object sender, KeyboardFocusChangedEventArgs e)
+        {
+            try
+            {
+                uint uintVal = Convert.ToUInt32(((TextBox)sender).Text);
+                if (0 <= uintVal && uintVal <= 65535) { return; }
+                MessageBox.Show("Enter in the range 0 to 65535");
+                e.Handled = true;
+            }
+            catch
+            {
+                MessageBox.Show("Enter in the range 0 to 65535");
+                e.Handled = true;
+            }
+        }
+
+        private void ANGLE_TextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            // 0-9のみ
+            e.Handled = !new Regex("[0-9|.]").IsMatch(e.Text);
+        }
+
+        private void ANGLE_TextBox_PreviewExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            // 貼付け場合
+            if (e.Command == ApplicationCommands.Paste)
+            {
+                string strTXT = Clipboard.GetText();
+                for (int cnt = 0; cnt < strTXT.Length; cnt++)
+                {
+                    if (!new Regex("[0-9|.]|[ ]").IsMatch(strTXT[cnt].ToString()))
+                    {
+                        // 処理済み
+                        e.Handled = true;
+                        break;
+                    }
+                }
+            }
+        }
+
+        private void ANGLE_TextBox_PreviewLostKeyboardForcus(object sender, KeyboardFocusChangedEventArgs e)
+        {
+            try
+            {
+                float floatVal = float.Parse(((TextBox)sender).Text);
+                if (-90.0 <= floatVal && floatVal <= 90.0f) { return; }
+                MessageBox.Show("Enter in the range -90.0 to +90.0");
+                e.Handled = true;
+            }
+            catch
+            {
+                MessageBox.Show("Enter in the range -90.0 to +90.0");
+                e.Handled = true;
+            }
+        }
+
         private void SAVEADDRESS_COMBOBOX_DropDownClosed(object sender, EventArgs e)
         {
             if (SAVEADDRESS_COMBOBOX.SelectedIndex < 0) { SAVEADDRESS_COMBOBOX.SelectedIndex = 0; }
@@ -456,8 +547,60 @@ namespace PCAB_Debugger_ACS
         {
             double thisHeight = this.Height;
             if (this.WindowState == WindowState.Maximized) { thisHeight = System.Windows.SystemParameters.WorkArea.Height - 50; }
-            if (CONFIG_EXPANDER.IsExpanded) { CONFIG_GRID.Height = thisHeight * 0.7; }
+            if (CONFIG_EXPANDER.IsExpanded) { CONFIG_GRID.Height = thisHeight * 0.5; }
             if (BOARD_CONFIG_EXPANDER.IsExpanded) { BOARD_CONFIG_GRID.Height = thisHeight * 0.7; }
+        }
+        #endregion
+
+        private void READ_PORTFILE_BUTTON_Click(object sender, RoutedEventArgs e)
+        {
+            using (System.Windows.Forms.OpenFileDialog ofd = new System.Windows.Forms.OpenFileDialog())
+            {
+                ofd.Title = "";
+                if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    List<PANEL.PORT> ptu11, ptu12, ptu13, ptu21, ptu22, ptu23, ptu31, ptu32, ptu33;
+                    if (clsReadDAT.ReadPortDAT(ofd.FileName, out ptu11, out ptu12, out ptu13, out ptu21, out ptu22, out ptu23, out ptu31, out ptu32, out ptu33))
+                    {
+                        _ptp.unitIFs[0].UNITs[0].Ports = ptu11;
+                        _ptp.unitIFs[0].UNITs[1].Ports = ptu12;
+                        _ptp.unitIFs[0].UNITs[2].Ports = ptu13;
+                        _ptp.unitIFs[1].UNITs[0].Ports = ptu21;
+                        _ptp.unitIFs[1].UNITs[1].Ports = ptu22;
+                        _ptp.unitIFs[1].UNITs[2].Ports = ptu23;
+                        _ptp.unitIFs[2].UNITs[0].Ports = ptu31;
+                        _ptp.unitIFs[2].UNITs[1].Ports = ptu32;
+                        _ptp.unitIFs[2].UNITs[2].Ports = ptu33;
+                    }
+                }
+            }
+        }
+
+        private void OFFSET_ZERO_BUTTON_Click(object sender, RoutedEventArgs e)
+        {
+            foreach(PANEL.UNIT_IF unitIF in _ptp.unitIFs)
+            {
+                foreach(PANEL.UNIT unit in unitIF.UNITs)
+                {
+                    foreach(PANEL.PORT port in unit.Ports)
+                    {
+                        port.Offset = new MWComLibCS.ComplexAngle(1, new MWComLibCS.Angle(0));
+                    }
+                    unit.ReloadPorts();
+                }
+            }
+        }
+
+        private void SET_PHASE_BUTTON_Click(object sender, RoutedEventArgs e)
+        {
+            double freq = double.Parse(CALCULATE_FREQUENCY_TEXTBOX.Text) * Math.Pow(10.0, 6.0);
+            double az = double.Parse(CALCULATE_AZIMUTH_TEXTBOX.Text);
+            double el = double.Parse(CALCULATE_ELEVATION_TEXTBOX.Text);
+            MWComLibCS.CoordinateSystem.AntennaCS targ = new MWComLibCS.CoordinateSystem.AntennaCS(new MWComLibCS.Angle(az,false), new MWComLibCS.Angle(el, false), true);
+            WriteDPSxx(
+                _ptp.unitIFs[0].UNITs[0].GetPhaseDelay(freq, targ), _ptp.unitIFs[0].UNITs[1].GetPhaseDelay(freq, targ), _ptp.unitIFs[0].UNITs[2].GetPhaseDelay(freq, targ),
+                _ptp.unitIFs[1].UNITs[0].GetPhaseDelay(freq, targ), _ptp.unitIFs[1].UNITs[1].GetPhaseDelay(freq, targ), _ptp.unitIFs[1].UNITs[2].GetPhaseDelay(freq, targ),
+                _ptp.unitIFs[2].UNITs[0].GetPhaseDelay(freq, targ), _ptp.unitIFs[2].UNITs[1].GetPhaseDelay(freq, targ), _ptp.unitIFs[2].UNITs[2].GetPhaseDelay(freq, targ));
         }
 
         private void STBLNA_CheckboxClick(object sender, RoutedEventArgs e, bool? isChecked)
@@ -1030,5 +1173,6 @@ namespace PCAB_Debugger_ACS
             }
         }
         #endregion
+
     }
 }

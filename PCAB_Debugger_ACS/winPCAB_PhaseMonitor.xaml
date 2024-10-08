@@ -97,7 +97,7 @@
                 <RowDefinition Height="30"/>
             </Grid.RowDefinitions>
             <Viewbox Grid.Row="2"><Label Content="X"/></Viewbox>
-            <Viewbox Grid.Row="1"><Polygon Fill="ForestGreen" Points="20,0 0,25 15,20 15,200 25,200 25,20 40,25 20,0"/></Viewbox>
+            <Viewbox Grid.Row="1"><Polygon Fill="Red" Points="20,0 0,25 15,20 15,200 25,200 25,20 40,25 20,0"/></Viewbox>
         </Grid>
     </Grid>
 </Window>

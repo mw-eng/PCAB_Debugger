@@ -1,0 +1,951 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>MWComLibCS</name>
+    </assembly>
+    <members>
+        <member name="T:MWComLibCS.PhysicalConstant">
+            <summary>物理定数</summary>
+        </member>
+        <member name="F:MWComLibCS.PhysicalConstant.Eps0">
+            <summary>定数(真空の誘電率)8.854 187 8128(13) x 10^-12 [F/m]</summary>
+        </member>
+        <member name="F:MWComLibCS.PhysicalConstant.Mu0">
+            <summary>定数(真空の透磁率)1.256 637 062 12(19) x 10^-6 [H/m]</summary>
+        </member>
+        <member name="F:MWComLibCS.PhysicalConstant.c0">
+            <summary>定数(真空中の光速度)299 792 458 [m/s]</summary>
+        </member>
+        <member name="F:MWComLibCS.PhysicalConstant.NA">
+            <summary>定数(アボガドロ定数)6.022 140 76 x 10^23  [mol^-1]</summary>
+        </member>
+        <member name="F:MWComLibCS.PhysicalConstant.kB">
+            <summary>定数(ボルツマン定数)1.380 649 x 10^-23  [J*mol^-1*K^-1]</summary>
+        </member>
+        <member name="F:MWComLibCS.PhysicalConstant.h">
+            <summary>定数(プランク定数)6.626 070 15 x 10^-34  [J*s]</summary>
+        </member>
+        <member name="F:MWComLibCS.PhysicalConstant.e">
+            <summary>定数(電気素量) 1.602 176 634 x 10^-19 [C]</summary>
+        </member>
+        <member name="F:MWComLibCS.PhysicalConstant.a0">
+            <summary>定数(ボーア半径)5.291 772 109 03(80) x 10^-11 [m]</summary>
+        </member>
+        <member name="T:MWComLibCS.CartesianCS">
+            <summary>
+            デカルト座標(X,Y)
+            </summary>
+        </member>
+        <member name="M:MWComLibCS.CartesianCS.#ctor(System.Double,System.Double)">
+            <summary>構造体コンストラクタ</summary>
+            <param name="coordinate_x">X座標</param>
+            <param name="coordinate_y">Y座標</param>
+        </member>
+        <member name="M:MWComLibCS.CartesianCS.#ctor(System.Numerics.Complex)">
+            <summary>構造体コンストラクタ</summary>
+            <param name="comp">複素平面定義</param>
+        </member>
+        <member name="P:MWComLibCS.CartesianCS.X">
+            <summary>X軸座標</summary>
+        </member>
+        <member name="P:MWComLibCS.CartesianCS.Y">
+            <summary>Y軸座標</summary>
+        </member>
+        <member name="P:MWComLibCS.CartesianCS.NaN">
+            <summary>非数 (NaN) の値</summary>
+        </member>
+        <member name="T:MWComLibCS.CircularCS">
+            <summary>
+            円座標(r,φ)
+            </summary>
+        </member>
+        <member name="M:MWComLibCS.CircularCS.#ctor(System.Double,MWComLibCS.Angle)">
+            <summary>構造体コンストラクタ</summary>
+            <param name="coordinate_r">動径R</param>
+            <param name="coordinate_phi">偏角Phi(φ)</param>
+        </member>
+        <member name="M:MWComLibCS.CircularCS.#ctor(System.Numerics.Complex)">
+            <summary>構造体コンストラクタ</summary>
+            <param name="comp">複素平面定義</param>
+        </member>
+        <member name="P:MWComLibCS.CircularCS.R">
+            <summary>動径R</summary>
+        </member>
+        <member name="P:MWComLibCS.CircularCS.Phi">
+            <summary>偏角Phi(φ)</summary>
+        </member>
+        <member name="P:MWComLibCS.CircularCS.NaN">
+            <summary>非数 (NaN) の値</summary>
+        </member>
+        <member name="T:MWComLibCS.OrthogonalCS">
+            <summary>
+            直行座標(X,Y,Z)
+            </summary>
+        </member>
+        <member name="M:MWComLibCS.OrthogonalCS.#ctor(System.Double,System.Double,System.Double)">
+            <summary>構造体コンストラクタ</summary>
+            <param name="coordinate_x">X座標</param>
+            <param name="coordinate_y">Y座標</param>
+            <param name="coordinate_z">Z座標</param>
+        </member>
+        <member name="M:MWComLibCS.OrthogonalCS.#ctor(MWComLibCS.CartesianCS,System.Double)">
+            <summary>構造体コンストラクタ</summary>
+            <param name="coordinate_cartesian">デカルト座標(X,Y)</param>
+            <param name="coordinate_z">Z座標</param>
+        </member>
+        <member name="P:MWComLibCS.OrthogonalCS.X">
+            <summary>X軸座標</summary>
+        </member>
+        <member name="P:MWComLibCS.OrthogonalCS.Y">
+            <summary>Y軸座標</summary>
+        </member>
+        <member name="P:MWComLibCS.OrthogonalCS.Z">
+            <summary>Z軸座標</summary>
+        </member>
+        <member name="P:MWComLibCS.OrthogonalCS.NaN">
+            <summary>非数 (NaN) の値</summary>
+        </member>
+        <member name="T:MWComLibCS.CylindricalCS">
+            <summary>
+            円柱座標(r,φ[rad],z)
+            </summary>
+        </member>
+        <member name="M:MWComLibCS.CylindricalCS.#ctor(System.Double,MWComLibCS.Angle,System.Double)">
+            <summary>構造体コンストラクタ</summary>
+            <param name="coordinate_r">動径R</param>
+            <param name="coordinate_phi">偏角Phi(φ)</param>
+            <param name="coordinate_z">Z軸座標</param>
+        </member>
+        <member name="M:MWComLibCS.CylindricalCS.#ctor(MWComLibCS.CircularCS,System.Double)">
+            <summary>構造体コンストラクタ</summary>
+            <param name="coordinate_circular">円座標(r,φ)</param>
+            <param name="coordinate_z">Z軸座標</param>
+        </member>
+        <member name="P:MWComLibCS.CylindricalCS.R">
+            <summary>動径R</summary>
+        </member>
+        <member name="P:MWComLibCS.CylindricalCS.Phi">
+            <summary>偏角Phi(φ)</summary>
+        </member>
+        <member name="P:MWComLibCS.CylindricalCS.Z">
+            <summary>Z軸座標</summary>
+        </member>
+        <member name="P:MWComLibCS.CylindricalCS.NaN">
+            <summary>非数 (NaN) の値</summary>
+        </member>
+        <member name="T:MWComLibCS.SphericalCS">
+            <summary>
+            球面座標系(r,φ[rad],θ[rad])
+            </summary>
+        </member>
+        <member name="M:MWComLibCS.SphericalCS.#ctor(System.Double,MWComLibCS.Angle,MWComLibCS.Angle)">
+            <summary>構造体コンストラクタ</summary>
+            <param name="coordinate_r">動径R</param>
+            <param name="coordinate_phi">偏角Phi(φ[x,y平面と平行な面内での偏角でx軸=0deg])</param>
+            <param name="coordinate_theta">偏角Theta(θ[z,Phi平面でz軸=0deg])</param>
+        </member>
+        <member name="M:MWComLibCS.SphericalCS.#ctor(MWComLibCS.CircularCS,MWComLibCS.Angle)">
+            <summary>構造体コンストラクタ</summary>
+            <param name="coordinate_circular">円座標(r,φ[x,y平面と平行な面内での偏角でx軸=0deg])</param>
+            <param name="coordinate_theta">偏角Theta(θ[z,Phi平面でz軸=0deg)</param>
+        </member>
+        <member name="P:MWComLibCS.SphericalCS.R">
+            <summary>動径R</summary>
+        </member>
+        <member name="P:MWComLibCS.SphericalCS.Phi">
+            <summary>偏角Phi(φ[x,y平面と平行な面内での偏角でx軸=0deg])</summary>
+        </member>
+        <member name="P:MWComLibCS.SphericalCS.Theta">
+            <summary>偏角Theta(θ[z,Phi平面でz軸=0deg])</summary>
+        </member>
+        <member name="P:MWComLibCS.SphericalCS.NaN">
+            <summary>非数 (NaN) の値</summary>
+        </member>
+        <member name="T:MWComLibCS.UnitFrequency">
+            <summary>周波数単位列挙型</summary>
+        </member>
+        <member name="T:MWComLibCS.UniteLength">
+            <summary>長さ単位列挙型</summary>
+        </member>
+        <member name="T:MWComLibCS.SIprefix">
+            <summary>SI接頭語列挙型</summary>
+        </member>
+        <member name="T:MWComLibCS.Frequency">
+            <summary>周波数構造体<br/>
+            演算子はHz計算</summary>
+        </member>
+        <member name="P:MWComLibCS.Frequency.Hz">
+            <summary>周波数[Hz]</summary>
+        </member>
+        <member name="P:MWComLibCS.Frequency.kHz">
+            <summary>周波数[kHz]</summary>
+        </member>
+        <member name="P:MWComLibCS.Frequency.MHz">
+            <summary>周波数[MHz]</summary>
+        </member>
+        <member name="P:MWComLibCS.Frequency.GHz">
+            <summary>周波数[GHz]</summary>
+        </member>
+        <member name="P:MWComLibCS.Frequency.THz">
+            <summary>周波数[THz]</summary>
+        </member>
+        <member name="P:MWComLibCS.Frequency.T">
+            <summary>周期[s]</summary>
+        </member>
+        <member name="P:MWComLibCS.Frequency.Lambda0">
+            <summary>真空中の波長[m]</summary>
+        </member>
+        <member name="P:MWComLibCS.Frequency.WaveNumber0">
+            <summary>真空中の波数(k = 1 / λ)</summary>
+        </member>
+        <member name="P:MWComLibCS.Frequency.AngularWaveNumber0">
+            <summary>真空中の角速度(ω = 2π / λ)</summary>
+        </member>
+        <member name="M:MWComLibCS.Frequency.#ctor(System.Double)">
+            <summary>コンストラクタ</summary>
+            <param name="freq">周波数[Hz]</param>
+        </member>
+        <member name="M:MWComLibCS.Frequency.#ctor(System.Double,MWComLibCS.UnitFrequency)">
+            <summary>コンストラクタ</summary>
+            <param name="freq">周波数</param>
+            <param name="unit">周波数単位</param>
+        </member>
+        <member name="M:MWComLibCS.Frequency.#ctor(System.Double,MWComLibCS.SIprefix)">
+            <summary>コンストラクタ</summary>
+            <param name="freq">周波数</param>
+            <param name="sIprefix">周波数単位(SI接頭語)</param>
+        </member>
+        <member name="M:MWComLibCS.Frequency.FrequencyHz">
+            <summary>周波数値取得</summary>
+            <returns>周波数[Hz]</returns>
+        </member>
+        <member name="M:MWComLibCS.Frequency.FrequencyHz(MWComLibCS.UnitFrequency)">
+            <summary>周波数値取得</summary>
+            <param name="unit">取得単位(THz/GHz/MHz/kHz/Hz)</param>
+            <returns>周波数[取得単位]</returns>
+        </member>
+        <member name="M:MWComLibCS.Frequency.FrequencyHz(MWComLibCS.SIprefix)">
+            <summary>周波数値取得</summary>
+            <param name="sIprefix">取得単位SI接頭語(G/M/k等)</param>
+            <returns>周波数[SI接頭語Hz]</returns>
+        </member>
+        <member name="M:MWComLibCS.Frequency.Lambda(System.Double,System.Double)">
+            <summary>波長取得</summary>
+            <param name="EffectivePermittivity">比誘電率</param>
+            <param name="EffectivePermiability">比透磁率</param>
+            <returns>波数</returns>
+        </member>
+        <member name="M:MWComLibCS.Frequency.WaveNumber(System.Double,System.Double)">
+            <summary>波数取得(k = 1 / λ)</summary>
+            <param name="EffectivePermittivity">比誘電率</param>
+            <param name="EffectivePermiability">比透磁率</param>
+            <returns>波数</returns>
+        </member>
+        <member name="M:MWComLibCS.Frequency.AngularWaveNumber(System.Double,System.Double)">
+            <summary>角周波数取得(ω = 2π / λ)</summary>
+            <param name="EffectivePermittivity">比誘電率</param>
+            <param name="EffectivePermiability">比透磁率</param>
+            <returns>角周波数</returns>
+        </member>
+        <member name="M:MWComLibCS.Frequency.Equals(System.Object)">
+            <summary>
+            Equals override
+            </summary>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MWComLibCS.Frequency.GetHashCode">
+            <summary>
+            GetHashCode overwrite
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MWComLibCS.Frequency.Equals(MWComLibCS.Frequency)">
+            <summary>
+            比較
+            </summary>
+            <param name="freq">比較対象</param>
+            <returns>true:同一/false:異なる</returns>
+        </member>
+        <member name="M:MWComLibCS.Frequency.Equals(MWComLibCS.Frequency,MWComLibCS.Frequency)">
+            <summary>
+            比較
+            </summary>
+            <param name="freq1">対象1</param>
+            <param name="freq2">対象2</param>
+            <returns>true:同一/false:異なる</returns>
+        </member>
+        <member name="M:MWComLibCS.Frequency.ToString">
+            <summary>
+            このインスタンスの数値を等価な文字列形式に変換
+            </summary>
+            <returns>Hz</returns>
+        </member>
+        <member name="M:MWComLibCS.Frequency.ToString(System.String)">
+            <summary>
+            このインスタンスの数値を等価な文字列形式に変換(format指定)
+            </summary>
+            <param name="format">Hz</param>
+            <returns>インスタンスの数値文字列</returns>
+        </member>
+        <member name="M:MWComLibCS.Frequency.ToString(System.String,System.IFormatProvider)">
+            <summary>
+            このインスタンスの数値を等価な文字列形式に変換(format指定)
+            </summary>
+            <param name="format">Hz</param>
+            <param name="formatProvider"></param>
+            <returns></returns>
+        </member>
+        <member name="T:MWComLibCS.Power">
+            <summary>仕事量</summary>
+        </member>
+        <member name="P:MWComLibCS.Power.W">
+            <summary>W基準</summary>
+        </member>
+        <member name="P:MWComLibCS.Power.dBm">
+            <summary>dBm</summary>
+        </member>
+        <member name="P:MWComLibCS.Power.mW">
+            <summary>mW</summary>
+        </member>
+        <member name="P:MWComLibCS.Power.dBW">
+            <summary>dBW</summary>
+        </member>
+        <member name="M:MWComLibCS.Power.#ctor(System.Double,MWComLibCS.SIprefix)">
+            <summary>コンストラクタ</summary>
+            <param name="power">電力[W]</param>
+            <param name="prefix">SI接頭語(Wの場合SIPrefix.none)</param>
+        </member>
+        <member name="M:MWComLibCS.Power.#ctor(System.Double)">
+            <summary>コンストラクタ</summary>
+            <param name="power">電力[dBm]</param>
+        </member>
+        <member name="M:MWComLibCS.Power.#ctor(System.Double,System.Boolean)">
+            <summary>コンストラクタ</summary>
+            <param name="power">電力[Watt or dBm]</param>
+            <param name="isWatt">電力がWattか(true:Watt / false:dBm)</param>
+        </member>
+        <member name="T:MWComLibCS.Sparameter">
+            <summary> Sパラメータデータ構造体</summary>
+        </member>
+        <member name="P:MWComLibCS.Sparameter.Freq">
+            <summary>周波数[Hz]</summary>
+        </member>
+        <member name="P:MWComLibCS.Sparameter.S">
+            <summary>S行列</summary>
+        </member>
+        <member name="M:MWComLibCS.Sparameter.#ctor(MWComLibCS.Frequency,MWComLibCS.ScatteringParameters)">
+            <summary>コンストラクタ</summary>
+            <param name="freq">周波数</param>
+            <param name="s_dat">Sパラメータ(散乱行列)</param>
+        </member>
+        <member name="M:MWComLibCS.Sparameter.#ctor(System.Double,MWComLibCS.ScatteringParameters)">
+            <summary>コンストラクタ</summary>
+            <param name="freq">周波数[Hz]</param>
+            <param name="s_dat">Sパラメータ(散乱行列)</param>
+        </member>
+        <member name="T:MWComLibCS.Angle">
+            <summary>角度データ構造体(非正規化/反時計回り角度)</summary>
+        </member>
+        <member name="P:MWComLibCS.Angle.Radian">
+            <summary>Radian角度</summary>
+        </member>
+        <member name="M:MWComLibCS.Angle.#ctor(System.Double,System.Boolean)">
+            <summary>
+            コンストラクタ
+            </summary>
+            <param name="ang">角度</param>
+            <param name="radian">true:Radian(弧度)/false:Degree(度数)</param>
+        </member>
+        <member name="M:MWComLibCS.Angle.#ctor(System.Double)">
+            <summary>
+            コンストラクタ(Radianで初期化)
+            </summary>
+            <param name="ang">角度(Radian)</param>
+        </member>
+        <member name="P:MWComLibCS.Angle.Degree">
+            <summary>Degree角度取得</summary>
+        </member>
+        <member name="M:MWComLibCS.Angle.Argument(System.Boolean)">
+            <summary>
+            角度取得
+            </summary>
+            <param name="radian">true:Radian(弧度)/false:Degree(度数)</param>
+            <returns></returns>
+        </member>
+        <member name="P:MWComLibCS.Angle.NaN">
+            <summary>数値ではない値を表す(NaN)</summary>
+        </member>
+        <member name="M:MWComLibCS.Angle.AngleRad(System.Double)">
+            <summary>
+            角度(Radian)を角度データに変換
+            </summary>
+            <param name="rad">Radian</param>
+            <returns>Angle</returns>
+        </member>
+        <member name="M:MWComLibCS.Angle.AngleDeg(System.Double)">
+            <summary>
+            角度(Degree)を角度データに変換
+            </summary>
+            <param name="deg">Degree</param>
+            <returns>Angle</returns>
+        </member>
+        <member name="M:MWComLibCS.Angle.GetRadian(System.Double)">
+            <summary>
+            DegreeをRadianに変換
+            </summary>
+            <param name="deg">Degree</param>
+            <returns>Radian</returns>
+        </member>
+        <member name="M:MWComLibCS.Angle.GetDegree(System.Double)">
+            <summary>
+            RadianをDegreeに変換
+            </summary>
+            <param name="rad">Radian</param>
+            <returns>Degree</returns>
+        </member>
+        <member name="M:MWComLibCS.Angle.Normalize(MWComLibCS.Angle)">
+            <summary>
+            角度正規化(±180deg/±π@反時計回り)
+            </summary>
+            <param name="ang">角度データ</param>
+            <returns></returns>
+        </member>
+        <member name="M:MWComLibCS.Angle.Normalize180(MWComLibCS.Angle)">
+            <summary>
+            角度正規化(±180deg/±π@反時計回り)
+            </summary>
+            <param name="ang">角度データ</param>
+            <returns></returns>
+        </member>
+        <member name="M:MWComLibCS.Angle.Normalize360(MWComLibCS.Angle)">
+            <summary>
+            角度正規化(0-360deg/0-2π@反時計回り)
+            </summary>
+            <param name="ang">角度データ</param>
+            <returns></returns>
+        </member>
+        <member name="M:MWComLibCS.Angle.NormalizeCCW180(MWComLibCS.Angle)">
+            <summary>
+            角度正規化(±180deg/±π@反時計回り)
+            </summary>
+            <param name="ang">角度データ</param>
+            <returns></returns>
+        </member>
+        <member name="M:MWComLibCS.Angle.NormalizeCCW360(MWComLibCS.Angle)">
+            <summary>
+            角度正規化(0-360deg/0-2π@反時計回り)
+            </summary>
+            <param name="ang">角度データ</param>
+            <returns></returns>
+        </member>
+        <member name="M:MWComLibCS.Angle.NormalizeCW180(MWComLibCS.Angle)">
+            <summary>
+            角度正規化(±180deg/±π@時計回り)
+            </summary>
+            <param name="ang">角度データ</param>
+            <returns></returns>
+        </member>
+        <member name="M:MWComLibCS.Angle.NormalizeCW360(MWComLibCS.Angle)">
+            <summary>
+            角度正規化(0-360deg/0-2π@時計回り)
+            </summary>
+            <param name="ang">角度データ</param>
+            <returns></returns>
+        </member>
+        <member name="M:MWComLibCS.Angle.Add(MWComLibCS.Angle,MWComLibCS.Angle)">
+            <summary>
+            加算演算
+            </summary>
+            <param name="ang1">角度1</param>
+            <param name="ang2">角度2</param>
+            <returns></returns>
+        </member>
+        <member name="M:MWComLibCS.Angle.Subtract(MWComLibCS.Angle,MWComLibCS.Angle)">
+            <summary>
+            減算演算
+            </summary>
+            <param name="ang1">角度1</param>
+            <param name="ang2">角度2</param>
+            <returns></returns>
+        </member>
+        <member name="M:MWComLibCS.Angle.Multiply(System.Double,MWComLibCS.Angle)">
+            <summary>
+            積算演算
+            </summary>
+            <param name="value">実数</param>
+            <param name="ang">角度</param>
+            <returns></returns>
+        </member>
+        <member name="M:MWComLibCS.Angle.Multiply(MWComLibCS.Angle,System.Double)">
+            <summary>
+            積算演算
+            </summary>
+            <param name="ang">角度</param>
+            <param name="value">実数</param>
+            <returns></returns>
+        </member>
+        <member name="M:MWComLibCS.Angle.Divide(System.Double,MWComLibCS.Angle)">
+            <summary>
+            除算演算(実数/各座標)
+            </summary>
+            <param name="value">実数</param>
+            <param name="ang">角度</param>
+            <returns></returns>
+        </member>
+        <member name="M:MWComLibCS.Angle.Divide(MWComLibCS.Angle,System.Double)">
+            <summary>
+            除算演算(角度/実数)
+            </summary>
+            <param name="ang">角度</param>
+            <param name="value">実数</param>
+            <returns></returns>
+        </member>
+        <member name="M:MWComLibCS.Angle.Negate(MWComLibCS.Angle)">
+            <summary>
+            逆数演算
+            </summary>
+            <param name="ang">角度</param>
+            <returns></returns>
+        </member>
+        <member name="M:MWComLibCS.Angle.Acos(System.Double)">
+            <summary>
+            Math.Acos参照
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MWComLibCS.Angle.Asin(System.Double)">
+            <summary>
+            Math.Asin参照
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MWComLibCS.Angle.Atan(System.Double)">
+            <summary>
+            Math.Atan参照
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MWComLibCS.Angle.Cos(MWComLibCS.Angle)">
+            <summary>
+            Math.Cos参照
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MWComLibCS.Angle.IsNaN(MWComLibCS.Angle)">
+            <summary>
+            NaN判定
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MWComLibCS.Angle.Sin(MWComLibCS.Angle)">
+            <summary>
+            Math.Sin参照
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MWComLibCS.Angle.Tan(MWComLibCS.Angle)">
+            <summary>
+            Math.Tan参照
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MWComLibCS.Angle.op_Equality(MWComLibCS.Angle,MWComLibCS.Angle)">
+            <summary>
+            角度比較演算子
+            </summary>
+            <param name="ang1">角度1</param>
+            <param name="ang2">角度2</param>
+            <returns>true:同一角度/false:異なる角度</returns>
+        </member>
+        <member name="M:MWComLibCS.Angle.op_Inequality(MWComLibCS.Angle,MWComLibCS.Angle)">
+            <summary>
+            角度比較演算子
+            </summary>
+            <param name="ang1">角度1</param>
+            <param name="ang2">角度2</param>
+            <returns>true:異なる角度/false:同一角度</returns>
+        </member>
+        <member name="M:MWComLibCS.Angle.op_Addition(MWComLibCS.Angle,MWComLibCS.Angle)">
+            <summary>
+            加算演算子
+            </summary>
+            <param name="ang1">角度1</param>
+            <param name="ang2">角度2</param>
+            <returns></returns>
+        </member>
+        <member name="M:MWComLibCS.Angle.op_Subtraction(MWComLibCS.Angle,MWComLibCS.Angle)">
+            <summary>
+            減算演算子
+            </summary>
+            <param name="ang1">角度1</param>
+            <param name="ang2">角度2</param>
+            <returns></returns>
+        </member>
+        <member name="M:MWComLibCS.Angle.op_UnaryNegation(MWComLibCS.Angle)">
+            <summary>
+            逆数演算子
+            </summary>
+            <param name="ang">角度</param>
+            <returns></returns>
+        </member>
+        <member name="M:MWComLibCS.Angle.op_Multiply(System.Double,MWComLibCS.Angle)">
+            <summary>
+            積算演算子
+            </summary>
+            <param name="value">実数</param>
+            <param name="ang">座標</param>
+            <returns></returns>
+        </member>
+        <member name="M:MWComLibCS.Angle.op_Multiply(MWComLibCS.Angle,System.Double)">
+            <summary>
+            積算演算子
+            </summary>
+            <param name="ang">座標</param>
+            <param name="value">実数</param>
+            <returns></returns>
+        </member>
+        <member name="M:MWComLibCS.Angle.op_Division(System.Double,MWComLibCS.Angle)">
+            <summary>
+            除算演算子
+            </summary>
+            <param name="value">実数</param>
+            <param name="ang">座標</param>
+            <returns></returns>
+        </member>
+        <member name="M:MWComLibCS.Angle.op_Division(MWComLibCS.Angle,System.Double)">
+            <summary>
+            除算演算子
+            </summary>
+            <param name="ang">座標</param>
+            <param name="value">実数</param>
+            <returns></returns>
+        </member>
+        <member name="M:MWComLibCS.Angle.Equals(System.Object)">
+            <summary>
+            Equals override
+            </summary>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MWComLibCS.Angle.GetHashCode">
+            <summary>
+            GetHashCode overwrite
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MWComLibCS.Angle.Equals(MWComLibCS.Angle)">
+            <summary>
+            角度比較
+            </summary>
+            <param name="angle">比較対象角度</param>
+            <returns>true:同一角度/false:異なる角度</returns>
+        </member>
+        <member name="M:MWComLibCS.Angle.Equals(MWComLibCS.Angle,MWComLibCS.Angle)">
+            <summary>
+            角度比較
+            </summary>
+            <param name="ang1">角度1</param>
+            <param name="ang2">角度2</param>
+            <returns>true:同一角度/false:異なる角度</returns>
+        </member>
+        <member name="M:MWComLibCS.Angle.ToString">
+            <summary>
+            このインスタンスの数値を等価な文字列形式に変換(X,Y,Z)
+            </summary>
+            <returns>X,Y,Z</returns>
+        </member>
+        <member name="M:MWComLibCS.Angle.ToString(System.String)">
+            <summary>
+            このインスタンスの数値を等価な文字列形式に変換(format指定)
+            </summary>
+            <param name="format">G/R=radian/D=degree</param>
+            <returns>インスタンスの数値文字列</returns>
+        </member>
+        <member name="M:MWComLibCS.Angle.ToString(System.String,System.IFormatProvider)">
+            <summary>
+            このインスタンスの数値を等価な文字列形式に変換(format指定)
+            </summary>
+            <param name="format">G/O=(X,Y,Z)/C=(R,Phi,Z)/S=(R,Phi,Theta)</param>
+            <param name="formatProvider"></param>
+            <returns></returns>
+        </member>
+        <member name="T:MWComLibCS.ComplexAngle">
+            <summary>複素型データ構造体(Angleタイプ)</summary>
+        </member>
+        <member name="P:MWComLibCS.ComplexAngle.Real">
+            <summary>実部</summary>
+        </member>
+        <member name="P:MWComLibCS.ComplexAngle.Imaginary">
+            <summary>虚部</summary>
+        </member>
+        <member name="M:MWComLibCS.ComplexAngle.#ctor(System.Numerics.Complex)">
+            <summary>
+            コンストラクタ
+            </summary>
+            <param name="complex">Complex</param>
+        </member>
+        <member name="M:MWComLibCS.ComplexAngle.#ctor(System.Double,System.Double)">
+            <summary>
+            コンストラクタ
+            </summary>
+            <param name="real">実部</param>
+            <param name="imag">虚部</param>
+        </member>
+        <member name="M:MWComLibCS.ComplexAngle.#ctor(System.Double,MWComLibCS.Angle)">
+            <summary>
+            コンストラクタ
+            </summary>
+            <param name="Magnitude">振幅(真値)</param>
+            <param name="Phase">位相</param>
+        </member>
+        <member name="M:MWComLibCS.ComplexAngle.#ctor(System.Double,System.Double,MWComLibCS.Angle)">
+            <summary>
+            コンストラクタ
+            </summary>
+            <param name="LogarithmizationFactor">ログ化係数(電力比:20 / 電圧比:10)</param>
+            <param name="Magnitude">振幅[dB](底10)</param>
+            <param name="Phase">位相</param>
+        </member>
+        <member name="M:MWComLibCS.ComplexAngle.#ctor(System.Boolean,System.Double,System.Double,MWComLibCS.Angle)">
+            <summary>
+            コンストラクタ
+            </summary>
+            <param name="Logarithmization">true:MagnitudeをDB(底10)として初期化 / false:Magnitudeを真値として初期化</param>
+            <param name="LogarithmizationFactor">ログ化係数(電力比:20 / 電圧比:10)</param>
+            <param name="Magnitude">振幅[dB]</param>
+            <param name="Phase">位相</param>
+        </member>
+        <member name="M:MWComLibCS.ComplexAngle.#ctor(System.Double,System.Double,System.Double,MWComLibCS.Angle)">
+            <summary>
+            コンストラクタ
+            </summary>
+            <param name="LogarithmizationFactor">Logarithmizationがtrueの場合に使用するログ化係数(電力比:20 / 電圧比:10)</param>
+            <param name="newBase">Logarithmizationがtrueの場合に使用する新しい底</param>
+            <param name="Magnitude">振幅[dB]</param>
+            <param name="Phase">位相</param>
+        </member>
+        <member name="M:MWComLibCS.ComplexAngle.#ctor(System.Boolean,System.Double,System.Double,System.Double,MWComLibCS.Angle)">
+            <summary>
+            コンストラクタ
+            </summary>
+            <param name="Logarithmization">true:MagnitudeをDBとして初期化 / false:Magnitudeを真値として初期化</param>
+            <param name="LogarithmizationFactor">Logarithmizationがtrueの場合に使用するログ化係数(電力比:20 / 電圧比:10)</param>
+            <param name="newBase">Logarithmizationがtrueの場合に使用する新しい底</param>
+            <param name="Magnitude">振幅[dB]</param>
+            <param name="Phase">位相</param>
+        </member>
+        <member name="P:MWComLibCS.ComplexAngle.Complex">
+            <summary>複素数取得</summary>
+        </member>
+        <member name="P:MWComLibCS.ComplexAngle.Magnitude">
+            <summary>振幅(絶対値)取得</summary>
+        </member>
+        <member name="P:MWComLibCS.ComplexAngle.Phase">
+            <summary>位相取得</summary>
+        </member>
+        <member name="P:MWComLibCS.ComplexAngle.ImaginaryOne">
+            <summary>実部が0で虚部が1(0+j)の新しいComplexAngleインスタンス</summary>
+        </member>
+        <member name="P:MWComLibCS.ComplexAngle.Infinity">
+            <summary>無限大を複素数として取得</summary>
+        </member>
+        <member name="P:MWComLibCS.ComplexAngle.NaN">
+            <summary>非数(NaN)のComplexAngleインスタンス</summary>
+        </member>
+        <member name="P:MWComLibCS.ComplexAngle.One">
+            <summary>実部が1で虚部が0(1+j0)の新しいComplexAngleインスタンス</summary>
+        </member>
+        <member name="P:MWComLibCS.ComplexAngle.Zero">
+            <summary>実部が0で虚部が0(0+j0)の新しいComplexAngleインスタンス</summary>
+        </member>
+        <member name="M:MWComLibCS.ComplexAngle.Abs">
+            <summary>絶対値(振幅)の真値を取得</summary>
+            <returns></returns>
+        </member>
+        <member name="M:MWComLibCS.ComplexAngle.Abs(System.Double,System.Double)">
+            <summary>
+            絶対値(振幅)をdBで取得
+            </summary>
+            <param name="LogarithmizationFactor">ログ化係数(電力比:20 / 電圧比:10)</param>
+            <param name="newBase">新しい底</param>
+            <returns></returns>
+        </member>
+        <member name="M:MWComLibCS.ComplexAngle.Abs(System.Boolean,System.Double)">
+            <summary>
+            絶対値(振幅)を取得
+            </summary>
+            <param name="Logarithmization">true:DB(底は10) / false:真値</param>
+            <param name="LogarithmizationFactor">Logarithmizationがtrueの場合に使用するログ化係数(電力比:20 / 電圧比:10)</param>
+            <returns></returns>
+        </member>
+        <member name="M:MWComLibCS.ComplexAngle.Abs(System.Double)">
+            <summary>
+            絶対値(振幅)をdB(底は10)で取得
+            </summary>
+            <param name="LogarithmizationFactor">ログ化係数(電力比:20 / 電圧比:10)</param>
+            <returns></returns>
+        </member>
+        <member name="M:MWComLibCS.ComplexAngle.Abs(System.Boolean,System.Double,System.Double)">
+            <summary>
+            絶対値(振幅)を取得
+            </summary>
+            <param name="Logarithmization">true:DB / false:真値</param>
+            <param name="LogarithmizationFactor">Logarithmizationがtrueの場合に使用するログ化係数(電力比:20 / 電圧比:10)</param>
+            <param name="newBase">Logarithmizationがtrueの場合に使用する新しい底</param>
+            <returns></returns>
+        </member>
+        <member name="M:MWComLibCS.ComplexAngle.MagnitudeDB">
+            <summary>
+            振幅(絶対値)取得をデシベルで取得(ログ化係数20／底10)
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MWComLibCS.ComplexAngle.MagnitudeDB(System.Double)">
+            <summary>
+            振幅(絶対値)取得をデシベルで取得(底10)
+            </summary>
+            <param name="LogarithmizationFactor">ログ化係数(電力比:20 / 電圧比:10)</param>
+            <returns></returns>
+        </member>
+        <member name="M:MWComLibCS.ComplexAngle.MagnitudeDB(System.Double,System.Double)">
+            <summary>
+            振幅(絶対値)取得をデシベルで取得
+            </summary>
+            <param name="LogarithmizationFactor">ログ化係数(電力比:20 / 電圧比:10)</param>
+            <param name="newBase">新しい底</param>
+            <returns></returns>
+        </member>
+        <member name="M:MWComLibCS.ComplexAngle.RI(System.Double,System.Double)">
+            <summary>新しいComplexAngleインスタンス</summary>
+            <param name="Real">実部</param>
+            <param name="Imaginary">虚部</param>
+            <returns></returns>
+        </member>
+        <member name="M:MWComLibCS.ComplexAngle.MA(System.Double,MWComLibCS.Angle)">
+            <summary>新しいComplexAngleインスタンス</summary>
+            <param name="Magnitude">振幅(絶対値)の真値</param>
+            <param name="Phase">位相</param>
+            <returns></returns>
+        </member>
+        <member name="M:MWComLibCS.ComplexAngle.DB(System.Double,System.Double,MWComLibCS.Angle)">
+            <summary>新しいComplexAngleインスタンス</summary>
+            <param name="LogarithmizationFactor">ログ化係数</param>
+            <param name="Magnitude">振幅(絶対値)のデシベル値</param>
+            <param name="Phase">位相</param>
+            <returns></returns>
+        </member>
+        <member name="M:MWComLibCS.ComplexAngle.DB(System.Double,MWComLibCS.Angle)">
+            <summary>新しいComplexAngleインスタンス</summary>
+            <param name="Magnitude">振幅(絶対値)のデシベル値(ログ化係数20として算出)</param>
+            <param name="Phase">位相</param>
+            <returns></returns>
+        </member>
+        <member name="M:MWComLibCS.ComplexAngle.Equals(System.Object)">
+            <summary>
+            Equals override
+            </summary>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MWComLibCS.ComplexAngle.GetHashCode">
+            <summary>
+            GetHashCode override
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MWComLibCS.ComplexAngle.Equals(MWComLibCS.ComplexAngle)">
+            <summary>
+            比較を行い、同一であればtrue
+            </summary>
+            <param name="complexAngle"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MWComLibCS.ComplexAngle.Equals(MWComLibCS.ComplexAngle,MWComLibCS.ComplexAngle)">
+            <summary>
+            比較を行い、同一であればtrue
+            </summary>
+            <param name="complexAngle1"></param>
+            <param name="complexAngle2"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MWComLibCS.ComplexAngle.Equals(System.Numerics.Complex,MWComLibCS.ComplexAngle)">
+            <summary>
+            比較を行い、同一であればtrue
+            </summary>
+            <param name="complexAngle1"></param>
+            <param name="complexAngle2"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MWComLibCS.ComplexAngle.Equals(MWComLibCS.ComplexAngle,System.Numerics.Complex)">
+            <summary>
+            比較を行い、同一であればtrue
+            </summary>
+            <param name="complexAngle1"></param>
+            <param name="complexAngle2"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MWComLibCS.ComplexAngle.ToString">
+            <summary>
+            このインスタンスの数値を等価な文字列形式に変換(Complex参照)
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MWComLibCS.ComplexAngle.ToString(System.String)">
+            <summary>
+            このインスタンスの数値を等価な文字列形式に変換(Complex参照)
+            </summary>
+            <param name="format"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MWComLibCS.ComplexAngle.ToString(System.String,System.IFormatProvider)">
+            <summary>
+            このインスタンスの数値を等価な文字列形式に変換(Complex参照)
+            </summary>
+            <param name="format"></param>
+            <param name="formatProvider"></param>
+            <returns></returns>
+        </member>
+        <member name="T:MWComLibCS.ScatteringParameters">
+            <summary>Sパラメータ(散乱行列)構造体(2次元行列)</summary>
+        </member>
+        <member name="M:MWComLibCS.ScatteringParameters.#ctor(MWComLibCS.ComplexAngle[0:,0:])">
+            <summary>コンストラクタ</summary>
+            <param name="s_matrix">Sマトリクス</param>
+        </member>
+        <member name="T:MWComLibCS.MessageCode">
+            <summary>メッセージコードクラス</summary>
+        </member>
+        <member name="P:MWComLibCS.MessageCode.CodeType">
+            <summary>コード種別</summary>
+        </member>
+        <member name="P:MWComLibCS.MessageCode.Code">
+            <summary>コード番号</summary>
+        </member>
+        <member name="P:MWComLibCS.MessageCode.Message">
+            <summary>メッセージ内容</summary>
+        </member>
+        <member name="T:MWComLibCS.MessageCodeType">
+            <summary>メッセージコード種別</summary>
+        </member>
+        <member name="F:MWComLibCS.MessageCodeType.Unknown">
+            <summary>不明</summary>
+        </member>
+        <member name="F:MWComLibCS.MessageCodeType.Information">
+            <summary>情報</summary>
+        </member>
+        <member name="F:MWComLibCS.MessageCodeType.Worning">
+            <summary>警告</summary>
+        </member>
+        <member name="F:MWComLibCS.MessageCodeType.Error">
+            <summary>エラー</summary>
+        </member>
+    </members>
+</doc>

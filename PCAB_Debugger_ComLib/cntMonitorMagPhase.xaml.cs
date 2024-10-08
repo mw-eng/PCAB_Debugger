@@ -40,7 +40,20 @@ namespace PCAB_Debugger_ComLib
             }
         }
 
-        public List<float> OFFSETs { get { return _offset; } }
+        public List<float> OFFSETs
+        {
+            get { return _offset; }
+            set
+            {
+
+                if (_offset.Count - 1 == value.Count)
+                {
+                    for (int i = 1; i < _values.Count; i++) { _offset[i] = value[i - 1]; }
+                    ReloadView();
+                }
+            }
+        }
+
         public List<float> OFFSET_VALUEs { get { return _offsetVal; } }
 
         public void SetOffsetNow()
