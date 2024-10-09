@@ -70,7 +70,7 @@ namespace PCAB_Debugger_ACS
             public void UNITs_SensorMonitor_TASK_Stop()
             {
                 if (_state) { _state = false; _task = true; }
-                _task = false; _loopTask?.ConfigureAwait(false);
+                _task = false; _loopTask?.ConfigureAwait(false);_loopTask?.Wait();
             }
             public void UNITs_SensorMonitor_TASK_Pause()
             {
@@ -258,7 +258,7 @@ namespace PCAB_Debugger_ACS
 
             public Angle OffsetPhaseDelay(double Frequency, AntennaCS BeamDirection)
             {
-                return Offset.Phase + PhaseDelay(Frequency, BeamDirection);
+                return PhaseDelay(Frequency, BeamDirection) - Offset.Phase;
             }
 
             public byte PhaseDelayConfig(double Frequency, AntennaCS BeamDirection)

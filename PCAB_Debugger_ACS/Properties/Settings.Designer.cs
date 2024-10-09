@@ -502,5 +502,29 @@ namespace PCAB_Debugger_ACS.Properties {
                 this["saveLogs"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("100")]
+        public uint snsIntTime {
+            get {
+                return ((uint)(this["snsIntTime"]));
+            }
+            set {
+                this["snsIntTime"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("5800")]
+        public uint FreqMHz {
+            get {
+                return ((uint)(this["FreqMHz"]));
+            }
+            set {
+                this["FreqMHz"] = value;
+            }
+        }
     }
 }

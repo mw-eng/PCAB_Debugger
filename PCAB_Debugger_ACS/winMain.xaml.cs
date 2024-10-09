@@ -3,6 +3,7 @@ using PCAB_Debugger_ComLib;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
@@ -108,6 +109,9 @@ namespace PCAB_Debugger_ACS
             VIEW_COMBOBOX.SelectedIndex = Settings.Default.view;
             SAVELOGs_CHECKBOX.IsChecked = Settings.Default.saveLogs;
             LogDirPath_TextBox.Text = Settings.Default.logSaveDirPath;
+            INTERVAL_TIME_TEXTBOX.Text = Settings.Default.snsIntTime.ToString("0");
+            CALCULATE_FREQUENCY_TEXTBOX.Text = Settings.Default.FreqMHz.ToString("0");
+
             SERIAL_PORTS_COMBOBOX_DropDownClosed(null, null);
         }
 
@@ -141,6 +145,8 @@ namespace PCAB_Debugger_ACS
             if(SAVELOGs_CHECKBOX.IsChecked == true) { Settings.Default.saveLogs = true; }
             else { Settings.Default.saveLogs = false; }
             Settings.Default.logSaveDirPath = LogDirPath_TextBox.Text;
+            Settings.Default.snsIntTime = uint.Parse(INTERVAL_TIME_TEXTBOX.Text);
+            Settings.Default.FreqMHz = uint.Parse(CALCULATE_FREQUENCY_TEXTBOX.Text);
             Settings.Default.winMainTop = this.Top;
             Settings.Default.winMainLeft = this.Left;
             Settings.Default.winMainHeight = this.Height;
@@ -152,7 +158,6 @@ namespace PCAB_Debugger_ACS
 
         private void DISCONNECT()
         {
-            winPOSmonitor?.WindowClose();
             PTU11.Children.Clear();
             PTU12.Children.Clear();
             PTU13.Children.Clear();
@@ -162,6 +167,7 @@ namespace PCAB_Debugger_ACS
             PTU31.Children.Clear();
             PTU32.Children.Clear();
             PTU33.Children.Clear();
+            winPOSmonitor?.WindowClose();
             winPCABsensor?.WindowClose();
             winPCABphase?.WindowClose();
 
@@ -184,6 +190,23 @@ namespace PCAB_Debugger_ACS
             if (isControl) { DISCONNECT(); }
             else
             {
+                string portConfFilePath = "";
+                using (System.Windows.Forms.OpenFileDialog ofd = new System.Windows.Forms.OpenFileDialog())
+                {
+                    ofd.Title = "Select the ports configuration file";
+                    ofd.FileName = "OffsetDAT.csv";
+                    ofd.Filter = "csv(*.csv)|*.csv|All files(*.*)|*.*";
+                    ofd.FilterIndex = 1;
+                    if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                    {
+                        portConfFilePath = ofd.FileName;
+                    }
+                    else
+                    {
+                        return;
+                    }
+                }
+
                 string sp1Name = "";
                 string sp2Name = "";
                 string sp3Name = "";
@@ -294,24 +317,34 @@ namespace PCAB_Debugger_ACS
                         winPCABphase.GRID33.Children.Add(_ptp.unitIFs[2].UNITs[2].PHASE_MONITOR);
                     }
 
-                    if (!_ptp.Open())
-                    {
-                        _ptp.PANEL_SensorMonitor_TASK_Stop();
-                        _ptp.Close();
-                        _ptp = null;
-                        _pos = null;
-                        MessageBox.Show("Serial Number detection error.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                    }
-                    _ptp.PANEL_SensorMonitor_TASK_Start(uint.Parse(INTERVAL_TIME_TEXTBOX.Text));
-                    winPCABsensor.Show();
-                    winPCABphase.Show();
-
                     winPOSmonitor = new winPOS();
                     _pos.OnReadDAT += winPOSmonitor.OnReadDAT;
                     _pos.OnTaskError += POS_OnError;
-                    _pos.Open();
+                    try
+                    {
+                        if (!_ptp.Open())
+                        {
+                            _ptp.Close();
+                            _ptp = null;
+                            _pos = null;
+                            MessageBox.Show("Serial Number detection error.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                            return;
+                        }
+                        _pos.Open();
+                    }
+                    catch
+                    {
+                        DISCONNECT();
+                        return;
+                    }
+
+                    READ_PORTsFile(portConfFilePath);
+                    _ptp.PANEL_SensorMonitor_TASK_Start(uint.Parse(INTERVAL_TIME_TEXTBOX.Text));
                     _pos.POS_AutoTaskStart();
+                    winPCABsensor.Show();
+                    winPCABphase.Show();
                     winPOSmonitor.Show();
+
 
                     try { READ_CONFIG(); } catch { }
                     CONFIG_EXPANDER.IsExpanded = false;
@@ -556,22 +589,13 @@ namespace PCAB_Debugger_ACS
         {
             using (System.Windows.Forms.OpenFileDialog ofd = new System.Windows.Forms.OpenFileDialog())
             {
-                ofd.Title = "";
+                ofd.Title = "Select the ports configuration file";
+                ofd.FileName = "OffsetDAT.csv";
+                ofd.Filter = "csv(*.csv)|*.csv|All files(*.*)|*.*";
+                ofd.FilterIndex = 1;
                 if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
-                    List<PANEL.PORT> ptu11, ptu12, ptu13, ptu21, ptu22, ptu23, ptu31, ptu32, ptu33;
-                    if (clsReadDAT.ReadPortDAT(ofd.FileName, out ptu11, out ptu12, out ptu13, out ptu21, out ptu22, out ptu23, out ptu31, out ptu32, out ptu33))
-                    {
-                        _ptp.unitIFs[0].UNITs[0].Ports = ptu11;
-                        _ptp.unitIFs[0].UNITs[1].Ports = ptu12;
-                        _ptp.unitIFs[0].UNITs[2].Ports = ptu13;
-                        _ptp.unitIFs[1].UNITs[0].Ports = ptu21;
-                        _ptp.unitIFs[1].UNITs[1].Ports = ptu22;
-                        _ptp.unitIFs[1].UNITs[2].Ports = ptu23;
-                        _ptp.unitIFs[2].UNITs[0].Ports = ptu31;
-                        _ptp.unitIFs[2].UNITs[1].Ports = ptu32;
-                        _ptp.unitIFs[2].UNITs[2].Ports = ptu33;
-                    }
+                    READ_PORTsFile(ofd.FileName);
                 }
             }
         }
@@ -597,10 +621,16 @@ namespace PCAB_Debugger_ACS
             double az = double.Parse(CALCULATE_AZIMUTH_TEXTBOX.Text);
             double el = double.Parse(CALCULATE_ELEVATION_TEXTBOX.Text);
             MWComLibCS.CoordinateSystem.AntennaCS targ = new MWComLibCS.CoordinateSystem.AntennaCS(new MWComLibCS.Angle(az,false), new MWComLibCS.Angle(el, false), true);
-            WriteDPSxx(
+
+            _ptp.PANEL_SensorMonitor_TASK_Pause();
+            if(!WriteDPSxx(
                 _ptp.unitIFs[0].UNITs[0].GetPhaseDelay(freq, targ), _ptp.unitIFs[0].UNITs[1].GetPhaseDelay(freq, targ), _ptp.unitIFs[0].UNITs[2].GetPhaseDelay(freq, targ),
                 _ptp.unitIFs[1].UNITs[0].GetPhaseDelay(freq, targ), _ptp.unitIFs[1].UNITs[1].GetPhaseDelay(freq, targ), _ptp.unitIFs[1].UNITs[2].GetPhaseDelay(freq, targ),
-                _ptp.unitIFs[2].UNITs[0].GetPhaseDelay(freq, targ), _ptp.unitIFs[2].UNITs[1].GetPhaseDelay(freq, targ), _ptp.unitIFs[2].UNITs[2].GetPhaseDelay(freq, targ));
+                _ptp.unitIFs[2].UNITs[0].GetPhaseDelay(freq, targ), _ptp.unitIFs[2].UNITs[1].GetPhaseDelay(freq, targ), _ptp.unitIFs[2].UNITs[2].GetPhaseDelay(freq, targ)))
+            {
+                MessageBox.Show("Write DPS failed.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            _ptp.PANEL_SensorMonitor_TASK_Restart();
         }
 
         private void STBLNA_CheckboxClick(object sender, RoutedEventArgs e, bool? isChecked)
@@ -903,12 +933,20 @@ namespace PCAB_Debugger_ACS
 
         private void PANEL_OnError(object sender, ErrorEventArgs e)
         {
-
+            if(MessageBox.Show((e.GetException()).Message + "\nDo you want to close the port and abort the process?", "Error",MessageBoxButton.YesNo,MessageBoxImage.Error)
+                == MessageBoxResult.Yes)
+            {
+                DISCONNECT();
+            }
         }
 
         private void POS_OnError(object sender, POSEventArgs e)
         {
-
+            if (MessageBox.Show(e.Message + "\nDo you want to close the port and abort the process?", "Error", MessageBoxButton.YesNo, MessageBoxImage.Error)
+                == MessageBoxResult.Yes)
+            {
+                DISCONNECT();
+            }
         }
 
         private void READ_CONFIG()
@@ -979,6 +1017,23 @@ namespace PCAB_Debugger_ACS
             _ptp.PANEL_SensorMonitor_TASK_Restart();
         }
 
+        private void READ_PORTsFile(string filePath)
+        {
+            List<PANEL.PORT> ptu11, ptu12, ptu13, ptu21, ptu22, ptu23, ptu31, ptu32, ptu33;
+            if (clsReadDAT.ReadPortDAT(filePath, out ptu11, out ptu12, out ptu13, out ptu21, out ptu22, out ptu23, out ptu31, out ptu32, out ptu33))
+            {
+                _ptp.unitIFs[0].UNITs[0].Ports = ptu11;
+                _ptp.unitIFs[0].UNITs[1].Ports = ptu12;
+                _ptp.unitIFs[0].UNITs[2].Ports = ptu13;
+                _ptp.unitIFs[1].UNITs[0].Ports = ptu21;
+                _ptp.unitIFs[1].UNITs[1].Ports = ptu22;
+                _ptp.unitIFs[1].UNITs[2].Ports = ptu23;
+                _ptp.unitIFs[2].UNITs[0].Ports = ptu31;
+                _ptp.unitIFs[2].UNITs[1].Ports = ptu32;
+                _ptp.unitIFs[2].UNITs[2].Ports = ptu33;
+            }
+        }
+
         #region private Tasks
         private bool WriteDPSxx(
             List<uint> ptu11, List<uint> ptu12, List<uint> ptu13,
@@ -986,43 +1041,49 @@ namespace PCAB_Debugger_ACS
             List<uint> ptu31, List<uint> ptu32, List<uint> ptu33
             )
         {
-            Task<bool> _wrt1x = Task.Factory.StartNew(() => { return WriteDPSxx(0, ptu11, ptu12, ptu13); });
-            Task<bool> _wrt2x = Task.Factory.StartNew(() => { return WriteDPSxx(1, ptu21, ptu22, ptu23); });
-            Task<bool> _wrt3x = Task.Factory.StartNew(() => { return WriteDPSxx(2, ptu31, ptu32, ptu33); });
-            Task.WaitAll(_wrt1x, _wrt2x, _wrt3x);
-            if (_wrt1x.Result && _wrt2x.Result && _wrt3x.Result)
+            try
             {
-                List<float> ptuVal = new List<float>();
-                ptuVal.Clear();
-                foreach (uint val in ptu11) { ptuVal.Add(val * -5.625f); }
-                _ptp.unitIFs[0].UNITs[0].PHASE_MONITOR.VALUEs = ptuVal;
-                ptuVal.Clear();
-                foreach (uint val in ptu12) { ptuVal.Add(val * -5.625f); }
-                _ptp.unitIFs[0].UNITs[1].PHASE_MONITOR.VALUEs = ptuVal;
-                ptuVal.Clear();
-                foreach (uint val in ptu13) { ptuVal.Add(val * -5.625f); }
-                _ptp.unitIFs[0].UNITs[2].PHASE_MONITOR.VALUEs = ptuVal;
-                ptuVal.Clear();
-                foreach (uint val in ptu21) { ptuVal.Add(val * -5.625f); }
-                _ptp.unitIFs[1].UNITs[0].PHASE_MONITOR.VALUEs = ptuVal;
-                ptuVal.Clear();
-                foreach (uint val in ptu22) { ptuVal.Add(val * -5.625f); }
-                _ptp.unitIFs[1].UNITs[1].PHASE_MONITOR.VALUEs = ptuVal;
-                ptuVal.Clear();
-                foreach (uint val in ptu23) { ptuVal.Add(val * -5.625f); }
-                _ptp.unitIFs[1].UNITs[2].PHASE_MONITOR.VALUEs = ptuVal;
-                ptuVal.Clear();
-                foreach (uint val in ptu31) { ptuVal.Add(val * -5.625f); }
-                _ptp.unitIFs[2].UNITs[0].PHASE_MONITOR.VALUEs = ptuVal;
-                ptuVal.Clear();
-                foreach (uint val in ptu32) { ptuVal.Add(val * -5.625f); }
-                _ptp.unitIFs[2].UNITs[1].PHASE_MONITOR.VALUEs = ptuVal;
-                ptuVal.Clear();
-                foreach (uint val in ptu33) { ptuVal.Add(val * -5.625f); }
-                _ptp.unitIFs[2].UNITs[2].PHASE_MONITOR.VALUEs = ptuVal;
-                return true;
-            }
-            else { return false; }
+                Task<bool> _wrt1x = Task.Factory.StartNew(() => { return WriteDPSxx(0, ptu11, ptu12, ptu13); });
+                Task<bool> _wrt2x = Task.Factory.StartNew(() => { return WriteDPSxx(1, ptu21, ptu22, ptu23); });
+                Task<bool> _wrt3x = Task.Factory.StartNew(() => { return WriteDPSxx(2, ptu31, ptu32, ptu33); });
+                _wrt1x?.ConfigureAwait(false);
+                _wrt2x?.ConfigureAwait(false);
+                _wrt3x?.ConfigureAwait(false);
+                Task.WaitAll(_wrt1x, _wrt2x, _wrt3x);
+                if (_wrt1x.Result && _wrt2x.Result && _wrt3x.Result)
+                {
+                    List<float> ptuVal = new List<float>();
+                    ptuVal.Clear();
+                    foreach (uint val in ptu11) { ptuVal.Add(val * -5.625f); }
+                    _ptp.unitIFs[0].UNITs[0].PHASE_MONITOR.VALUEs = ptuVal;
+                    ptuVal.Clear();
+                    foreach (uint val in ptu12) { ptuVal.Add(val * -5.625f); }
+                    _ptp.unitIFs[0].UNITs[1].PHASE_MONITOR.VALUEs = ptuVal;
+                    ptuVal.Clear();
+                    foreach (uint val in ptu13) { ptuVal.Add(val * -5.625f); }
+                    _ptp.unitIFs[0].UNITs[2].PHASE_MONITOR.VALUEs = ptuVal;
+                    ptuVal.Clear();
+                    foreach (uint val in ptu21) { ptuVal.Add(val * -5.625f); }
+                    _ptp.unitIFs[1].UNITs[0].PHASE_MONITOR.VALUEs = ptuVal;
+                    ptuVal.Clear();
+                    foreach (uint val in ptu22) { ptuVal.Add(val * -5.625f); }
+                    _ptp.unitIFs[1].UNITs[1].PHASE_MONITOR.VALUEs = ptuVal;
+                    ptuVal.Clear();
+                    foreach (uint val in ptu23) { ptuVal.Add(val * -5.625f); }
+                    _ptp.unitIFs[1].UNITs[2].PHASE_MONITOR.VALUEs = ptuVal;
+                    ptuVal.Clear();
+                    foreach (uint val in ptu31) { ptuVal.Add(val * -5.625f); }
+                    _ptp.unitIFs[2].UNITs[0].PHASE_MONITOR.VALUEs = ptuVal;
+                    ptuVal.Clear();
+                    foreach (uint val in ptu32) { ptuVal.Add(val * -5.625f); }
+                    _ptp.unitIFs[2].UNITs[1].PHASE_MONITOR.VALUEs = ptuVal;
+                    ptuVal.Clear();
+                    foreach (uint val in ptu33) { ptuVal.Add(val * -5.625f); }
+                    _ptp.unitIFs[2].UNITs[2].PHASE_MONITOR.VALUEs = ptuVal;
+                    return true;
+                }
+                else { return false; }
+            }catch (Exception e) { return false; }
         }
 
         private bool WriteDPSxx(int interfaceNum, List<uint> ptux1, List<uint> ptux2, List<uint> ptux3)
@@ -1040,12 +1101,19 @@ namespace PCAB_Debugger_ACS
             List<uint> ptu31, List<uint> ptu32, List<uint> ptu33
             )
         {
-            Task<bool> _wrt1x = Task.Factory.StartNew(() => { return WriteDSAxx(0, ptu11, ptu12, ptu13); });
-            Task<bool> _wrt2x = Task.Factory.StartNew(() => { return WriteDSAxx(1, ptu21, ptu22, ptu23); });
-            Task<bool> _wrt3x = Task.Factory.StartNew(() => { return WriteDSAxx(2, ptu31, ptu32, ptu33); });
-            Task.WaitAll(_wrt1x, _wrt2x, _wrt3x);
-            if (_wrt1x.Result && _wrt2x.Result && _wrt3x.Result) { return true; }
-            else { return false; }
+            try
+            {
+                Task<bool> _wrt1x = Task.Factory.StartNew(() => { return WriteDSAxx(0, ptu11, ptu12, ptu13); });
+                Task<bool> _wrt2x = Task.Factory.StartNew(() => { return WriteDSAxx(1, ptu21, ptu22, ptu23); });
+                Task<bool> _wrt3x = Task.Factory.StartNew(() => { return WriteDSAxx(2, ptu31, ptu32, ptu33); });
+                _wrt1x?.ConfigureAwait(false);
+                _wrt2x?.ConfigureAwait(false);
+                _wrt3x?.ConfigureAwait(false);
+                Task.WaitAll(_wrt1x, _wrt2x, _wrt3x);
+                if (_wrt1x.Result && _wrt2x.Result && _wrt3x.Result) { return true; }
+                else { return false; }
+            }
+            catch { return false; }
         }
 
         private bool WriteDSAxx(int interfaceNum, List<uint> ptux1, List<uint> ptux2, List<uint> ptux3)
@@ -1063,54 +1131,73 @@ namespace PCAB_Debugger_ACS
             out List<uint> ptu31, out List<uint> ptu32, out List<uint> ptu33
             )
         {
-            Task<ptuxx> _wrt1x = Task.Factory.StartNew(() => { return ReadDPSxx(0); });
-            Task<ptuxx> _wrt2x = Task.Factory.StartNew(() => { return ReadDPSxx(1); });
-            Task<ptuxx> _wrt3x = Task.Factory.StartNew(() => { return ReadDPSxx(2); });
-            Task.WaitAll(_wrt1x, _wrt2x, _wrt3x);
-            ptu11 = _wrt1x.Result.ptux1;
-            ptu12 = _wrt1x.Result.ptux2;
-            ptu13 = _wrt1x.Result.ptux3;
-            ptu21 = _wrt2x.Result.ptux1;
-            ptu22 = _wrt2x.Result.ptux2;
-            ptu23 = _wrt2x.Result.ptux3;
-            ptu31 = _wrt3x.Result.ptux1;
-            ptu32 = _wrt3x.Result.ptux2;
-            ptu33 = _wrt3x.Result.ptux3;
-            if (ptu11 != null && ptu12 != null && ptu13 != null &&
-                ptu21 != null && ptu22 != null && ptu23 != null &&
-                ptu31 != null && ptu23 != null && ptu33 != null)
+            try
             {
-                List<float> ptuVal = new List<float>();
-                ptuVal.Clear();
-                foreach (uint val in ptu11) { ptuVal.Add(val * -5.625f); }
-                _ptp.unitIFs[0].UNITs[0].PHASE_MONITOR.VALUEs = ptuVal;
-                ptuVal.Clear();
-                foreach (uint val in ptu12) { ptuVal.Add(val * -5.625f); }
-                _ptp.unitIFs[0].UNITs[1].PHASE_MONITOR.VALUEs = ptuVal;
-                ptuVal.Clear();
-                foreach (uint val in ptu13) { ptuVal.Add(val * -5.625f); }
-                _ptp.unitIFs[0].UNITs[2].PHASE_MONITOR.VALUEs = ptuVal;
-                ptuVal.Clear();
-                foreach (uint val in ptu21) { ptuVal.Add(val * -5.625f); }
-                _ptp.unitIFs[1].UNITs[0].PHASE_MONITOR.VALUEs = ptuVal;
-                ptuVal.Clear();
-                foreach (uint val in ptu22) { ptuVal.Add(val * -5.625f); }
-                _ptp.unitIFs[1].UNITs[1].PHASE_MONITOR.VALUEs = ptuVal;
-                ptuVal.Clear();
-                foreach (uint val in ptu23) { ptuVal.Add(val * -5.625f); }
-                _ptp.unitIFs[1].UNITs[2].PHASE_MONITOR.VALUEs = ptuVal;
-                ptuVal.Clear();
-                foreach (uint val in ptu31) { ptuVal.Add(val * -5.625f); }
-                _ptp.unitIFs[2].UNITs[0].PHASE_MONITOR.VALUEs = ptuVal;
-                ptuVal.Clear();
-                foreach (uint val in ptu32) { ptuVal.Add(val * -5.625f); }
-                _ptp.unitIFs[2].UNITs[1].PHASE_MONITOR.VALUEs = ptuVal;
-                ptuVal.Clear();
-                foreach (uint val in ptu33) { ptuVal.Add(val * -5.625f); }
-                _ptp.unitIFs[2].UNITs[2].PHASE_MONITOR.VALUEs = ptuVal;
-                return true;
+                Task<ptuxx> _wrt1x = Task.Factory.StartNew(() => { return ReadDPSxx(0); });
+                Task<ptuxx> _wrt2x = Task.Factory.StartNew(() => { return ReadDPSxx(1); });
+                Task<ptuxx> _wrt3x = Task.Factory.StartNew(() => { return ReadDPSxx(2); });
+                _wrt1x?.ConfigureAwait(false);
+                _wrt2x?.ConfigureAwait(false);
+                _wrt3x?.ConfigureAwait(false);
+                Task.WaitAll(_wrt1x, _wrt2x, _wrt3x);
+                ptu11 = _wrt1x.Result.ptux1;
+                ptu12 = _wrt1x.Result.ptux2;
+                ptu13 = _wrt1x.Result.ptux3;
+                ptu21 = _wrt2x.Result.ptux1;
+                ptu22 = _wrt2x.Result.ptux2;
+                ptu23 = _wrt2x.Result.ptux3;
+                ptu31 = _wrt3x.Result.ptux1;
+                ptu32 = _wrt3x.Result.ptux2;
+                ptu33 = _wrt3x.Result.ptux3;
+                if (ptu11 != null && ptu12 != null && ptu13 != null &&
+                    ptu21 != null && ptu22 != null && ptu23 != null &&
+                    ptu31 != null && ptu23 != null && ptu33 != null)
+                {
+                    List<float> ptuVal = new List<float>();
+                    ptuVal.Clear();
+                    foreach (uint val in ptu11) { ptuVal.Add(val * -5.625f); }
+                    _ptp.unitIFs[0].UNITs[0].PHASE_MONITOR.VALUEs = ptuVal;
+                    ptuVal.Clear();
+                    foreach (uint val in ptu12) { ptuVal.Add(val * -5.625f); }
+                    _ptp.unitIFs[0].UNITs[1].PHASE_MONITOR.VALUEs = ptuVal;
+                    ptuVal.Clear();
+                    foreach (uint val in ptu13) { ptuVal.Add(val * -5.625f); }
+                    _ptp.unitIFs[0].UNITs[2].PHASE_MONITOR.VALUEs = ptuVal;
+                    ptuVal.Clear();
+                    foreach (uint val in ptu21) { ptuVal.Add(val * -5.625f); }
+                    _ptp.unitIFs[1].UNITs[0].PHASE_MONITOR.VALUEs = ptuVal;
+                    ptuVal.Clear();
+                    foreach (uint val in ptu22) { ptuVal.Add(val * -5.625f); }
+                    _ptp.unitIFs[1].UNITs[1].PHASE_MONITOR.VALUEs = ptuVal;
+                    ptuVal.Clear();
+                    foreach (uint val in ptu23) { ptuVal.Add(val * -5.625f); }
+                    _ptp.unitIFs[1].UNITs[2].PHASE_MONITOR.VALUEs = ptuVal;
+                    ptuVal.Clear();
+                    foreach (uint val in ptu31) { ptuVal.Add(val * -5.625f); }
+                    _ptp.unitIFs[2].UNITs[0].PHASE_MONITOR.VALUEs = ptuVal;
+                    ptuVal.Clear();
+                    foreach (uint val in ptu32) { ptuVal.Add(val * -5.625f); }
+                    _ptp.unitIFs[2].UNITs[1].PHASE_MONITOR.VALUEs = ptuVal;
+                    ptuVal.Clear();
+                    foreach (uint val in ptu33) { ptuVal.Add(val * -5.625f); }
+                    _ptp.unitIFs[2].UNITs[2].PHASE_MONITOR.VALUEs = ptuVal;
+                    return true;
+                }
+                else { return false; }
             }
-            else { return false; }
+            catch
+            {
+                ptu11 = null;
+                ptu12 = null;
+                ptu13 = null;
+                ptu21 = null;
+                ptu22 = null;
+                ptu23 = null;
+                ptu31 = null;
+                ptu32 = null;
+                ptu33 = null;
+                return false;
+            }
         }
 
         private ptuxx ReadDPSxx(int interfaceNum)
@@ -1131,23 +1218,42 @@ namespace PCAB_Debugger_ACS
             out List<uint> ptu31, out List<uint> ptu32, out List<uint> ptu33
             )
         {
-            Task<ptuxx> _wrt1x = Task.Factory.StartNew(() => { return ReadDSAxx(0); });
-            Task<ptuxx> _wrt2x = Task.Factory.StartNew(() => { return ReadDSAxx(1); });
-            Task<ptuxx> _wrt3x = Task.Factory.StartNew(() => { return ReadDSAxx(2); });
-            Task.WaitAll(_wrt1x, _wrt2x, _wrt3x);
-            ptu11 = _wrt1x.Result.ptux1;
-            ptu12 = _wrt1x.Result.ptux2;
-            ptu13 = _wrt1x.Result.ptux3;
-            ptu21 = _wrt2x.Result.ptux1;
-            ptu22 = _wrt2x.Result.ptux2;
-            ptu23 = _wrt2x.Result.ptux3;
-            ptu31 = _wrt3x.Result.ptux1;
-            ptu32 = _wrt3x.Result.ptux2;
-            ptu33 = _wrt3x.Result.ptux3;
-            if (ptu11 != null && ptu12 != null && ptu13 != null &&
-                ptu21 != null && ptu22 != null && ptu23 != null &&
-                ptu31 != null && ptu23 != null && ptu33 != null) { return true; }
-            else { return false; }
+            try
+            {
+                Task<ptuxx> _wrt1x = Task.Factory.StartNew(() => { return ReadDSAxx(0); });
+                Task<ptuxx> _wrt2x = Task.Factory.StartNew(() => { return ReadDSAxx(1); });
+                Task<ptuxx> _wrt3x = Task.Factory.StartNew(() => { return ReadDSAxx(2); });
+                _wrt1x?.ConfigureAwait(false);
+                _wrt2x?.ConfigureAwait(false);
+                _wrt3x?.ConfigureAwait(false);
+                Task.WaitAll(_wrt1x, _wrt2x, _wrt3x);
+                ptu11 = _wrt1x.Result.ptux1;
+                ptu12 = _wrt1x.Result.ptux2;
+                ptu13 = _wrt1x.Result.ptux3;
+                ptu21 = _wrt2x.Result.ptux1;
+                ptu22 = _wrt2x.Result.ptux2;
+                ptu23 = _wrt2x.Result.ptux3;
+                ptu31 = _wrt3x.Result.ptux1;
+                ptu32 = _wrt3x.Result.ptux2;
+                ptu33 = _wrt3x.Result.ptux3;
+                if (ptu11 != null && ptu12 != null && ptu13 != null &&
+                    ptu21 != null && ptu22 != null && ptu23 != null &&
+                    ptu31 != null && ptu23 != null && ptu33 != null) { return true; }
+                else { return false; }
+            }
+            catch
+            {
+                ptu11 = null;
+                ptu12 = null;
+                ptu13 = null;
+                ptu21 = null;
+                ptu22 = null;
+                ptu23 = null;
+                ptu31 = null;
+                ptu32 = null;
+                ptu33 = null;
+                return false;
+            }
         }
 
         private ptuxx ReadDSAxx(int interfaceNum)

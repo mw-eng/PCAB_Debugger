@@ -4,7 +4,6 @@ using MWComLibCS;
 using MWComLibCS.CoordinateSystem;
 using System;
 using System.IO;
-using static PCAB_Debugger_ACS.PANEL;
 
 namespace PCAB_Debugger_ACS
 {

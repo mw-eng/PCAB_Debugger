@@ -1,5 +1,5 @@
-#define WRITE_MODE
-//#define OUTPUT_MODE
+//#define WRITE_MODE
+#define OUTPUT_MODE
 
 #include "PCAB_Debugger_POS_Emu.hpp"
 

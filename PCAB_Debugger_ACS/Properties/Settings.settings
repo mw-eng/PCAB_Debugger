@@ -122,5 +122,11 @@
     <Setting Name="saveLogs" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
+    <Setting Name="snsIntTime" Type="System.UInt32" Scope="User">
+      <Value Profile="(Default)">100</Value>
+    </Setting>
+    <Setting Name="FreqMHz" Type="System.UInt32" Scope="User">
+      <Value Profile="(Default)">5800</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

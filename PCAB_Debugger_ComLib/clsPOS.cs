@@ -100,7 +100,8 @@ namespace PCAB_Debugger_ComLib
         public void POS_AutoTaskStop()
         {
             _task = false;
-            _loopTask.ConfigureAwait(false);
+            _loopTask?.ConfigureAwait(false);
+            _loopTask?.Wait();
         }
 
         public class POSEventArgs : EventArgs
