@@ -11,8 +11,8 @@ namespace PCAB_Debugger_ComLib
     public partial class cntMonitor : UserControl
     {
         private const float maxTMP = 55.0f;
-        private const float minTMP = 15.0f;
-        private const float maxVin = 30.0f;
+        private const float minTMP = 20.0f;
+        private const float maxVin = 40.0f;
         private const float minVin = 26.0f;
         private const float maxPin = 1.1f;
         private const float minPin = 0.9f;

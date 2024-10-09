@@ -481,7 +481,7 @@ namespace PCAB_Debugger_ACS.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("D:\\Temp\\Sample")]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string logSaveDirPath {
             get {
                 return ((string)(this["logSaveDirPath"]));

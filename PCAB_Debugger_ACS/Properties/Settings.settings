@@ -117,7 +117,7 @@
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="logSaveDirPath" Type="System.String" Scope="User">
-      <Value Profile="(Default)">D:\Temp\Sample</Value>
+      <Value Profile="(Default)" />
     </Setting>
     <Setting Name="saveLogs" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
