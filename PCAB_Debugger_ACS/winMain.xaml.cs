@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Markup;
 using static PCAB_Debugger_ComLib.cntConfigPorts;
 using static PCAB_Debugger_ComLib.PCAB_SerialInterface;
 using static PCAB_Debugger_ComLib.POS;
@@ -34,7 +33,7 @@ namespace PCAB_Debugger_ACS
         private StreamWriter snsSP1FS;
         private StreamWriter snsSP2FS;
         private StreamWriter snsSP3FS;
-        private StreamWriter writeFS;
+        private StreamWriter cmdFS;
         private StreamWriter errFS;
         private bool saveLOG = false;
 
@@ -190,7 +189,7 @@ namespace PCAB_Debugger_ACS
                 snsSP1FS.Close();
                 snsSP2FS.Close();
                 snsSP3FS.Close();
-                writeFS.Close();
+                cmdFS.Close();
                 errFS.Close();
             }
             CONFIG_EXPANDER.IsExpanded = true;
@@ -266,7 +265,7 @@ namespace PCAB_Debugger_ACS
                         snsSP1FS = new StreamWriter(LogDirPath_TextBox.Text + "//" + sp1Name + "_" + dt.ToString("yyyyMMdd-HHmmss") + ".csv", true, enc);
                         snsSP2FS = new StreamWriter(LogDirPath_TextBox.Text + "//" + sp2Name + "_" + dt.ToString("yyyyMMdd-HHmmss") + ".csv", true, enc);
                         snsSP3FS = new StreamWriter(LogDirPath_TextBox.Text + "//" + sp3Name + "_" + dt.ToString("yyyyMMdd-HHmmss") + ".csv", true, enc);
-                        writeFS = new StreamWriter(LogDirPath_TextBox.Text + "//CMD_" + dt.ToString("yyyyMMdd-HHmmss") + ".csv", true, enc);
+                        cmdFS = new StreamWriter(LogDirPath_TextBox.Text + "//CMD_" + dt.ToString("yyyyMMdd-HHmmss") + ".csv", true, enc);
                         errFS = new StreamWriter(LogDirPath_TextBox.Text + "//ERR_" + dt.ToString("yyyyMMdd-HHmmss") + ".csv", true, enc);
                         #region Header Write
                         posFS.WriteLine(this.Title);
@@ -318,10 +317,10 @@ namespace PCAB_Debugger_ACS
                         snsSP3FS.Write("CPU TEMP [degC],Vin [V],Pin [V],Id [A],Vd [V],");
                         snsSP3FS.Write("TEMP1 [degC],TEMP2 [degC],TEMP3 [degC],TEMP4 [degC],TEMP5 [degC],TEMP6 [degC],TEMP7 [degC],TEMP8 [degC],TEMP9 [degC],TEMP10 [degC],TEMP11 [degC],TEMP12 [degC],TEMP13 [degC],TEMP14 [degC],TEMP15 [degC]");
                         snsSP3FS.WriteLine("");
-                        writeFS.WriteLine(this.Title);
-                        writeFS.WriteLine("Command Write Event Log");
-                        writeFS.WriteLine("");
-                        writeFS.WriteLine("Date Time,Command Line(HEX)");
+                        cmdFS.WriteLine(this.Title);
+                        cmdFS.WriteLine("All (DPS / DSA / DSAin) (Read / Write) Command Event Log");
+                        cmdFS.WriteLine("");
+                        cmdFS.WriteLine("Date Time,DPS or DSA or DSAin,Read or Write,PTU11(HEX),PTU12(HEX),PTU13(HEX),PTU21(HEX),PTU22(HEX),PTU23(HEX),PTU31(HEX),PTU32(HEX),PTU33(HEX),Date Time,true or false");
                         errFS.WriteLine(this.Title);
                         errFS.WriteLine("Error Event Log");
                         errFS.WriteLine("");
@@ -851,15 +850,27 @@ namespace PCAB_Debugger_ACS
         private void WRITEDSA_Click(object sender, RoutedEventArgs e)
         {
             bool result = true;
+            List<uint> ptu11 = _ptp.unitIFs[0].UNITs[0].CONFIG.GetDSA();
+            List<uint> ptu12 = _ptp.unitIFs[0].UNITs[1].CONFIG.GetDSA();
+            List<uint> ptu13 = _ptp.unitIFs[0].UNITs[2].CONFIG.GetDSA();
+            List<uint> ptu21 = _ptp.unitIFs[1].UNITs[0].CONFIG.GetDSA();
+            List<uint> ptu22 = _ptp.unitIFs[1].UNITs[1].CONFIG.GetDSA();
+            List<uint> ptu23 = _ptp.unitIFs[1].UNITs[2].CONFIG.GetDSA();
+            List<uint> ptu31 = _ptp.unitIFs[2].UNITs[0].CONFIG.GetDSA();
+            List<uint> ptu32 = _ptp.unitIFs[2].UNITs[1].CONFIG.GetDSA();
+            List<uint> ptu33 = _ptp.unitIFs[2].UNITs[2].CONFIG.GetDSA();
+            uint ptu11in = (uint)(_ptp.unitIFs[0].UNITs[0].CONFIG.GetDSA(0));
+            uint ptu12in = (uint)(_ptp.unitIFs[0].UNITs[1].CONFIG.GetDSA(0));
+            uint ptu13in = (uint)(_ptp.unitIFs[0].UNITs[2].CONFIG.GetDSA(0));
+            uint ptu21in = (uint)(_ptp.unitIFs[1].UNITs[0].CONFIG.GetDSA(0));
+            uint ptu22in = (uint)(_ptp.unitIFs[1].UNITs[1].CONFIG.GetDSA(0));
+            uint ptu23in = (uint)(_ptp.unitIFs[1].UNITs[2].CONFIG.GetDSA(0));
+            uint ptu31in = (uint)(_ptp.unitIFs[2].UNITs[0].CONFIG.GetDSA(0));
+            uint ptu32in = (uint)(_ptp.unitIFs[2].UNITs[1].CONFIG.GetDSA(0));
+            uint ptu33in = (uint)(_ptp.unitIFs[2].UNITs[2].CONFIG.GetDSA(0));
             _ptp.PANEL_SensorMonitor_TASK_Pause();
-            foreach (PANEL.UNIT_IF unitIF in _ptp.unitIFs)
-            {
-                foreach (PANEL.UNIT unit in unitIF.UNITs)
-                {
-                    if (!unitIF.SerialInterface.WriteDSAin(new PCAB_UnitInterface(unit.SerialNumber), (uint)unit.CONFIG.GetDSA(0))) { result = false; }
-                    if (!unitIF.SerialInterface.WriteDSA(new PCAB_UnitInterface(unit.SerialNumber), unit.CONFIG.GetDSA())) { result = false; }
-                }
-            }
+            if (!WriteDSAinxx(ptu11in, ptu12in, ptu13in, ptu21in, ptu22in, ptu23in, ptu31in, ptu32in, ptu33in)) { result = false; }
+            if (!WriteDSAxx(ptu11, ptu12, ptu13, ptu21, ptu22, ptu23, ptu31, ptu32, ptu33)) { result = false; }
             _ptp.PANEL_SensorMonitor_TASK_Restart();
             if (!result)
             {
@@ -874,21 +885,33 @@ namespace PCAB_Debugger_ACS
         private void WRITEDPS_Click(object sender, RoutedEventArgs e)
         {
             bool result = true;
+            List<uint> ptu11 = _ptp.unitIFs[0].UNITs[0].CONFIG.GetDPS();
+            List<uint> ptu12 = _ptp.unitIFs[0].UNITs[1].CONFIG.GetDPS();
+            List<uint> ptu13 = _ptp.unitIFs[0].UNITs[2].CONFIG.GetDPS();
+            List<uint> ptu21 = _ptp.unitIFs[1].UNITs[0].CONFIG.GetDPS();
+            List<uint> ptu22 = _ptp.unitIFs[1].UNITs[1].CONFIG.GetDPS();
+            List<uint> ptu23 = _ptp.unitIFs[1].UNITs[2].CONFIG.GetDPS();
+            List<uint> ptu31 = _ptp.unitIFs[2].UNITs[0].CONFIG.GetDPS();
+            List<uint> ptu32 = _ptp.unitIFs[2].UNITs[1].CONFIG.GetDPS();
+            List<uint> ptu33 = _ptp.unitIFs[2].UNITs[2].CONFIG.GetDPS();
             _ptp.PANEL_SensorMonitor_TASK_Pause();
-            foreach (PANEL.UNIT_IF unitIF in _ptp.unitIFs)
+            if (!WriteDPSxx(ptu11, ptu12, ptu13, ptu21, ptu22, ptu23, ptu31, ptu32, ptu33)) { result = false; }
+            _ptp.PANEL_SensorMonitor_TASK_Restart();
+            if (result)
             {
-                foreach (PANEL.UNIT unit in unitIF.UNITs)
+                foreach (PANEL.UNIT_IF unitIF in _ptp.unitIFs)
                 {
-                    if (!unitIF.SerialInterface.WriteDPS(new PCAB_UnitInterface(unit.SerialNumber), unit.CONFIG.GetDPS())) { result = false; }
-                    List<float> dpsVal = new List<float>();
-                    foreach (uint val in unit.CONFIG.GetDPS())
+                    foreach (PANEL.UNIT unit in unitIF.UNITs)
                     {
-                        dpsVal.Add(val * -5.625f);
+                        List<float> dpsVal = new List<float>();
+                        foreach (uint val in unit.CONFIG.GetDPS())
+                        {
+                            dpsVal.Add(val * -5.625f);
+                        }
+                        unit.PHASE_MONITOR.VALUEs = dpsVal;
                     }
-                    unit.PHASE_MONITOR.VALUEs = dpsVal;
                 }
             }
-            _ptp.PANEL_SensorMonitor_TASK_Restart();
             if (!result)
             {
                 MessageBox.Show("Write DPS failed.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -1310,6 +1333,7 @@ namespace PCAB_Debugger_ACS
         {
             _ptp.PANEL_SensorMonitor_TASK_Pause();
             List<uint> ptu11, ptu12, ptu13, ptu21, ptu22, ptu23, ptu31, ptu32, ptu33;
+            int ptu11in, ptu12in, ptu13in, ptu21in, ptu22in, ptu23in, ptu31in, ptu32in, ptu33in;
             try
             {
                 if (ReadDPSxx(out ptu11, out ptu12, out ptu13, out ptu21, out ptu22, out ptu23, out ptu31, out ptu32, out ptu33))
@@ -1336,11 +1360,22 @@ namespace PCAB_Debugger_ACS
                     _ptp.unitIFs[2].UNITs[1].CONFIG.SetDSA(ptu32);
                     _ptp.unitIFs[2].UNITs[2].CONFIG.SetDSA(ptu33);
                 }
+                if (ReadDSAinxx(out ptu11in, out ptu12in, out ptu13in, out ptu21in, out ptu22in, out ptu23in, out ptu31in, out ptu32in, out ptu33in))
+                {
+                    _ptp.unitIFs[0].UNITs[0].CONFIG.SetDSA(0, ptu11in);
+                    _ptp.unitIFs[0].UNITs[1].CONFIG.SetDSA(0, ptu12in);
+                    _ptp.unitIFs[0].UNITs[2].CONFIG.SetDSA(0, ptu13in);
+                    _ptp.unitIFs[1].UNITs[0].CONFIG.SetDSA(0, ptu21in);
+                    _ptp.unitIFs[1].UNITs[1].CONFIG.SetDSA(0, ptu22in);
+                    _ptp.unitIFs[1].UNITs[2].CONFIG.SetDSA(0, ptu23in);
+                    _ptp.unitIFs[2].UNITs[0].CONFIG.SetDSA(0, ptu31in);
+                    _ptp.unitIFs[2].UNITs[1].CONFIG.SetDSA(0, ptu32in);
+                    _ptp.unitIFs[2].UNITs[2].CONFIG.SetDSA(0, ptu33in);
+                }
                 foreach (PANEL.UNIT_IF unitIF in _ptp.unitIFs)
                 {
                     foreach (PANEL.UNIT unit in unitIF.UNITs)
                     {
-                        unit.CONFIG.SetDSA(0, unitIF.SerialInterface.GetDSAin(new PCAB_UnitInterface(unit.SerialNumber)));
                         unit.CONFIG.StandbyLNA = unitIF.SerialInterface.GetSTB_LNA(new PCAB_UnitInterface(unit.SerialNumber));
                     }
                 }
@@ -1398,6 +1433,19 @@ namespace PCAB_Debugger_ACS
             List<uint> ptu31, List<uint> ptu32, List<uint> ptu33
             )
         {
+            if (saveLOG)
+            {
+                cmdFS.Write(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss.ffffff") + ",DPS,WRITE,");
+                cmdFS.Write(BitConverter.ToString(ptu11.ConvertAll(x => (byte)x).ToArray()) + ",");
+                cmdFS.Write(BitConverter.ToString(ptu12.ConvertAll(x => (byte)x).ToArray()) + ",");
+                cmdFS.Write(BitConverter.ToString(ptu13.ConvertAll(x => (byte)x).ToArray()) + ",");
+                cmdFS.Write(BitConverter.ToString(ptu21.ConvertAll(x => (byte)x).ToArray()) + ",");
+                cmdFS.Write(BitConverter.ToString(ptu22.ConvertAll(x => (byte)x).ToArray()) + ",");
+                cmdFS.Write(BitConverter.ToString(ptu23.ConvertAll(x => (byte)x).ToArray()) + ",");
+                cmdFS.Write(BitConverter.ToString(ptu31.ConvertAll(x => (byte)x).ToArray()) + ",");
+                cmdFS.Write(BitConverter.ToString(ptu32.ConvertAll(x => (byte)x).ToArray()) + ",");
+                cmdFS.Write(BitConverter.ToString(ptu33.ConvertAll(x => (byte)x).ToArray()) + ",");
+            }
             try
             {
                 Task<bool> _wrt1x = Task.Factory.StartNew(() => { return WriteDPSxx(0, ptu11, ptu12, ptu13); });
@@ -1437,10 +1485,29 @@ namespace PCAB_Debugger_ACS
                     ptuVal.Clear();
                     foreach (uint val in ptu33) { ptuVal.Add(val * -5.625f); }
                     _ptp.unitIFs[2].UNITs[2].PHASE_MONITOR.VALUEs = ptuVal;
+                    if (saveLOG)
+                    {
+                        cmdFS.WriteLine(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss.ffffff") + ",TRUE");
+                    }
                     return true;
                 }
-                else { return false; }
-            }catch (Exception e) { return false; }
+                else
+                {
+                    if (saveLOG)
+                    {
+                        cmdFS.WriteLine(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss.ffffff") + ",FALSE");
+                    }
+                    return false;
+                }
+            }
+            catch (Exception e)
+            {
+                if (saveLOG)
+                {
+                    cmdFS.WriteLine(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss.ffffff") + ",FALSE");
+                }
+                return false;
+            }
         }
 
         private bool WriteDPSxx(int interfaceNum, List<uint> ptux1, List<uint> ptux2, List<uint> ptux3)
@@ -1458,6 +1525,19 @@ namespace PCAB_Debugger_ACS
             List<uint> ptu31, List<uint> ptu32, List<uint> ptu33
             )
         {
+            if (saveLOG)
+            {
+                cmdFS.Write(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss.ffffff") + ",DSA,WRITE,");
+                cmdFS.Write(BitConverter.ToString(ptu11.ConvertAll(x => (byte)x).ToArray()) + ",");
+                cmdFS.Write(BitConverter.ToString(ptu12.ConvertAll(x => (byte)x).ToArray()) + ",");
+                cmdFS.Write(BitConverter.ToString(ptu13.ConvertAll(x => (byte)x).ToArray()) + ",");
+                cmdFS.Write(BitConverter.ToString(ptu21.ConvertAll(x => (byte)x).ToArray()) + ",");
+                cmdFS.Write(BitConverter.ToString(ptu22.ConvertAll(x => (byte)x).ToArray()) + ",");
+                cmdFS.Write(BitConverter.ToString(ptu23.ConvertAll(x => (byte)x).ToArray()) + ",");
+                cmdFS.Write(BitConverter.ToString(ptu31.ConvertAll(x => (byte)x).ToArray()) + ",");
+                cmdFS.Write(BitConverter.ToString(ptu32.ConvertAll(x => (byte)x).ToArray()) + ",");
+                cmdFS.Write(BitConverter.ToString(ptu33.ConvertAll(x => (byte)x).ToArray()) + ",");
+            }
             try
             {
                 Task<bool> _wrt1x = Task.Factory.StartNew(() => { return WriteDSAxx(0, ptu11, ptu12, ptu13); });
@@ -1467,10 +1547,31 @@ namespace PCAB_Debugger_ACS
                 _wrt2x?.ConfigureAwait(false);
                 _wrt3x?.ConfigureAwait(false);
                 Task.WaitAll(_wrt1x, _wrt2x, _wrt3x);
-                if (_wrt1x.Result && _wrt2x.Result && _wrt3x.Result) { return true; }
-                else { return false; }
+                if (_wrt1x.Result && _wrt2x.Result && _wrt3x.Result)
+                {
+                    if (saveLOG)
+                    {
+                        cmdFS.WriteLine(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss.ffffff") + ",TRUE");
+                    }
+                    return true;
+                }
+                else
+                {
+                    if (saveLOG)
+                    {
+                        cmdFS.WriteLine(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss.ffffff") + ",FALSE");
+                    }
+                    return false;
+                }
             }
-            catch { return false; }
+            catch (Exception e)
+            {
+                if (saveLOG)
+                {
+                    cmdFS.WriteLine(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss.ffffff") + ",FALSE");
+                }
+                return false;
+            }
         }
 
         private bool WriteDSAxx(int interfaceNum, List<uint> ptux1, List<uint> ptux2, List<uint> ptux3)
@@ -1482,12 +1583,81 @@ namespace PCAB_Debugger_ACS
             return result;
         }
 
+
+        private bool WriteDSAinxx(
+            uint ptu11, uint ptu12, uint ptu13,
+            uint ptu21, uint ptu22, uint ptu23,
+            uint ptu31, uint ptu32, uint ptu33
+            )
+        {
+            if (saveLOG)
+            {
+                cmdFS.Write(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss.ffffff") + ",DSAin,WRITE,");
+                cmdFS.Write(ptu11.ToString("X2") + ",");
+                cmdFS.Write(ptu12.ToString("X2") + ",");
+                cmdFS.Write(ptu13.ToString("X2") + ",");
+                cmdFS.Write(ptu21.ToString("X2") + ",");
+                cmdFS.Write(ptu22.ToString("X2") + ",");
+                cmdFS.Write(ptu23.ToString("X2") + ",");
+                cmdFS.Write(ptu31.ToString("X2") + ",");
+                cmdFS.Write(ptu32.ToString("X2") + ",");
+                cmdFS.Write(ptu33.ToString("X2") + ",");
+            }
+            try
+            {
+                Task<bool> _wrt1x = Task.Factory.StartNew(() => { return WriteDSAinxx(0, ptu11, ptu12, ptu13); });
+                Task<bool> _wrt2x = Task.Factory.StartNew(() => { return WriteDSAinxx(1, ptu21, ptu22, ptu23); });
+                Task<bool> _wrt3x = Task.Factory.StartNew(() => { return WriteDSAinxx(2, ptu31, ptu32, ptu33); });
+                _wrt1x?.ConfigureAwait(false);
+                _wrt2x?.ConfigureAwait(false);
+                _wrt3x?.ConfigureAwait(false);
+                Task.WaitAll(_wrt1x, _wrt2x, _wrt3x);
+                if (_wrt1x.Result && _wrt2x.Result && _wrt3x.Result)
+                {
+                    if (saveLOG)
+                    {
+                        cmdFS.WriteLine(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss.ffffff") + ",TRUE");
+                    }
+                    return true;
+                }
+                else
+                {
+                    if (saveLOG)
+                    {
+                        cmdFS.WriteLine(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss.ffffff") + ",FALSE");
+                    }
+                    return false;
+                }
+            }
+            catch (Exception e)
+            {
+                if (saveLOG)
+                {
+                    cmdFS.WriteLine(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss.ffffff") + ",FALSE");
+                }
+                return false;
+            }
+        }
+
+        private bool WriteDSAinxx(int interfaceNum, uint ptux1, uint ptux2, uint ptux3)
+        {
+            bool result = true;
+            if (!_ptp.unitIFs[interfaceNum].SerialInterface.WriteDSAin(0, ptux1)) { result = false; }
+            if (!_ptp.unitIFs[interfaceNum].SerialInterface.WriteDSAin(1, ptux2)) { result = false; }
+            if (!_ptp.unitIFs[interfaceNum].SerialInterface.WriteDSAin(2, ptux3)) { result = false; }
+            return result;
+        }
+
         private bool ReadDPSxx(
             out List<uint> ptu11, out List<uint> ptu12, out List<uint> ptu13,
             out List<uint> ptu21, out List<uint> ptu22, out List<uint> ptu23,
             out List<uint> ptu31, out List<uint> ptu32, out List<uint> ptu33
             )
         {
+            if (saveLOG)
+            {
+                cmdFS.Write(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss.ffffff") + ",DPS,READ,");
+            }
             try
             {
                 Task<ptuxx> _wrt1x = Task.Factory.StartNew(() => { return ReadDPSxx(0); });
@@ -1510,6 +1680,19 @@ namespace PCAB_Debugger_ACS
                     ptu21 != null && ptu22 != null && ptu23 != null &&
                     ptu31 != null && ptu23 != null && ptu33 != null)
                 {
+                    if (saveLOG)
+                    {
+                        cmdFS.Write(BitConverter.ToString(ptu11.ConvertAll(x => (byte)x).ToArray()) + ",");
+                        cmdFS.Write(BitConverter.ToString(ptu12.ConvertAll(x => (byte)x).ToArray()) + ",");
+                        cmdFS.Write(BitConverter.ToString(ptu13.ConvertAll(x => (byte)x).ToArray()) + ",");
+                        cmdFS.Write(BitConverter.ToString(ptu21.ConvertAll(x => (byte)x).ToArray()) + ",");
+                        cmdFS.Write(BitConverter.ToString(ptu22.ConvertAll(x => (byte)x).ToArray()) + ",");
+                        cmdFS.Write(BitConverter.ToString(ptu23.ConvertAll(x => (byte)x).ToArray()) + ",");
+                        cmdFS.Write(BitConverter.ToString(ptu31.ConvertAll(x => (byte)x).ToArray()) + ",");
+                        cmdFS.Write(BitConverter.ToString(ptu32.ConvertAll(x => (byte)x).ToArray()) + ",");
+                        cmdFS.Write(BitConverter.ToString(ptu33.ConvertAll(x => (byte)x).ToArray()) + ",");
+                        cmdFS.WriteLine(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss.ffffff") + ",TRUE");
+                    }
                     List<float> ptuVal = new List<float>();
                     ptuVal.Clear();
                     foreach (uint val in ptu11) { ptuVal.Add(val * -5.625f); }
@@ -1540,7 +1723,13 @@ namespace PCAB_Debugger_ACS
                     _ptp.unitIFs[2].UNITs[2].PHASE_MONITOR.VALUEs = ptuVal;
                     return true;
                 }
-                else { return false; }
+                else
+                {
+                    if (saveLOG)
+                    {
+                        cmdFS.WriteLine(",,,,,,,,," + DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss.ffffff") + ",FALSE");
+                    }
+                    return false; }
             }
             catch
             {
@@ -1553,6 +1742,10 @@ namespace PCAB_Debugger_ACS
                 ptu31 = null;
                 ptu32 = null;
                 ptu33 = null;
+                if (saveLOG)
+                {
+                    cmdFS.WriteLine(",,,,,,,,," + DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss.ffffff") + ",FALSE");
+                }
                 return false;
             }
         }
@@ -1575,6 +1768,10 @@ namespace PCAB_Debugger_ACS
             out List<uint> ptu31, out List<uint> ptu32, out List<uint> ptu33
             )
         {
+            if (saveLOG)
+            {
+                cmdFS.Write(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss.ffffff") + ",DSA,READ,");
+            }
             try
             {
                 Task<ptuxx> _wrt1x = Task.Factory.StartNew(() => { return ReadDSAxx(0); });
@@ -1595,8 +1792,29 @@ namespace PCAB_Debugger_ACS
                 ptu33 = _wrt3x.Result.ptux3;
                 if (ptu11 != null && ptu12 != null && ptu13 != null &&
                     ptu21 != null && ptu22 != null && ptu23 != null &&
-                    ptu31 != null && ptu23 != null && ptu33 != null) { return true; }
-                else { return false; }
+                    ptu31 != null && ptu23 != null && ptu33 != null)
+                {
+                    if (saveLOG)
+                    {
+                        cmdFS.Write(BitConverter.ToString(ptu11.ConvertAll(x => (byte)x).ToArray()) + ",");
+                        cmdFS.Write(BitConverter.ToString(ptu12.ConvertAll(x => (byte)x).ToArray()) + ",");
+                        cmdFS.Write(BitConverter.ToString(ptu13.ConvertAll(x => (byte)x).ToArray()) + ",");
+                        cmdFS.Write(BitConverter.ToString(ptu21.ConvertAll(x => (byte)x).ToArray()) + ",");
+                        cmdFS.Write(BitConverter.ToString(ptu22.ConvertAll(x => (byte)x).ToArray()) + ",");
+                        cmdFS.Write(BitConverter.ToString(ptu23.ConvertAll(x => (byte)x).ToArray()) + ",");
+                        cmdFS.Write(BitConverter.ToString(ptu31.ConvertAll(x => (byte)x).ToArray()) + ",");
+                        cmdFS.Write(BitConverter.ToString(ptu32.ConvertAll(x => (byte)x).ToArray()) + ",");
+                        cmdFS.Write(BitConverter.ToString(ptu33.ConvertAll(x => (byte)x).ToArray()) + ",");
+                        cmdFS.WriteLine(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss.ffffff") + ",TRUE");
+                    }
+                    return true; }
+                else
+                {
+                    if (saveLOG)
+                    {
+                        cmdFS.WriteLine(",,,,,,,,," + DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss.ffffff") + ",FALSE");
+                    }
+                    return false; }
             }
             catch
             {
@@ -1609,6 +1827,10 @@ namespace PCAB_Debugger_ACS
                 ptu31 = null;
                 ptu32 = null;
                 ptu33 = null;
+                if (saveLOG)
+                {
+                    cmdFS.WriteLine(",,,,,,,,," + DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss.ffffff") + ",FALSE");
+                }
                 return false;
             }
         }
@@ -1625,12 +1847,109 @@ namespace PCAB_Debugger_ACS
             return ptuDAT;
         }
 
+
+        private bool ReadDSAinxx(
+            out int ptu11, out int ptu12, out int ptu13,
+            out int ptu21, out int ptu22, out int ptu23,
+            out int ptu31, out int ptu32, out int ptu33
+            )
+        {
+            if (saveLOG)
+            {
+                cmdFS.Write(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss.ffffff") + ",DSAin,READ,");
+            }
+            try
+            {
+                Task<dsaINxx> _wrt1x = Task.Factory.StartNew(() => { return ReadDSAinxx(0); });
+                Task<dsaINxx> _wrt2x = Task.Factory.StartNew(() => { return ReadDSAinxx(1); });
+                Task<dsaINxx> _wrt3x = Task.Factory.StartNew(() => { return ReadDSAinxx(2); });
+                _wrt1x?.ConfigureAwait(false);
+                _wrt2x?.ConfigureAwait(false);
+                _wrt3x?.ConfigureAwait(false);
+                Task.WaitAll(_wrt1x, _wrt2x, _wrt3x);
+                ptu11 = _wrt1x.Result.ptux1;
+                ptu12 = _wrt1x.Result.ptux2;
+                ptu13 = _wrt1x.Result.ptux3;
+                ptu21 = _wrt2x.Result.ptux1;
+                ptu22 = _wrt2x.Result.ptux2;
+                ptu23 = _wrt2x.Result.ptux3;
+                ptu31 = _wrt3x.Result.ptux1;
+                ptu32 = _wrt3x.Result.ptux2;
+                ptu33 = _wrt3x.Result.ptux3;
+                if (ptu11 >= 0 && ptu12 >= 0 && ptu13 >= 0 &&
+                    ptu21 >= 0 && ptu22 >= 0 && ptu23 >= 0 &&
+                    ptu31 >= 0 && ptu23 >= 0 && ptu33 >= 0)
+                {
+                    if (saveLOG)
+                    {
+                        cmdFS.Write(ptu11.ToString("X2") + ",");
+                        cmdFS.Write(ptu12.ToString("X2") + ",");
+                        cmdFS.Write(ptu13.ToString("X2") + ",");
+                        cmdFS.Write(ptu21.ToString("X2") + ",");
+                        cmdFS.Write(ptu22.ToString("X2") + ",");
+                        cmdFS.Write(ptu23.ToString("X2") + ",");
+                        cmdFS.Write(ptu31.ToString("X2") + ",");
+                        cmdFS.Write(ptu32.ToString("X2") + ",");
+                        cmdFS.Write(ptu33.ToString("X2") + ",");
+                        cmdFS.WriteLine(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss.ffffff") + ",TRUE");
+                    }
+                    return true; }
+                else
+                {
+                    if (saveLOG)
+                    {
+                        cmdFS.WriteLine(",,,,,,,,," + DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss.ffffff") + ",FALSE");
+                    }
+                    return false; }
+            }
+            catch
+            {
+                ptu11 = -1;
+                ptu12 = -1;
+                ptu13 = -1;
+                ptu21 = -1;
+                ptu22 = -1;
+                ptu23 = -1;
+                ptu31 = -1;
+                ptu32 = -1;
+                ptu33 = -1;
+                if (saveLOG)
+                {
+                    cmdFS.WriteLine(",,,,,,,,," + DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss.ffffff") + ",FALSE");
+                }
+                return false;
+            }
+        }
+
+        private dsaINxx ReadDSAinxx(int interfaceNum)
+        {
+            dsaINxx ptuDAT = new dsaINxx();
+            try { ptuDAT.ptux1 = _ptp.unitIFs[interfaceNum].SerialInterface.GetDSAin(0); }
+            catch { ptuDAT.ptux1 = -1; }
+            try { ptuDAT.ptux2 = _ptp.unitIFs[interfaceNum].SerialInterface.GetDSAin(1); }
+            catch { ptuDAT.ptux2 = -1; }
+            try { ptuDAT.ptux3 = _ptp.unitIFs[interfaceNum].SerialInterface.GetDSAin(2); }
+            catch { ptuDAT.ptux3 = -1; }
+            return ptuDAT;
+        }
+
         private struct ptuxx
         {
             public List<uint> ptux1;
             public List<uint> ptux2;
             public List<uint> ptux3;
             public ptuxx(List<uint> ptux1, List<uint> ptux2, List<uint> ptux3)
+            {
+                this.ptux1 = ptux1; this.ptux2 = ptux2; this.ptux3 = ptux3;
+            }
+        }
+
+        private struct dsaINxx
+        {
+            public int ptux1;
+            public int ptux2;
+            public int ptux3;
+            public dsaINxx(int ptux1, int ptux2, int ptux3)
             {
                 this.ptux1 = ptux1; this.ptux2 = ptux2; this.ptux3 = ptux3;
             }

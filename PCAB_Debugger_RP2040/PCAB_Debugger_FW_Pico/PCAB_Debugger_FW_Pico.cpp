@@ -9,7 +9,7 @@
 #define ROM_BLOCK_NUM PICO_FLASH_SIZE_BYTES / FLASH_BLOCK_SIZE
 const static std::string FW_VENDOR = "Orient Microwave Corp.";
 const static std::string FW_MODEL = "LX00-0004-00";
-const static std::string FW_REV = "1.4.0";
+const static std::string FW_REV = "1.4.4";
 
 #ifdef DEBUG_RASPICO
     #define DSA_D3_PIN 8
@@ -316,30 +316,30 @@ int main()
                                 {
                                     for(int i = 0; i < NUMBER_OF_SYSTEM; i++ )
                                     {
-                                        len = snprintf(ch, sizeof(ch), "Now DPS[%02d] > %7.3f[deg] (0d%03d, 0b%s)", i + 1, dpsNOW[i] * 5.625f, dpsNOW[i], Convert::ToString(dpsNOW[i], 2, 6).c_str());
+                                        len = snprintf(ch, sizeof(ch), "Now DPS[%02d] > %7.3f[dB] (0d%03d, 0b%s)", i + 1, dsaNOW[i] * 0.25f, dsaNOW[i], Convert::ToString(dsaNOW[i], 2, 6).c_str());
                                         uart->writeLine(std::string(ch, len));
                                     }
                                 }
                                 else if(num == 0)
                                 {
-                                    len = snprintf(ch, sizeof(ch), "Buffer DSA[IN(16)] > %7.3f[deg] (0d%03d, 0b%s)", dsaBF[NUMBER_OF_SYSTEM] * 5.625f, dsaBF[NUMBER_OF_SYSTEM], Convert::ToString(dsaBF[NUMBER_OF_SYSTEM], 2, 6).c_str());
+                                    len = snprintf(ch, sizeof(ch), "Buffer DSA[IN(16)] > %7.3f[dB] (0d%03d, 0b%s)", dsaBF[NUMBER_OF_SYSTEM] * 0.25f, dsaBF[NUMBER_OF_SYSTEM], Convert::ToString(dsaBF[NUMBER_OF_SYSTEM], 2, 6).c_str());
                                     uart->writeLine(std::string(ch, len));
                                     for(int i = 0; i < NUMBER_OF_SYSTEM; i++ )
                                     {
-                                        len = snprintf(ch, sizeof(ch), "Buffer DSA[%02d] > %7.3f[deg] (0d%03d, 0b%s)", i + 1, dsaBF[i] * 5.625f, dsaBF[i], Convert::ToString(dsaBF[i], 2, 6).c_str());
+                                        len = snprintf(ch, sizeof(ch), "Buffer DSA[%02d] > %7.3f[dB] (0d%03d, 0b%s)", i + 1, dsaBF[i] * 0.25f, dsaBF[i], Convert::ToString(dsaBF[i], 2, 6).c_str());
                                         uart->writeLine(std::string(ch, len));
                                     }
                                 }
                                 else if(blNOW)
                                 {
-                                    if(num == NUMBER_OF_SYSTEM + 1){ len = snprintf(ch, sizeof(ch), "Now DSA[IN(%02d)] > %7.3f[deg] (0d%03d, 0b%s)", num, dsaNOW[num - 1] * 5.625f, dsaNOW[num - 1], Convert::ToString(dsaNOW[num - 1], 2, 6).c_str()); }
-                                    else { len = snprintf(ch, sizeof(ch), "Now DSA[%02d] > %7.3f[deg] (0d%03d, 0b%s)", num, dsaNOW[num - 1] * 5.625f, dsaNOW[num - 1], Convert::ToString(dsaNOW[num - 1], 2, 6).c_str()); }
+                                    if(num == NUMBER_OF_SYSTEM + 1){ len = snprintf(ch, sizeof(ch), "Now DSA[IN(%02d)] > %7.3f[dB] (0d%03d, 0b%s)", num, dsaNOW[num - 1] * 0.25f, dsaNOW[num - 1], Convert::ToString(dsaNOW[num - 1], 2, 6).c_str()); }
+                                    else { len = snprintf(ch, sizeof(ch), "Now DSA[%02d] > %7.3f[dB] (0d%03d, 0b%s)", num, dsaNOW[num - 1] * 0.25f, dsaNOW[num - 1], Convert::ToString(dsaNOW[num - 1], 2, 6).c_str()); }
                                     uart->writeLine(std::string(ch, len));
                                 }
                                 else
                                 {
-                                    if(num == NUMBER_OF_SYSTEM + 1){len = snprintf(ch, sizeof(ch), "Buffer DSA[IN(%02d)] > %7.3f[deg] (0d%03d, 0b%s)", num, dsaBF[num - 1] * 5.625f, dsaBF[num - 1], Convert::ToString(dsaBF[num - 1], 2, 6).c_str()); }
-                                    else { len = snprintf(ch, sizeof(ch), "Buffer DSA[%02d] > %7.3f[deg] (0d%03d, 0b%s)", num, dsaBF[num - 1] * 5.625f, dsaBF[num - 1], Convert::ToString(dsaBF[num - 1], 2, 6).c_str()); }
+                                    if(num == NUMBER_OF_SYSTEM + 1){len = snprintf(ch, sizeof(ch), "Buffer DSA[IN(%02d)] > %7.3f[dB] (0d%03d, 0b%s)", num, dsaBF[num - 1] * 0.25f, dsaBF[num - 1], Convert::ToString(dsaBF[num - 1], 2, 6).c_str()); }
+                                    else { len = snprintf(ch, sizeof(ch), "Buffer DSA[%02d] > %7.3f[dB] (0d%03d, 0b%s)", num, dsaBF[num - 1] * 0.25f, dsaBF[num - 1], Convert::ToString(dsaBF[num - 1], 2, 6).c_str()); }
                                     uart->writeLine(std::string(ch, len));
                                 }
                             }
