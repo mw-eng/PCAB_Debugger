@@ -170,7 +170,7 @@ namespace PCAB_Debugger_ACS
                     }
                 }
             }
-            private void GetSensorValue()
+            public void GetSensorValue()
             {
                 if (UNITs.Count != 0)
                 {

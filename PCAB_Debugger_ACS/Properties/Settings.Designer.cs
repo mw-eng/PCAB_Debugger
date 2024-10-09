@@ -493,7 +493,7 @@ namespace PCAB_Debugger_ACS.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool saveLogs {
             get {
                 return ((bool)(this["saveLogs"]));
@@ -524,6 +524,54 @@ namespace PCAB_Debugger_ACS.Properties {
             }
             set {
                 this["FreqMHz"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool saveLogsPOS {
+            get {
+                return ((bool)(this["saveLogsPOS"]));
+            }
+            set {
+                this["saveLogsPOS"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool saveLogsPTU1x {
+            get {
+                return ((bool)(this["saveLogsPTU1x"]));
+            }
+            set {
+                this["saveLogsPTU1x"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool saveLogsPTU2x {
+            get {
+                return ((bool)(this["saveLogsPTU2x"]));
+            }
+            set {
+                this["saveLogsPTU2x"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool saveLogsPTU3x {
+            get {
+                return ((bool)(this["saveLogsPTU3x"]));
+            }
+            set {
+                this["saveLogsPTU3x"] = value;
             }
         }
     }

@@ -120,13 +120,25 @@
       <Value Profile="(Default)">D:\Temp\Sample</Value>
     </Setting>
     <Setting Name="saveLogs" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">True</Value>
+      <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="snsIntTime" Type="System.UInt32" Scope="User">
       <Value Profile="(Default)">100</Value>
     </Setting>
     <Setting Name="FreqMHz" Type="System.UInt32" Scope="User">
       <Value Profile="(Default)">5800</Value>
+    </Setting>
+    <Setting Name="saveLogsPOS" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="saveLogsPTU1x" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="saveLogsPTU2x" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="saveLogsPTU3x" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
     </Setting>
   </Settings>
 </SettingsFile>

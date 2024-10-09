@@ -36,6 +36,10 @@ namespace PCAB_Debugger_ACS
         private StreamWriter cmdFS;
         private StreamWriter errFS;
         private bool saveLOG = false;
+        private bool savePosLOG = false;
+        private bool savePTU1xLOG = false;
+        private bool savePTU2xLOG = false;
+        private bool savePTU3xLOG = false;
 
         public winMain()
         {
@@ -116,6 +120,10 @@ namespace PCAB_Debugger_ACS
             VIEW_COMBOBOX.SelectedIndex = Settings.Default.view;
             SAVELOGs_CHECKBOX.IsChecked = Settings.Default.saveLogs;
             LogDirPath_TextBox.Text = Settings.Default.logSaveDirPath;
+            SAVELOGsPOS_CHECKBOX.IsChecked = Settings.Default.saveLogsPOS;
+            SAVELOGsPTU1x_CHECKBOX.IsChecked = Settings.Default.saveLogsPTU1x;
+            SAVELOGsPTU2x_CHECKBOX.IsChecked = Settings.Default.saveLogsPTU2x;
+            SAVELOGsPTU3x_CHECKBOX.IsChecked = Settings.Default.saveLogsPTU3x;
             INTERVAL_TIME_TEXTBOX.Text = Settings.Default.snsIntTime.ToString("0");
             CALCULATE_FREQUENCY_TEXTBOX.Text = Settings.Default.FreqMHz.ToString("0");
 
@@ -149,8 +157,16 @@ namespace PCAB_Debugger_ACS
             Settings.Default.sn32 = SERIAL_NUMBERS_TEXTBOX32.Text;
             Settings.Default.sn33 = SERIAL_NUMBERS_TEXTBOX33.Text;
             Settings.Default.view = VIEW_COMBOBOX.SelectedIndex;
-            if(SAVELOGs_CHECKBOX.IsChecked == true) { Settings.Default.saveLogs = true; }
+            if (SAVELOGs_CHECKBOX.IsChecked == true) { Settings.Default.saveLogs = true; }
             else { Settings.Default.saveLogs = false; }
+            if (SAVELOGsPOS_CHECKBOX.IsChecked == true) { Settings.Default.saveLogsPOS = true; }
+            else { Settings.Default.saveLogsPOS = false; }
+            if (SAVELOGsPTU1x_CHECKBOX.IsChecked == true) { Settings.Default.saveLogsPTU1x = true; }
+            else { Settings.Default.saveLogsPTU1x = false; }
+            if (SAVELOGsPTU2x_CHECKBOX.IsChecked == true) { Settings.Default.saveLogsPTU2x = true; }
+            else { Settings.Default.saveLogsPTU2x = false; }
+            if (SAVELOGsPTU3x_CHECKBOX.IsChecked == true) { Settings.Default.saveLogsPTU3x = true; }
+            else { Settings.Default.saveLogsPTU3x = false; }
             Settings.Default.logSaveDirPath = LogDirPath_TextBox.Text;
             Settings.Default.snsIntTime = uint.Parse(INTERVAL_TIME_TEXTBOX.Text);
             Settings.Default.FreqMHz = uint.Parse(CALCULATE_FREQUENCY_TEXTBOX.Text);
@@ -185,12 +201,12 @@ namespace PCAB_Debugger_ACS
             _ptp = null;
             if(SAVELOGs_CHECKBOX.IsChecked == true)
             {
-                posFS.Close();
-                snsSP1FS.Close();
-                snsSP2FS.Close();
-                snsSP3FS.Close();
                 cmdFS.Close();
                 errFS.Close();
+                if (savePosLOG) { posFS.Close(); }
+                if (savePTU1xLOG) { snsSP1FS.Close(); }
+                if (savePTU2xLOG) { snsSP2FS.Close(); }
+                if (savePTU3xLOG) { snsSP3FS.Close(); }
             }
             CONFIG_EXPANDER.IsExpanded = true;
             CONFIG_GRID.IsEnabled = true;
@@ -198,6 +214,11 @@ namespace PCAB_Debugger_ACS
             BOARD_CONFIG_EXPANDER.IsExpanded = false;
             CONNECT_BUTTON_CONTENT.Text = "Connect";
             isControl = false;
+            saveLOG = false;
+            savePosLOG = false;
+            savePTU1xLOG = false;
+            savePTU2xLOG = false;
+            savePTU3xLOG = false;
         }
 
         #region CONTROL CONFIG BUTTON EVENTs
@@ -215,6 +236,10 @@ namespace PCAB_Debugger_ACS
                         MessageBox.Show("The log destination folder does not exist.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                         return;
                     }
+                    if (SAVELOGsPOS_CHECKBOX.IsChecked == true) { savePosLOG = true; }
+                    if (SAVELOGsPTU1x_CHECKBOX.IsChecked == true) { savePTU1xLOG = true; }
+                    if (SAVELOGsPTU2x_CHECKBOX.IsChecked == true) { savePTU2xLOG = true; }
+                    if (SAVELOGsPTU3x_CHECKBOX.IsChecked == true) { savePTU3xLOG = true; }
                 }
                 string portConfFilePath = "";
                 using (System.Windows.Forms.OpenFileDialog ofd = new System.Windows.Forms.OpenFileDialog())
@@ -259,64 +284,10 @@ namespace PCAB_Debugger_ACS
                 {
                     DateTime dt = DateTime.Now;
                     Encoding enc = Encoding.UTF8;
-                    if (SAVELOGs_CHECKBOX.IsChecked == true)
+                    if (saveLOG)
                     {
-                        posFS = new StreamWriter(LogDirPath_TextBox.Text + "//POS_" + dt.ToString("yyyyMMdd-HHmmss") + ".csv", true, enc);
-                        snsSP1FS = new StreamWriter(LogDirPath_TextBox.Text + "//" + sp1Name + "_" + dt.ToString("yyyyMMdd-HHmmss") + ".csv", true, enc);
-                        snsSP2FS = new StreamWriter(LogDirPath_TextBox.Text + "//" + sp2Name + "_" + dt.ToString("yyyyMMdd-HHmmss") + ".csv", true, enc);
-                        snsSP3FS = new StreamWriter(LogDirPath_TextBox.Text + "//" + sp3Name + "_" + dt.ToString("yyyyMMdd-HHmmss") + ".csv", true, enc);
                         cmdFS = new StreamWriter(LogDirPath_TextBox.Text + "//CMD_" + dt.ToString("yyyyMMdd-HHmmss") + ".csv", true, enc);
                         errFS = new StreamWriter(LogDirPath_TextBox.Text + "//ERR_" + dt.ToString("yyyyMMdd-HHmmss") + ".csv", true, enc);
-                        #region Header Write
-                        posFS.WriteLine(this.Title);
-                        posFS.WriteLine("POS Data Update event log");
-                        posFS.WriteLine("");
-                        posFS.WriteLine("Date Time,Time of Validity [sec],Speed [m/s],Track [deg],Latitude,Longitude,Altitude [m],Roll [deg],Pitch [deg],Hedading [deg],Long Accel [m/s^2],Tran Accel [m/s^2],Down Accel [m/s^2]");
-                        snsSP1FS.WriteLine(this.Title);
-                        snsSP1FS.WriteLine("Serial Port [" + sp1Name + "] Sensor Data Update event log");
-                        snsSP1FS.WriteLine("PTU11 : " + SERIAL_NUMBERS_TEXTBOX11.Text);
-                        snsSP1FS.WriteLine("PTU12 : " + SERIAL_NUMBERS_TEXTBOX12.Text);
-                        snsSP1FS.WriteLine("PTU13 : " + SERIAL_NUMBERS_TEXTBOX13.Text);
-                        snsSP1FS.WriteLine("Monitor Interval Time [mS] : " + INTERVAL_TIME_TEXTBOX.Text);
-                        snsSP1FS.WriteLine("");
-                        snsSP1FS.WriteLine(",PTU11,,,,,,,,,,,,,,,,,,,,PTU12,,,,,,,,,,,,,,,,,,,,PTU13");
-                        snsSP1FS.Write("Date Time,CPU TEMP [degC],Vin [V],Pin [V],Id [A],Vd [V],");
-                        snsSP1FS.Write("TEMP1 [degC],TEMP2 [degC],TEMP3 [degC],TEMP4 [degC],TEMP5 [degC],TEMP6 [degC],TEMP7 [degC],TEMP8 [degC],TEMP9 [degC],TEMP10 [degC],TEMP11 [degC],TEMP12 [degC],TEMP13 [degC],TEMP14 [degC],TEMP15 [degC],");
-                        snsSP1FS.Write("CPU TEMP [degC],Vin [V],Pin [V],Id [A],Vd [V],");
-                        snsSP1FS.Write("TEMP1 [degC],TEMP2 [degC],TEMP3 [degC],TEMP4 [degC],TEMP5 [degC],TEMP6 [degC],TEMP7 [degC],TEMP8 [degC],TEMP9 [degC],TEMP10 [degC],TEMP11 [degC],TEMP12 [degC],TEMP13 [degC],TEMP14 [degC],TEMP15 [degC],");
-                        snsSP1FS.Write("CPU TEMP [degC],Vin [V],Pin [V],Id [A],Vd [V],");
-                        snsSP1FS.Write("TEMP1 [degC],TEMP2 [degC],TEMP3 [degC],TEMP4 [degC],TEMP5 [degC],TEMP6 [degC],TEMP7 [degC],TEMP8 [degC],TEMP9 [degC],TEMP10 [degC],TEMP11 [degC],TEMP12 [degC],TEMP13 [degC],TEMP14 [degC],TEMP15 [degC]");
-                        snsSP1FS.WriteLine("");
-                        snsSP2FS.WriteLine(this.Title);
-                        snsSP2FS.WriteLine("Serial Port [" + sp2Name + "] Sensor Data Update event log");
-                        snsSP2FS.WriteLine("PTU21 : " + SERIAL_NUMBERS_TEXTBOX21.Text);
-                        snsSP2FS.WriteLine("PTU22 : " + SERIAL_NUMBERS_TEXTBOX22.Text);
-                        snsSP2FS.WriteLine("PTU23 : " + SERIAL_NUMBERS_TEXTBOX23.Text);
-                        snsSP2FS.WriteLine("Monitor Interval Time [mS] : " + INTERVAL_TIME_TEXTBOX.Text);
-                        snsSP2FS.WriteLine("");
-                        snsSP2FS.WriteLine(",PTU21,,,,,,,,,,,,,,,,,,,,PTU22,,,,,,,,,,,,,,,,,,,,PTU23");
-                        snsSP2FS.Write("Date Time,CPU TEMP [degC],Vin [V],Pin [V],Id [A],Vd [V],");
-                        snsSP2FS.Write("TEMP1 [degC],TEMP2 [degC],TEMP3 [degC],TEMP4 [degC],TEMP5 [degC],TEMP6 [degC],TEMP7 [degC],TEMP8 [degC],TEMP9 [degC],TEMP10 [degC],TEMP11 [degC],TEMP12 [degC],TEMP13 [degC],TEMP14 [degC],TEMP15 [degC],");
-                        snsSP2FS.Write("CPU TEMP [degC],Vin [V],Pin [V],Id [A],Vd [V],");
-                        snsSP2FS.Write("TEMP1 [degC],TEMP2 [degC],TEMP3 [degC],TEMP4 [degC],TEMP5 [degC],TEMP6 [degC],TEMP7 [degC],TEMP8 [degC],TEMP9 [degC],TEMP10 [degC],TEMP11 [degC],TEMP12 [degC],TEMP13 [degC],TEMP14 [degC],TEMP15 [degC],");
-                        snsSP2FS.Write("CPU TEMP [degC],Vin [V],Pin [V],Id [A],Vd [V],");
-                        snsSP2FS.Write("TEMP1 [degC],TEMP2 [degC],TEMP3 [degC],TEMP4 [degC],TEMP5 [degC],TEMP6 [degC],TEMP7 [degC],TEMP8 [degC],TEMP9 [degC],TEMP10 [degC],TEMP11 [degC],TEMP12 [degC],TEMP13 [degC],TEMP14 [degC],TEMP15 [degC]");
-                        snsSP2FS.WriteLine("");
-                        snsSP3FS.WriteLine(this.Title);
-                        snsSP3FS.WriteLine("Serial Port [" + sp3Name + "] Sensor Data Update event log");
-                        snsSP3FS.WriteLine("PTU31 : " + SERIAL_NUMBERS_TEXTBOX31.Text);
-                        snsSP3FS.WriteLine("PTU32 : " + SERIAL_NUMBERS_TEXTBOX32.Text);
-                        snsSP3FS.WriteLine("PTU33 : " + SERIAL_NUMBERS_TEXTBOX33.Text);
-                        snsSP3FS.WriteLine("Monitor Interval Time [mS] : " + INTERVAL_TIME_TEXTBOX.Text);
-                        snsSP3FS.WriteLine("");
-                        snsSP3FS.WriteLine(",PTU31,,,,,,,,,,,,,,,,,,,,PTU32,,,,,,,,,,,,,,,,,,,,PTU33");
-                        snsSP3FS.Write("Date Time,CPU TEMP [degC],Vin [V],Pin [V],Id [A],Vd [V],");
-                        snsSP3FS.Write("TEMP1 [degC],TEMP2 [degC],TEMP3 [degC],TEMP4 [degC],TEMP5 [degC],TEMP6 [degC],TEMP7 [degC],TEMP8 [degC],TEMP9 [degC],TEMP10 [degC],TEMP11 [degC],TEMP12 [degC],TEMP13 [degC],TEMP14 [degC],TEMP15 [degC],");
-                        snsSP3FS.Write("CPU TEMP [degC],Vin [V],Pin [V],Id [A],Vd [V],");
-                        snsSP3FS.Write("TEMP1 [degC],TEMP2 [degC],TEMP3 [degC],TEMP4 [degC],TEMP5 [degC],TEMP6 [degC],TEMP7 [degC],TEMP8 [degC],TEMP9 [degC],TEMP10 [degC],TEMP11 [degC],TEMP12 [degC],TEMP13 [degC],TEMP14 [degC],TEMP15 [degC],");
-                        snsSP3FS.Write("CPU TEMP [degC],Vin [V],Pin [V],Id [A],Vd [V],");
-                        snsSP3FS.Write("TEMP1 [degC],TEMP2 [degC],TEMP3 [degC],TEMP4 [degC],TEMP5 [degC],TEMP6 [degC],TEMP7 [degC],TEMP8 [degC],TEMP9 [degC],TEMP10 [degC],TEMP11 [degC],TEMP12 [degC],TEMP13 [degC],TEMP14 [degC],TEMP15 [degC]");
-                        snsSP3FS.WriteLine("");
                         cmdFS.WriteLine(this.Title);
                         cmdFS.WriteLine("All (DPS / DSA / DSAin) (Read / Write) Command Event Log");
                         cmdFS.WriteLine("");
@@ -325,8 +296,71 @@ namespace PCAB_Debugger_ACS
                         errFS.WriteLine("Error Event Log");
                         errFS.WriteLine("");
                         errFS.WriteLine("Date Time,Sender,Message");
-                        #endregion
-
+                        if (savePosLOG)
+                        {
+                            posFS = new StreamWriter(LogDirPath_TextBox.Text + "//POS_" + dt.ToString("yyyyMMdd-HHmmss") + ".csv", true, enc);
+                            posFS.WriteLine(this.Title);
+                            posFS.WriteLine("POS Data Update event log");
+                            posFS.WriteLine("");
+                            posFS.WriteLine("Date Time,Time of Validity [sec],Speed [m/s],Track [deg],Latitude,Longitude,Altitude [m],Roll [deg],Pitch [deg],Hedading [deg],Long Accel [m/s^2],Tran Accel [m/s^2],Down Accel [m/s^2]");
+                        }
+                        if (savePTU1xLOG)
+                        {
+                            snsSP1FS = new StreamWriter(LogDirPath_TextBox.Text + "//" + sp1Name + "_" + dt.ToString("yyyyMMdd-HHmmss") + ".csv", true, enc);
+                            snsSP1FS.WriteLine(this.Title);
+                            snsSP1FS.WriteLine("Serial Port [" + sp1Name + "] Sensor Data Update event log");
+                            snsSP1FS.WriteLine("PTU11 : " + SERIAL_NUMBERS_TEXTBOX11.Text);
+                            snsSP1FS.WriteLine("PTU12 : " + SERIAL_NUMBERS_TEXTBOX12.Text);
+                            snsSP1FS.WriteLine("PTU13 : " + SERIAL_NUMBERS_TEXTBOX13.Text);
+                            snsSP1FS.WriteLine("Monitor Interval Time [mS] : " + INTERVAL_TIME_TEXTBOX.Text);
+                            snsSP1FS.WriteLine("");
+                            snsSP1FS.WriteLine(",PTU11,,,,,,,,,,,,,,,,,,,,PTU12,,,,,,,,,,,,,,,,,,,,PTU13");
+                            snsSP1FS.Write("Date Time,CPU TEMP [degC],Vin [V],Pin [V],Id [A],Vd [V],");
+                            snsSP1FS.Write("TEMP1 [degC],TEMP2 [degC],TEMP3 [degC],TEMP4 [degC],TEMP5 [degC],TEMP6 [degC],TEMP7 [degC],TEMP8 [degC],TEMP9 [degC],TEMP10 [degC],TEMP11 [degC],TEMP12 [degC],TEMP13 [degC],TEMP14 [degC],TEMP15 [degC],");
+                            snsSP1FS.Write("CPU TEMP [degC],Vin [V],Pin [V],Id [A],Vd [V],");
+                            snsSP1FS.Write("TEMP1 [degC],TEMP2 [degC],TEMP3 [degC],TEMP4 [degC],TEMP5 [degC],TEMP6 [degC],TEMP7 [degC],TEMP8 [degC],TEMP9 [degC],TEMP10 [degC],TEMP11 [degC],TEMP12 [degC],TEMP13 [degC],TEMP14 [degC],TEMP15 [degC],");
+                            snsSP1FS.Write("CPU TEMP [degC],Vin [V],Pin [V],Id [A],Vd [V],");
+                            snsSP1FS.Write("TEMP1 [degC],TEMP2 [degC],TEMP3 [degC],TEMP4 [degC],TEMP5 [degC],TEMP6 [degC],TEMP7 [degC],TEMP8 [degC],TEMP9 [degC],TEMP10 [degC],TEMP11 [degC],TEMP12 [degC],TEMP13 [degC],TEMP14 [degC],TEMP15 [degC]");
+                            snsSP1FS.WriteLine("");
+                        }
+                        if (savePTU2xLOG)
+                        {
+                            snsSP2FS = new StreamWriter(LogDirPath_TextBox.Text + "//" + sp2Name + "_" + dt.ToString("yyyyMMdd-HHmmss") + ".csv", true, enc);
+                            snsSP2FS.WriteLine(this.Title);
+                            snsSP2FS.WriteLine("Serial Port [" + sp2Name + "] Sensor Data Update event log");
+                            snsSP2FS.WriteLine("PTU21 : " + SERIAL_NUMBERS_TEXTBOX21.Text);
+                            snsSP2FS.WriteLine("PTU22 : " + SERIAL_NUMBERS_TEXTBOX22.Text);
+                            snsSP2FS.WriteLine("PTU23 : " + SERIAL_NUMBERS_TEXTBOX23.Text);
+                            snsSP2FS.WriteLine("Monitor Interval Time [mS] : " + INTERVAL_TIME_TEXTBOX.Text);
+                            snsSP2FS.WriteLine("");
+                            snsSP2FS.WriteLine(",PTU21,,,,,,,,,,,,,,,,,,,,PTU22,,,,,,,,,,,,,,,,,,,,PTU23");
+                            snsSP2FS.Write("Date Time,CPU TEMP [degC],Vin [V],Pin [V],Id [A],Vd [V],");
+                            snsSP2FS.Write("TEMP1 [degC],TEMP2 [degC],TEMP3 [degC],TEMP4 [degC],TEMP5 [degC],TEMP6 [degC],TEMP7 [degC],TEMP8 [degC],TEMP9 [degC],TEMP10 [degC],TEMP11 [degC],TEMP12 [degC],TEMP13 [degC],TEMP14 [degC],TEMP15 [degC],");
+                            snsSP2FS.Write("CPU TEMP [degC],Vin [V],Pin [V],Id [A],Vd [V],");
+                            snsSP2FS.Write("TEMP1 [degC],TEMP2 [degC],TEMP3 [degC],TEMP4 [degC],TEMP5 [degC],TEMP6 [degC],TEMP7 [degC],TEMP8 [degC],TEMP9 [degC],TEMP10 [degC],TEMP11 [degC],TEMP12 [degC],TEMP13 [degC],TEMP14 [degC],TEMP15 [degC],");
+                            snsSP2FS.Write("CPU TEMP [degC],Vin [V],Pin [V],Id [A],Vd [V],");
+                            snsSP2FS.Write("TEMP1 [degC],TEMP2 [degC],TEMP3 [degC],TEMP4 [degC],TEMP5 [degC],TEMP6 [degC],TEMP7 [degC],TEMP8 [degC],TEMP9 [degC],TEMP10 [degC],TEMP11 [degC],TEMP12 [degC],TEMP13 [degC],TEMP14 [degC],TEMP15 [degC]");
+                            snsSP2FS.WriteLine("");
+                        }
+                        if (savePTU3xLOG)
+                        {
+                            snsSP3FS = new StreamWriter(LogDirPath_TextBox.Text + "//" + sp3Name + "_" + dt.ToString("yyyyMMdd-HHmmss") + ".csv", true, enc);
+                            snsSP3FS.WriteLine(this.Title);
+                            snsSP3FS.WriteLine("Serial Port [" + sp3Name + "] Sensor Data Update event log");
+                            snsSP3FS.WriteLine("PTU31 : " + SERIAL_NUMBERS_TEXTBOX31.Text);
+                            snsSP3FS.WriteLine("PTU32 : " + SERIAL_NUMBERS_TEXTBOX32.Text);
+                            snsSP3FS.WriteLine("PTU33 : " + SERIAL_NUMBERS_TEXTBOX33.Text);
+                            snsSP3FS.WriteLine("Monitor Interval Time [mS] : " + INTERVAL_TIME_TEXTBOX.Text);
+                            snsSP3FS.WriteLine("");
+                            snsSP3FS.WriteLine(",PTU31,,,,,,,,,,,,,,,,,,,,PTU32,,,,,,,,,,,,,,,,,,,,PTU33");
+                            snsSP3FS.Write("Date Time,CPU TEMP [degC],Vin [V],Pin [V],Id [A],Vd [V],");
+                            snsSP3FS.Write("TEMP1 [degC],TEMP2 [degC],TEMP3 [degC],TEMP4 [degC],TEMP5 [degC],TEMP6 [degC],TEMP7 [degC],TEMP8 [degC],TEMP9 [degC],TEMP10 [degC],TEMP11 [degC],TEMP12 [degC],TEMP13 [degC],TEMP14 [degC],TEMP15 [degC],");
+                            snsSP3FS.Write("CPU TEMP [degC],Vin [V],Pin [V],Id [A],Vd [V],");
+                            snsSP3FS.Write("TEMP1 [degC],TEMP2 [degC],TEMP3 [degC],TEMP4 [degC],TEMP5 [degC],TEMP6 [degC],TEMP7 [degC],TEMP8 [degC],TEMP9 [degC],TEMP10 [degC],TEMP11 [degC],TEMP12 [degC],TEMP13 [degC],TEMP14 [degC],TEMP15 [degC],");
+                            snsSP3FS.Write("CPU TEMP [degC],Vin [V],Pin [V],Id [A],Vd [V],");
+                            snsSP3FS.Write("TEMP1 [degC],TEMP2 [degC],TEMP3 [degC],TEMP4 [degC],TEMP5 [degC],TEMP6 [degC],TEMP7 [degC],TEMP8 [degC],TEMP9 [degC],TEMP10 [degC],TEMP11 [degC],TEMP12 [degC],TEMP13 [degC],TEMP14 [degC],TEMP15 [degC]");
+                            snsSP3FS.WriteLine("");
+                        }
                     }
                     ROTATE ang1;
                     ROTATE ang2;
@@ -479,8 +513,8 @@ namespace PCAB_Debugger_ACS
 
         private void SAVELOGs_CHECKBOX_Click(object sender, RoutedEventArgs e)
         {
-            if (e.RoutedEvent.Name == "Checked") { LogDirPathSelect_BUTTON.IsEnabled = true; LogDirPath_TextBox.IsEnabled = true; }
-            else if (e.RoutedEvent.Name == "Unchecked") { LogDirPathSelect_BUTTON.IsEnabled = false; LogDirPath_TextBox.IsEnabled = false; }
+            if (e.RoutedEvent.Name == "Checked") { LogDirPathSelect_BUTTON.IsEnabled = true; LogDirPath_TextBox.IsEnabled = true; SAVELOGs_SELECT_GRID.IsEnabled = true; }
+            else if (e.RoutedEvent.Name == "Unchecked") { LogDirPathSelect_BUTTON.IsEnabled = false; LogDirPath_TextBox.IsEnabled = false; SAVELOGs_SELECT_GRID.IsEnabled = false; }
         }
 
         #endregion
@@ -1066,209 +1100,218 @@ namespace PCAB_Debugger_ACS
             if (saveLOG)
             {
                 string portName = ((PANEL.UNIT_IF)sender).SerialInterface.PortName;
-                string sp1Name = Path.GetFileNameWithoutExtension(((FileStream)snsSP1FS.BaseStream).Name).Split('_')[0];
-                string sp2Name = Path.GetFileNameWithoutExtension(((FileStream)snsSP2FS.BaseStream).Name).Split('_')[0];
-                string sp3Name = Path.GetFileNameWithoutExtension(((FileStream)snsSP3FS.BaseStream).Name).Split('_')[0];
-                if (portName == sp1Name)
+                if (savePTU1xLOG)
                 {
-                    snsSP1FS.Write(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss.ffffff") + ",");
-                    snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Analog.CPU_Temprature.ToString("0.00") + ",");
-                    snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Analog.Vin.ToString("0.00") + ",");
-                    snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Analog.Pin.ToString("0.00") + ",");
-                    snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Analog.Id.ToString("0.00") + ",");
-                    snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Analog.Vd.ToString("0.00") + ",");
-                    snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[0].ToString("0.00") + ",");
-                    snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[1].ToString("0.00") + ",");
-                    snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[2].ToString("0.00") + ",");
-                    snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[3].ToString("0.00") + ",");
-                    snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[4].ToString("0.00") + ",");
-                    snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[5].ToString("0.00") + ",");
-                    snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[6].ToString("0.00") + ",");
-                    snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[7].ToString("0.00") + ",");
-                    snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[8].ToString("0.00") + ",");
-                    snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[9].ToString("0.00") + ",");
-                    snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[10].ToString("0.00") + ",");
-                    snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[11].ToString("0.00") + ",");
-                    snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[12].ToString("0.00") + ",");
-                    snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[13].ToString("0.00") + ",");
-                    snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[14].ToString("0.00") + ",");
-                    snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Analog.CPU_Temprature.ToString("0.00") + ",");
-                    snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Analog.Vin.ToString("0.00") + ",");
-                    snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Analog.Pin.ToString("0.00") + ",");
-                    snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Analog.Id.ToString("0.00") + ",");
-                    snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Analog.Vd.ToString("0.00") + ",");
-                    snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[0].ToString("0.00") + ",");
-                    snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[1].ToString("0.00") + ",");
-                    snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[2].ToString("0.00") + ",");
-                    snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[3].ToString("0.00") + ",");
-                    snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[4].ToString("0.00") + ",");
-                    snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[5].ToString("0.00") + ",");
-                    snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[6].ToString("0.00") + ",");
-                    snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[7].ToString("0.00") + ",");
-                    snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[8].ToString("0.00") + ",");
-                    snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[9].ToString("0.00") + ",");
-                    snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[10].ToString("0.00") + ",");
-                    snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[11].ToString("0.00") + ",");
-                    snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[12].ToString("0.00") + ",");
-                    snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[13].ToString("0.00") + ",");
-                    snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[14].ToString("0.00") + ",");
-                    snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Analog.CPU_Temprature.ToString("0.00") + ",");
-                    snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Analog.Vin.ToString("0.00") + ",");
-                    snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Analog.Pin.ToString("0.00") + ",");
-                    snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Analog.Id.ToString("0.00") + ",");
-                    snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Analog.Vd.ToString("0.00") + ",");
-                    snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[0].ToString("0.00") + ",");
-                    snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[1].ToString("0.00") + ",");
-                    snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[2].ToString("0.00") + ",");
-                    snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[3].ToString("0.00") + ",");
-                    snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[4].ToString("0.00") + ",");
-                    snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[5].ToString("0.00") + ",");
-                    snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[6].ToString("0.00") + ",");
-                    snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[7].ToString("0.00") + ",");
-                    snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[8].ToString("0.00") + ",");
-                    snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[9].ToString("0.00") + ",");
-                    snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[10].ToString("0.00") + ",");
-                    snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[11].ToString("0.00") + ",");
-                    snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[12].ToString("0.00") + ",");
-                    snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[13].ToString("0.00") + ",");
-                    snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[14].ToString("0.00"));
-                    snsSP1FS.WriteLine("");
+                    string sp1Name = Path.GetFileNameWithoutExtension(((FileStream)snsSP1FS.BaseStream).Name).Split('_')[0];
+                    if (portName == sp1Name)
+                    {
+                        snsSP1FS.Write(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss.ffffff") + ",");
+                        snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Analog.CPU_Temprature.ToString("0.00") + ",");
+                        snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Analog.Vin.ToString("0.00") + ",");
+                        snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Analog.Pin.ToString("0.00") + ",");
+                        snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Analog.Id.ToString("0.00") + ",");
+                        snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Analog.Vd.ToString("0.00") + ",");
+                        snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[0].ToString("0.00") + ",");
+                        snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[1].ToString("0.00") + ",");
+                        snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[2].ToString("0.00") + ",");
+                        snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[3].ToString("0.00") + ",");
+                        snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[4].ToString("0.00") + ",");
+                        snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[5].ToString("0.00") + ",");
+                        snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[6].ToString("0.00") + ",");
+                        snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[7].ToString("0.00") + ",");
+                        snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[8].ToString("0.00") + ",");
+                        snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[9].ToString("0.00") + ",");
+                        snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[10].ToString("0.00") + ",");
+                        snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[11].ToString("0.00") + ",");
+                        snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[12].ToString("0.00") + ",");
+                        snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[13].ToString("0.00") + ",");
+                        snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[14].ToString("0.00") + ",");
+                        snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Analog.CPU_Temprature.ToString("0.00") + ",");
+                        snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Analog.Vin.ToString("0.00") + ",");
+                        snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Analog.Pin.ToString("0.00") + ",");
+                        snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Analog.Id.ToString("0.00") + ",");
+                        snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Analog.Vd.ToString("0.00") + ",");
+                        snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[0].ToString("0.00") + ",");
+                        snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[1].ToString("0.00") + ",");
+                        snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[2].ToString("0.00") + ",");
+                        snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[3].ToString("0.00") + ",");
+                        snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[4].ToString("0.00") + ",");
+                        snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[5].ToString("0.00") + ",");
+                        snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[6].ToString("0.00") + ",");
+                        snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[7].ToString("0.00") + ",");
+                        snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[8].ToString("0.00") + ",");
+                        snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[9].ToString("0.00") + ",");
+                        snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[10].ToString("0.00") + ",");
+                        snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[11].ToString("0.00") + ",");
+                        snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[12].ToString("0.00") + ",");
+                        snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[13].ToString("0.00") + ",");
+                        snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[14].ToString("0.00") + ",");
+                        snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Analog.CPU_Temprature.ToString("0.00") + ",");
+                        snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Analog.Vin.ToString("0.00") + ",");
+                        snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Analog.Pin.ToString("0.00") + ",");
+                        snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Analog.Id.ToString("0.00") + ",");
+                        snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Analog.Vd.ToString("0.00") + ",");
+                        snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[0].ToString("0.00") + ",");
+                        snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[1].ToString("0.00") + ",");
+                        snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[2].ToString("0.00") + ",");
+                        snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[3].ToString("0.00") + ",");
+                        snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[4].ToString("0.00") + ",");
+                        snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[5].ToString("0.00") + ",");
+                        snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[6].ToString("0.00") + ",");
+                        snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[7].ToString("0.00") + ",");
+                        snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[8].ToString("0.00") + ",");
+                        snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[9].ToString("0.00") + ",");
+                        snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[10].ToString("0.00") + ",");
+                        snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[11].ToString("0.00") + ",");
+                        snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[12].ToString("0.00") + ",");
+                        snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[13].ToString("0.00") + ",");
+                        snsSP1FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[14].ToString("0.00"));
+                        snsSP1FS.WriteLine("");
+                    }
                 }
-                else if (portName == sp2Name)
+                else if (savePTU2xLOG)
                 {
-                    snsSP2FS.Write(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss.ffffff") + ",");
-                    snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Analog.CPU_Temprature.ToString("0.00") + ",");
-                    snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Analog.Vin.ToString("0.00") + ",");
-                    snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Analog.Pin.ToString("0.00") + ",");
-                    snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Analog.Id.ToString("0.00") + ",");
-                    snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Analog.Vd.ToString("0.00") + ",");
-                    snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[0].ToString("0.00") + ",");
-                    snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[1].ToString("0.00") + ",");
-                    snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[2].ToString("0.00") + ",");
-                    snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[3].ToString("0.00") + ",");
-                    snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[4].ToString("0.00") + ",");
-                    snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[5].ToString("0.00") + ",");
-                    snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[6].ToString("0.00") + ",");
-                    snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[7].ToString("0.00") + ",");
-                    snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[8].ToString("0.00") + ",");
-                    snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[9].ToString("0.00") + ",");
-                    snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[10].ToString("0.00") + ",");
-                    snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[11].ToString("0.00") + ",");
-                    snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[12].ToString("0.00") + ",");
-                    snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[13].ToString("0.00") + ",");
-                    snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[14].ToString("0.00") + ",");
-                    snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Analog.CPU_Temprature.ToString("0.00") + ",");
-                    snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Analog.Vin.ToString("0.00") + ",");
-                    snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Analog.Pin.ToString("0.00") + ",");
-                    snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Analog.Id.ToString("0.00") + ",");
-                    snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Analog.Vd.ToString("0.00") + ",");
-                    snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[0].ToString("0.00") + ",");
-                    snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[1].ToString("0.00") + ",");
-                    snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[2].ToString("0.00") + ",");
-                    snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[3].ToString("0.00") + ",");
-                    snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[4].ToString("0.00") + ",");
-                    snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[5].ToString("0.00") + ",");
-                    snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[6].ToString("0.00") + ",");
-                    snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[7].ToString("0.00") + ",");
-                    snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[8].ToString("0.00") + ",");
-                    snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[9].ToString("0.00") + ",");
-                    snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[10].ToString("0.00") + ",");
-                    snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[11].ToString("0.00") + ",");
-                    snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[12].ToString("0.00") + ",");
-                    snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[13].ToString("0.00") + ",");
-                    snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[14].ToString("0.00") + ",");
-                    snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Analog.CPU_Temprature.ToString("0.00") + ",");
-                    snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Analog.Vin.ToString("0.00") + ",");
-                    snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Analog.Pin.ToString("0.00") + ",");
-                    snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Analog.Id.ToString("0.00") + ",");
-                    snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Analog.Vd.ToString("0.00") + ",");
-                    snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[0].ToString("0.00") + ",");
-                    snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[1].ToString("0.00") + ",");
-                    snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[2].ToString("0.00") + ",");
-                    snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[3].ToString("0.00") + ",");
-                    snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[4].ToString("0.00") + ",");
-                    snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[5].ToString("0.00") + ",");
-                    snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[6].ToString("0.00") + ",");
-                    snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[7].ToString("0.00") + ",");
-                    snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[8].ToString("0.00") + ",");
-                    snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[9].ToString("0.00") + ",");
-                    snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[10].ToString("0.00") + ",");
-                    snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[11].ToString("0.00") + ",");
-                    snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[12].ToString("0.00") + ",");
-                    snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[13].ToString("0.00") + ",");
-                    snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[14].ToString("0.00"));
-                    snsSP2FS.WriteLine("");
+                    string sp2Name = Path.GetFileNameWithoutExtension(((FileStream)snsSP2FS.BaseStream).Name).Split('_')[0];
+                    if (portName == sp2Name)
+                    {
+                        snsSP2FS.Write(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss.ffffff") + ",");
+                        snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Analog.CPU_Temprature.ToString("0.00") + ",");
+                        snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Analog.Vin.ToString("0.00") + ",");
+                        snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Analog.Pin.ToString("0.00") + ",");
+                        snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Analog.Id.ToString("0.00") + ",");
+                        snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Analog.Vd.ToString("0.00") + ",");
+                        snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[0].ToString("0.00") + ",");
+                        snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[1].ToString("0.00") + ",");
+                        snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[2].ToString("0.00") + ",");
+                        snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[3].ToString("0.00") + ",");
+                        snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[4].ToString("0.00") + ",");
+                        snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[5].ToString("0.00") + ",");
+                        snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[6].ToString("0.00") + ",");
+                        snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[7].ToString("0.00") + ",");
+                        snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[8].ToString("0.00") + ",");
+                        snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[9].ToString("0.00") + ",");
+                        snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[10].ToString("0.00") + ",");
+                        snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[11].ToString("0.00") + ",");
+                        snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[12].ToString("0.00") + ",");
+                        snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[13].ToString("0.00") + ",");
+                        snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[14].ToString("0.00") + ",");
+                        snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Analog.CPU_Temprature.ToString("0.00") + ",");
+                        snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Analog.Vin.ToString("0.00") + ",");
+                        snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Analog.Pin.ToString("0.00") + ",");
+                        snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Analog.Id.ToString("0.00") + ",");
+                        snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Analog.Vd.ToString("0.00") + ",");
+                        snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[0].ToString("0.00") + ",");
+                        snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[1].ToString("0.00") + ",");
+                        snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[2].ToString("0.00") + ",");
+                        snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[3].ToString("0.00") + ",");
+                        snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[4].ToString("0.00") + ",");
+                        snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[5].ToString("0.00") + ",");
+                        snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[6].ToString("0.00") + ",");
+                        snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[7].ToString("0.00") + ",");
+                        snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[8].ToString("0.00") + ",");
+                        snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[9].ToString("0.00") + ",");
+                        snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[10].ToString("0.00") + ",");
+                        snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[11].ToString("0.00") + ",");
+                        snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[12].ToString("0.00") + ",");
+                        snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[13].ToString("0.00") + ",");
+                        snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[14].ToString("0.00") + ",");
+                        snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Analog.CPU_Temprature.ToString("0.00") + ",");
+                        snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Analog.Vin.ToString("0.00") + ",");
+                        snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Analog.Pin.ToString("0.00") + ",");
+                        snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Analog.Id.ToString("0.00") + ",");
+                        snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Analog.Vd.ToString("0.00") + ",");
+                        snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[0].ToString("0.00") + ",");
+                        snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[1].ToString("0.00") + ",");
+                        snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[2].ToString("0.00") + ",");
+                        snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[3].ToString("0.00") + ",");
+                        snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[4].ToString("0.00") + ",");
+                        snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[5].ToString("0.00") + ",");
+                        snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[6].ToString("0.00") + ",");
+                        snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[7].ToString("0.00") + ",");
+                        snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[8].ToString("0.00") + ",");
+                        snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[9].ToString("0.00") + ",");
+                        snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[10].ToString("0.00") + ",");
+                        snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[11].ToString("0.00") + ",");
+                        snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[12].ToString("0.00") + ",");
+                        snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[13].ToString("0.00") + ",");
+                        snsSP2FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[14].ToString("0.00"));
+                        snsSP2FS.WriteLine("");
+                    }
                 }
-                else if (portName == sp3Name)
+                else if (savePTU3xLOG)
                 {
-                    snsSP3FS.Write(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss.ffffff") + ",");
-                    snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Analog.CPU_Temprature.ToString("0.00") + ",");
-                    snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Analog.Vin.ToString("0.00") + ",");
-                    snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Analog.Pin.ToString("0.00") + ",");
-                    snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Analog.Id.ToString("0.00") + ",");
-                    snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Analog.Vd.ToString("0.00") + ",");
-                    snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[0].ToString("0.00") + ",");
-                    snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[1].ToString("0.00") + ",");
-                    snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[2].ToString("0.00") + ",");
-                    snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[3].ToString("0.00") + ",");
-                    snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[4].ToString("0.00") + ",");
-                    snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[5].ToString("0.00") + ",");
-                    snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[6].ToString("0.00") + ",");
-                    snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[7].ToString("0.00") + ",");
-                    snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[8].ToString("0.00") + ",");
-                    snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[9].ToString("0.00") + ",");
-                    snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[10].ToString("0.00") + ",");
-                    snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[11].ToString("0.00") + ",");
-                    snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[12].ToString("0.00") + ",");
-                    snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[13].ToString("0.00") + ",");
-                    snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[14].ToString("0.00") + ",");
-                    snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Analog.CPU_Temprature.ToString("0.00") + ",");
-                    snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Analog.Vin.ToString("0.00") + ",");
-                    snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Analog.Pin.ToString("0.00") + ",");
-                    snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Analog.Id.ToString("0.00") + ",");
-                    snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Analog.Vd.ToString("0.00") + ",");
-                    snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[0].ToString("0.00") + ",");
-                    snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[1].ToString("0.00") + ",");
-                    snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[2].ToString("0.00") + ",");
-                    snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[3].ToString("0.00") + ",");
-                    snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[4].ToString("0.00") + ",");
-                    snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[5].ToString("0.00") + ",");
-                    snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[6].ToString("0.00") + ",");
-                    snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[7].ToString("0.00") + ",");
-                    snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[8].ToString("0.00") + ",");
-                    snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[9].ToString("0.00") + ",");
-                    snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[10].ToString("0.00") + ",");
-                    snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[11].ToString("0.00") + ",");
-                    snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[12].ToString("0.00") + ",");
-                    snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[13].ToString("0.00") + ",");
-                    snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[14].ToString("0.00") + ",");
-                    snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Analog.CPU_Temprature.ToString("0.00") + ",");
-                    snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Analog.Vin.ToString("0.00") + ",");
-                    snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Analog.Pin.ToString("0.00") + ",");
-                    snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Analog.Id.ToString("0.00") + ",");
-                    snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Analog.Vd.ToString("0.00") + ",");
-                    snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[0].ToString("0.00") + ",");
-                    snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[1].ToString("0.00") + ",");
-                    snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[2].ToString("0.00") + ",");
-                    snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[3].ToString("0.00") + ",");
-                    snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[4].ToString("0.00") + ",");
-                    snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[5].ToString("0.00") + ",");
-                    snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[6].ToString("0.00") + ",");
-                    snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[7].ToString("0.00") + ",");
-                    snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[8].ToString("0.00") + ",");
-                    snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[9].ToString("0.00") + ",");
-                    snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[10].ToString("0.00") + ",");
-                    snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[11].ToString("0.00") + ",");
-                    snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[12].ToString("0.00") + ",");
-                    snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[13].ToString("0.00") + ",");
-                    snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[14].ToString("0.00"));
-                    snsSP3FS.WriteLine("");
+                    string sp3Name = Path.GetFileNameWithoutExtension(((FileStream)snsSP3FS.BaseStream).Name).Split('_')[0];
+                    if (portName == sp3Name)
+                    {
+                        snsSP3FS.Write(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss.ffffff") + ",");
+                        snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Analog.CPU_Temprature.ToString("0.00") + ",");
+                        snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Analog.Vin.ToString("0.00") + ",");
+                        snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Analog.Pin.ToString("0.00") + ",");
+                        snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Analog.Id.ToString("0.00") + ",");
+                        snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Analog.Vd.ToString("0.00") + ",");
+                        snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[0].ToString("0.00") + ",");
+                        snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[1].ToString("0.00") + ",");
+                        snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[2].ToString("0.00") + ",");
+                        snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[3].ToString("0.00") + ",");
+                        snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[4].ToString("0.00") + ",");
+                        snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[5].ToString("0.00") + ",");
+                        snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[6].ToString("0.00") + ",");
+                        snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[7].ToString("0.00") + ",");
+                        snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[8].ToString("0.00") + ",");
+                        snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[9].ToString("0.00") + ",");
+                        snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[10].ToString("0.00") + ",");
+                        snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[11].ToString("0.00") + ",");
+                        snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[12].ToString("0.00") + ",");
+                        snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[13].ToString("0.00") + ",");
+                        snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[0].SensorValuesNOW.Temprature.Values[14].ToString("0.00") + ",");
+                        snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Analog.CPU_Temprature.ToString("0.00") + ",");
+                        snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Analog.Vin.ToString("0.00") + ",");
+                        snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Analog.Pin.ToString("0.00") + ",");
+                        snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Analog.Id.ToString("0.00") + ",");
+                        snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Analog.Vd.ToString("0.00") + ",");
+                        snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[0].ToString("0.00") + ",");
+                        snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[1].ToString("0.00") + ",");
+                        snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[2].ToString("0.00") + ",");
+                        snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[3].ToString("0.00") + ",");
+                        snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[4].ToString("0.00") + ",");
+                        snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[5].ToString("0.00") + ",");
+                        snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[6].ToString("0.00") + ",");
+                        snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[7].ToString("0.00") + ",");
+                        snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[8].ToString("0.00") + ",");
+                        snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[9].ToString("0.00") + ",");
+                        snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[10].ToString("0.00") + ",");
+                        snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[11].ToString("0.00") + ",");
+                        snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[12].ToString("0.00") + ",");
+                        snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[13].ToString("0.00") + ",");
+                        snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[1].SensorValuesNOW.Temprature.Values[14].ToString("0.00") + ",");
+                        snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Analog.CPU_Temprature.ToString("0.00") + ",");
+                        snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Analog.Vin.ToString("0.00") + ",");
+                        snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Analog.Pin.ToString("0.00") + ",");
+                        snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Analog.Id.ToString("0.00") + ",");
+                        snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Analog.Vd.ToString("0.00") + ",");
+                        snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[0].ToString("0.00") + ",");
+                        snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[1].ToString("0.00") + ",");
+                        snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[2].ToString("0.00") + ",");
+                        snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[3].ToString("0.00") + ",");
+                        snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[4].ToString("0.00") + ",");
+                        snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[5].ToString("0.00") + ",");
+                        snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[6].ToString("0.00") + ",");
+                        snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[7].ToString("0.00") + ",");
+                        snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[8].ToString("0.00") + ",");
+                        snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[9].ToString("0.00") + ",");
+                        snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[10].ToString("0.00") + ",");
+                        snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[11].ToString("0.00") + ",");
+                        snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[12].ToString("0.00") + ",");
+                        snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[13].ToString("0.00") + ",");
+                        snsSP3FS.Write(((PANEL.UNIT_IF)sender).UNITs[2].SensorValuesNOW.Temprature.Values[14].ToString("0.00"));
+                        snsSP3FS.WriteLine("");
+                    }
                 }
             }
         }
         private void POS_OnTaskUpdate(object sender, EventArgs e)
         {
-            if (saveLOG)
+            if (savePosLOG)
             {
                 posFS.Write(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss.ffffff") + ",");
                 if (winPOSmonitor.POS_VIEWER.DATA != null)
@@ -1931,6 +1974,27 @@ namespace PCAB_Debugger_ACS
             try { ptuDAT.ptux3 = _ptp.unitIFs[interfaceNum].SerialInterface.GetDSAin(2); }
             catch { ptuDAT.ptux3 = -1; }
             return ptuDAT;
+        }
+
+        private void GetSensorValue()
+        {
+            try
+            {
+                Task _wrt1x = Task.Factory.StartNew(() => { _ptp.unitIFs[0].GetSensorValue(); });
+                Task _wrt2x = Task.Factory.StartNew(() => { _ptp.unitIFs[0].GetSensorValue(); });
+                Task _wrt3x = Task.Factory.StartNew(() => { _ptp.unitIFs[0].GetSensorValue(); });
+                _wrt1x?.ConfigureAwait(false);
+                _wrt2x?.ConfigureAwait(false);
+                _wrt3x?.ConfigureAwait(false);
+                Task.WaitAll(_wrt1x, _wrt2x, _wrt3x);
+            }
+            catch(Exception e)
+            {
+                if (saveLOG)
+                {
+                    errFS.WriteLine(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss.ffffff") + ",GetSensorValue,\"" + e.Message + "\"");
+                }
+            }
         }
 
         private struct ptuxx

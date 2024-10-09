@@ -1089,6 +1089,7 @@
                                 <RowDefinition Height="1*"/>
                                 <RowDefinition Height="1*"/>
                                 <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="1*"/>
@@ -1097,8 +1098,7 @@
                                 <ColumnDefinition Width="1*"/>
                             </Grid.ColumnDefinitions>
                             <Label Grid.Row="0" Grid.Column="0" Content="View" VerticalAlignment="Center"/>
-                            <CheckBox Grid.Row="1" Grid.Column="0" x:Name="SAVELOGs_CHECKBOX" Content="Save Logs" VerticalAlignment="Center" VerticalContentAlignment="Center" Checked="SAVELOGs_CHECKBOX_Click" Unchecked="SAVELOGs_CHECKBOX_Click"/>
-                            <ComboBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="3" MinWidth="450" x:Name="VIEW_COMBOBOX" Margin="5" SelectedIndex="0" Style="{StaticResource COMBOBOX_CONTENT_CENTER}" VerticalContentAlignment="Center">
+                            <ComboBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="3" MinWidth="550" x:Name="VIEW_COMBOBOX" Margin="5" SelectedIndex="0" Style="{StaticResource COMBOBOX_CONTENT_CENTER}" VerticalContentAlignment="Center">
                                 <ComboBoxItem>
                                     <TextBlock Text="Antenna"/>
                                 </ComboBoxItem>
@@ -1106,10 +1106,25 @@
                                     <TextBlock Text="PCAB"/>
                                 </ComboBoxItem>
                             </ComboBox>
+                            <CheckBox Grid.Row="1" Grid.Column="0" x:Name="SAVELOGs_CHECKBOX" Content="Save Logs" VerticalAlignment="Center" VerticalContentAlignment="Center" Checked="SAVELOGs_CHECKBOX_Click" Unchecked="SAVELOGs_CHECKBOX_Click"/>
                             <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" x:Name="LogDirPath_TextBox" MinWidth="100" Margin="5" IsEnabled="False"/>
                             <Button Grid.Row="1" Grid.Column="3" x:Name="LogDirPathSelect_BUTTON" Content="Select" Margin="5" Click="LogDirSelectButton_Click" IsEnabled="False"/>
-                            <Label Grid.Row="2" Grid.Column="0" Content="Monitor interval Time [mS]"/>
-                            <TextBox Grid.Row="2" Grid.Column="1" x:Name="INTERVAL_TIME_TEXTBOX" Style="{StaticResource EDIT_TEXT_LINE}" TextWrapping="Wrap" Text="100" Margin="5" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" PreviewTextInput="DEC_TextBox_PreviewTextInput" CommandManager.PreviewExecuted="DEC_TextBox_PreviewExecuted" PreviewLostKeyboardFocus="DEC_TextBox_PreviewLostKeyboardForcus"/>
+                            <Grid Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" MinHeight="50" x:Name="SAVELOGs_SELECT_GRID" IsEnabled="False">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="1*"/>
+                                    <RowDefinition Height="1*"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                </Grid.ColumnDefinitions>
+                                <CheckBox Grid.Row="0" Grid.Column="0" x:Name="SAVELOGsPOS_CHECKBOX" Content="Save POS Logs" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+                                <CheckBox Grid.Row="0" Grid.Column="1" x:Name="SAVELOGsPTU1x_CHECKBOX" Content="Save PTU 1x Sensor Logs" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+                                <CheckBox Grid.Row="1" Grid.Column="0" x:Name="SAVELOGsPTU2x_CHECKBOX" Content="Save PTU 2x Sensor Logs" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+                                <CheckBox Grid.Row="1" Grid.Column="1" x:Name="SAVELOGsPTU3x_CHECKBOX" Content="Save PTU 3x Sensor Logs" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+                            </Grid>
+                            <Label Grid.Row="3" Grid.Column="0" Content="Monitor interval Time [mS]"/>
+                            <TextBox Grid.Row="3" Grid.Column="1" x:Name="INTERVAL_TIME_TEXTBOX" Style="{StaticResource EDIT_TEXT_LINE}" TextWrapping="Wrap" Text="100" Margin="5" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" PreviewTextInput="DEC_TextBox_PreviewTextInput" CommandManager.PreviewExecuted="DEC_TextBox_PreviewExecuted" PreviewLostKeyboardFocus="DEC_TextBox_PreviewLostKeyboardForcus"/>
                         </Grid>
                     </Viewbox>
                 </Grid>
