@@ -117,10 +117,10 @@
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="logSaveDirPath" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">D:\Temp\Sample</Value>
     </Setting>
     <Setting Name="saveLogs" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
+      <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="snsIntTime" Type="System.UInt32" Scope="User">
       <Value Profile="(Default)">100</Value>

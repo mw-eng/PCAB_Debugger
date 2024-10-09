@@ -15,6 +15,7 @@ namespace PCAB_Debugger_ACS
     {
         public List<UNIT_IF> unitIFs { get; private set; }
         public event EventHandler<ErrorEventArgs> OnTaskError;
+        public event EventHandler<EventArgs> OnUpdate;
 
 
         public class UNIT_IF
@@ -23,6 +24,7 @@ namespace PCAB_Debugger_ACS
             public PCAB_SerialInterface SerialInterface { get; private set; }
             public bool? isOpen { get { return SerialInterface?.isOpen; } }
             public event EventHandler<ErrorEventArgs> OnError;
+            public event EventHandler<EventArgs> OnUpdate;
             private bool? _task;    //true:run / false:stop / null:Interrupt
             private bool _state;
             private Task _loopTask;
@@ -55,7 +57,7 @@ namespace PCAB_Debugger_ACS
 
             public void Close()
             {
-                if (_task != false) { UNITs_SensorMonitor_TASK_Stop(); }
+                if (_task != false) { UNITs_SensorMonitor_TASK_Stop(true); }
                 try { SerialInterface?.Close(); } catch { }
                 SerialInterface = null;
             }
@@ -67,11 +69,14 @@ namespace PCAB_Debugger_ACS
                 _loopTask = Task.Factory.StartNew(() => { UNITs_SensorMonitor_TASK(MonitorIntervalTime); });
             }
 
-            public void UNITs_SensorMonitor_TASK_Stop()
+            public void UNITs_SensorMonitor_TASK_Stop(bool wait)
             {
                 _task = false;
-                _loopTask?.ConfigureAwait(false);
-                _loopTask?.Wait();
+                if (wait)
+                {
+                    _loopTask?.ConfigureAwait(false);
+                    _loopTask?.Wait();
+                }
             }
             public void UNITs_SensorMonitor_TASK_Pause()
             {
@@ -174,6 +179,7 @@ namespace PCAB_Debugger_ACS
                         GetSensorValue((uint)i);
                     }
                 }
+                OnUpdate?.Invoke(this, null);
             }
 
         }
@@ -306,14 +312,15 @@ namespace PCAB_Debugger_ACS
             foreach (UNIT_IF unitIF in unitIFs)
             {
                 unitIF.OnError += OnError_UnitIF_TASK;
+                unitIF.OnUpdate += OnUpdate_UnitIF_TASK;
                 unitIF.UNITs_SensorMonitor_TASK_Start(MonitorIntervalTime);
             }
         }
-        public void PANEL_SensorMonitor_TASK_Stop()
+        public void PANEL_SensorMonitor_TASK_Stop(bool wait)
         {
             foreach (UNIT_IF unitIF in unitIFs)
             {
-                unitIF.UNITs_SensorMonitor_TASK_Stop();
+                unitIF.UNITs_SensorMonitor_TASK_Stop(wait);
             }
         }
         public void PANEL_SensorMonitor_TASK_Pause()
@@ -333,7 +340,12 @@ namespace PCAB_Debugger_ACS
 
         private void OnError_UnitIF_TASK(object sender, ErrorEventArgs e)
         {
-            OnTaskError?.Invoke(this, e);
+            OnTaskError?.Invoke(sender, e);
+        }
+
+        private void OnUpdate_UnitIF_TASK(object sender, EventArgs e)
+        {
+            OnUpdate?.Invoke(sender, e);
         }
 
         public struct SerialInterface

@@ -26,7 +26,7 @@ namespace PCAB_Debugger_ComLib
 
         private void Close()
         {
-            if (_task != false) { PCAB_AutoTaskStop(); }
+            if (_task != false) { PCAB_AutoTaskStop(true); }
             try { serialInterface?.Close(); } catch { }
             serialInterface = null;
         }
@@ -108,11 +108,14 @@ namespace PCAB_Debugger_ComLib
             }
         }
 
-        public void PCAB_AutoTaskStop()
+        public void PCAB_AutoTaskStop(bool wait)
         {
             _task = false;
-            _loopTask?.ConfigureAwait(false);
-            _loopTask?.Wait();
+            if (wait)
+            {
+                _loopTask?.ConfigureAwait(false);
+                _loopTask?.Wait();
+            }
         }
 
         public void PCAB_TaskPause()
@@ -460,6 +463,7 @@ namespace PCAB_Debugger_ComLib
         private SerialPort _serialPort;
         public bool isOpen { get; private set; } = false;
         public List<PCAB_UnitInterface> pcabUNITs { get; private set; } = new List<PCAB_UnitInterface>();
+        public string PortName { get { return _serialPort.PortName; } }
         private List<byte> serialBF = new List<byte>();
 
         /// <summary>Constructor</summary>

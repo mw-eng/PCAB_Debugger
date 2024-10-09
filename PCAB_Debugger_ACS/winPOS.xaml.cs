@@ -18,6 +18,7 @@ namespace PCAB_Debugger_ACS
         private static extern bool RemoveMenu(IntPtr hMenu, uint uPosition, uint uFlags);
         private const int SC_CLOSE = 0xf060;
         private const int MF_BYCOMMAND = 0x0000;
+        public event EventHandler<EventArgs> OnUpdate;
 
         public PAST2 DATA { get { return POS_VIEWER.DATA; } }
 
@@ -86,14 +87,7 @@ namespace PCAB_Debugger_ACS
                 {
                     POS_VIEWER.DATA = dat;
                 }));
-                //if (DateTime.Now - startTIME > new TimeSpan(100 * 1000))
-                //{
-                //    startTIME = DateTime.Now;
-                //    Dispatcher.BeginInvoke(new Action(() =>
-                //    {
-                //        POS_VIEWER.DATA = dat;
-                //    }));
-                //}
+                OnUpdate?.Invoke(this, e);
             }
             catch (Exception ex)
             {
@@ -101,11 +95,6 @@ namespace PCAB_Debugger_ACS
                 {
                     POS_VIEWER.DATA = null;
                 }));
-                //Dispatcher.BeginInvoke(new Action(() =>
-                //{
-                //    LOG_TEXTBOX.Text += ex.Message + " > " + BitConverter.ToString(e.ReceiveDAT.ToArray()) + "\n";
-                //    LOG_TEXTBOX.ScrollToEnd();
-                //}));
             }
         }
     }

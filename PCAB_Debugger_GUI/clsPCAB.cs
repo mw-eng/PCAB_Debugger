@@ -71,13 +71,13 @@ namespace PCAB_Debugger_GUI
 
         public void Close()
         {
-            _task?.PCAB_AutoTaskStop();
+            _task?.PCAB_AutoTaskStop(true);
             PCAB_Boards.Clear(); PCAB_Monitors.Clear();
         }
 
         private void PCAB_TASK_OnError(object sender, PCABEventArgs e)
         {
-            _task.PCAB_AutoTaskStop();
+            _task.PCAB_AutoTaskStop(false);
             _task = null;
             MessageBox.Show(e.Message.ToString(), "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             OnError?.Invoke(this, e);

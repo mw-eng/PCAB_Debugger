@@ -42,7 +42,7 @@ namespace PCAB_Debugger_ComLib
             _serial.WriteTimeout = 5000;
         }
 
-        ~POS() { if (_task) { POS_AutoTaskStop();  } Close(); }
+        ~POS() { if (_task) { POS_AutoTaskStop(true);  } Close(); }
 
         public void Open()
         {
@@ -54,7 +54,7 @@ namespace PCAB_Debugger_ComLib
             { MessageBox.Show("Serial port open Error.\n{" + e.ToString() + "}\n", "Error", MessageBoxButton.OK, MessageBoxImage.Error); throw; }
         }
 
-        public void Close() { if (_task) { POS_AutoTaskStop(); } if (_serial?.IsOpen == true) { _serial.Close(); } }
+        public void Close() { if (_task) { POS_AutoTaskStop(true); } if (_serial?.IsOpen == true) { _serial.Close(); } }
 
         public bool POS_AutoTaskStart()
         {
@@ -97,11 +97,14 @@ namespace PCAB_Debugger_ComLib
             return 0;
         }
 
-        public void POS_AutoTaskStop()
+        public void POS_AutoTaskStop(bool wait)
         {
             _task = false;
-            _loopTask?.ConfigureAwait(false);
-            _loopTask?.Wait();
+            if (wait)
+            {
+                _loopTask?.ConfigureAwait(false);
+                _loopTask?.Wait();
+            }
         }
 
         public class POSEventArgs : EventArgs

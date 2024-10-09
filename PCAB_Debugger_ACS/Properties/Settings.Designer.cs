@@ -481,7 +481,7 @@ namespace PCAB_Debugger_ACS.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("D:\\Temp\\Sample")]
         public string logSaveDirPath {
             get {
                 return ((string)(this["logSaveDirPath"]));
@@ -493,7 +493,7 @@ namespace PCAB_Debugger_ACS.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool saveLogs {
             get {
                 return ((bool)(this["saveLogs"]));
