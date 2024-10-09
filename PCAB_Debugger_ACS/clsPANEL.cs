@@ -69,23 +69,22 @@ namespace PCAB_Debugger_ACS
 
             public void UNITs_SensorMonitor_TASK_Stop()
             {
-                if (_state) { _state = false; _task = true; }
-                _task = false; _loopTask?.ConfigureAwait(false);_loopTask?.Wait();
+                _task = false;
+                _loopTask?.ConfigureAwait(false);
+                _loopTask?.Wait();
             }
             public void UNITs_SensorMonitor_TASK_Pause()
             {
-                if (!_state)
+                if (_task != null)
                 {
                     _task = null;
-                    while (_state) { Thread.Sleep(5); }
-                    _state = true;
+                    while (_state) { }
                 }
             }
             public void UNITs_SensorMonitor_TASK_Restart()
             {
-                if (_state)
+                if (_task == null)
                 {
-                    _state = false;
                     _task = true;
                 }
             }
@@ -96,7 +95,7 @@ namespace PCAB_Debugger_ACS
                 {
                     if (_task == true)
                     {
-                        while (_state) { Thread.Sleep(8); }
+                        while (_task == null) { Thread.Sleep(10); }
                         _state = true;
                         try
                         {
@@ -123,7 +122,7 @@ namespace PCAB_Debugger_ACS
                         Thread.Sleep((int)MonitorIntervalTime);
                         if (_task == true)
                         {
-                            while (_state) { Thread.Sleep(2); }
+                            while (_task == null) { Thread.Sleep(10); }
                             _state = true;
                             try { GetSensorValue(); }
                             catch (Exception e) { OnError?.Invoke(this, new ErrorEventArgs(e)); }
