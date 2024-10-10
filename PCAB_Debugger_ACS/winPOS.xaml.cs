@@ -19,6 +19,8 @@ namespace PCAB_Debugger_ACS
         private const int SC_CLOSE = 0xf060;
         private const int MF_BYCOMMAND = 0x0000;
         public event EventHandler<EventArgs> OnUpdate;
+        private uint errCount = 0;
+        private const uint MAX_ERRORCOUNT = 10;
 
         public PAST2 DATA { get { return POS_VIEWER.DATA; } }
 
@@ -87,14 +89,19 @@ namespace PCAB_Debugger_ACS
                 {
                     POS_VIEWER.DATA = dat;
                 }));
+                errCount = 0;
                 OnUpdate?.Invoke(this, e);
             }
             catch (Exception ex)
             {
-                Dispatcher.BeginInvoke(new Action(() =>
+                errCount++;
+                if (errCount > MAX_ERRORCOUNT)
                 {
-                    POS_VIEWER.DATA = null;
-                }));
+                    Dispatcher.BeginInvoke(new Action(() =>
+                    {
+                        POS_VIEWER.DATA = null;
+                    }));
+                }
             }
         }
     }

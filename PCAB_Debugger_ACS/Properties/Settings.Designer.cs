@@ -529,7 +529,7 @@ namespace PCAB_Debugger_ACS.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool saveLogsPOS {
             get {
                 return ((bool)(this["saveLogsPOS"]));
@@ -572,6 +572,18 @@ namespace PCAB_Debugger_ACS.Properties {
             }
             set {
                 this["saveLogsPTU3x"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool csLudwig3 {
+            get {
+                return ((bool)(this["csLudwig3"]));
+            }
+            set {
+                this["csLudwig3"] = value;
             }
         }
     }

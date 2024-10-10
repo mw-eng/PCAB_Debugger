@@ -129,7 +129,7 @@
       <Value Profile="(Default)">5800</Value>
     </Setting>
     <Setting Name="saveLogsPOS" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">True</Value>
+      <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="saveLogsPTU1x" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
@@ -139,6 +139,9 @@
     </Setting>
     <Setting Name="saveLogsPTU3x" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="csLudwig3" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
     </Setting>
   </Settings>
 </SettingsFile>
