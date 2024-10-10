@@ -2,7 +2,9 @@
 using PCAB_Debugger_ComLib;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
 using System.IO;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -250,6 +252,11 @@ namespace PCAB_Debugger_ACS
                     ofd.FilterIndex = 1;
                     if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                     {
+                        if (!clsReadDAT.ReadPortDAT(ofd.FileName, out _, out _, out _, out _, out _, out _, out _, out _, out _))
+                        {
+                            MessageBox.Show("Failed to load port configuration list.\nPlease check file format.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                            return;
+                        }
                         portConfFilePath = ofd.FileName;
                     }
                     else
@@ -661,7 +668,7 @@ namespace PCAB_Debugger_ACS
         private void ANGLE_TextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
             // 0-9のみ
-            e.Handled = !new Regex("[0-9|.]").IsMatch(e.Text);
+            e.Handled = !new Regex("[0-9|.|-]").IsMatch(e.Text);
         }
 
         private void ANGLE_TextBox_PreviewExecuted(object sender, ExecutedRoutedEventArgs e)
@@ -732,23 +739,35 @@ namespace PCAB_Debugger_ACS
                 ofd.FilterIndex = 1;
                 if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
-                    READ_PORTsFile(ofd.FileName);
+                    if (READ_PORTsFile(ofd.FileName))
+                    {
+                        MessageBox.Show("Port setting list loading completed.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Failed to load port configuration list.\nPlease check file format.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
                 }
             }
         }
 
         private void OFFSET_ZERO_BUTTON_Click(object sender, RoutedEventArgs e)
         {
-            foreach(PANEL.UNIT_IF unitIF in _ptp.unitIFs)
+            if (MessageBox.Show("All port compensation values ​​will be deleted.\nDo you want to continue?",
+                "Question", MessageBoxButton.OKCancel, MessageBoxImage.Question) == MessageBoxResult.OK)
             {
-                foreach(PANEL.UNIT unit in unitIF.UNITs)
+                foreach (PANEL.UNIT_IF unitIF in _ptp.unitIFs)
                 {
-                    foreach(PANEL.PORT port in unit.Ports)
+                    foreach (PANEL.UNIT unit in unitIF.UNITs)
                     {
-                        port.Offset = new MWComLibCS.ComplexAngle(1, new MWComLibCS.Angle(0));
+                        foreach (PANEL.PORT port in unit.Ports)
+                        {
+                            port.Offset = new MWComLibCS.ComplexAngle(1, new MWComLibCS.Angle(0));
+                        }
+                        unit.ReloadPorts();
                     }
-                    unit.ReloadPorts();
                 }
+                MessageBox.Show("Port compensation value deletion is complete.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
 
@@ -758,16 +777,15 @@ namespace PCAB_Debugger_ACS
             double az = double.Parse(CALCULATE_AZIMUTH_TEXTBOX.Text);
             double el = double.Parse(CALCULATE_ELEVATION_TEXTBOX.Text);
             MWComLibCS.CoordinateSystem.AntennaCS targ = new MWComLibCS.CoordinateSystem.AntennaCS(new MWComLibCS.Angle(az,false), new MWComLibCS.Angle(el, false), true);
-
+            bool result = false;
             _ptp.PANEL_SensorMonitor_TASK_Pause();
-            if(!WriteDPSxx(
+            result = WriteDPSxx(
                 _ptp.unitIFs[0].UNITs[0].GetPhaseDelay(freq, targ), _ptp.unitIFs[0].UNITs[1].GetPhaseDelay(freq, targ), _ptp.unitIFs[0].UNITs[2].GetPhaseDelay(freq, targ),
                 _ptp.unitIFs[1].UNITs[0].GetPhaseDelay(freq, targ), _ptp.unitIFs[1].UNITs[1].GetPhaseDelay(freq, targ), _ptp.unitIFs[1].UNITs[2].GetPhaseDelay(freq, targ),
-                _ptp.unitIFs[2].UNITs[0].GetPhaseDelay(freq, targ), _ptp.unitIFs[2].UNITs[1].GetPhaseDelay(freq, targ), _ptp.unitIFs[2].UNITs[2].GetPhaseDelay(freq, targ)))
-            {
-                MessageBox.Show("Write DPS failed.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+                _ptp.unitIFs[2].UNITs[0].GetPhaseDelay(freq, targ), _ptp.unitIFs[2].UNITs[1].GetPhaseDelay(freq, targ), _ptp.unitIFs[2].UNITs[2].GetPhaseDelay(freq, targ));
             _ptp.PANEL_SensorMonitor_TASK_Restart();
+            if (result) { MessageBox.Show("Write DPS Done.", "Success", MessageBoxButton.OK, MessageBoxImage.Information); }
+            else { MessageBox.Show("Write DPS failed.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
         }
 
         private void STBLNA_CheckboxClick(object sender, RoutedEventArgs e, bool? isChecked)
@@ -1452,7 +1470,7 @@ namespace PCAB_Debugger_ACS
             _ptp.PANEL_SensorMonitor_TASK_Restart();
         }
 
-        private void READ_PORTsFile(string filePath)
+        private bool READ_PORTsFile(string filePath)
         {
             List<PANEL.PORT> ptu11, ptu12, ptu13, ptu21, ptu22, ptu23, ptu31, ptu32, ptu33;
             if (clsReadDAT.ReadPortDAT(filePath, out ptu11, out ptu12, out ptu13, out ptu21, out ptu22, out ptu23, out ptu31, out ptu32, out ptu33))
@@ -1466,7 +1484,9 @@ namespace PCAB_Debugger_ACS
                 _ptp.unitIFs[2].UNITs[0].Ports = ptu31;
                 _ptp.unitIFs[2].UNITs[1].Ports = ptu32;
                 _ptp.unitIFs[2].UNITs[2].Ports = ptu33;
+                return true;
             }
+            return false;
         }
 
         #region private Tasks
@@ -2020,5 +2040,14 @@ namespace PCAB_Debugger_ACS
         }
         #endregion
 
+        private void SET_TARGET_BUTTON_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void TRACK_TASK_BUTTON_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

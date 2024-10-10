@@ -70,6 +70,9 @@
     <Compile Include="cntConfigSettings.xaml.cs">
       <DependentUpon>cntConfigSettings.xaml</DependentUpon>
     </Compile>
+    <Compile Include="cntLaLinput.xaml.cs">
+      <DependentUpon>cntLaLinput.xaml</DependentUpon>
+    </Compile>
     <Compile Include="cntMonitor.xaml.cs">
       <DependentUpon>cntMonitor.xaml</DependentUpon>
     </Compile>
@@ -126,6 +129,10 @@
     <Page Include="cntConfigSettings.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="cntLaLinput.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="cntMonitor.xaml">
       <Generator>MSBuild:Compile</Generator>
