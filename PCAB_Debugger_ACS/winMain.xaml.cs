@@ -1071,7 +1071,7 @@ namespace PCAB_Debugger_ACS
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Config read error.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Config read error.\n" + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -1114,7 +1114,7 @@ namespace PCAB_Debugger_ACS
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Config read error.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Config read error.\n" + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -1142,7 +1142,7 @@ namespace PCAB_Debugger_ACS
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Config read error.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Config read error.\n" + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -1503,7 +1503,7 @@ namespace PCAB_Debugger_ACS
             catch (Exception ex)
             {
                 _ptp.PANEL_SensorMonitor_TASK_Restart();
-                throw;
+                throw ex;
             }
             _ptp.PANEL_SensorMonitor_TASK_Restart();
         }
@@ -1604,7 +1604,7 @@ namespace PCAB_Debugger_ACS
                     return false;
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 if (saveLOG)
                 {
@@ -1668,7 +1668,7 @@ namespace PCAB_Debugger_ACS
                     return false;
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 if (saveLOG)
                 {
@@ -1733,7 +1733,7 @@ namespace PCAB_Debugger_ACS
                     return false;
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 if (saveLOG)
                 {

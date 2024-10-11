@@ -34,13 +34,13 @@ namespace PCAB_Debugger_ComLib
                         ss = _data.LATITUDE - hh * 60 * 60 - mm * 60;
                         if(hh < 0) { hh = -hh; lal = "S"; }
                         else { lal = "N"; }
-                        LATITUDE_LABEL.Content = hh.ToString().PadLeft(3, ' ') + "°" + mm.ToString("00") + "'" + ss.ToString("00.000000") + "\" " + lal;
+                        LATITUDE_LABEL.Content = hh.ToString().PadLeft(3, ' ') + "°" + Math.Abs(mm).ToString("00") + "'" + Math.Abs(ss).ToString("00.000000") + "\" " + lal;
                         hh = (int)Math.Truncate(_data.LONGITUDE / 60 / 60);
                         mm = (int)Math.Truncate((_data.LONGITUDE - (hh * 60 * 60)) / 60);
                         ss = _data.LONGITUDE - hh * 60 * 60 - mm * 60;
                         if (hh < 0) { hh = -hh; lal = "W"; }
                         else { lal = "E"; }
-                        LONGITUDE_LABEL.Content = hh.ToString().PadLeft(3, ' ') + "°" + mm.ToString("00") + "'" + ss.ToString("00.000000") + "\" " + lal;
+                        LONGITUDE_LABEL.Content = hh.ToString().PadLeft(3, ' ') + "°" + Math.Abs(mm).ToString("00") + "'" + Math.Abs(ss).ToString("00.000000") + "\" " + lal;
                         ALTITUDE_LABEL.Content = _data.ALTITUDE.ToString("0.00").PadLeft(20, ' ');
                         LONG_ACCEL_LABEL.Content = _data.LONG_ACCEL.ToString("0.0000").PadLeft(20, ' ');
                         TRAN_ACCEL_LABEL.Content = _data.TRAN_ACCEL.ToString("0.0000").PadLeft(20, ' ');

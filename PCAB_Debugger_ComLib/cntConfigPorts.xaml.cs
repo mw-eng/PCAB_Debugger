@@ -115,7 +115,7 @@ namespace PCAB_Debugger_ComLib
             }
             catch (Exception ex)
             {
-                throw;
+                throw ex;
             }
         }
         public int GetDSA(uint number)
@@ -232,7 +232,7 @@ namespace PCAB_Debugger_ComLib
             }
             catch (Exception ex)
             {
-                throw;
+                throw ex;
             }
         }
         public int GetDPS(uint number)

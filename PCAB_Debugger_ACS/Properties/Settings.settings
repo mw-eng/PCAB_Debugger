@@ -48,16 +48,16 @@
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="spCaption0" Type="System.String" Scope="User">
-      <Value Profile="(Default)">USB シリアル デバイス (COM20)</Value>
+      <Value Profile="(Default)">USB シリアル デバイス (COM13)</Value>
     </Setting>
     <Setting Name="spCaption1" Type="System.String" Scope="User">
-      <Value Profile="(Default)">USB シリアル デバイス (COM21)</Value>
+      <Value Profile="(Default)">USB シリアル デバイス (COM10)</Value>
     </Setting>
     <Setting Name="spCaption2" Type="System.String" Scope="User">
-      <Value Profile="(Default)">USB シリアル デバイス (COM22)</Value>
+      <Value Profile="(Default)">USB シリアル デバイス (COM11)</Value>
     </Setting>
     <Setting Name="spCaption3" Type="System.String" Scope="User">
-      <Value Profile="(Default)">USB シリアル デバイス (COM23)</Value>
+      <Value Profile="(Default)">USB シリアル デバイス (COM12)</Value>
     </Setting>
     <Setting Name="spBaudRate0" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">5</Value>

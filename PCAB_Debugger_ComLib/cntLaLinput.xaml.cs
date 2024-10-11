@@ -9,6 +9,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Markup;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
@@ -21,6 +22,57 @@ namespace PCAB_Debugger_ComLib
     /// </summary>
     public partial class cntLaLinput : UserControl
     {
+        public float Latitude
+        {
+            get
+            {
+                float deg = float.Parse(LATITUDE_DEGREE_TEXTBOX.Text);
+                float min = float.Parse(LATITUDE_MINUTES_TEXTBOX.Text);
+                float sec = float.Parse(LATITUDE_SECOND_TEXTBOX.Text);
+                if(LATITUDE_COMBOBOX.SelectedIndex == 1) { deg = -deg; }
+                return deg * 60.0f * 60.0f + min * 60.0f + sec;
+            }
+            set
+            {
+                int deg = (int)Math.Truncate(value / 60.0 / 60.0);
+                int min = (int)Math.Truncate((value - deg * 60.0 * 60.0) / 60.0);
+                float sec = value - deg * 60.0f * 60.0f - min * 60.0f;
+                if(deg < 0) { LATITUDE_COMBOBOX.SelectedIndex = 1; }
+                else { LATITUDE_COMBOBOX.SelectedIndex = 0; }
+                LATITUDE_DEGREE_TEXTBOX.Text = Math.Abs(deg).ToString();
+                LATITUDE_MINUTES_TEXTBOX.Text = Math.Abs(min).ToString("00");
+                LATITUDE_SECOND_TEXTBOX.Text = Math.Abs(sec).ToString("00.000000");
+            }
+        }
+        public float Longitude
+        {
+            get
+            {
+                float deg = float.Parse(LONGITUDE_DEGREE_TEXTBOX.Text);
+                float min = float.Parse(LONGITUDE_MINUTES_TEXTBOX.Text);
+                float sec = float.Parse(LONGITUDE_SECOND_TEXTBOX.Text);
+                if (LONGITUDE_COMBOBOX.SelectedIndex == 1) { deg = -deg; }
+                return deg * 60.0f * 60.0f + min * 60.0f + sec;
+            }
+            set
+            {
+                int deg = (int)Math.Truncate(value / 60.0 / 60.0);
+                int min = (int)Math.Truncate((value - deg * 60.0 * 60.0) / 60.0);
+                float sec = value - deg * 60.0f * 60.0f - min * 60.0f;
+                if (deg < 0) { LONGITUDE_COMBOBOX.SelectedIndex = 1; }
+                else { LONGITUDE_COMBOBOX.SelectedIndex = 0; }
+                LONGITUDE_DEGREE_TEXTBOX.Text = Math.Abs(deg).ToString();
+                LONGITUDE_MINUTES_TEXTBOX.Text = Math.Abs(min).ToString("00");
+                LONGITUDE_SECOND_TEXTBOX.Text = Math.Abs(sec).ToString("00.000000");
+            }
+        }
+        public float Altitude
+        {
+            get { return float.Parse(ALTITUDE_TEXTBOX.Text); }
+            set { ALTITUDE_TEXTBOX.Text = value.ToString("0.00"); }
+        }
+
+
         public cntLaLinput()
         {
             InitializeComponent();
@@ -34,111 +86,186 @@ namespace PCAB_Debugger_ComLib
             }
         }
 
-        private void DEC_TEXTBOX_PreviewTextInput(object sender, TextCompositionEventArgs e)
-        {
-            //Only 0 to 9 or -
-            e.Handled = !new Regex("[0-9]|-").IsMatch(e.Text);
-            if (sender is TextBox tb)
-            {
-                string strBF = tb.Text.Remove(tb.SelectionStart, tb.SelectionLength).Insert(tb.SelectionStart, e.Text);
-                if (strBF.Trim() != "-") { e.Handled = !int.TryParse(strBF, out _); }
-            }
-        }
 
-        private void NUMBER_TEXTBOX_PreviewTextInput(object sender, TextCompositionEventArgs e)
-        {
-            //Only 0 to 9
-            e.Handled = !new Regex("[0-9]").IsMatch(e.Text);
-        }
-
-        private void DEC_TextBox_PreviewExecuted(object sender, ExecutedRoutedEventArgs e)
+        private void LATITUDE_DEGREE_TEXTBOX_PreviewExecuted(object sender, ExecutedRoutedEventArgs e)
         {
             //If Paste
             if (e.Command == ApplicationCommands.Paste)
             {
                 string strTXT = Clipboard.GetText();
-                for (int cnt = 0; cnt < strTXT.Length; cnt++)
+                //Only 0 to 90
+                if (sender is TextBox tb)
                 {
-                    if (!new Regex("[0-9]|[ ]").IsMatch(strTXT[cnt].ToString()))
+                    string strBF = tb.Text.Remove(tb.SelectionStart, tb.SelectionLength).Insert(tb.SelectionStart, strTXT);
+                    int val;
+                    if (int.TryParse(strBF, out val))
                     {
-                        e.Handled = true;
-                        break;
+                        if (val < 0) { LATITUDE_COMBOBOX.SelectedIndex = 1; val = -val; }
+                        if (val < 0 || 90 < val) { e.Handled = true; return; }
                     }
+                    else { e.Handled = true; return; }
                 }
             }
         }
-        private void DEC_TextBox_PreviewLostKeyboardForcus(object sender, KeyboardFocusChangedEventArgs e)
-        {
-            try
-            {
-                uint uintVal = Convert.ToUInt32(((TextBox)sender).Text);
-                if (0 <= uintVal && uintVal <= 65535) { return; }
-                MessageBox.Show("Enter in the range 0 to 65535");
-                e.Handled = true;
-            }
-            catch
-            {
-                MessageBox.Show("Enter in the range 0 to 65535");
-                e.Handled = true;
-            }
-        }
-
-        private void LATITUDE_DEGREE_TEXTBOX_PreviewExecuted(object sender, ExecutedRoutedEventArgs e)
-        {
-
-        }
         private void LATITUDE_DEGREE_TEXTBOX_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
-
-        }
-
-        private void LATITUDE_DEGREE_TEXTBOX_PreviewLostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
-        {
-
+            // "-" is Combobox select change.
+            if (e.Text == "-") { LATITUDE_COMBOBOX.SelectedIndex = 1; e.Handled = true; return; }
+            if(e.Text == "+") { LATITUDE_COMBOBOX.SelectedIndex = 0; e.Handled = true;return; }
+            //Only 0 to 9.
+            if(!new Regex("[0-9]").IsMatch(e.Text)) { e.Handled = true; return; }
+            //Only 0 to 90
+            if (sender is TextBox tb)
+            {
+                string strBF = tb.Text.Remove(tb.SelectionStart, tb.SelectionLength).Insert(tb.SelectionStart, e.Text);
+                int val;
+                if(int.TryParse(strBF,out val))
+                {
+                    if(val < 0 || 90 < val) {  e.Handled = true; return; }
+                }
+                else { e.Handled = true; return; }
+            }
         }
 
         private void LONGITUDE_DEGREE_TEXTBOX_PreviewExecuted(object sender, ExecutedRoutedEventArgs e)
         {
-
+            //If Paste
+            if (e.Command == ApplicationCommands.Paste)
+            {
+                string strTXT = Clipboard.GetText();
+                //Only 0 to 90
+                if (sender is TextBox tb)
+                {
+                    string strBF = tb.Text.Remove(tb.SelectionStart, tb.SelectionLength).Insert(tb.SelectionStart, strTXT);
+                    int val;
+                    if (int.TryParse(strBF, out val))
+                    {
+                        if (val < 0) { LONGITUDE_COMBOBOX.SelectedIndex = 1; val = -val; }
+                        if (val < 0 || 180 < val) { e.Handled = true; return; }
+                    }
+                    else { e.Handled = true; return; }
+                }
+            }
         }
         private void LONGITUDE_DEGREE_TEXTBOX_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
-
-        }
-
-        private void LONGITUDE_DEGREE_TEXTBOX_PreviewLostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
-        {
-
+            // "-" is Combobox select change.
+            if (e.Text == "-") { LONGITUDE_COMBOBOX.SelectedIndex = 1; e.Handled = true; return; }
+            if (e.Text == "+") { LONGITUDE_COMBOBOX.SelectedIndex = 0; e.Handled = true; return; }
+            //Only 0 to 9.
+            if (!new Regex("[0-9]").IsMatch(e.Text)) { e.Handled = true; return; }
+            //Only 0 to 180
+            if (sender is TextBox tb)
+            {
+                string strBF = tb.Text.Remove(tb.SelectionStart, tb.SelectionLength).Insert(tb.SelectionStart, e.Text);
+                int val;
+                if (int.TryParse(strBF, out val))
+                {
+                    if (val < 0 || 180 < val) { e.Handled = true; return; }
+                }
+                else { e.Handled = true; return; }
+            }
         }
 
         private void MINUTES_TEXTBOX_PreviewExecuted(object sender, ExecutedRoutedEventArgs e)
         {
-
+            //If Paste
+            if (e.Command == ApplicationCommands.Paste)
+            {
+                string strTXT = Clipboard.GetText();
+                //Only 0 to 59
+                if (sender is TextBox tb)
+                {
+                    string strBF = tb.Text.Remove(tb.SelectionStart, tb.SelectionLength).Insert(tb.SelectionStart, strTXT);
+                    int val;
+                    if (int.TryParse(strBF, out val))
+                    {
+                        if (val < 0 || 59 < val) { e.Handled = true; return; }
+                    }
+                    else { e.Handled = true; return; }
+                }
+            }
         }
 
         private void MINUTES_TEXTBOX_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
-
-        }
-
-        private void MINUTES_TEXTBOX_PreviewLostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
-        {
-
+            //Only 0 to 9.
+            if (!new Regex("[0-9]").IsMatch(e.Text)) { e.Handled = true; return; }
+            //Only 0 to 59
+            if (sender is TextBox tb)
+            {
+                string strBF = tb.Text.Remove(tb.SelectionStart, tb.SelectionLength).Insert(tb.SelectionStart, e.Text);
+                int val;
+                if (int.TryParse(strBF, out val))
+                {
+                    if (val < 0 || 59 < val) { e.Handled = true; return; }
+                }
+                else { e.Handled = true; return; }
+            }
         }
 
         private void SECOND_TEXTBOX_PreviewExecuted(object sender, ExecutedRoutedEventArgs e)
         {
-
+            //If Paste
+            if (e.Command == ApplicationCommands.Paste)
+            {
+                string strTXT = Clipboard.GetText();
+                //Only 0 to 59.9999...
+                if (sender is TextBox tb)
+                {
+                    string strBF = tb.Text.Remove(tb.SelectionStart, tb.SelectionLength).Insert(tb.SelectionStart, strTXT);
+                    float val;
+                    if (float.TryParse(strBF, out val))
+                    {
+                        if (val < 0.0f || 60.0f <= val) { e.Handled = true; return; }
+                    }
+                    else { e.Handled = true; return; }
+                }
+            }
         }
 
         private void SECOND_TEXTBOX_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
-
+            //Only 0 to 9.
+            if (!new Regex("[0-9]|.").IsMatch(e.Text)) { e.Handled = true; return; }
+            //Only 0 to 59.9999,,,
+            if (sender is TextBox tb)
+            {
+                string strBF = tb.Text.Remove(tb.SelectionStart, tb.SelectionLength).Insert(tb.SelectionStart, e.Text);
+                float val;
+                if (float.TryParse(strBF, out val))
+                {
+                    if (val < 0.0f || 60.0f <= val) { e.Handled = true; return; }
+                }
+                else { e.Handled = true; return; }
+            }
         }
 
-        private void SECOND_TEXTBOX_PreviewLostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        private void FLOAT_TEXTBOX_PreviewExecuted(object sender, ExecutedRoutedEventArgs e)
         {
+            //If Paste
+            if (e.Command == ApplicationCommands.Paste)
+            {
+                string strTXT = Clipboard.GetText();
+                //Only float
+                if (sender is TextBox tb)
+                {
+                    string strBF = tb.Text.Remove(tb.SelectionStart, tb.SelectionLength).Insert(tb.SelectionStart, strTXT);
+                    e.Handled = !float.TryParse(strBF, out _);
+                }
+            }
+        }
 
+        private void FLOAT_TEXTBOX_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            //Only 0 to 9.
+            if (!new Regex("[0-9]|.").IsMatch(e.Text)) { e.Handled = true; return; }
+            //Only 0 to 59.9999,,,
+            if (sender is TextBox tb)
+            {
+                string strBF = tb.Text.Remove(tb.SelectionStart, tb.SelectionLength).Insert(tb.SelectionStart, e.Text);
+                e.Handled = !float.TryParse(strBF, out _);
+            }
         }
     }
 }
