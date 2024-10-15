@@ -265,7 +265,7 @@ namespace PCAB_Debugger_ACS
                 phase = Math.Acos(phase);
                 phase = Position.Abs * Math.Cos(phase);
                 phase *= 2.0 * Math.PI * Frequency / PhysicalConstant.c0;
-                return new Angle(-phase);
+                return new Angle(phase);
             }
 
             public Angle PhaseDelay(double Frequency, double Phi, double Theta)
