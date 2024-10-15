@@ -1061,9 +1061,9 @@
                             <Label Grid.Row="4" Grid.Column="0" Content="POS" VerticalAlignment="Center"/>
                             <Label Grid.Row="0" Grid.Column="1" Content="Serial Port" VerticalAlignment="Center"/>
                             <Label Grid.Row="0" Grid.Column="2" Content="Baud Ratio [bps]" VerticalAlignment="Center"/>
-                            <Label Grid.Row="0" Grid.Column="3" Content="PUT x1 S/N" VerticalAlignment="Center"/>
-                            <Label Grid.Row="0" Grid.Column="4" Content="PUT x2 S/N" VerticalAlignment="Center"/>
-                            <Label Grid.Row="0" Grid.Column="5" Content="PUT x3 S/N" VerticalAlignment="Center"/>
+                            <Label Grid.Row="0" Grid.Column="3" Content="PTU x1 S/N" VerticalAlignment="Center"/>
+                            <Label Grid.Row="0" Grid.Column="4" Content="PTU x2 S/N" VerticalAlignment="Center"/>
+                            <Label Grid.Row="0" Grid.Column="5" Content="PTU x3 S/N" VerticalAlignment="Center"/>
                             <ComboBox Grid.Row="1" Grid.Column="1" MinWidth="300" x:Name="SERIAL_PORTS_COMBOBOX1" Margin="5" VerticalContentAlignment="Center" DropDownOpened="SERIAL_PORTS_COMBOBOX_DropDownOpened" DropDownClosed="SERIAL_PORTS_COMBOBOX_DropDownClosed"/>
                             <ComboBox Grid.Row="2" Grid.Column="1" MinWidth="300" x:Name="SERIAL_PORTS_COMBOBOX2" Margin="5" VerticalContentAlignment="Center" DropDownOpened="SERIAL_PORTS_COMBOBOX_DropDownOpened" DropDownClosed="SERIAL_PORTS_COMBOBOX_DropDownClosed"/>
                             <ComboBox Grid.Row="3" Grid.Column="1" MinWidth="300" x:Name="SERIAL_PORTS_COMBOBOX3" Margin="5" VerticalContentAlignment="Center" DropDownOpened="SERIAL_PORTS_COMBOBOX_DropDownOpened" DropDownClosed="SERIAL_PORTS_COMBOBOX_DropDownClosed"/>

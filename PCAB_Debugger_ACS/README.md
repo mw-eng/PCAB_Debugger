@@ -14,8 +14,11 @@ POS linked control GUI program.
 |:--|:--|:--|
 |1-1|Serial Port			|Select the *Serial Port* coneected to PCAB.|
 |1-2|Baud Rate				|Select the *BAUD RATE* for the main communication to the PCAB.|
-|1-3|Monitor loop inberval	|Specifies the acquisition interval for monitors (temperature, etc.) in milliseconds.|
-|1-4|Serial Numbers			|Enter the serial number of the connect target.|
+|1-3|PTU xx S/N				|Enter the serial number of the connect target.|
+|1-4|View					| |
+|1-5|Save Log				| |
+|1-6|Monitor loop inberval	|Specifies the acquisition interval for monitors (temperature, etc.) in milliseconds.|
+|1-7|Coordinate System		| |
 
 
 
@@ -44,7 +47,7 @@ POS linked control GUI program.
 
 <br><img src="https://github.com/mw-eng/PCAB_Debugger/blob/master/PCAB_Debugger_ACS/assets/UI2_BOARD_PTU.png?raw=true" width="600px"><br>
 <br>
-Show by PCAB_DEBUGGER_GUI README.md
+Show by [PCAB_DEBUGGER_GUI README.md](https://github.com/mw-eng/PCAB_Debugger/blob/master/PCAB_Debugger_GUI/README.md)
 
 <br><img src="https://github.com/mw-eng/PCAB_Debugger/blob/master/PCAB_Debugger_ACS/assets/UI3_TRACKING.png?raw=true" width="600px"><br>
 <br>
@@ -58,4 +61,12 @@ Show by PCAB_DEBUGGER_GUI README.md
 
 ### Monitor window
 
+<br><img src="https://github.com/mw-eng/PCAB_Debugger/blob/master/PCAB_Debugger_ACS/assets/UI4_SENSOR.png?raw=true" width="600px"><br>
+<br>
+
+<br><img src="https://github.com/mw-eng/PCAB_Debugger/blob/master/PCAB_Debugger_ACS/assets/UI5_POS.png?raw=true" width="600px"><br>
+<br>
+
+<br><img src="https://github.com/mw-eng/PCAB_Debugger/blob/master/PCAB_Debugger_ACS/assets/UI6_PHASE.png?raw=true" width="600px"><br>
+<br>
 
