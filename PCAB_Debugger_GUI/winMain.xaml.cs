@@ -3,6 +3,7 @@ using PCAB_Debugger_ComLib;
 using PCAB_Debugger_GUI.Properties;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
