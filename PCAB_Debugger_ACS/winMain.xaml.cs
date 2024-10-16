@@ -148,7 +148,7 @@ namespace PCAB_Debugger_ACS
                     DISCONNECT(true);
                 }
             }
-            Settings.Default.spCaption0 = SERIAL_PORTS_COMBOBOX1.Text;
+            Settings.Default.spCaption0 = SERIAL_PORTS_COMBOBOX0.Text;
             Settings.Default.spCaption1 = SERIAL_PORTS_COMBOBOX1.Text;
             Settings.Default.spCaption2 = SERIAL_PORTS_COMBOBOX2.Text;
             Settings.Default.spCaption3 = SERIAL_PORTS_COMBOBOX3.Text;
