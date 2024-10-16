@@ -100,7 +100,7 @@ namespace PCAB_Debugger_ACS
             if (SERIAL_PORTS_COMBOBOX0.Items.Count > 0) { SERIAL_PORTS_COMBOBOX0.SelectedIndex = 0; }
             if (SERIAL_PORTS_COMBOBOX1.Items.Count > 1) { SERIAL_PORTS_COMBOBOX1.SelectedIndex = 1; }
             if (SERIAL_PORTS_COMBOBOX2.Items.Count > 2) { SERIAL_PORTS_COMBOBOX2.SelectedIndex = 2; }
-            if (SERIAL_PORTS_COMBOBOX3.Items.Count > 2) { SERIAL_PORTS_COMBOBOX3.SelectedIndex = 2; }
+            if (SERIAL_PORTS_COMBOBOX3.Items.Count > 3) { SERIAL_PORTS_COMBOBOX3.SelectedIndex = 3; }
             if (ports != null)
             {
                 for (int i = 0; i < ports.Length; i++)
