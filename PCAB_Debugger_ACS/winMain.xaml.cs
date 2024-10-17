@@ -2116,7 +2116,7 @@ namespace PCAB_Debugger_ACS
         {
             if (winPOSmonitor.DATA != null)
             {
-                _trackTASK_az = winPOSmonitor.DATA.PITCH - PITCH_ZERO;
+                _trackTASK_az = -(winPOSmonitor.DATA.PITCH - PITCH_ZERO);
                 _trackTASK_pol = -(winPOSmonitor.DATA.HEADING - HEADING_ZERO);
                 //_trackTASK_az = winPOSmonitor.DATA.ROLL;
                 //_trackTASK_pol = winPOSmonitor.DATA.PITCH;
