@@ -50,7 +50,7 @@ namespace PCAB_Debugger_ACS
 
         public winMain()
         {
-#if DEBUG
+#if DEBUG_RESET
             Settings.Default.Reset();
 #endif
             InitializeComponent();
@@ -87,7 +87,7 @@ namespace PCAB_Debugger_ACS
             BOARD_CONFIG_EXPANDER.IsExpanded = false;
             CONTROL_GRID.IsEnabled = false;
 
-#if DEBUG
+#if DEBUG_RESET
             Settings.Default.Reset();
             this.Title += "_DEBUG MODE";
             CONTROL_GRID.IsEnabled = true;
