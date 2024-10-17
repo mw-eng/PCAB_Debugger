@@ -21,6 +21,9 @@ namespace PCAB_Debugger_ACS
     /// </summary>
     public partial class winMain : Window
     {
+        private const double HEADING_ZERO = 0.0;
+        private const double ROLL_ZERO= 0.0;
+        private const double PITCH_ZERO = 0.0;
         private POS _pos;
         private PANEL _ptp;
         private SerialPortTable[] ports;
@@ -2113,8 +2116,10 @@ namespace PCAB_Debugger_ACS
         {
             if (winPOSmonitor.DATA != null)
             {
-                _trackTASK_az = winPOSmonitor.DATA.ROLL;
-                _trackTASK_pol = winPOSmonitor.DATA.PITCH;
+                _trackTASK_az = 0;
+                _trackTASK_pol = -(winPOSmonitor.DATA.HEADING - HEADING_ZERO);
+                //_trackTASK_az = winPOSmonitor.DATA.ROLL;
+                //_trackTASK_pol = winPOSmonitor.DATA.PITCH;
             }
             Dispatcher.BeginInvoke(new Action(() =>
             {
