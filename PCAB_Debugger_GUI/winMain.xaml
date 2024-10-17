@@ -20,19 +20,26 @@
             <Setter Property="FontFamily" Value="UD Digi Kyokasho N-R"/>
         </Style>
         <x:Array xmlns:sys="clr-namespace:System;assembly=mscorlib" xml:space="preserve" Type="{x:Type sys:String}" x:Key="BR_List">
-        <sys:String>    9,600</sys:String>
-        <sys:String>   14,400</sys:String>
-        <sys:String>   19,201</sys:String>
-        <sys:String>   38,402</sys:String>
-        <sys:String>   57,603</sys:String>
-        <sys:String>  115,207</sys:String>
-        <sys:String>  230,414</sys:String>
-        <sys:String>  460,829</sys:String>
-        <sys:String>  920,810</sys:String>
-        <sys:String>1,000,000</sys:String>
-        <sys:String>2,000,000</sys:String>
-        <sys:String>4,000,000</sys:String>
-        <sys:String>7,812,500</sys:String>
+            <sys:String>    9,600</sys:String>
+            <sys:String>   14,400</sys:String>
+            <sys:String>   19,200</sys:String>
+            <sys:String>   38,400</sys:String>
+            <sys:String>   57,600</sys:String>
+            <sys:String>  115,200</sys:String>
+            <sys:String>  230,400</sys:String>
+            <sys:String>  460,800</sys:String>
+            <sys:String>  921,600</sys:String>
+            <sys:String>1,000,000</sys:String>
+            <sys:String>2,000,000</sys:String>
+            <sys:String>4,000,000</sys:String>
+            <sys:String>7,812,500</sys:String>
+            <sys:String>   19,201</sys:String>
+            <sys:String>   38,402</sys:String>
+            <sys:String>   57,603</sys:String>
+            <sys:String>  115,207</sys:String>
+            <sys:String>  230,414</sys:String>
+            <sys:String>  460,829</sys:String>
+            <sys:String>  920,810</sys:String>
     </x:Array>
     </Window.Resources>
     <Grid>
