@@ -21,7 +21,7 @@ const static std::string FW_REV = "1.4.4";
     #define SW_4_PIN SW_1_PIN
     #define SW_5_PIN SW_1_PIN
     #define SW_6_PIN SW_1_PIN
-    #define PICO_LED_PIN 3
+    #define PICO_LED_PIN 25
     // Onewire PIN Configure
     #define SNS_TEMP_PIN 11
 #endif
@@ -952,7 +952,31 @@ int main()
                             tmp = analog->readADC4();
                             result.push_back((uint8_t)((tmp & 0xFF00) >> 8));
                             result.push_back((uint8_t)(tmp & 0x00FF) );
+#ifdef DEBUG_RASPICO
                             std::vector<uint16_t> code = sens->readSENS();
+                            if(code.size() <= 0)
+                            {
+                                code.clear();
+                                code.push_back(0x0010);
+                                code.push_back(0x0020);
+                                code.push_back(0x0030);
+                                code.push_back(0x0040);
+                                code.push_back(0x0050);
+                                code.push_back(0x0060);
+                                code.push_back(0x0070);
+                                code.push_back(0x0080);
+                                code.push_back(0x0090);
+                                code.push_back(0x00A0);
+                                code.push_back(0x00B0);
+                                code.push_back(0x00C0);
+                                code.push_back(0x00D0);
+                                code.push_back(0x00E0);
+                                code.push_back(0x00F0);
+                                sleep_ms(500);
+                            }
+#else
+                            std::vector<uint16_t> code = sens->readSENS();
+#endif
                             for(uint i = 0; i < code.size(); i++)
                             {
                                 result.push_back((uint8_t)((code[i] & 0xFF00) >> 8));

@@ -205,7 +205,7 @@ namespace PCAB_Debugger_ACS.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("USB シリアル デバイス (COM13)")]
+        [global::System.Configuration.DefaultSettingValueAttribute("USB シリアル デバイス (COM8)")]
         public string spCaption0 {
             get {
                 return ((string)(this["spCaption0"]));
@@ -217,7 +217,7 @@ namespace PCAB_Debugger_ACS.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("USB シリアル デバイス (COM10)")]
+        [global::System.Configuration.DefaultSettingValueAttribute("USB シリアル デバイス (COM5)")]
         public string spCaption1 {
             get {
                 return ((string)(this["spCaption1"]));
@@ -229,7 +229,7 @@ namespace PCAB_Debugger_ACS.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("USB シリアル デバイス (COM11)")]
+        [global::System.Configuration.DefaultSettingValueAttribute("USB シリアル デバイス (COM6)")]
         public string spCaption2 {
             get {
                 return ((string)(this["spCaption2"]));
@@ -241,7 +241,7 @@ namespace PCAB_Debugger_ACS.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("USB シリアル デバイス (COM12)")]
+        [global::System.Configuration.DefaultSettingValueAttribute("USB シリアル デバイス (COM7)")]
         public string spCaption3 {
             get {
                 return ((string)(this["spCaption3"]));

@@ -182,6 +182,35 @@ namespace PCAB_Debugger_ACS
                 OnUpdate?.Invoke(this, null);
             }
 
+            private void GetAnalogValue(uint unitNum)
+            {
+                AnalogValues values = SerialInterface.GetAnalogValue(unitNum);
+                if (UNITs[(int)unitNum].SensorValuesNOW.Analog.Vd != values.Vd ||
+                    UNITs[(int)unitNum].SensorValuesNOW.Analog.Id != values.Id ||
+                    UNITs[(int)unitNum].SensorValuesNOW.Analog.Vin != values.Vin ||
+                    UNITs[(int)unitNum].SensorValuesNOW.Analog.Pin != values.Pin ||
+                    UNITs[(int)unitNum].SensorValuesNOW.Analog.CPU_Temprature != values.CPU_Temprature
+                    )
+                {
+                    UNITs[(int)unitNum].SensorValuesNOW = new SensorValues(values, UNITs[(int)unitNum].SensorValuesNOW.Temprature, UNITs[(int)unitNum].SensorValuesNOW.ID);
+                    UNITs[(int)unitNum].SENS_MONITOR.TEMPcpu = values.CPU_Temprature.ToString("0.00");
+                    UNITs[(int)unitNum].SENS_MONITOR.SNSvin = values.Vin.ToString("0.00");
+                    UNITs[(int)unitNum].SENS_MONITOR.SNSpin = values.Pin.ToString("0.00");
+                    UNITs[(int)unitNum].SENS_MONITOR.SNSvd = values.Vd.ToString("0.00");
+                    UNITs[(int)unitNum].SENS_MONITOR.SNSid = values.Id.ToString("0.00");
+                }
+            }
+            public void GetAnalogValue()
+            {
+                if (UNITs.Count != 0)
+                {
+                    for (int i = 0; i < UNITs.Count; i++)
+                    {
+                        GetAnalogValue((uint)i);
+                    }
+                }
+                OnUpdate?.Invoke(this, null);
+            }
         }
 
         public class UNIT
