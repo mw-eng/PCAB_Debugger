@@ -1132,7 +1132,9 @@
                                 <CheckBox Grid.Row="1" Grid.Column="1" x:Name="SAVELOGsPTU3x_CHECKBOX" Content="Save PTU 3x Sensor Logs" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
                             </Grid>
                             <Label Grid.Row="3" Grid.Column="0" Content="Monitor interval Time [mS]"/>
-                            <TextBox Grid.Row="3" Grid.Column="1" x:Name="INTERVAL_TIME_TEXTBOX" Style="{StaticResource EDIT_TEXT_LINE}" TextWrapping="Wrap" Text="100" Margin="5" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" PreviewTextInput="DEC_TextBox_PreviewTextInput" CommandManager.PreviewExecuted="DEC_TextBox_PreviewExecuted" PreviewLostKeyboardFocus="DEC_TextBox_PreviewLostKeyboardForcus"/>
+                            <TextBox Grid.Row="3" Grid.Column="1" x:Name="INTERVAL_TIME_TEXTBOX" Style="{StaticResource EDIT_TEXT_LINE}" TextWrapping="Wrap" Text="100" Margin="5,5,50,5" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" PreviewTextInput="DEC_TextBox_PreviewTextInput" CommandManager.PreviewExecuted="DEC_TextBox_PreviewExecuted" PreviewLostKeyboardFocus="DEC_TextBox_PreviewLostKeyboardForcus"/>
+                            <Label Grid.Row="3" Grid.Column="2" Content="Temperature interval count"/>
+                            <TextBox Grid.Row="3" Grid.Column="4" x:Name="INTERVAL_COUNT_TEXTBOX" Style="{StaticResource EDIT_TEXT_LINE}" TextWrapping="Wrap" Text="10" Margin="5,5,50,5" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" PreviewTextInput="DEC_TextBox_PreviewTextInput" CommandManager.PreviewExecuted="DEC_TextBox_PreviewExecuted" PreviewLostKeyboardFocus="DEC_TextBox_PreviewLostKeyboardForcus"/>
 
                             <Label Grid.Row="5" Grid.Column="0" Content="Coordinate System" VerticalAlignment="Center"/>
                             <RadioButton Grid.Row="5" Grid.Column="1" x:Name="CsAzEl_RADIOBUTTON" Content="Ludwig2 Az / El" VerticalAlignment="Center" VerticalContentAlignment="Center" Checked="CoordinateSystem_RADIOBUTTON_Checked"/>
@@ -1165,6 +1167,7 @@
                             <TabItem Header="COMMON">
                                 <Grid>
                                     <Grid.RowDefinitions>
+                                        <RowDefinition Height="1*"/>
                                         <RowDefinition Height="1*"/>
                                         <RowDefinition Height="1*"/>
                                         <RowDefinition Height="1*"/>
@@ -1284,6 +1287,9 @@
                                         <Viewbox Grid.Column="7" Margin="5"><TextBox MinWidth="100" Text="0" x:Name="CALCULATE_POLAR_TEXTBOX" HorizontalContentAlignment="Right" PreviewTextInput="ANGLE_TextBox_PreviewTextInput" CommandManager.PreviewExecuted="ANGLE_TextBox_PreviewExecuted" PreviewLostKeyboardFocus="ANGLE_TextBox_PreviewLostKeyboardForcus"/></Viewbox>
                                         <Button Grid.Column="9" Margin="5" Click="SET_PHASE_BUTTON_Click"><Viewbox Margin="5"><TextBlock Text="Set Phase"/></Viewbox></Button>
                                     </Grid>
+                                    <Grid Grid.Row="5" Background="#FFFAF2FF">
+                                        
+                                    </Grid>
                                 </Grid>
                             </TabItem>
                             <TabItem Header="PTU11">
@@ -1320,13 +1326,14 @@
                 </Expander>
             </Grid>
             <Grid Grid.Row="0" Grid.RowSpan="3" Background="White" Panel.ZIndex="0"/>
-            <Grid Grid.Row="4" Panel.ZIndex="0" Background="#FFE1FFA3">
+            <Grid Grid.Row="4" Panel.ZIndex="0" Background="#FFE1FFA3" ShowGridLines="True">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="2*"/>
                     <RowDefinition Height="1*"/>
                 </Grid.RowDefinitions>
                 <Grid Grid.Row="0">
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="2*"/>
                         <RowDefinition Height="1*"/>
                         <RowDefinition Height="1*"/>
                     </Grid.RowDefinitions>
@@ -1350,7 +1357,7 @@
                             <PCAB_Debugger_ComLib:cntLaLinput x:Name="TARGET_POSITION_INPUT" Margin="5"/>
                         </Viewbox>
                     </Grid>
-                    <Grid Grid.Row="0" Grid.Column="1">
+                    <Grid Grid.Row="1" Grid.Column="0" Grid.RowSpan="2">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="1*"/>
                             <RowDefinition Height="3*"/>
@@ -1359,11 +1366,26 @@
                             <ColumnDefinition Width="1*"/>
                             <ColumnDefinition Width="30*"/>
                         </Grid.ColumnDefinitions>
-                        <Viewbox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Left">
-                            <Label Content="Limit Angle" FontFamily="UD Digi Kyokasho N-R"/>
-                        </Viewbox>
+                        <Viewbox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Left"><Label Content="Limit Angle" FontFamily="UD Digi Kyokasho N-R"/></Viewbox>
+                        <Grid Grid.Row="1" Grid.Column="1" Margin="5,5,10,30">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="1*"/>
+                            </Grid.ColumnDefinitions>
+                            <Viewbox Grid.Row="0" Grid.Column="0" HorizontalAlignment="Right"><Label FontFamily="UD Digi Kyokasho N-R" Content="Azimuth ±"/></Viewbox>
+                            <Viewbox Grid.Row="0" Grid.Column="2" HorizontalAlignment="Left"><Label FontFamily="UD Digi Kyokasho N-R" Content="[deg]"/></Viewbox>
+                            <Viewbox Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right"><Label FontFamily="UD Digi Kyokasho N-R" Content="Elevation ±"/></Viewbox>
+                            <Viewbox Grid.Row="1" Grid.Column="2" HorizontalAlignment="Left"><Label FontFamily="UD Digi Kyokasho N-R" Content="[deg]"/></Viewbox>
+                            <Viewbox Grid.Row="0" Grid.Column="1" Margin="5"><TextBox MinWidth="100" Text="20" x:Name="LIMIT_AZIMUTH_TEXTBOX" HorizontalContentAlignment="Right" PreviewTextInput="ANGLE_TextBox_PreviewTextInput" CommandManager.PreviewExecuted="ANGLE_TextBox_PreviewExecuted" PreviewLostKeyboardFocus="ANGLE_TextBox_PreviewLostKeyboardForcus"/></Viewbox>
+                            <Viewbox Grid.Row="1" Grid.Column="1" Margin="5"><TextBox MinWidth="100" Text="20" x:Name="LIMIT_POLAR_TEXTBOX" HorizontalContentAlignment="Right" PreviewTextInput="ANGLE_TextBox_PreviewTextInput" CommandManager.PreviewExecuted="ANGLE_TextBox_PreviewExecuted" PreviewLostKeyboardFocus="ANGLE_TextBox_PreviewLostKeyboardForcus"/></Viewbox>
+                        </Grid>
                     </Grid>
-                    <Grid Grid.Row="1" Grid.Column="0">
+                    <Grid Grid.Row="0" Grid.Column="1" Grid.RowSpan="2">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="1*"/>
                             <RowDefinition Height="3*"/>
@@ -1375,10 +1397,39 @@
                         <Viewbox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Left">
                             <Label Content="Correction value" FontFamily="UD Digi Kyokasho N-R"/>
                         </Viewbox>
+                        <Grid Grid.Row="1" Grid.Column="1">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition Width="1*"/>
+                            </Grid.ColumnDefinitions>
+                            <Viewbox Grid.Row="0" Grid.Column="0" HorizontalAlignment="Right"><Label FontFamily="UD Digi Kyokasho N-R" Content="Latitude"/></Viewbox>
+                            <Viewbox Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right"><Label FontFamily="UD Digi Kyokasho N-R" Content="Longitude"/></Viewbox>
+                            <Viewbox Grid.Row="2" Grid.Column="0" HorizontalAlignment="Right"><Label FontFamily="UD Digi Kyokasho N-R" Content="Altitude"/></Viewbox>
+                            <Viewbox Grid.Row="3" Grid.Column="0" HorizontalAlignment="Right"><Label FontFamily="UD Digi Kyokasho N-R" Content="Azimuth"/></Viewbox>
+                            <Viewbox Grid.Row="4" Grid.Column="0" HorizontalAlignment="Right"><Label FontFamily="UD Digi Kyokasho N-R" Content="Elevation"/></Viewbox>
+                            <Viewbox Grid.Row="0" Grid.Column="2" HorizontalAlignment="Left"><Label FontFamily="UD Digi Kyokasho N-R" Content="[deg]"/></Viewbox>
+                            <Viewbox Grid.Row="1" Grid.Column="2" HorizontalAlignment="Left"><Label FontFamily="UD Digi Kyokasho N-R" Content="[deg]"/></Viewbox>
+                            <Viewbox Grid.Row="2" Grid.Column="2" HorizontalAlignment="Left"><Label FontFamily="UD Digi Kyokasho N-R" Content="[m]"/></Viewbox>
+                            <Viewbox Grid.Row="3" Grid.Column="2" HorizontalAlignment="Left"><Label FontFamily="UD Digi Kyokasho N-R" Content="[deg]"/></Viewbox>
+                            <Viewbox Grid.Row="4" Grid.Column="2" HorizontalAlignment="Left"><Label FontFamily="UD Digi Kyokasho N-R" Content="[deg]"/></Viewbox>
+                            <Viewbox Grid.Row="0" Grid.Column="1" Margin="5"><TextBox MinWidth="100" Text="0" x:Name="CORRECTION_LATITUDE_TEXTBOX" HorizontalContentAlignment="Right" PreviewTextInput="ANGLE_TextBox_PreviewTextInput" CommandManager.PreviewExecuted="ANGLE_TextBox_PreviewExecuted"/></Viewbox>
+                            <Viewbox Grid.Row="1" Grid.Column="1" Margin="5"><TextBox MinWidth="100" Text="0" x:Name="CORRECTION_LONGITUDE_TEXTBOX" HorizontalContentAlignment="Right" PreviewTextInput="ANGLE_TextBox_PreviewTextInput" CommandManager.PreviewExecuted="ANGLE_TextBox_PreviewExecuted"/></Viewbox>
+                            <Viewbox Grid.Row="2" Grid.Column="1" Margin="5"><TextBox MinWidth="100" Text="0" x:Name="CORRECTION_ALTITUDE_TEXTBOX" HorizontalContentAlignment="Right" PreviewTextInput="ANGLE_TextBox_PreviewTextInput" CommandManager.PreviewExecuted="ANGLE_TextBox_PreviewExecuted"/></Viewbox>
+                            <Viewbox Grid.Row="3" Grid.Column="1" Margin="5"><TextBox MinWidth="100" Text="0" x:Name="CORRECTION_AZIMUTH_TEXTBOX" HorizontalContentAlignment="Right" PreviewTextInput="ANGLE_TextBox_PreviewTextInput" CommandManager.PreviewExecuted="ANGLE_TextBox_PreviewExecuted"/></Viewbox>
+                            <Viewbox Grid.Row="4" Grid.Column="1" Margin="5"><TextBox MinWidth="100" Text="0" x:Name="CORRECTION_POLAR_TEXTBOX" HorizontalContentAlignment="Right" PreviewTextInput="ANGLE_TextBox_PreviewTextInput" CommandManager.PreviewExecuted="ANGLE_TextBox_PreviewExecuted"/></Viewbox>
+                        </Grid>
                     </Grid>
-                    <Button Grid.Row="1" Grid.Column="1" Margin="5" x:Name="SET_TARGET_BUTTON" Click="SET_TARGET_BUTTON_Click"><Button.Content><Viewbox Margin="5"><TextBlock Text="Set Target"/></Viewbox></Button.Content></Button>
+                    <Button Grid.Row="2" Grid.Column="1" Margin="20" x:Name="SET_TARGET_BUTTON" Click="SET_TARGET_BUTTON_Click"><Button.Content><Viewbox Margin="5"><TextBlock Text="Set Target"/></Viewbox></Button.Content></Button>
                 </Grid>
-                <Grid Grid.Row="1">
+                <Grid Grid.Row="1" ShowGridLines="True">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="1*"/>
                         <ColumnDefinition Width="1*"/>
@@ -1436,7 +1487,7 @@
                             <Label x:Name="targ_pol" Content="   0.0000" FontFamily="UD Digi Kyokasho N-R"/>
                         </Viewbox>
                     </Grid>
-                    <Button Grid.Column="3" Margin="5" x:Name="TRACK_TASK_BUTTON" Click="TRACK_TASK_BUTTON_Click"><Button.Content><Viewbox Margin="5"><TextBlock x:Name="TRACK_TASK_BUTTON_TEXT" Text="Tracking Start"/></Viewbox></Button.Content></Button>
+                    <Button Grid.Column="3" Margin="20" x:Name="TRACK_TASK_BUTTON" Click="TRACK_TASK_BUTTON_Click"><Button.Content><Viewbox Margin="5"><TextBlock x:Name="TRACK_TASK_BUTTON_TEXT" Text="Tracking Start"/></Viewbox></Button.Content></Button>
                 </Grid>
             </Grid>
         </Grid>

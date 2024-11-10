@@ -62,11 +62,11 @@ namespace PCAB_Debugger_ACS
                 SerialInterface = null;
             }
 
-            public void UNITs_SensorMonitor_TASK_Start(UInt32 MonitorIntervalTime)
+            public void UNITs_SensorMonitor_TASK_Start(UInt32 MonitorIntervalTime, UInt32 TempMonitorIntervalCount)
             {
                 _task = true;
                 _state = false;
-                _loopTask = Task.Factory.StartNew(() => { UNITs_SensorMonitor_TASK(MonitorIntervalTime); });
+                _loopTask = Task.Factory.StartNew(() => { UNITs_SensorMonitor_TASK(MonitorIntervalTime, TempMonitorIntervalCount); });
             }
 
             public void UNITs_SensorMonitor_TASK_Stop(bool wait)
@@ -94,7 +94,7 @@ namespace PCAB_Debugger_ACS
                 }
             }
 
-            private void UNITs_SensorMonitor_TASK(UInt32 MonitorIntervalTime)
+            private void UNITs_SensorMonitor_TASK(UInt32 MonitorIntervalTime, UInt32 TempMonitorIntervalCount)
             {
                 try
                 {
@@ -122,6 +122,7 @@ namespace PCAB_Debugger_ACS
                         catch { }
                         _state = false;
                     }
+                    UInt32 monCount = 0;
                     do
                     {
                         Thread.Sleep((int)MonitorIntervalTime);
@@ -129,7 +130,11 @@ namespace PCAB_Debugger_ACS
                         {
                             while (_task == null) { Thread.Sleep(10); }
                             _state = true;
-                            try { GetSensorValue(); }
+                            try
+                            {
+                                if (monCount < TempMonitorIntervalCount) { GetAnalogValue(); monCount++; }
+                                else { GetSensorValue(); monCount = 0; }
+                            }
                             catch (Exception e) { OnError?.Invoke(this, new ErrorEventArgs(e)); }
                             _state = false;
                         }
@@ -361,28 +366,32 @@ namespace PCAB_Debugger_ACS
             }
         }
 
-        public void PANEL_SensorMonitor_TASK_Start(UInt32 MonitorIntervalTime)
+        public void PANEL_SensorMonitor_TASK_Start(UInt32 MonitorIntervalTime, UInt32 TempMonitorIntervalCount)
         {
             foreach (UNIT_IF unitIF in unitIFs)
             {
                 unitIF.OnError += OnError_UnitIF_TASK;
                 unitIF.OnUpdate += OnUpdate_UnitIF_TASK;
-                unitIF.UNITs_SensorMonitor_TASK_Start(MonitorIntervalTime);
+                unitIF.UNITs_SensorMonitor_TASK_Start(MonitorIntervalTime, TempMonitorIntervalCount);
             }
         }
         public void PANEL_SensorMonitor_TASK_Stop(bool wait)
         {
+            List<Task> _units = new List<Task>();
             foreach (UNIT_IF unitIF in unitIFs)
             {
-                unitIF.UNITs_SensorMonitor_TASK_Stop(wait);
+                _units.Add(Task.Factory.StartNew(() => unitIF.UNITs_SensorMonitor_TASK_Stop(wait)));
             }
+            Task.WaitAll(_units.ToArray());
         }
         public void PANEL_SensorMonitor_TASK_Pause()
         {
+            List<Task> _units = new List<Task>();
             foreach (UNIT_IF unitIF in unitIFs)
             {
-                unitIF.UNITs_SensorMonitor_TASK_Pause();
+                _units.Add(Task.Factory.StartNew(() => unitIF.UNITs_SensorMonitor_TASK_Pause()));
             }
+            Task.WaitAll(_units.ToArray());
         }
         public void PANEL_SensorMonitor_TASK_Restart()
         {

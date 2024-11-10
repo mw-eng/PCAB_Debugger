@@ -586,5 +586,17 @@ namespace PCAB_Debugger_ACS.Properties {
                 this["csLudwig3"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        public long snsIntCount {
+            get {
+                return ((long)(this["snsIntCount"]));
+            }
+            set {
+                this["snsIntCount"] = value;
+            }
+        }
     }
 }

@@ -27,7 +27,7 @@ namespace PCAB_Debugger_ACS
         private POS _pos;
         private PANEL _ptp;
         private SerialPortTable[] ports;
-        NormalizedColorChart cc;
+        private NormalizedColorChart cc;
         private winPOS winPOSmonitor;
         private winPCAB_SensorMonitor winPCABsensor;
         private winPCAB_PhaseMonitor winPCABphase;
@@ -137,6 +137,7 @@ namespace PCAB_Debugger_ACS
             if (Settings.Default.csLudwig3) { CsPhiTheta_RADIOBUTTON.IsChecked = true; }
             else { CsAzEl_RADIOBUTTON.IsChecked = true; }
             INTERVAL_TIME_TEXTBOX.Text = Settings.Default.snsIntTime.ToString("0");
+            INTERVAL_COUNT_TEXTBOX.Text = Settings.Default.snsIntCount.ToString("0");
             CALCULATE_FREQUENCY_TEXTBOX.Text = Settings.Default.FreqMHz.ToString("0");
 
             SERIAL_PORTS_COMBOBOX_DropDownClosed(null, null);
@@ -183,6 +184,7 @@ namespace PCAB_Debugger_ACS
             else { Settings.Default.csLudwig3 = false; }
             Settings.Default.logSaveDirPath = LogDirPath_TextBox.Text;
             Settings.Default.snsIntTime = uint.Parse(INTERVAL_TIME_TEXTBOX.Text);
+            Settings.Default.snsIntCount = uint.Parse(INTERVAL_COUNT_TEXTBOX.Text);
             Settings.Default.FreqMHz = uint.Parse(CALCULATE_FREQUENCY_TEXTBOX.Text);
             Settings.Default.winMainTop = this.Top;
             Settings.Default.winMainLeft = this.Left;
@@ -492,7 +494,7 @@ namespace PCAB_Debugger_ACS
                     }
 
                     READ_PORTsFile(portConfFilePath);
-                    _ptp.PANEL_SensorMonitor_TASK_Start(uint.Parse(INTERVAL_TIME_TEXTBOX.Text));
+                    _ptp.PANEL_SensorMonitor_TASK_Start(uint.Parse(INTERVAL_TIME_TEXTBOX.Text), uint.Parse(INTERVAL_COUNT_TEXTBOX.Text));
                     _pos.POS_AutoTaskStart();
                     winPCABsensor.Show();
                     winPCABphase.Show();
@@ -761,8 +763,8 @@ namespace PCAB_Debugger_ACS
         {
             double thisHeight = this.Height;
             if (this.WindowState == WindowState.Maximized) { thisHeight = System.Windows.SystemParameters.WorkArea.Height - 50; }
-            if (CONFIG_EXPANDER.IsExpanded) { CONFIG_GRID.Height = thisHeight * 1; }
-            if (BOARD_CONFIG_EXPANDER.IsExpanded) { BOARD_CONFIG_GRID.Height = thisHeight * 1; }
+            if (CONFIG_EXPANDER.IsExpanded) { CONFIG_GRID.Height = thisHeight * 0.85; }
+            if (BOARD_CONFIG_EXPANDER.IsExpanded) { BOARD_CONFIG_GRID.Height = thisHeight * 0.75; }
         }
         #endregion
 
@@ -2152,7 +2154,7 @@ namespace PCAB_Debugger_ACS
         private void TrackingTASK_START()
         {
             _trackTASK_Freq = double.Parse(CALCULATE_FREQUENCY_TEXTBOX.Text) * Math.Pow(10.0, 6.0);
-            trackSNS = uint.Parse(INTERVAL_TIME_TEXTBOX.Text) / 10;
+            trackSNS = uint.Parse(INTERVAL_COUNT_TEXTBOX.Text);
             _ptp.PANEL_SensorMonitor_TASK_Pause();
             _trackTASK_state = true;
             _trackTASK = Task.Factory.StartNew(() => { TrackingTASK(); });
@@ -2187,9 +2189,9 @@ namespace PCAB_Debugger_ACS
                 if (!WriteTarget(_trackTASK_Freq,_trackTASK_az,_trackTASK_pol)) { TRACK_TASK_OnError(); }
                 if (count >= trackSNS)
                 {
-                    Task _getSens1x = Task.Factory.StartNew(() => { _ptp.unitIFs[0].GetSensorValue(); });
-                    Task _getSens2x = Task.Factory.StartNew(() => { _ptp.unitIFs[1].GetSensorValue(); });
-                    Task _getSens3x = Task.Factory.StartNew(() => { _ptp.unitIFs[2].GetSensorValue(); });
+                    Task _getSens1x = Task.Factory.StartNew(() => { _ptp.unitIFs[0].GetAnalogValue(); });
+                    Task _getSens2x = Task.Factory.StartNew(() => { _ptp.unitIFs[1].GetAnalogValue(); });
+                    Task _getSens3x = Task.Factory.StartNew(() => { _ptp.unitIFs[2].GetAnalogValue(); });
                     _getSens1x?.ConfigureAwait(false);
                     _getSens2x?.ConfigureAwait(false);
                     _getSens3x?.ConfigureAwait(false);
