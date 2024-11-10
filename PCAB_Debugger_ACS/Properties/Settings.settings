@@ -146,5 +146,14 @@
     <Setting Name="snsIntCount" Type="System.Int64" Scope="User">
       <Value Profile="(Default)">10</Value>
     </Setting>
+    <Setting Name="targetLATITUDE" Type="System.Single" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="targetLOGITUDE" Type="System.Single" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="targetALTITUDE" Type="System.Single" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

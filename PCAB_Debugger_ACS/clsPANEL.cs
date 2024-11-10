@@ -268,13 +268,6 @@ namespace PCAB_Debugger_ACS
                 foreach (PORT port in _ports) { resutlt.Add(port.PhaseDelayConfig(Frequency, BeamDirection)); }
                 return resutlt;
             }
-
-            public List<uint> GetPhaseDelay(double Frequency, double Phi, double Theta)
-            {
-                List<uint> resutlt = new List<uint>();
-                foreach (PORT port in _ports) { resutlt.Add(port.PhaseDelayConfig(Frequency, Phi,Theta)); }
-                return resutlt;
-            }
         }
 
         public class PORT
@@ -302,32 +295,14 @@ namespace PCAB_Debugger_ACS
                 return new Angle(-phase);
             }
 
-            public Angle PhaseDelay(double Frequency, double Phi, double Theta)
-            {
-                double phase = Position.X * Math.Sin(Theta * Math.PI / 180.0) * Math.Cos(Phi * Math.PI / 180.0);
-                phase += Position.Y * Math.Sin(Theta * Math.PI / 180.0) * Math.Sin(Phi * Math.PI / 180.0);
-                phase *= 360.0 * Frequency / PhysicalConstant.c0;
-                return new Angle(-phase, false);
-            }
-
             public Angle OffsetPhaseDelay(double Frequency, AntennaCS BeamDirection)
             {
                 return PhaseDelay(Frequency, BeamDirection) - Offset.Phase;
             }
 
-            public Angle OffsetPhaseDelay(double Frequency, double Phi, double Theta)
-            {
-                return PhaseDelay(Frequency,Phi,Theta) - Offset.Phase;
-            }
-
             public byte PhaseDelayConfig(double Frequency, AntennaCS BeamDirection)
             {
                 return (byte)Math.Round(Angle.Normalize360(OffsetPhaseDelay(Frequency, BeamDirection)).Degree / 5.625, MidpointRounding.AwayFromZero);
-            }
-
-            public byte PhaseDelayConfig(double Frequency, double Phi, double Theta)
-            {
-                return (byte)Math.Round(Angle.Normalize360(OffsetPhaseDelay(Frequency, Phi,Theta)).Degree / 5.625, MidpointRounding.AwayFromZero);
             }
         }
 

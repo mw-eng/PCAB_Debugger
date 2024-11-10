@@ -598,5 +598,41 @@ namespace PCAB_Debugger_ACS.Properties {
                 this["snsIntCount"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public float targetLATITUDE {
+            get {
+                return ((float)(this["targetLATITUDE"]));
+            }
+            set {
+                this["targetLATITUDE"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public float targetLOGITUDE {
+            get {
+                return ((float)(this["targetLOGITUDE"]));
+            }
+            set {
+                this["targetLOGITUDE"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public float targetALTITUDE {
+            get {
+                return ((float)(this["targetALTITUDE"]));
+            }
+            set {
+                this["targetALTITUDE"] = value;
+            }
+        }
     }
 }

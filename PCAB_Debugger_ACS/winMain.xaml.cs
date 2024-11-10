@@ -32,7 +32,6 @@ namespace PCAB_Debugger_ACS
         private winPCAB_SensorMonitor winPCABsensor;
         private winPCAB_PhaseMonitor winPCABphase;
         private bool isControl = false;
-        private bool ludwig3 = false;
         private StreamWriter posFS;
         private StreamWriter snsSP1FS;
         private StreamWriter snsSP2FS;
@@ -50,6 +49,20 @@ namespace PCAB_Debugger_ACS
         private double _trackTASK_az = 0;
         private double _trackTASK_pol = 0;
         private uint trackSNS = 5;
+        private double trackCalc_az = 0;
+        private double trackCalc_pol = 0;
+        private double limitAz = 20;
+        private double limitPol = 20;
+        private double corrLatitude = 0;
+        private double corrLongitude = 0;
+        private double corrAltitude = 0;
+        private double corrAz = 0;
+        private double corrPol = 0;
+        private double targLatitude = 0;
+        private double targLongitude = 0;
+        private double targAltitude = 0;
+        private bool? coordSYS = true;
+
 
         public winMain()
         {
@@ -134,12 +147,23 @@ namespace PCAB_Debugger_ACS
             SAVELOGsPTU1x_CHECKBOX.IsChecked = Settings.Default.saveLogsPTU1x;
             SAVELOGsPTU2x_CHECKBOX.IsChecked = Settings.Default.saveLogsPTU2x;
             SAVELOGsPTU3x_CHECKBOX.IsChecked = Settings.Default.saveLogsPTU3x;
-            if (Settings.Default.csLudwig3) { CsPhiTheta_RADIOBUTTON.IsChecked = true; }
-            else { CsAzEl_RADIOBUTTON.IsChecked = true; }
+            if (Settings.Default.csLudwig3) { CsPhiTheta_RADIOBUTTON.IsChecked = true; coordSYS = null; }
+            else { CsAzEl_RADIOBUTTON.IsChecked = true; coordSYS = true; }
             INTERVAL_TIME_TEXTBOX.Text = Settings.Default.snsIntTime.ToString("0");
             INTERVAL_COUNT_TEXTBOX.Text = Settings.Default.snsIntCount.ToString("0");
             CALCULATE_FREQUENCY_TEXTBOX.Text = Settings.Default.FreqMHz.ToString("0");
 
+            targLatitude = TARGET_POSITION_INPUT.Latitude = Settings.Default.targetLATITUDE;
+            targLongitude = TARGET_POSITION_INPUT.Longitude = Settings.Default.targetLOGITUDE;
+            targAltitude = TARGET_POSITION_INPUT.Altitude = Settings.Default.targetALTITUDE;
+
+            LIMIT_AZIMUTH_TEXTBOX.Text = Math.Abs(limitAz).ToString("0.00");
+            LIMIT_POLAR_TEXTBOX.Text = Math.Abs(limitPol).ToString("0.00");
+            CORRECTION_LATITUDE_TEXTBOX.Text = corrLatitude.ToString("0.00");
+            CORRECTION_LONGITUDE_TEXTBOX.Text = corrLongitude.ToString("0.00");
+            CORRECTION_ALTITUDE_TEXTBOX.Text = corrAltitude.ToString("0.00");
+            CORRECTION_AZIMUTH_TEXTBOX.Text = corrAz.ToString("0.00");
+            CORRECTION_POLAR_TEXTBOX.Text = corrPol.ToString("0.00");
             SERIAL_PORTS_COMBOBOX_DropDownClosed(null, null);
         }
 
@@ -186,6 +210,11 @@ namespace PCAB_Debugger_ACS
             Settings.Default.snsIntTime = uint.Parse(INTERVAL_TIME_TEXTBOX.Text);
             Settings.Default.snsIntCount = uint.Parse(INTERVAL_COUNT_TEXTBOX.Text);
             Settings.Default.FreqMHz = uint.Parse(CALCULATE_FREQUENCY_TEXTBOX.Text);
+
+            TARGET_POSITION_INPUT.Latitude = Settings.Default.targetLATITUDE = (float)targLatitude;
+            TARGET_POSITION_INPUT.Longitude = Settings.Default.targetLOGITUDE = (float)targLongitude;
+            TARGET_POSITION_INPUT.Altitude = Settings.Default.targetALTITUDE = (float)targAltitude;
+
             Settings.Default.winMainTop = this.Top;
             Settings.Default.winMainLeft = this.Left;
             Settings.Default.winMainHeight = this.Height;
@@ -548,19 +577,31 @@ namespace PCAB_Debugger_ACS
             {
                 if (rb.Name == "CsPhiTheta_RADIOBUTTON")
                 {
-                    ludwig3 = true;
+                    coordSYS = null;
                     az_label.Content = "      Phi [deg]";
                     pol_label.Content = "    Theta [deg]";
                     targ_az_label.Content = "      Phi [deg]";
                     targ_pol_label.Content = "    Theta [deg]";
+                    calc_az_label.Content = "      Phi [deg]";
+                    calc_pol_label.Content = "    Theta [deg]";
+                    limit_az_label.Content = "    Phi   (+/-)";
+                    limit_pol_label.Content = "    Theta (+/-)";
+                    corr_az_label.Content = "Phi";
+                    corr_pol_label.Content = "Theta";
                 }
                 if (rb.Name == "CsAzEl_RADIOBUTTON")
                 {
-                    ludwig3 = false;
+                    coordSYS = true;
                     az_label.Content = "  Azimuth [deg]";
                     pol_label.Content = "Elevation [deg]";
                     targ_az_label.Content = "  Azimuth [deg]";
                     targ_pol_label.Content = "Elevation [deg]";
+                    calc_az_label.Content = "  Azimuth [deg]";
+                    calc_pol_label.Content = "Elevation [deg]";
+                    limit_az_label.Content = "Azimuth   (+/-)";
+                    limit_pol_label.Content = "Elevation (+/-)";
+                    corr_az_label.Content = " Azimuth";
+                    corr_pol_label.Content = "Elevation";
                 }
             }
         }
@@ -822,6 +863,11 @@ namespace PCAB_Debugger_ACS
             _ptp.PANEL_SensorMonitor_TASK_Restart();
             if (result) { MessageBox.Show("Write DPS Done.", "Success", MessageBoxButton.OK, MessageBoxImage.Information); }
             else { MessageBox.Show("Write DPS failed.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
+        }
+
+        private void TRY_SET_ATT_BUTTON_Click(object sender, RoutedEventArgs e)
+        {
+
         }
 
         private void STBLNA_CheckboxClick(object sender, RoutedEventArgs e, bool? isChecked)
@@ -1389,8 +1435,7 @@ namespace PCAB_Debugger_ACS
                     posFS.WriteLine("ND,ND,ND,ND,ND,ND,ND,ND,ND,ND,ND,ND");
                 }
             }
-            if (ludwig3){CalcTargetAngleLudwig3(); }
-            else { CalcTargetAngleLudwig2AzEl();}
+            CalcTargetAngle();
         }
 
         private void PANEL_OnError(object sender, ErrorEventArgs e)
@@ -2083,7 +2128,16 @@ namespace PCAB_Debugger_ACS
 
         private void SET_TARGET_BUTTON_Click(object sender, RoutedEventArgs e)
         {
-
+            limitAz = Math.Abs(double.Parse(LIMIT_AZIMUTH_TEXTBOX.Text));
+            limitPol = Math.Abs(double.Parse(LIMIT_POLAR_TEXTBOX.Text));
+            corrLatitude = double.Parse(CORRECTION_LATITUDE_TEXTBOX.Text);
+            corrLongitude = double.Parse(CORRECTION_LONGITUDE_TEXTBOX.Text);
+            corrAltitude = double.Parse(CORRECTION_ALTITUDE_TEXTBOX.Text);
+            corrAz = double.Parse(CORRECTION_AZIMUTH_TEXTBOX.Text);
+            corrPol = double.Parse(CORRECTION_POLAR_TEXTBOX.Text);
+            targLatitude = TARGET_POSITION_INPUT.Latitude;
+            targLongitude = TARGET_POSITION_INPUT.Longitude;
+            targAltitude = TARGET_POSITION_INPUT.Altitude;
         }
 
         private void TRACK_TASK_BUTTON_Click(object sender, RoutedEventArgs e)
@@ -2100,54 +2154,37 @@ namespace PCAB_Debugger_ACS
 
         #region Track calculate and tasks
 
-        private void CalcTargetAngleLudwig3()
+        private void CalcTargetAngle()
         {
             if (winPOSmonitor.DATA != null)
             {
-                _trackTASK_pol = -winPOSmonitor.DATA.HEADING;
-            }
+                //trackCalc_az = -(winPOSmonitor.DATA.PITCH - PITCH_ZERO);
+                //trackCalc_pol = -(winPOSmonitor.DATA.HEADING - HEADING_ZERO);
+                trackCalc_az = winPOSmonitor.DATA.PITCH;
+                trackCalc_pol = winPOSmonitor.DATA.ROLL;
 
-            Dispatcher.BeginInvoke(new Action(() =>
-            {
-                targ_az.Content = _trackTASK_az.ToString("0.0000").PadLeft(9, ' '); //Phi
-                targ_pol.Content = _trackTASK_pol.ToString("0.0000").PadLeft(9, ' '); //Theta
-            }));
-        }
-
-        private void CalcTargetAngleLudwig2AzEl()
-        {
-            if (winPOSmonitor.DATA != null)
-            {
-                _trackTASK_az = -(winPOSmonitor.DATA.PITCH - PITCH_ZERO);
-                _trackTASK_pol = -(winPOSmonitor.DATA.HEADING - HEADING_ZERO);
-                //_trackTASK_az = winPOSmonitor.DATA.ROLL;
-                //_trackTASK_pol = winPOSmonitor.DATA.PITCH;
+                if (Math.Abs(trackCalc_az) <= Math.Abs(limitAz)) { _trackTASK_az = trackCalc_az; }
+                else { _trackTASK_az = Math.Sign(trackCalc_az) * Math.Abs(limitAz); }
+                if (Math.Abs(trackCalc_pol) <= Math.Abs(limitPol)) { _trackTASK_pol = trackCalc_pol; }
+                else { _trackTASK_pol = Math.Sign(trackCalc_pol) * Math.Abs(limitPol); }
             }
             Dispatcher.BeginInvoke(new Action(() =>
             {
                 targ_az.Content = _trackTASK_az.ToString("0.0000").PadLeft(9, ' ');
                 targ_pol.Content = _trackTASK_pol.ToString("0.0000").PadLeft(9, ' ');
+                calc_az.Content = trackCalc_az.ToString("0.0000").PadLeft(9, ' ');
+                calc_pol.Content = trackCalc_pol.ToString("0.0000").PadLeft(9, ' ');
             }));
         }
 
         private bool WriteTarget(double frequency ,double az, double pol)
         {
             bool result = false;
-            if (ludwig3)
-            {
-                result = WriteDPSxx(
-                    _ptp.unitIFs[0].UNITs[0].GetPhaseDelay(frequency, az, pol), _ptp.unitIFs[0].UNITs[1].GetPhaseDelay(frequency, az, pol), _ptp.unitIFs[0].UNITs[2].GetPhaseDelay(frequency, az, pol),
-                    _ptp.unitIFs[1].UNITs[0].GetPhaseDelay(frequency, az, pol), _ptp.unitIFs[1].UNITs[1].GetPhaseDelay(frequency, az, pol), _ptp.unitIFs[1].UNITs[2].GetPhaseDelay(frequency, az, pol),
-                    _ptp.unitIFs[2].UNITs[0].GetPhaseDelay(frequency, az, pol), _ptp.unitIFs[2].UNITs[1].GetPhaseDelay(frequency, az, pol), _ptp.unitIFs[2].UNITs[2].GetPhaseDelay(frequency, az, pol));
-            }
-            else
-            {
-                MWComLibCS.CoordinateSystem.AntennaCS targ = new MWComLibCS.CoordinateSystem.AntennaCS(new MWComLibCS.Angle(az, false), new MWComLibCS.Angle(pol, false), true);
-                result = WriteDPSxx(
-                    _ptp.unitIFs[0].UNITs[0].GetPhaseDelay(frequency, targ), _ptp.unitIFs[0].UNITs[1].GetPhaseDelay(frequency, targ), _ptp.unitIFs[0].UNITs[2].GetPhaseDelay(frequency, targ),
-                    _ptp.unitIFs[1].UNITs[0].GetPhaseDelay(frequency, targ), _ptp.unitIFs[1].UNITs[1].GetPhaseDelay(frequency, targ), _ptp.unitIFs[1].UNITs[2].GetPhaseDelay(frequency, targ),
-                    _ptp.unitIFs[2].UNITs[0].GetPhaseDelay(frequency, targ), _ptp.unitIFs[2].UNITs[1].GetPhaseDelay(frequency, targ), _ptp.unitIFs[2].UNITs[2].GetPhaseDelay(frequency, targ));
-            }
+            MWComLibCS.CoordinateSystem.AntennaCS targ = new MWComLibCS.CoordinateSystem.AntennaCS(new MWComLibCS.Angle(az, false), new MWComLibCS.Angle(pol, false), coordSYS);
+            result = WriteDPSxx(
+                _ptp.unitIFs[0].UNITs[0].GetPhaseDelay(frequency, targ), _ptp.unitIFs[0].UNITs[1].GetPhaseDelay(frequency, targ), _ptp.unitIFs[0].UNITs[2].GetPhaseDelay(frequency, targ),
+                _ptp.unitIFs[1].UNITs[0].GetPhaseDelay(frequency, targ), _ptp.unitIFs[1].UNITs[1].GetPhaseDelay(frequency, targ), _ptp.unitIFs[1].UNITs[2].GetPhaseDelay(frequency, targ),
+                _ptp.unitIFs[2].UNITs[0].GetPhaseDelay(frequency, targ), _ptp.unitIFs[2].UNITs[1].GetPhaseDelay(frequency, targ), _ptp.unitIFs[2].UNITs[2].GetPhaseDelay(frequency, targ));
             return result;
         }
 
@@ -2160,7 +2197,9 @@ namespace PCAB_Debugger_ACS
             _trackTASK = Task.Factory.StartNew(() => { TrackingTASK(); });
             BOARD_CONFIG_EXPANDER.IsEnabled = false;
             SET_TARGET_BUTTON.IsEnabled = false;
-            TARGET_POSITION_INPUT.IsEnabled = false;
+            TRACKING_TARGET_GRID.IsEnabled = false;
+            TRACKING_LIMIT_GRID.IsEnabled = false;
+            TRACKING_CORRECTION_GRID.IsEnabled = false;
             TRACK_TASK_BUTTON_TEXT.Text = "STOP";
         }
 
@@ -2175,7 +2214,9 @@ namespace PCAB_Debugger_ACS
             _ptp.PANEL_SensorMonitor_TASK_Restart();
             BOARD_CONFIG_EXPANDER.IsEnabled = true;
             SET_TARGET_BUTTON.IsEnabled = true;
-            TARGET_POSITION_INPUT.IsEnabled = true;
+            TRACKING_TARGET_GRID.IsEnabled = true;
+            TRACKING_LIMIT_GRID.IsEnabled = true;
+            TRACKING_CORRECTION_GRID.IsEnabled = true;
             TRACK_TASK_BUTTON_TEXT.Text = "Tracking Start";
         }
 

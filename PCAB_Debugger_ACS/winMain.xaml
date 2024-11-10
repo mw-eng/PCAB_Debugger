@@ -24,6 +24,10 @@
                 <Setter Property="FontSize" Value="14px"/>
                 <Setter Property="FontFamily" Value="UD Digi Kyokasho N-R"/>
             </Style>
+            <x:Array xmlns:sys="clr-namespace:System;assembly=mscorlib" xml:space="preserve" Type="{x:Type sys:String}" x:Key="NegaPosi_List">
+                <sys:String>+</sys:String>
+                <sys:String>-</sys:String>
+            </x:Array>
             <x:Array xmlns:sys="clr-namespace:System;assembly=mscorlib" xml:space="preserve" Type="{x:Type sys:String}" x:Key="BR_List">
                 <sys:String>    9,600</sys:String>
                 <sys:String>   14,400</sys:String>
@@ -1009,6 +1013,106 @@
                 <sys:String>0xEF - 2</sys:String>
                 <sys:String>0xEF - 3</sys:String>
             </x:Array>
+            <x:Array xmlns:sys="clr-namespace:System;assembly=mscorlib" xml:space="preserve" Type="{x:Type sys:String}" x:Key="DSA_List">
+                <sys:String>  0.00  dB  (000000 =  0)</sys:String>
+                <sys:String>  0.25  dB  (000001 =  1)</sys:String>
+                <sys:String>  0.50  dB  (000010 =  2)</sys:String>
+                <sys:String>  0.75  dB  (000011 =  3)</sys:String>
+                <sys:String>  1.00  dB  (000100 =  4)</sys:String>
+                <sys:String>  1.25  dB  (000101 =  5)</sys:String>
+                <sys:String>  1.50  dB  (000110 =  6)</sys:String>
+                <sys:String>  1.75  dB  (000111 =  7)</sys:String>
+                <sys:String>  2.00  dB  (001000 =  8)</sys:String>
+                <sys:String>  2.25  dB  (001001 =  9)</sys:String>
+                <sys:String>  2.50  dB  (001010 = 10)</sys:String>
+                <sys:String>  2.75  dB  (001011 = 11)</sys:String>
+                <sys:String>  3.00  dB  (001100 = 12)</sys:String>
+                <sys:String>  3.25  dB  (001101 = 13)</sys:String>
+                <sys:String>  3.50  dB  (001110 = 14)</sys:String>
+                <sys:String>  3.75  dB  (001111 = 15)</sys:String>
+                <sys:String>  4.00  dB  (010000 = 16)</sys:String>
+                <sys:String>  4.25  dB  (010001 = 17)</sys:String>
+                <sys:String>  4.50  dB  (010010 = 18)</sys:String>
+                <sys:String>  4.75  dB  (010011 = 19)</sys:String>
+                <sys:String>  5.00  dB  (010100 = 20)</sys:String>
+                <sys:String>  5.25  dB  (010101 = 21)</sys:String>
+                <sys:String>  5.50  dB  (010110 = 22)</sys:String>
+                <sys:String>  5.75  dB  (010111 = 23)</sys:String>
+                <sys:String>  6.00  dB  (011000 = 24)</sys:String>
+                <sys:String>  6.25  dB  (011001 = 25)</sys:String>
+                <sys:String>  6.50  dB  (011010 = 26)</sys:String>
+                <sys:String>  6.75  dB  (011011 = 27)</sys:String>
+                <sys:String>  7.00  dB  (011100 = 28)</sys:String>
+                <sys:String>  7.25  dB  (011101 = 29)</sys:String>
+                <sys:String>  7.50  dB  (011110 = 30)</sys:String>
+                <sys:String>  7.75  dB  (011111 = 31)</sys:String>
+                <sys:String>  8.00  dB  (100000 = 32)</sys:String>
+                <sys:String>  8.25  dB  (100001 = 33)</sys:String>
+                <sys:String>  8.50  dB  (100010 = 34)</sys:String>
+                <sys:String>  8.75  dB  (100011 = 35)</sys:String>
+                <sys:String>  9.00  dB  (100100 = 36)</sys:String>
+                <sys:String>  9.25  dB  (100101 = 37)</sys:String>
+                <sys:String>  9.50  dB  (100110 = 38)</sys:String>
+                <sys:String>  9.75  dB  (100111 = 39)</sys:String>
+                <sys:String> 10.00  dB  (101000 = 40)</sys:String>
+                <sys:String> 10.25  dB  (101001 = 41)</sys:String>
+                <sys:String> 10.50  dB  (101010 = 42)</sys:String>
+                <sys:String> 10.75  dB  (101011 = 43)</sys:String>
+                <sys:String> 11.00  dB  (101100 = 44)</sys:String>
+                <sys:String> 11.25  dB  (101101 = 45)</sys:String>
+                <sys:String> 11.50  dB  (101110 = 46)</sys:String>
+                <sys:String> 11.75  dB  (101111 = 47)</sys:String>
+                <sys:String> 12.00  dB  (110000 = 48)</sys:String>
+                <sys:String> 12.25  dB  (110001 = 49)</sys:String>
+                <sys:String> 12.50  dB  (110010 = 50)</sys:String>
+                <sys:String> 12.75  dB  (110011 = 51)</sys:String>
+                <sys:String> 13.00  dB  (110100 = 52)</sys:String>
+                <sys:String> 13.25  dB  (110101 = 53)</sys:String>
+                <sys:String> 13.50  dB  (110110 = 54)</sys:String>
+                <sys:String> 13.75  dB  (110111 = 55)</sys:String>
+                <sys:String> 14.00  dB  (111000 = 56)</sys:String>
+                <sys:String> 14.25  dB  (111001 = 57)</sys:String>
+                <sys:String> 14.50  dB  (111010 = 58)</sys:String>
+                <sys:String> 14.75  dB  (111011 = 59)</sys:String>
+                <sys:String> 15.00  dB  (111100 = 60)</sys:String>
+                <sys:String> 15.25  dB  (111101 = 61)</sys:String>
+                <sys:String> 15.50  dB  (111110 = 62)</sys:String>
+                <sys:String> 15.75  dB  (111111 = 63)</sys:String>
+            </x:Array>
+            <x:Array xmlns:sys="clr-namespace:System;assembly=mscorlib" xml:space="preserve" Type="{x:Type sys:String}" x:Key="DSAin_List">
+                <sys:String>0.00  dB  (000000 =  0)</sys:String>
+                <sys:String>0.25  dB  (000001 =  1)</sys:String>
+                <sys:String>0.50  dB  (000010 =  2)</sys:String>
+                <sys:String>0.75  dB  (000011 =  3)</sys:String>
+                <sys:String>1.00  dB  (000100 =  4)</sys:String>
+                <sys:String>1.25  dB  (000101 =  5)</sys:String>
+                <sys:String>1.50  dB  (000110 =  6)</sys:String>
+                <sys:String>1.75  dB  (000111 =  7)</sys:String>
+                <sys:String>2.00  dB  (001000 =  8)</sys:String>
+                <sys:String>2.25  dB  (001001 =  9)</sys:String>
+                <sys:String>2.50  dB  (001010 = 10)</sys:String>
+                <sys:String>2.75  dB  (001011 = 11)</sys:String>
+                <sys:String>3.00  dB  (001100 = 12)</sys:String>
+                <sys:String>3.25  dB  (001101 = 13)</sys:String>
+                <sys:String>3.50  dB  (001110 = 14)</sys:String>
+                <sys:String>3.75  dB  (001111 = 15)</sys:String>
+                <sys:String>4.00  dB  (010000 = 16)</sys:String>
+                <sys:String>4.25  dB  (010001 = 17)</sys:String>
+                <sys:String>4.50  dB  (010010 = 18)</sys:String>
+                <sys:String>4.75  dB  (010011 = 19)</sys:String>
+                <sys:String>5.00  dB  (010100 = 20)</sys:String>
+                <sys:String>5.25  dB  (010101 = 21)</sys:String>
+                <sys:String>5.50  dB  (010110 = 22)</sys:String>
+                <sys:String>5.75  dB  (010111 = 23)</sys:String>
+                <sys:String>6.00  dB  (011000 = 24)</sys:String>
+                <sys:String>6.25  dB  (011001 = 25)</sys:String>
+                <sys:String>6.50  dB  (011010 = 26)</sys:String>
+                <sys:String>6.75  dB  (011011 = 27)</sys:String>
+                <sys:String>7.00  dB  (011100 = 28)</sys:String>
+                <sys:String>7.25  dB  (011101 = 29)</sys:String>
+                <sys:String>7.50  dB  (011110 = 30)</sys:String>
+                <sys:String>7.75  dB  (011111 = 31)</sys:String>
+            </x:Array>
         </ResourceDictionary>
     </Window.Resources>
     <Grid>
@@ -1288,7 +1392,26 @@
                                         <Button Grid.Column="9" Margin="5" Click="SET_PHASE_BUTTON_Click"><Viewbox Margin="5"><TextBlock Text="Set Phase"/></Viewbox></Button>
                                     </Grid>
                                     <Grid Grid.Row="5" Background="#FFFAF2FF">
-                                        
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="1*"/>
+                                            <ColumnDefinition Width="1*"/>
+                                            <ColumnDefinition Width="5*"/>
+                                            <ColumnDefinition Width="1*"/>
+                                            <ColumnDefinition Width="1*"/>
+                                            <ColumnDefinition Width="5*"/>
+                                            <ColumnDefinition Width="3*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Viewbox Grid.Column="0" HorizontalAlignment="Right"><Label Content="J1 in"/></Viewbox>
+                                        <Viewbox Grid.Column="3" HorizontalAlignment="Right"><Label Content="  Pxx"/></Viewbox>
+                                        <Viewbox Grid.Column="2"><ComboBox SelectedIndex="0" Margin="5" x:Name="DSAin_COMBOBOX" ItemsSource="{StaticResource DSAin_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/></Viewbox>
+                                        <Viewbox Grid.Column="5"><ComboBox SelectedIndex="0" Margin="5" x:Name="DSAxx_COMBOBOX" ItemsSource="{StaticResource DSA_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/></Viewbox>
+                                        <Viewbox Grid.Column="1"><ComboBox SelectedIndex="0" x:Name="DSAinNP_COMBOBOX" ItemsSource="{StaticResource NegaPosi_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}" Margin="5"></ComboBox></Viewbox>
+                                        <Viewbox Grid.Column="4"><ComboBox SelectedIndex="0" x:Name="DSAxxNP_COMBOBOX" ItemsSource="{StaticResource NegaPosi_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}" Margin="5"></ComboBox></Viewbox>
+                                        <Button Grid.Column="9" Margin="5" Click="TRY_SET_ATT_BUTTON_Click">
+                                            <Viewbox Margin="5">
+                                                <TextBlock Text="TryATT Config"/>
+                                            </Viewbox>
+                                        </Button>
                                     </Grid>
                                 </Grid>
                             </TabItem>
@@ -1341,7 +1464,7 @@
                         <ColumnDefinition Width="1*"/>
                         <ColumnDefinition Width="1*"/>
                     </Grid.ColumnDefinitions>
-                    <Grid Grid.Row="0" Grid.Column="0">
+                    <Grid Grid.Row="0" Grid.Column="0" x:Name="TRACKING_TARGET_GRID">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="1*"/>
                             <RowDefinition Height="3*"/>
@@ -1357,7 +1480,7 @@
                             <PCAB_Debugger_ComLib:cntLaLinput x:Name="TARGET_POSITION_INPUT" Margin="5"/>
                         </Viewbox>
                     </Grid>
-                    <Grid Grid.Row="1" Grid.Column="0" Grid.RowSpan="2">
+                    <Grid Grid.Row="1" Grid.Column="0" Grid.RowSpan="2" x:Name="TRACKING_LIMIT_GRID">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="1*"/>
                             <RowDefinition Height="3*"/>
@@ -1377,15 +1500,15 @@
                                 <ColumnDefinition Width="1*"/>
                                 <ColumnDefinition Width="1*"/>
                             </Grid.ColumnDefinitions>
-                            <Viewbox Grid.Row="0" Grid.Column="0" HorizontalAlignment="Right"><Label FontFamily="UD Digi Kyokasho N-R" Content="Azimuth ±"/></Viewbox>
+                            <Viewbox Grid.Row="0" Grid.Column="0" HorizontalAlignment="Right"><Label FontFamily="UD Digi Kyokasho N-R" x:Name="limit_az_label"  Content="Azimuth   (+/-)"/></Viewbox>
                             <Viewbox Grid.Row="0" Grid.Column="2" HorizontalAlignment="Left"><Label FontFamily="UD Digi Kyokasho N-R" Content="[deg]"/></Viewbox>
-                            <Viewbox Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right"><Label FontFamily="UD Digi Kyokasho N-R" Content="Elevation ±"/></Viewbox>
+                            <Viewbox Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right"><Label FontFamily="UD Digi Kyokasho N-R" x:Name="limit_pol_label" Content="Elevation (+/-)"/></Viewbox>
                             <Viewbox Grid.Row="1" Grid.Column="2" HorizontalAlignment="Left"><Label FontFamily="UD Digi Kyokasho N-R" Content="[deg]"/></Viewbox>
                             <Viewbox Grid.Row="0" Grid.Column="1" Margin="5"><TextBox MinWidth="100" Text="20" x:Name="LIMIT_AZIMUTH_TEXTBOX" HorizontalContentAlignment="Right" PreviewTextInput="ANGLE_TextBox_PreviewTextInput" CommandManager.PreviewExecuted="ANGLE_TextBox_PreviewExecuted" PreviewLostKeyboardFocus="ANGLE_TextBox_PreviewLostKeyboardForcus"/></Viewbox>
                             <Viewbox Grid.Row="1" Grid.Column="1" Margin="5"><TextBox MinWidth="100" Text="20" x:Name="LIMIT_POLAR_TEXTBOX" HorizontalContentAlignment="Right" PreviewTextInput="ANGLE_TextBox_PreviewTextInput" CommandManager.PreviewExecuted="ANGLE_TextBox_PreviewExecuted" PreviewLostKeyboardFocus="ANGLE_TextBox_PreviewLostKeyboardForcus"/></Viewbox>
                         </Grid>
                     </Grid>
-                    <Grid Grid.Row="0" Grid.Column="1" Grid.RowSpan="2">
+                    <Grid Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" x:Name="TRACKING_CORRECTION_GRID">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="1*"/>
                             <RowDefinition Height="3*"/>
@@ -1413,8 +1536,8 @@
                             <Viewbox Grid.Row="0" Grid.Column="0" HorizontalAlignment="Right"><Label FontFamily="UD Digi Kyokasho N-R" Content="Latitude"/></Viewbox>
                             <Viewbox Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right"><Label FontFamily="UD Digi Kyokasho N-R" Content="Longitude"/></Viewbox>
                             <Viewbox Grid.Row="2" Grid.Column="0" HorizontalAlignment="Right"><Label FontFamily="UD Digi Kyokasho N-R" Content="Altitude"/></Viewbox>
-                            <Viewbox Grid.Row="3" Grid.Column="0" HorizontalAlignment="Right"><Label FontFamily="UD Digi Kyokasho N-R" Content="Azimuth"/></Viewbox>
-                            <Viewbox Grid.Row="4" Grid.Column="0" HorizontalAlignment="Right"><Label FontFamily="UD Digi Kyokasho N-R" Content="Elevation"/></Viewbox>
+                            <Viewbox Grid.Row="3" Grid.Column="0" HorizontalAlignment="Right"><Label FontFamily="UD Digi Kyokasho N-R" Content="Azimuth" x:Name="corr_az_label"/></Viewbox>
+                            <Viewbox Grid.Row="4" Grid.Column="0" HorizontalAlignment="Right"><Label FontFamily="UD Digi Kyokasho N-R" Content="Elevation" x:Name="corr_pol_label"/></Viewbox>
                             <Viewbox Grid.Row="0" Grid.Column="2" HorizontalAlignment="Left"><Label FontFamily="UD Digi Kyokasho N-R" Content="[deg]"/></Viewbox>
                             <Viewbox Grid.Row="1" Grid.Column="2" HorizontalAlignment="Left"><Label FontFamily="UD Digi Kyokasho N-R" Content="[deg]"/></Viewbox>
                             <Viewbox Grid.Row="2" Grid.Column="2" HorizontalAlignment="Left"><Label FontFamily="UD Digi Kyokasho N-R" Content="[m]"/></Viewbox>
@@ -1427,7 +1550,7 @@
                             <Viewbox Grid.Row="4" Grid.Column="1" Margin="5"><TextBox MinWidth="100" Text="0" x:Name="CORRECTION_POLAR_TEXTBOX" HorizontalContentAlignment="Right" PreviewTextInput="ANGLE_TextBox_PreviewTextInput" CommandManager.PreviewExecuted="ANGLE_TextBox_PreviewExecuted"/></Viewbox>
                         </Grid>
                     </Grid>
-                    <Button Grid.Row="2" Grid.Column="1" Margin="20" x:Name="SET_TARGET_BUTTON" Click="SET_TARGET_BUTTON_Click"><Button.Content><Viewbox Margin="5"><TextBlock Text="Set Target"/></Viewbox></Button.Content></Button>
+                    <Button Grid.Row="2" Grid.Column="1" Margin="10,10,20,10" x:Name="SET_TARGET_BUTTON" Click="SET_TARGET_BUTTON_Click"><Button.Content><Viewbox Margin="5"><TextBlock Text="Set Target And Limit and Correction Values"/></Viewbox></Button.Content></Button>
                 </Grid>
                 <Grid Grid.Row="1" ShowGridLines="True">
                     <Grid.ColumnDefinitions>
