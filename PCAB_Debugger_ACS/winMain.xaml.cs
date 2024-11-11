@@ -883,7 +883,7 @@ namespace PCAB_Debugger_ACS
             }
             try
             {
-                if(dsaInAdd != 0)
+                if (dsaInAdd != 0)
                 {
                     _ptp.unitIFs[0].UNITs[0].CONFIG.SetDSA(0, _ptp.unitIFs[0].UNITs[0].CONFIG.GetDSA(0) + dsaInAdd);
                     _ptp.unitIFs[0].UNITs[1].CONFIG.SetDSA(0, _ptp.unitIFs[0].UNITs[1].CONFIG.GetDSA(0) + dsaInAdd);
@@ -895,9 +895,9 @@ namespace PCAB_Debugger_ACS
                     _ptp.unitIFs[2].UNITs[1].CONFIG.SetDSA(0, _ptp.unitIFs[2].UNITs[1].CONFIG.GetDSA(0) + dsaInAdd);
                     _ptp.unitIFs[2].UNITs[2].CONFIG.SetDSA(0, _ptp.unitIFs[2].UNITs[2].CONFIG.GetDSA(0) + dsaInAdd);
                 }
-                if(dsaPxxAdd != 0)
+                if (dsaPxxAdd != 0)
                 {
-                    for(uint count = 1; count < 16; count++)
+                    for (uint count = 1; count < 16; count++)
                     {
                         _ptp.unitIFs[0].UNITs[0].CONFIG.SetDSA(count, _ptp.unitIFs[0].UNITs[0].CONFIG.GetDSA(count) + dsaPxxAdd);
                         _ptp.unitIFs[0].UNITs[1].CONFIG.SetDSA(count, _ptp.unitIFs[0].UNITs[1].CONFIG.GetDSA(count) + dsaPxxAdd);
@@ -914,11 +914,12 @@ namespace PCAB_Debugger_ACS
             catch
             {
                 MessageBox.Show("Processing was aborted because some value settings were outside the acceptable range.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
             }
-            WRITEDPS_Click(sender, e);
+            WRITEDSA_Click(sender, e);
             MessageBox.Show("DSA incremental configuration completed.\n" +
-                "Add DSA IN  > " + dsaInAdd.ToString() +
-                "Add DSA Pxx > " + dsaPxxAdd.ToString(),
+                "Add DSA IN  > " + (dsaInAdd * 0.25).ToString("0.00") + "dB" +
+                "Add DSA Pxx > " + (dsaPxxAdd * 0.25).ToString("0.00") + "dB",
                 "Success", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
