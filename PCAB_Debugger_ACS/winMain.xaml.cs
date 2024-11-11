@@ -867,7 +867,59 @@ namespace PCAB_Debugger_ACS
 
         private void TRY_SET_ATT_BUTTON_Click(object sender, RoutedEventArgs e)
         {
-
+            try { READ_CONFIG(); }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Read config failed\n" + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            int dsaInAdd = DSAin_COMBOBOX.SelectedIndex;
+            int dsaPxxAdd = DSAxx_COMBOBOX.SelectedIndex;
+            if (dsaInAdd != 0 && DSAinNP_COMBOBOX.Text == "-") { dsaInAdd *= -1; }
+            if (dsaPxxAdd != 0 && DSAxxNP_COMBOBOX.Text == "-") { dsaPxxAdd *= -1; }
+            if (dsaInAdd == 0 && dsaPxxAdd == 0)
+            {
+                MessageBox.Show("It will not changed.\nRead config done.", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+            try
+            {
+                if(dsaInAdd != 0)
+                {
+                    _ptp.unitIFs[0].UNITs[0].CONFIG.SetDSA(0, _ptp.unitIFs[0].UNITs[0].CONFIG.GetDSA(0) + dsaInAdd);
+                    _ptp.unitIFs[0].UNITs[1].CONFIG.SetDSA(0, _ptp.unitIFs[0].UNITs[1].CONFIG.GetDSA(0) + dsaInAdd);
+                    _ptp.unitIFs[0].UNITs[2].CONFIG.SetDSA(0, _ptp.unitIFs[0].UNITs[2].CONFIG.GetDSA(0) + dsaInAdd);
+                    _ptp.unitIFs[1].UNITs[0].CONFIG.SetDSA(0, _ptp.unitIFs[1].UNITs[0].CONFIG.GetDSA(0) + dsaInAdd);
+                    _ptp.unitIFs[1].UNITs[1].CONFIG.SetDSA(0, _ptp.unitIFs[1].UNITs[1].CONFIG.GetDSA(0) + dsaInAdd);
+                    _ptp.unitIFs[1].UNITs[2].CONFIG.SetDSA(0, _ptp.unitIFs[1].UNITs[2].CONFIG.GetDSA(0) + dsaInAdd);
+                    _ptp.unitIFs[2].UNITs[0].CONFIG.SetDSA(0, _ptp.unitIFs[2].UNITs[0].CONFIG.GetDSA(0) + dsaInAdd);
+                    _ptp.unitIFs[2].UNITs[1].CONFIG.SetDSA(0, _ptp.unitIFs[2].UNITs[1].CONFIG.GetDSA(0) + dsaInAdd);
+                    _ptp.unitIFs[2].UNITs[2].CONFIG.SetDSA(0, _ptp.unitIFs[2].UNITs[2].CONFIG.GetDSA(0) + dsaInAdd);
+                }
+                if(dsaPxxAdd != 0)
+                {
+                    for(uint count = 1; count < 16; count++)
+                    {
+                        _ptp.unitIFs[0].UNITs[0].CONFIG.SetDSA(count, _ptp.unitIFs[0].UNITs[0].CONFIG.GetDSA(count) + dsaPxxAdd);
+                        _ptp.unitIFs[0].UNITs[1].CONFIG.SetDSA(count, _ptp.unitIFs[0].UNITs[1].CONFIG.GetDSA(count) + dsaPxxAdd);
+                        _ptp.unitIFs[0].UNITs[2].CONFIG.SetDSA(count, _ptp.unitIFs[0].UNITs[2].CONFIG.GetDSA(count) + dsaPxxAdd);
+                        _ptp.unitIFs[1].UNITs[0].CONFIG.SetDSA(count, _ptp.unitIFs[1].UNITs[0].CONFIG.GetDSA(count) + dsaPxxAdd);
+                        _ptp.unitIFs[1].UNITs[1].CONFIG.SetDSA(count, _ptp.unitIFs[1].UNITs[1].CONFIG.GetDSA(count) + dsaPxxAdd);
+                        _ptp.unitIFs[1].UNITs[2].CONFIG.SetDSA(count, _ptp.unitIFs[1].UNITs[2].CONFIG.GetDSA(count) + dsaPxxAdd);
+                        _ptp.unitIFs[2].UNITs[0].CONFIG.SetDSA(count, _ptp.unitIFs[2].UNITs[0].CONFIG.GetDSA(count) + dsaPxxAdd);
+                        _ptp.unitIFs[2].UNITs[1].CONFIG.SetDSA(count, _ptp.unitIFs[2].UNITs[1].CONFIG.GetDSA(count) + dsaPxxAdd);
+                        _ptp.unitIFs[2].UNITs[2].CONFIG.SetDSA(count, _ptp.unitIFs[2].UNITs[2].CONFIG.GetDSA(count) + dsaPxxAdd);
+                    }
+                }
+            }
+            catch
+            {
+                MessageBox.Show("Processing was aborted because some value settings were outside the acceptable range.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+            WRITEDPS_Click(sender, e);
+            MessageBox.Show("DSA incremental configuration completed.\n" +
+                "Add DSA IN  > " + dsaInAdd.ToString() +
+                "Add DSA Pxx > " + dsaPxxAdd.ToString(),
+                "Success", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         private void STBLNA_CheckboxClick(object sender, RoutedEventArgs e, bool? isChecked)

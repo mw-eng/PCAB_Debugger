@@ -19,13 +19,17 @@ namespace PCAB_Debugger_ComLib
                 float min = float.Parse(LATITUDE_MINUTES_TEXTBOX.Text);
                 float sec = float.Parse(LATITUDE_SECOND_TEXTBOX.Text);
                 if(LATITUDE_COMBOBOX.SelectedIndex == 1) { deg = -deg; }
-                return deg * 60.0f * 60.0f + min * 60.0f + sec;
+                //return deg * 60.0f * 60.0f + min * 60.0f + sec;
+                return deg + (min * 60.0f + sec) / 3600f;
             }
             set
             {
-                int deg = (int)Math.Truncate(value / 60.0 / 60.0);
-                int min = (int)Math.Truncate((value - deg * 60.0 * 60.0) / 60.0);
-                float sec = value - deg * 60.0f * 60.0f - min * 60.0f;
+                //int deg = (int)Math.Truncate(value / 60.0 / 60.0);
+                //int min = (int)Math.Truncate((value - deg * 60.0 * 60.0) / 60.0);
+                //float sec = value - deg * 60.0f * 60.0f - min * 60.0f;
+                int deg = (int)Math.Truncate(value);
+                int min = (int)Math.Truncate((value - deg) * 3600.0 / 60.0);
+                float sec = (value - deg) * 3600.0f - min * 60.0f;
                 if(deg < 0) { LATITUDE_COMBOBOX.SelectedIndex = 1; }
                 else { LATITUDE_COMBOBOX.SelectedIndex = 0; }
                 LATITUDE_DEGREE_TEXTBOX.Text = Math.Abs(deg).ToString();
@@ -41,13 +45,17 @@ namespace PCAB_Debugger_ComLib
                 float min = float.Parse(LONGITUDE_MINUTES_TEXTBOX.Text);
                 float sec = float.Parse(LONGITUDE_SECOND_TEXTBOX.Text);
                 if (LONGITUDE_COMBOBOX.SelectedIndex == 1) { deg = -deg; }
-                return deg * 60.0f * 60.0f + min * 60.0f + sec;
+                //return deg * 60.0f * 60.0f + min * 60.0f + sec;
+                return deg + (min * 60.0f + sec) / 3600f;
             }
             set
             {
-                int deg = (int)Math.Truncate(value / 60.0 / 60.0);
-                int min = (int)Math.Truncate((value - deg * 60.0 * 60.0) / 60.0);
-                float sec = value - deg * 60.0f * 60.0f - min * 60.0f;
+                //int deg = (int)Math.Truncate(value / 60.0 / 60.0);
+                //int min = (int)Math.Truncate((value - deg * 60.0 * 60.0) / 60.0);
+                //float sec = value - deg * 60.0f * 60.0f - min * 60.0f;
+                int deg = (int)Math.Truncate(value);
+                int min = (int)Math.Truncate((value - deg) * 3600.0 / 60.0);
+                float sec = (value - deg) * 3600.0f - min * 60.0f;
                 if (deg < 0) { LONGITUDE_COMBOBOX.SelectedIndex = 1; }
                 else { LONGITUDE_COMBOBOX.SelectedIndex = 0; }
                 LONGITUDE_DEGREE_TEXTBOX.Text = Math.Abs(deg).ToString();

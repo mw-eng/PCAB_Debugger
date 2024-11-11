@@ -1407,7 +1407,7 @@
                                         <Viewbox Grid.Column="5"><ComboBox SelectedIndex="0" Margin="5" x:Name="DSAxx_COMBOBOX" ItemsSource="{StaticResource DSA_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}"/></Viewbox>
                                         <Viewbox Grid.Column="1"><ComboBox SelectedIndex="0" x:Name="DSAinNP_COMBOBOX" ItemsSource="{StaticResource NegaPosi_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}" Margin="5"></ComboBox></Viewbox>
                                         <Viewbox Grid.Column="4"><ComboBox SelectedIndex="0" x:Name="DSAxxNP_COMBOBOX" ItemsSource="{StaticResource NegaPosi_List}" Style="{StaticResource COMBOBOX_CONTENT_CENTER}" Margin="5"></ComboBox></Viewbox>
-                                        <Button Grid.Column="9" Margin="5" Click="TRY_SET_ATT_BUTTON_Click">
+                                        <Button Grid.Column="9" Margin="5" Click="TRY_SET_ATT_BUTTON_Click" x:Name="WRA">
                                             <Viewbox Margin="5">
                                                 <TextBlock Text="TryATT Config"/>
                                             </Viewbox>

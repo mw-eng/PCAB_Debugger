@@ -164,8 +164,17 @@ namespace PCAB_Debugger_ComLib
                 if(sum != (DATA[38] + DATA[39] * 0x0100))
                 { throw new Exception("Checksum Error."); }
             }
+
         }
 
+        public static float ConvertToArcsec(float degree)
+        {
+            return degree * 3600f;
+        }
 
+        public static float ConvertToDegree(float arcsec)
+        {
+            return arcsec / 3600f;
+        }
     }
 }
