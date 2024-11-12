@@ -61,82 +61,82 @@ namespace PCAB_Debugger_ComLib
                 switch (number)
                 {
                     case 0:
-                        if (DSA16_COMBOBOX.Items.Count >= value || value < 0) 
+                        if (DSA16_COMBOBOX.Items.Count <= value || value < 0) 
                         { throw new ArgumentException("A value out of range was specified.\nVALUE > " + value.ToString(), "SetDSA[" + number + "]"); }
                         DSA16_COMBOBOX.SelectedIndex = value; 
                         break;
                     case 1:
-                        if (DSA01_COMBOBOX.Items.Count >= value || value < 0)
+                        if (DSA01_COMBOBOX.Items.Count <= value || value < 0)
                         { throw new ArgumentException("A value out of range was specified.\nVALUE > " + value.ToString(), "SetDSA[" + number + "]"); }
                         DSA01_COMBOBOX.SelectedIndex = value;
                         break;
                     case 2:
-                        if (DSA02_COMBOBOX.Items.Count >= value || value < 0)
+                        if (DSA02_COMBOBOX.Items.Count <= value || value < 0)
                         { throw new ArgumentException("A value out of range was specified.\nVALUE > " + value.ToString(), "SetDSA[" + number + "]"); }
                         DSA02_COMBOBOX.SelectedIndex = value;
                         break;
                     case 3:
-                        if (DSA03_COMBOBOX.Items.Count >= value || value < 0)
+                        if (DSA03_COMBOBOX.Items.Count <= value || value < 0)
                         { throw new ArgumentException("A value out of range was specified.\nVALUE > " + value.ToString(), "SetDSA[" + number + "]"); }
                         DSA03_COMBOBOX.SelectedIndex = value;
                         break;
                     case 4:
-                        if (DSA04_COMBOBOX.Items.Count >= value || value < 0)
+                        if (DSA04_COMBOBOX.Items.Count <= value || value < 0)
                         { throw new ArgumentException("A value out of range was specified.\nVALUE > " + value.ToString(), "SetDSA[" + number + "]"); }
                         DSA04_COMBOBOX.SelectedIndex = value;
                         break;
                     case 5:
-                        if (DSA05_COMBOBOX.Items.Count >= value || value < 0)
+                        if (DSA05_COMBOBOX.Items.Count <= value || value < 0)
                         { throw new ArgumentException("A value out of range was specified.\nVALUE > " + value.ToString(), "SetDSA[" + number + "]"); }
                         DSA05_COMBOBOX.SelectedIndex = value;
                         break;
                     case 6:
-                        if (DSA06_COMBOBOX.Items.Count >= value || value < 0)
+                        if (DSA06_COMBOBOX.Items.Count <= value || value < 0)
                         { throw new ArgumentException("A value out of range was specified.\nVALUE > " + value.ToString(), "SetDSA[" + number + "]"); }
                         DSA06_COMBOBOX.SelectedIndex = value;
                         break;
                     case 7:
-                        if (DSA07_COMBOBOX.Items.Count >= value || value < 0)
+                        if (DSA07_COMBOBOX.Items.Count <= value || value < 0)
                         { throw new ArgumentException("A value out of range was specified.\nVALUE > " + value.ToString(), "SetDSA[" + number + "]"); }
                         DSA07_COMBOBOX.SelectedIndex = value;
                         break;
                     case 8:
-                        if (DSA08_COMBOBOX.Items.Count >= value || value < 0)
+                        if (DSA08_COMBOBOX.Items.Count <= value || value < 0)
                         { throw new ArgumentException("A value out of range was specified.\nVALUE > " + value.ToString(), "SetDSA[" + number + "]"); }
                         DSA08_COMBOBOX.SelectedIndex = value;
                         break;
                     case 9:
-                        if (DSA09_COMBOBOX.Items.Count >= value || value < 0)
+                        if (DSA09_COMBOBOX.Items.Count <= value || value < 0)
                         { throw new ArgumentException("A value out of range was specified.\nVALUE > " + value.ToString(), "SetDSA[" + number + "]"); }
                         DSA09_COMBOBOX.SelectedIndex = value;
                         break;
                     case 10:
-                        if (DSA10_COMBOBOX.Items.Count >= value || value < 0)
+                        if (DSA10_COMBOBOX.Items.Count <= value || value < 0)
                         { throw new ArgumentException("A value out of range was specified.\nVALUE > " + value.ToString(), "SetDSA[" + number + "]"); }
                         DSA10_COMBOBOX.SelectedIndex = value;
                         break;
                     case 11:
-                        if (DSA11_COMBOBOX.Items.Count >= value || value < 0)
+                        if (DSA11_COMBOBOX.Items.Count <= value || value < 0)
                         { throw new ArgumentException("A value out of range was specified.\nVALUE > " + value.ToString(), "SetDSA[" + number + "]"); }
                         DSA11_COMBOBOX.SelectedIndex = value;
                         break;
                     case 12:
-                        if (DSA12_COMBOBOX.Items.Count >= value || value < 0)
+                        if (DSA12_COMBOBOX.Items.Count <= value || value < 0)
                         { throw new ArgumentException("A value out of range was specified.\nVALUE > " + value.ToString(), "SetDSA[" + number + "]"); }
                         DSA12_COMBOBOX.SelectedIndex = value;
                         break;
                     case 13:
-                        if (DSA13_COMBOBOX.Items.Count >= value || value < 0)
+                        if (DSA13_COMBOBOX.Items.Count <= value || value < 0)
                         { throw new ArgumentException("A value out of range was specified.\nVALUE > " + value.ToString(), "SetDSA[" + number + "]"); }
                         DSA13_COMBOBOX.SelectedIndex = value;
                         break;
                     case 14:
-                        if (DSA14_COMBOBOX.Items.Count >= value || value < 0)
+                        if (DSA14_COMBOBOX.Items.Count <= value || value < 0)
                         { throw new ArgumentException("A value out of range was specified.\nVALUE > " + value.ToString(), "SetDSA[" + number + "]"); }
                         DSA14_COMBOBOX.SelectedIndex = value;
                         break;
                     case 15:
-                        if (DSA15_COMBOBOX.Items.Count >= value || value < 0)
+                        if (DSA15_COMBOBOX.Items.Count <= value || value < 0)
                         { throw new ArgumentException("A value out of range was specified.\nVALUE > " + value.ToString(), "SetDSA[" + number + "]"); }
                         DSA15_COMBOBOX.SelectedIndex = value;
                         break;
@@ -213,78 +213,78 @@ namespace PCAB_Debugger_ComLib
                 switch (number)
                 {
                     case 1:
-                        if (DPS01_COMBOBOX.Items.Count >= value || value < 0)
-                        { throw new ArgumentException("A value out of range was specified.\nVALUE > " + value.ToString(), "SetDSA[" + number + "]"); }
+                        if (DPS01_COMBOBOX.Items.Count <= value || value < 0)
+                        { throw new ArgumentException("A value out of range was specified.\nVALUE > " + value.ToString(), "SetDPS[" + number + "]"); }
                         DPS01_COMBOBOX.SelectedIndex = value;
                         break;
                     case 2:
-                        if (DPS02_COMBOBOX.Items.Count >= value || value < 0)
-                        { throw new ArgumentException("A value out of range was specified.\nVALUE > " + value.ToString(), "SetDSA[" + number + "]"); }
+                        if (DPS02_COMBOBOX.Items.Count <= value || value < 0)
+                        { throw new ArgumentException("A value out of range was specified.\nVALUE > " + value.ToString(), "SetDPS[" + number + "]"); }
                         DPS02_COMBOBOX.SelectedIndex = value;
                         break;
                     case 3:
-                        if (DPS03_COMBOBOX.Items.Count >= value || value < 0)
-                        { throw new ArgumentException("A value out of range was specified.\nVALUE > " + value.ToString(), "SetDSA[" + number + "]"); }
+                        if (DPS03_COMBOBOX.Items.Count <= value || value < 0)
+                        { throw new ArgumentException("A value out of range was specified.\nVALUE > " + value.ToString(), "SetDPS[" + number + "]"); }
                         DPS03_COMBOBOX.SelectedIndex = value;
                         break;
                     case 4:
-                        if (DPS04_COMBOBOX.Items.Count >= value || value < 0)
-                        { throw new ArgumentException("A value out of range was specified.\nVALUE > " + value.ToString(), "SetDSA[" + number + "]"); }
+                        if (DPS04_COMBOBOX.Items.Count <= value || value < 0)
+                        { throw new ArgumentException("A value out of range was specified.\nVALUE > " + value.ToString(), "SetDPS[" + number + "]"); }
                         DPS04_COMBOBOX.SelectedIndex = value;
                         break;
                     case 5:
-                        if (DPS05_COMBOBOX.Items.Count >= value || value < 0)
-                        { throw new ArgumentException("A value out of range was specified.\nVALUE > " + value.ToString(), "SetDSA[" + number + "]"); }
+                        if (DPS05_COMBOBOX.Items.Count <= value || value < 0)
+                        { throw new ArgumentException("A value out of range was specified.\nVALUE > " + value.ToString(), "SetDPS[" + number + "]"); }
                         DPS05_COMBOBOX.SelectedIndex = value;
                         break;
                     case 6:
-                        if (DPS06_COMBOBOX.Items.Count >= value || value < 0)
-                        { throw new ArgumentException("A value out of range was specified.\nVALUE > " + value.ToString(), "SetDSA[" + number + "]"); }
+                        if (DPS06_COMBOBOX.Items.Count <= value || value < 0)
+                        { throw new ArgumentException("A value out of range was specified.\nVALUE > " + value.ToString(), "SetDPS[" + number + "]"); }
                         DPS06_COMBOBOX.SelectedIndex = value;
                         break;
                     case 7:
-                        if (DPS07_COMBOBOX.Items.Count >= value || value < 0)
-                        { throw new ArgumentException("A value out of range was specified.\nVALUE > " + value.ToString(), "SetDSA[" + number + "]"); }
+                        if (DPS07_COMBOBOX.Items.Count <= value || value < 0)
+                        { throw new ArgumentException("A value out of range was specified.\nVALUE > " + value.ToString(), "SetDPS[" + number + "]"); }
                         DPS07_COMBOBOX.SelectedIndex = value;
                         break;
                     case 8:
-                        if (DPS08_COMBOBOX.Items.Count >= value || value < 0)
-                        { throw new ArgumentException("A value out of range was specified.\nVALUE > " + value.ToString(), "SetDSA[" + number + "]"); }
+                        if (DPS08_COMBOBOX.Items.Count <= value || value < 0)
+                        { throw new ArgumentException("A value out of range was specified.\nVALUE > " + value.ToString(), "SetDPS[" + number + "]"); }
                         DPS08_COMBOBOX.SelectedIndex = value;
                         break;
                     case 9:
-                        if (DPS09_COMBOBOX.Items.Count >= value || value < 0)
-                        { throw new ArgumentException("A value out of range was specified.\nVALUE > " + value.ToString(), "SetDSA[" + number + "]"); }
+                        if (DPS09_COMBOBOX.Items.Count <= value || value < 0)
+                        { throw new ArgumentException("A value out of range was specified.\nVALUE > " + value.ToString(), "SetDPS[" + number + "]"); }
                         DPS09_COMBOBOX.SelectedIndex = value;
                         break;
                     case 10:
-                        if (DPS10_COMBOBOX.Items.Count >= value || value < 0)
+                        if (DPS10_COMBOBOX.Items.Count <= value || value < 0)
                         { throw new ArgumentException("A value out of range was specified.\nVALUE > " + value.ToString(), "SetDSA[" + number + "]"); }
                         DPS10_COMBOBOX.SelectedIndex = value;
                         break;
                     case 11:
-                        if (DPS11_COMBOBOX.Items.Count >= value || value < 0)
-                        { throw new ArgumentException("A value out of range was specified.\nVALUE > " + value.ToString(), "SetDSA[" + number + "]"); }
+                        if (DPS11_COMBOBOX.Items.Count <= value || value < 0)
+                        { throw new ArgumentException("A value out of range was specified.\nVALUE > " + value.ToString(), "SetDPS[" + number + "]"); }
                         DPS11_COMBOBOX.SelectedIndex = value;
                         break;
                     case 12:
-                        if (DPS12_COMBOBOX.Items.Count >= value || value < 0)
-                        { throw new ArgumentException("A value out of range was specified.\nVALUE > " + value.ToString(), "SetDSA[" + number + "]"); }
+                        if (DPS12_COMBOBOX.Items.Count <= value || value < 0)
+                        { throw new ArgumentException("A value out of range was specified.\nVALUE > " + value.ToString(), "SetDPS[" + number + "]"); }
                         DPS12_COMBOBOX.SelectedIndex = value;
                         break;
                     case 13:
-                        if (DPS13_COMBOBOX.Items.Count >= value || value < 0)
-                        { throw new ArgumentException("A value out of range was specified.\nVALUE > " + value.ToString(), "SetDSA[" + number + "]"); }
+                        if (DPS13_COMBOBOX.Items.Count <= value || value < 0)
+                        { throw new ArgumentException("A value out of range was specified.\nVALUE > " + value.ToString(), "SetDPS[" + number + "]"); }
                         DPS13_COMBOBOX.SelectedIndex = value;
                         break;
                     case 14:
-                        if (DPS14_COMBOBOX.Items.Count >= value || value < 0)
-                        { throw new ArgumentException("A value out of range was specified.\nVALUE > " + value.ToString(), "SetDSA[" + number + "]"); }
+                        if (DPS14_COMBOBOX.Items.Count <= value || value < 0)
+                        { throw new ArgumentException("A value out of range was specified.\nVALUE > " + value.ToString(), "SetDPS[" + number + "]"); }
                         DPS14_COMBOBOX.SelectedIndex = value;
                         break;
                     case 15:
-                        if (DPS15_COMBOBOX.Items.Count >= value || value < 0)
-                        { throw new ArgumentException("A value out of range was specified.\nVALUE > " + value.ToString(), "SetDSA[" + number + "]"); }
+                        if (DPS15_COMBOBOX.Items.Count <= value || value < 0)
+                        { throw new ArgumentException("A value out of range was specified.\nVALUE > " + value.ToString(), "SetDPS[" + number + "]"); }
                         DPS15_COMBOBOX.SelectedIndex = value;
                         break;
                     default:

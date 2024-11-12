@@ -918,7 +918,7 @@ namespace PCAB_Debugger_ACS
             }
             WRITEDSA_Click(sender, e);
             MessageBox.Show("DSA incremental configuration completed.\n" +
-                "Add DSA IN  > " + (dsaInAdd * 0.25).ToString("0.00") + "dB" +
+                "Add DSA IN  > " + (dsaInAdd * 0.25).ToString("0.00") + "dB\n" +
                 "Add DSA Pxx > " + (dsaPxxAdd * 0.25).ToString("0.00") + "dB",
                 "Success", MessageBoxButton.OK, MessageBoxImage.Information);
         }
