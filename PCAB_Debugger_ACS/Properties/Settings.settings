@@ -147,13 +147,13 @@
       <Value Profile="(Default)">10</Value>
     </Setting>
     <Setting Name="targetLATITUDE" Type="System.Single" Scope="User">
-      <Value Profile="(Default)">36.0950356</Value>
+      <Value Profile="(Default)">36.09266</Value>
     </Setting>
     <Setting Name="targetLOGITUDE" Type="System.Single" Scope="User">
-      <Value Profile="(Default)">138.165771</Value>
+      <Value Profile="(Default)">138.163956</Value>
     </Setting>
     <Setting Name="targetALTITUDE" Type="System.Single" Scope="User">
-      <Value Profile="(Default)">1.58</Value>
+      <Value Profile="(Default)">1666.6</Value>
     </Setting>
   </Settings>
 </SettingsFile>

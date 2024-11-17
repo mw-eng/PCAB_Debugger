@@ -601,7 +601,7 @@ namespace PCAB_Debugger_ACS.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("36.0950356")]
+        [global::System.Configuration.DefaultSettingValueAttribute("36.09266")]
         public float targetLATITUDE {
             get {
                 return ((float)(this["targetLATITUDE"]));
@@ -613,7 +613,7 @@ namespace PCAB_Debugger_ACS.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("138.165771")]
+        [global::System.Configuration.DefaultSettingValueAttribute("138.163956")]
         public float targetLOGITUDE {
             get {
                 return ((float)(this["targetLOGITUDE"]));
@@ -625,7 +625,7 @@ namespace PCAB_Debugger_ACS.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("1.58")]
+        [global::System.Configuration.DefaultSettingValueAttribute("1666.6")]
         public float targetALTITUDE {
             get {
                 return ((float)(this["targetALTITUDE"]));
