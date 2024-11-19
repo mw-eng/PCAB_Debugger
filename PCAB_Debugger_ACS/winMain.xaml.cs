@@ -2225,19 +2225,23 @@ namespace PCAB_Debugger_ACS
                 Angle pos_longitude = Angle.AngleSec(winPOSmonitor.DATA.LONGITUDE) + Angle.AngleDeg(corrLongitude);
                 Angle pos_latitude = Angle.AngleSec(winPOSmonitor.DATA.LATITUDE) + Angle.AngleDeg(corrLatitude);
                 double pos_altitude = winPOSmonitor.DATA.ALTITUDE + corrAltitude;
-                Angle pos_rollOFFSET = Angle.AngleSec(winPOSmonitor.DATA.ROLL) + Angle.AngleDeg(corrRoll);
-                Angle pos_pitchOFFSET = Angle.AngleSec(winPOSmonitor.DATA.PITCH) + Angle.AngleDeg(corrPitch);
-                Angle pos_headingOFFSET = Angle.AngleSec(winPOSmonitor.DATA.HEADING) + Angle.AngleDeg(corrHeading);
+                Angle pos_rollOFFSET = Angle.AngleDeg(winPOSmonitor.DATA.ROLL+corrRoll);
+                Angle pos_pitchOFFSET = Angle.AngleDeg(winPOSmonitor.DATA.PITCH+corrPitch);
+                Angle pos_headingOFFSET = Angle.AngleDeg(winPOSmonitor.DATA.HEADING + corrHeading);
                 WGS84CS target = new WGS84CS(Angle.AngleDeg(targLongitude), Angle.AngleDeg(targLatitude), targAltitude);
                 WGS84CS pos = new WGS84CS(pos_longitude, pos_latitude, pos_altitude);
                 //CoordinateSystem3D rc = new CoordinateSystem3D(target.OrthogonalCoordinate) - new CoordinateSystem3D(pos.OrthogonalCoordinate);
                 //OrthogonalCS enu = AxisRotation.RotateZ(Angle.AngleDeg(90), AxisRotation.RotateY(Angle.AngleDeg(90)-pos_latitude, AxisRotation.RotateZ(pos_longitude, rc.Orthogonal)));
                 OrthogonalCS enu = WGS84CS.ENU(pos, target);
-                OrthogonalCS targENU = AxisRotation.RotateY(pos_rollOFFSET,AxisRotation.RotateX(pos_pitchOFFSET, AxisRotation.RotateZ(pos_headingOFFSET + Angle.AngleDeg(90), enu)));
-                OrthogonalCS targCalc = AxisRotation.RotateZ(Angle.AngleDeg(90), AxisRotation.RotateX(Angle.AngleDeg(180), targENU));
-                CoordinateSystem3D targCalc3D = new CoordinateSystem3D(targCalc);
-                AntennaCS targCalcANT = new AntennaCS(targCalc3D.Phi, targCalc3D.Theta, null);
+                OrthogonalCS targNWU = new OrthogonalCS(enu.Y,-enu.X,enu.Z);
+                OrthogonalCS targCalc = AxisRotation.RotateX(-pos_rollOFFSET, AxisRotation.RotateY(pos_pitchOFFSET, AxisRotation.RotateZ(pos_headingOFFSET, targNWU)));
 
+                //OrthogonalCS targetCalcOffset = AxisRotation.RotateZ(Angle.AngleDeg(180), AxisRotation.RotateY(Angle.AngleDeg(180), targCalc));
+                OrthogonalCS targetCalcOffset = new OrthogonalCS(-targCalc.X, -targCalc.Y, -targCalc.Z);
+                //OrthogonalCS targetCalcOffset = targCalc;
+
+                CoordinateSystem3D targCalc3D = new CoordinateSystem3D(targetCalcOffset);
+                AntennaCS targCalcANT = new AntennaCS(targCalc3D.Phi, targCalc3D.Theta, null);
                 Angle targCalcAngle_az, targCalcAngle_pol;
 
                 if (targCalcANT.NormalizedAngle(coordSYS, out targCalcAngle_az, out targCalcAngle_pol))
@@ -2263,7 +2267,7 @@ namespace PCAB_Debugger_ACS
         private bool WriteTarget(double frequency ,double az, double pol)
         {
             bool result = false;
-            MWComLibCS.CoordinateSystem.AntennaCS targ = new MWComLibCS.CoordinateSystem.AntennaCS(new MWComLibCS.Angle(az, false), new MWComLibCS.Angle(pol, false), coordSYS);
+            AntennaCS targ = new AntennaCS(Angle.AngleDeg(az), Angle.AngleDeg(pol), coordSYS);
             result = WriteDPSxx(
                 _ptp.unitIFs[0].UNITs[0].GetPhaseDelay(frequency, targ), _ptp.unitIFs[0].UNITs[1].GetPhaseDelay(frequency, targ), _ptp.unitIFs[0].UNITs[2].GetPhaseDelay(frequency, targ),
                 _ptp.unitIFs[1].UNITs[0].GetPhaseDelay(frequency, targ), _ptp.unitIFs[1].UNITs[1].GetPhaseDelay(frequency, targ), _ptp.unitIFs[1].UNITs[2].GetPhaseDelay(frequency, targ),

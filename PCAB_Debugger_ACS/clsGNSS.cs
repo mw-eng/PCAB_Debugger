@@ -98,9 +98,15 @@ namespace MWComLibCS.CoordinateSystem
 
             return new OrthogonalCS(
                 -ecef.X * Math.Sin(POS.Longitude.Radian) + ecef.Y * Math.Cos(POS.Longitude.Radian),
-                ecef.X * Math.Sin(POS.Latitude.Radian) * Math.Cos(POS.Longitude.Radian) + ecef.Y * Math.Sin(POS.Latitude.Radian) * Math.Sin(POS.Longitude.Radian) - ecef.Z * Math.Cos(POS.Latitude.Radian),
+                -ecef.X * Math.Sin(POS.Latitude.Radian) * Math.Cos(POS.Longitude.Radian) - ecef.Y * Math.Sin(POS.Latitude.Radian) * Math.Sin(POS.Longitude.Radian) + ecef.Z * Math.Cos(POS.Latitude.Radian),
                 ecef.X * Math.Cos(POS.Latitude.Radian) * Math.Cos(POS.Longitude.Radian) + ecef.Y * Math.Cos(POS.Latitude.Radian) * Math.Sin(POS.Longitude.Radian) + ecef.Z * Math.Sin(POS.Latitude.Radian)
                 );
+
+            //return new OrthogonalCS(
+            //    -ecef.X * Math.Sin(POS.Longitude.Radian) + ecef.Y * Math.Cos(POS.Longitude.Radian),
+            //    ecef.X * Math.Sin(POS.Latitude.Radian) * Math.Cos(POS.Longitude.Radian) + ecef.Y * Math.Sin(POS.Latitude.Radian) * Math.Sin(POS.Longitude.Radian) - ecef.Z * Math.Cos(POS.Latitude.Radian),
+            //    ecef.X * Math.Cos(POS.Latitude.Radian) * Math.Cos(POS.Longitude.Radian) + ecef.Y * Math.Cos(POS.Latitude.Radian) * Math.Sin(POS.Longitude.Radian) + ecef.Z * Math.Sin(POS.Latitude.Radian)
+            //    );
         }
     }
 
