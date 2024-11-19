@@ -1451,13 +1451,13 @@
             <Grid Grid.Row="0" Grid.RowSpan="3" Background="White" Panel.ZIndex="0"/>
             <Grid Grid.Row="4" Panel.ZIndex="0" Background="#FFE1FFA3" ShowGridLines="True">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="2*"/>
+                    <RowDefinition Height="3*"/>
                     <RowDefinition Height="1*"/>
                 </Grid.RowDefinitions>
                 <Grid Grid.Row="0">
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="3*"/>
                         <RowDefinition Height="2*"/>
-                        <RowDefinition Height="1*"/>
                         <RowDefinition Height="1*"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
@@ -1511,7 +1511,7 @@
                     <Grid Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" x:Name="TRACKING_CORRECTION_GRID">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="1*"/>
-                            <RowDefinition Height="3*"/>
+                            <RowDefinition Height="6*"/>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="1*"/>
@@ -1527,27 +1527,39 @@
                                 <RowDefinition Height="1*"/>
                                 <RowDefinition Height="1*"/>
                                 <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="1*"/>
-                                <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition Width="1*"/>
                                 <ColumnDefinition Width="1*"/>
                             </Grid.ColumnDefinitions>
                             <Viewbox Grid.Row="0" Grid.Column="0" HorizontalAlignment="Right"><Label FontFamily="UD Digi Kyokasho N-R" Content="Latitude"/></Viewbox>
                             <Viewbox Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right"><Label FontFamily="UD Digi Kyokasho N-R" Content="Longitude"/></Viewbox>
                             <Viewbox Grid.Row="2" Grid.Column="0" HorizontalAlignment="Right"><Label FontFamily="UD Digi Kyokasho N-R" Content="Altitude"/></Viewbox>
-                            <Viewbox Grid.Row="3" Grid.Column="0" HorizontalAlignment="Right"><Label FontFamily="UD Digi Kyokasho N-R" Content="Azimuth" x:Name="corr_az_label"/></Viewbox>
-                            <Viewbox Grid.Row="4" Grid.Column="0" HorizontalAlignment="Right"><Label FontFamily="UD Digi Kyokasho N-R" Content="Elevation" x:Name="corr_pol_label"/></Viewbox>
+                            <Viewbox Grid.Row="3" Grid.Column="0" HorizontalAlignment="Right"><Label FontFamily="UD Digi Kyokasho N-R" Content="Roll"/></Viewbox>
+                            <Viewbox Grid.Row="4" Grid.Column="0" HorizontalAlignment="Right"><Label FontFamily="UD Digi Kyokasho N-R" Content="Pitch"/></Viewbox>
+                            <Viewbox Grid.Row="5" Grid.Column="0" HorizontalAlignment="Right"><Label FontFamily="UD Digi Kyokasho N-R" Content="Heading"/></Viewbox>
+                            <Viewbox Grid.Row="6" Grid.Column="0" HorizontalAlignment="Right"><Label FontFamily="UD Digi Kyokasho N-R" Content="Azimuth" x:Name="corr_az_label"/></Viewbox>
+                            <Viewbox Grid.Row="7" Grid.Column="0" HorizontalAlignment="Right"><Label FontFamily="UD Digi Kyokasho N-R" Content="Elevation" x:Name="corr_pol_label"/></Viewbox>
                             <Viewbox Grid.Row="0" Grid.Column="2" HorizontalAlignment="Left"><Label FontFamily="UD Digi Kyokasho N-R" Content="[deg]"/></Viewbox>
                             <Viewbox Grid.Row="1" Grid.Column="2" HorizontalAlignment="Left"><Label FontFamily="UD Digi Kyokasho N-R" Content="[deg]"/></Viewbox>
                             <Viewbox Grid.Row="2" Grid.Column="2" HorizontalAlignment="Left"><Label FontFamily="UD Digi Kyokasho N-R" Content="[m]"/></Viewbox>
                             <Viewbox Grid.Row="3" Grid.Column="2" HorizontalAlignment="Left"><Label FontFamily="UD Digi Kyokasho N-R" Content="[deg]"/></Viewbox>
                             <Viewbox Grid.Row="4" Grid.Column="2" HorizontalAlignment="Left"><Label FontFamily="UD Digi Kyokasho N-R" Content="[deg]"/></Viewbox>
-                            <Viewbox Grid.Row="0" Grid.Column="1" Margin="5"><TextBox MinWidth="100" Text="0" x:Name="CORRECTION_LATITUDE_TEXTBOX" HorizontalContentAlignment="Right" PreviewTextInput="ANGLE_TextBox_PreviewTextInput" CommandManager.PreviewExecuted="ANGLE_TextBox_PreviewExecuted"/></Viewbox>
-                            <Viewbox Grid.Row="1" Grid.Column="1" Margin="5"><TextBox MinWidth="100" Text="0" x:Name="CORRECTION_LONGITUDE_TEXTBOX" HorizontalContentAlignment="Right" PreviewTextInput="ANGLE_TextBox_PreviewTextInput" CommandManager.PreviewExecuted="ANGLE_TextBox_PreviewExecuted"/></Viewbox>
-                            <Viewbox Grid.Row="2" Grid.Column="1" Margin="5"><TextBox MinWidth="100" Text="0" x:Name="CORRECTION_ALTITUDE_TEXTBOX" HorizontalContentAlignment="Right" PreviewTextInput="ANGLE_TextBox_PreviewTextInput" CommandManager.PreviewExecuted="ANGLE_TextBox_PreviewExecuted"/></Viewbox>
-                            <Viewbox Grid.Row="3" Grid.Column="1" Margin="5"><TextBox MinWidth="100" Text="0" x:Name="CORRECTION_AZIMUTH_TEXTBOX" HorizontalContentAlignment="Right" PreviewTextInput="ANGLE_TextBox_PreviewTextInput" CommandManager.PreviewExecuted="ANGLE_TextBox_PreviewExecuted"/></Viewbox>
-                            <Viewbox Grid.Row="4" Grid.Column="1" Margin="5"><TextBox MinWidth="100" Text="0" x:Name="CORRECTION_POLAR_TEXTBOX" HorizontalContentAlignment="Right" PreviewTextInput="ANGLE_TextBox_PreviewTextInput" CommandManager.PreviewExecuted="ANGLE_TextBox_PreviewExecuted"/></Viewbox>
+                            <Viewbox Grid.Row="5" Grid.Column="2" HorizontalAlignment="Left"><Label FontFamily="UD Digi Kyokasho N-R" Content="[deg]"/></Viewbox>
+                            <Viewbox Grid.Row="6" Grid.Column="2" HorizontalAlignment="Left"><Label FontFamily="UD Digi Kyokasho N-R" Content="[deg]"/></Viewbox>
+                            <Viewbox Grid.Row="7" Grid.Column="2" HorizontalAlignment="Left"><Label FontFamily="UD Digi Kyokasho N-R" Content="[deg]"/></Viewbox>
+                            <Viewbox Grid.Row="0" Grid.Column="1" Margin="5"><TextBox MinWidth="120" Text="0" x:Name="CORRECTION_LATITUDE_TEXTBOX" HorizontalContentAlignment="Right" PreviewTextInput="ANGLE_TextBox_PreviewTextInput" CommandManager.PreviewExecuted="ANGLE_TextBox_PreviewExecuted"/></Viewbox>
+                            <Viewbox Grid.Row="1" Grid.Column="1" Margin="5"><TextBox MinWidth="120" Text="0" x:Name="CORRECTION_LONGITUDE_TEXTBOX" HorizontalContentAlignment="Right" PreviewTextInput="ANGLE_TextBox_PreviewTextInput" CommandManager.PreviewExecuted="ANGLE_TextBox_PreviewExecuted"/></Viewbox>
+                            <Viewbox Grid.Row="2" Grid.Column="1" Margin="5"><TextBox MinWidth="120" Text="0" x:Name="CORRECTION_ALTITUDE_TEXTBOX" HorizontalContentAlignment="Right" PreviewTextInput="ANGLE_TextBox_PreviewTextInput" CommandManager.PreviewExecuted="ANGLE_TextBox_PreviewExecuted"/></Viewbox>
+                            <Viewbox Grid.Row="3" Grid.Column="1" Margin="5"><TextBox MinWidth="120" Text="0" x:Name="CORRECTION_ROLL_TEXTBOX" HorizontalContentAlignment="Right" PreviewTextInput="ANGLE_TextBox_PreviewTextInput" CommandManager.PreviewExecuted="ANGLE_TextBox_PreviewExecuted"/></Viewbox>
+                            <Viewbox Grid.Row="4" Grid.Column="1" Margin="5"><TextBox MinWidth="120" Text="0" x:Name="CORRECTION_PITCH_TEXTBOX" HorizontalContentAlignment="Right" PreviewTextInput="ANGLE_TextBox_PreviewTextInput" CommandManager.PreviewExecuted="ANGLE_TextBox_PreviewExecuted"/></Viewbox>
+                            <Viewbox Grid.Row="5" Grid.Column="1" Margin="5"><TextBox MinWidth="120" Text="0" x:Name="CORRECTION_HEADING_TEXTBOX" HorizontalContentAlignment="Right" PreviewTextInput="ANGLE_TextBox_PreviewTextInput" CommandManager.PreviewExecuted="ANGLE_TextBox_PreviewExecuted"/></Viewbox>
+                            <Viewbox Grid.Row="6" Grid.Column="1" Margin="5"><TextBox MinWidth="120" Text="0" x:Name="CORRECTION_AZIMUTH_TEXTBOX" HorizontalContentAlignment="Right" PreviewTextInput="ANGLE_TextBox_PreviewTextInput" CommandManager.PreviewExecuted="ANGLE_TextBox_PreviewExecuted"/></Viewbox>
+                            <Viewbox Grid.Row="7" Grid.Column="1" Margin="5"><TextBox MinWidth="120" Text="0" x:Name="CORRECTION_POLAR_TEXTBOX" HorizontalContentAlignment="Right" PreviewTextInput="ANGLE_TextBox_PreviewTextInput" CommandManager.PreviewExecuted="ANGLE_TextBox_PreviewExecuted"/></Viewbox>
                         </Grid>
                     </Grid>
                     <Button Grid.Row="2" Grid.Column="1" Margin="10,10,20,10" x:Name="SET_TARGET_BUTTON" Click="SET_TARGET_BUTTON_Click"><Button.Content><Viewbox Margin="5"><TextBlock Text="Set Target And Limit and Correction Values"/></Viewbox></Button.Content></Button>

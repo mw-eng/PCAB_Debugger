@@ -1,4 +1,6 @@
-﻿using PCAB_Debugger_ACS.Properties;
+﻿using MWComLibCS;
+using MWComLibCS.CoordinateSystem;
+using PCAB_Debugger_ACS.Properties;
 using PCAB_Debugger_ComLib;
 using System;
 using System.Collections.Generic;
@@ -56,6 +58,9 @@ namespace PCAB_Debugger_ACS
         private double corrLatitude = 0;
         private double corrLongitude = 0;
         private double corrAltitude = 0;
+        private double corrRoll = 0;
+        private double corrPitch = 0;
+        private double corrHeading = 0;
         private double corrAz = 0;
         private double corrPol = 0;
         private double targLatitude = 0;
@@ -162,6 +167,9 @@ namespace PCAB_Debugger_ACS
             CORRECTION_LATITUDE_TEXTBOX.Text = corrLatitude.ToString("0.00");
             CORRECTION_LONGITUDE_TEXTBOX.Text = corrLongitude.ToString("0.00");
             CORRECTION_ALTITUDE_TEXTBOX.Text = corrAltitude.ToString("0.00");
+            CORRECTION_ROLL_TEXTBOX.Text = corrRoll.ToString("0.00");
+            CORRECTION_PITCH_TEXTBOX.Text = corrPitch.ToString("0.00");
+            CORRECTION_HEADING_TEXTBOX.Text = corrHeading.ToString("0.00");
             CORRECTION_AZIMUTH_TEXTBOX.Text = corrAz.ToString("0.00");
             CORRECTION_POLAR_TEXTBOX.Text = corrPol.ToString("0.00");
             SERIAL_PORTS_COMBOBOX_DropDownClosed(null, null);
@@ -2186,6 +2194,9 @@ namespace PCAB_Debugger_ACS
             corrLatitude = double.Parse(CORRECTION_LATITUDE_TEXTBOX.Text);
             corrLongitude = double.Parse(CORRECTION_LONGITUDE_TEXTBOX.Text);
             corrAltitude = double.Parse(CORRECTION_ALTITUDE_TEXTBOX.Text);
+            corrRoll = double.Parse(CORRECTION_ROLL_TEXTBOX.Text);
+            corrPitch = double.Parse(CORRECTION_PITCH_TEXTBOX.Text);
+            corrHeading = double.Parse(CORRECTION_HEADING_TEXTBOX.Text);
             corrAz = double.Parse(CORRECTION_AZIMUTH_TEXTBOX.Text);
             corrPol = double.Parse(CORRECTION_POLAR_TEXTBOX.Text);
             targLatitude = TARGET_POSITION_INPUT.Latitude;
@@ -2211,10 +2222,29 @@ namespace PCAB_Debugger_ACS
         {
             if (winPOSmonitor.DATA != null)
             {
-                //trackCalc_az = -(winPOSmonitor.DATA.PITCH - PITCH_ZERO);
-                //trackCalc_pol = -(winPOSmonitor.DATA.HEADING - HEADING_ZERO);
-                trackCalc_az = winPOSmonitor.DATA.PITCH;
-                trackCalc_pol = winPOSmonitor.DATA.ROLL;
+                Angle pos_longitude = Angle.AngleSec(winPOSmonitor.DATA.LONGITUDE) + Angle.AngleDeg(corrLongitude);
+                Angle pos_latitude = Angle.AngleSec(winPOSmonitor.DATA.LATITUDE) + Angle.AngleDeg(corrLatitude);
+                double pos_altitude = winPOSmonitor.DATA.ALTITUDE + corrAltitude;
+                Angle pos_rollOFFSET = Angle.AngleSec(winPOSmonitor.DATA.ROLL) + Angle.AngleDeg(corrRoll);
+                Angle pos_pitchOFFSET = Angle.AngleSec(winPOSmonitor.DATA.PITCH) + Angle.AngleDeg(corrPitch);
+                Angle pos_headingOFFSET = Angle.AngleSec(winPOSmonitor.DATA.HEADING) + Angle.AngleDeg(corrHeading);
+                WGS84CS target = new WGS84CS(Angle.AngleDeg(targLongitude), Angle.AngleDeg(targLatitude), targAltitude);
+                WGS84CS pos = new WGS84CS(pos_longitude, pos_latitude, pos_altitude);
+                //CoordinateSystem3D rc = new CoordinateSystem3D(target.OrthogonalCoordinate) - new CoordinateSystem3D(pos.OrthogonalCoordinate);
+                //OrthogonalCS enu = AxisRotation.RotateZ(Angle.AngleDeg(90), AxisRotation.RotateY(Angle.AngleDeg(90)-pos_latitude, AxisRotation.RotateZ(pos_longitude, rc.Orthogonal)));
+                OrthogonalCS enu = WGS84CS.ENU(pos, target);
+                OrthogonalCS targENU = AxisRotation.RotateY(pos_rollOFFSET,AxisRotation.RotateX(pos_pitchOFFSET, AxisRotation.RotateZ(pos_headingOFFSET + Angle.AngleDeg(90), enu)));
+                OrthogonalCS targCalc = AxisRotation.RotateZ(Angle.AngleDeg(90), AxisRotation.RotateX(Angle.AngleDeg(180), targENU));
+                CoordinateSystem3D targCalc3D = new CoordinateSystem3D(targCalc);
+                AntennaCS targCalcANT = new AntennaCS(targCalc3D.Phi, targCalc3D.Theta, null);
+
+                Angle targCalcAngle_az, targCalcAngle_pol;
+
+                if (targCalcANT.NormalizedAngle(coordSYS, out targCalcAngle_az, out targCalcAngle_pol))
+                {
+                    trackCalc_az = Angle.Normalize180(targCalcAngle_az).Degree + corrAz;
+                    trackCalc_pol = Angle.Normalize180(targCalcAngle_pol).Degree + corrPol;
+                }
 
                 if (Math.Abs(trackCalc_az) <= Math.Abs(limitAz)) { _trackTASK_az = trackCalc_az; }
                 else { _trackTASK_az = Math.Sign(trackCalc_az) * Math.Abs(limitAz); }

@@ -7,7 +7,7 @@
   "targets": {
     ".NETStandard,Version=v1.1": {},
     ".NETStandard,Version=v1.1/": {
-      "MWComLibCS/1.0.0-alpha": {
+      "MWComLibCS/1.0.0-alpha.2": {
         "dependencies": {
           "NETStandard.Library": "1.6.1"
         },
@@ -275,7 +275,7 @@
     }
   },
   "libraries": {
-    "MWComLibCS/1.0.0-alpha": {
+    "MWComLibCS/1.0.0-alpha.2": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

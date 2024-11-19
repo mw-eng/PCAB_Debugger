@@ -291,7 +291,7 @@ namespace PCAB_Debugger_ACS
                 phase /= (csBD.Abs * Position.Abs);
                 phase = Math.Acos(phase);
                 phase = Position.Abs * Math.Cos(phase);
-                phase *= 2.0 * Math.PI * Frequency / PhysicalConstant.c0;
+                phase *= 2.0 * Math.PI * Frequency / SIunit.c0;
                 return new Angle(-phase);
             }
 

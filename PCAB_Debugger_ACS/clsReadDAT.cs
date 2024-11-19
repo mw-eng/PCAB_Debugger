@@ -53,7 +53,7 @@ namespace PCAB_Debugger_ACS
                                     double.TryParse(strLine[5], out att) &&
                                     double.TryParse(strLine[6], out pha))
                                 {
-                                    PANEL.PORT portBF = new PANEL.PORT(portNum, new CoordinateSystem3D(x * Math.Pow(10, (double)SIprefix.m), y * Math.Pow(10, (double)SIprefix.m), z * Math.Pow(10, (double)SIprefix.m)),
+                                    PANEL.PORT portBF = new PANEL.PORT(portNum, new CoordinateSystem3D(x * Math.Pow(10, (double)SIunit.SIprefix.m), y * Math.Pow(10, (double)SIunit.SIprefix.m), z * Math.Pow(10, (double)SIunit.SIprefix.m)),
                                         new ComplexAngle(20.0, 10, att, new Angle(pha, false)));
                                     switch (unitNum)
                                     {

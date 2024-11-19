@@ -72,6 +72,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="clsGNSS.cs" />
     <Compile Include="clsPANEL.cs" />
     <Compile Include="clsReadDAT.cs" />
     <Compile Include="winPCAB_PhaseMonitor.xaml.cs">
