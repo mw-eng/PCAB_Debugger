@@ -1,21 +1,5 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="PCAB_Debugger_ComLib.Properties" GeneratedClassName="Settings">
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)">
   <Profiles />
-  <Settings>
-    <Setting Name="mli" Type="System.Int64" Scope="User">
-      <Value Profile="(Default)">1000</Value>
-    </Setting>
-    <Setting Name="sn" Type="System.String" Scope="User">
-      <Value Profile="(Default)">0000</Value>
-    </Setting>
-    <Setting Name="visaAddr" Type="System.String" Scope="User">
-      <Value Profile="(Default)">TCPIP0::localhost::hislip0::INSTR</Value>
-    </Setting>
-    <Setting Name="visaTO" Type="System.Int64" Scope="User">
-      <Value Profile="(Default)">2000</Value>
-    </Setting>
-    <Setting Name="fnHeader" Type="System.String" Scope="User">
-      <Value Profile="(Default)">DAT</Value>
-    </Setting>
-  </Settings>
+  <Settings />
 </SettingsFile>

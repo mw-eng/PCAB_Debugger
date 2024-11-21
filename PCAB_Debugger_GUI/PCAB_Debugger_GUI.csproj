@@ -68,9 +68,24 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="clsPCAB.cs" />
+    <Compile Include="clsPNA835x.cs" />
+    <Compile Include="cntAUTO.xaml.cs">
+      <DependentUpon>cntAUTO.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="cntBOARD.xaml.cs">
+      <DependentUpon>cntBOARD.xaml</DependentUpon>
+    </Compile>
     <Compile Include="winMonitor.xaml.cs">
       <DependentUpon>winMonitor.xaml</DependentUpon>
     </Compile>
+    <Page Include="cntAUTO.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="cntBOARD.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="winEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -137,6 +152,7 @@
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
     <Reference Include="WindowsBase" />
   </ItemGroup>

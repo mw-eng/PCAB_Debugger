@@ -65,5 +65,14 @@
     <Setting Name="spEnable3" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
+    <Setting Name="visaAddr" Type="System.String" Scope="User">
+      <Value Profile="(Default)">TCPIP0::localhost::hislip0::INSTR</Value>
+    </Setting>
+    <Setting Name="visaTO" Type="System.Int64" Scope="User">
+      <Value Profile="(Default)">2000</Value>
+    </Setting>
+    <Setting Name="fnHeader" Type="System.String" Scope="User">
+      <Value Profile="(Default)">DAT</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

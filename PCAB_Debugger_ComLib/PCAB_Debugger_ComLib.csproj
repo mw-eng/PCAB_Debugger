@@ -41,14 +41,10 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MWComLibCS.ExternalControl">
-      <HintPath>MWComLibCS\MWComLibCS.ExternalControl.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Management" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
@@ -61,15 +57,8 @@
     <Compile Include="clsAsyncButton.cs" />
     <Compile Include="clsCOLOR.cs" />
     <Compile Include="clsPCAB_IO.cs" />
-    <Compile Include="clsPNA835x.cs" />
     <Compile Include="clsPOS.cs" />
     <Compile Include="clsSearchList.cs" />
-    <Compile Include="cntAUTO.xaml.cs">
-      <DependentUpon>cntAUTO.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="cntBOARD.xaml.cs">
-      <DependentUpon>cntBOARD.xaml</DependentUpon>
-    </Compile>
     <Compile Include="cntConfig.xaml.cs">
       <DependentUpon>cntConfig.xaml</DependentUpon>
     </Compile>
@@ -119,14 +108,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="cntAUTO.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="cntBOARD.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="cntConfig.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

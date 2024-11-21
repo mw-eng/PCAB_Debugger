@@ -6,7 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using static PCAB_Debugger_ComLib.agPNA835x;
+using static PCAB_Debugger_GUI.agPNA835x;
 using static PCAB_Debugger_ComLib.PCAB_TASK;
 using PCAB_Debugger_ComLib;
 using System.Linq;

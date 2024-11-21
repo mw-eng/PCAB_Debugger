@@ -1,14 +1,15 @@
-﻿<UserControl x:Class="PCAB_Debugger_ComLib.cntBOARD"
+﻿<UserControl x:Class="PCAB_Debugger_GUI.cntBOARD"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:PCAB_Debugger_ComLib"
+             xmlns:local="clr-namespace:PCAB_Debugger_GUI"
+             xmlns:PCAB_Debugger_ComLib="clr-namespace:PCAB_Debugger_ComLib;assembly=PCAB_Debugger_ComLib"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <TabControl Grid.Column="0" x:Name="TAB_CONTROL" FontSize="18" Margin="5">
-            <TabItem Header="CONTROL"><local:cntConfig/></TabItem>
+            <TabItem Header="CONTROL"><PCAB_Debugger_ComLib:cntConfig/></TabItem>
             <TabItem Header="AUTO"><local:cntAUTO/></TabItem>
         </TabControl>
 

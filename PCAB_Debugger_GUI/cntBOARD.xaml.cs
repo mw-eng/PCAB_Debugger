@@ -1,7 +1,8 @@
 ﻿using System.Windows.Controls;
+using PCAB_Debugger_ComLib;
 using static PCAB_Debugger_ComLib.cntConfigPorts;
 
-namespace PCAB_Debugger_ComLib
+namespace PCAB_Debugger_GUI
 {
     /// <summary>
     /// cntBOARD.xaml の相互作用ロジック

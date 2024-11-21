@@ -1,5 +1,5 @@
 ﻿using MWComLibCS.ExternalControl;
-using PCAB_Debugger_ComLib.Properties;
+using PCAB_Debugger_GUI.Properties;
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
@@ -7,7 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace PCAB_Debugger_ComLib
+namespace PCAB_Debugger_GUI
 {
     /// <summary>
     /// cntAUTO.xaml の相互作用ロジック
