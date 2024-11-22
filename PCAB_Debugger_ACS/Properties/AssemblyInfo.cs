@@ -10,9 +10,9 @@ using System.Windows;
 [assembly: AssemblyTitle("PCAB_Debugger_ACS")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("HP Inc.")]
+[assembly: AssemblyCompany("OrientMicrowave")]
 [assembly: AssemblyProduct("PCAB_Debugger_ACS")]
-[assembly: AssemblyCopyright("Copyright © HP Inc. 2024")]
+[assembly: AssemblyCopyright("Copyright © Orient Microwave Corp.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

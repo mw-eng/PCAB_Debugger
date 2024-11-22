@@ -585,18 +585,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_B550224760695DC09838E7BF09BF9BCA"
-        "OwnerKey" = "8:_55219439E27A4BB88D2EDAAFB85C87A6"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_B550224760695DC09838E7BF09BF9BCA"
-        "OwnerKey" = "8:_DC54A4B250B54FA5A1394D3E6D46BAC6"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_B7299B8AC5F15A1848916900D0DF2DBA"
         "OwnerKey" = "8:_A319CD15B281D34DB79A6E6A8D30B8B3"
         "MsmSig" = "8:_UNDEFINED"
@@ -778,6 +766,18 @@
         "Entry"
         {
         "MsmKey" = "8:_E9E0D05A8F6A0FCF20BA46314A269E3D"
+        "OwnerKey" = "8:_DC54A4B250B54FA5A1394D3E6D46BAC6"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_ED965BB3754662A0289B77761EDBFB3E"
+        "OwnerKey" = "8:_55219439E27A4BB88D2EDAAFB85C87A6"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_ED965BB3754662A0289B77761EDBFB3E"
         "OwnerKey" = "8:_DC54A4B250B54FA5A1394D3E6D46BAC6"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -1522,7 +1522,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_B550224760695DC09838E7BF09BF9BCA"
+        "OwnerKey" = "8:_ED965BB3754662A0289B77761EDBFB3E"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -1740,7 +1740,7 @@
             "SharedLegacy" = "11:FALSE"
             "PackageAs" = "3:1"
             "Register" = "3:1"
-            "Exclude" = "11:TRUE"
+            "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
@@ -1957,7 +1957,7 @@
             "SharedLegacy" = "11:FALSE"
             "PackageAs" = "3:1"
             "Register" = "3:1"
-            "Exclude" = "11:TRUE"
+            "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
@@ -2411,7 +2411,7 @@
             "SharedLegacy" = "11:FALSE"
             "PackageAs" = "3:1"
             "Register" = "3:1"
-            "Exclude" = "11:TRUE"
+            "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
@@ -2597,7 +2597,7 @@
             "SharedLegacy" = "11:FALSE"
             "PackageAs" = "3:1"
             "Register" = "3:1"
-            "Exclude" = "11:TRUE"
+            "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
@@ -2938,7 +2938,7 @@
             "SharedLegacy" = "11:FALSE"
             "PackageAs" = "3:1"
             "Register" = "3:1"
-            "Exclude" = "11:TRUE"
+            "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
@@ -3206,7 +3206,7 @@
             "SharedLegacy" = "11:FALSE"
             "PackageAs" = "3:1"
             "Register" = "3:1"
-            "Exclude" = "11:TRUE"
+            "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
@@ -3485,7 +3485,7 @@
             "SharedLegacy" = "11:FALSE"
             "PackageAs" = "3:1"
             "Register" = "3:1"
-            "Exclude" = "11:TRUE"
+            "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
@@ -3764,7 +3764,7 @@
             "SharedLegacy" = "11:FALSE"
             "PackageAs" = "3:1"
             "Register" = "3:1"
-            "Exclude" = "11:TRUE"
+            "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
@@ -3981,7 +3981,7 @@
             "SharedLegacy" = "11:FALSE"
             "PackageAs" = "3:1"
             "Register" = "3:1"
-            "Exclude" = "11:TRUE"
+            "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
@@ -4291,38 +4291,7 @@
             "SharedLegacy" = "11:FALSE"
             "PackageAs" = "3:1"
             "Register" = "3:1"
-            "Exclude" = "11:TRUE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_B550224760695DC09838E7BF09BF9BCA"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:PCAB_Debugger_ComLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_B550224760695DC09838E7BF09BF9BCA"
-                    {
-                    "Name" = "8:PCAB_Debugger_ComLib.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:PCAB_Debugger_ComLib.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_74480F6C3B5E4178865AAF909950A49F"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:TRUE"
+            "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
@@ -4818,7 +4787,7 @@
             "SharedLegacy" = "11:FALSE"
             "PackageAs" = "3:1"
             "Register" = "3:1"
-            "Exclude" = "11:TRUE"
+            "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
@@ -4911,7 +4880,7 @@
             "SharedLegacy" = "11:FALSE"
             "PackageAs" = "3:1"
             "Register" = "3:1"
-            "Exclude" = "11:TRUE"
+            "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
@@ -5177,6 +5146,37 @@
                     }
                 }
             "SourcePath" = "8:System.Net.WebHeaderCollection.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_74480F6C3B5E4178865AAF909950A49F"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:TRUE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_ED965BB3754662A0289B77761EDBFB3E"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:PCAB_Debugger_ComLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_ED965BB3754662A0289B77761EDBFB3E"
+                    {
+                    "Name" = "8:PCAB_Debugger_ComLib.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:PCAB_Debugger_ComLib.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_74480F6C3B5E4178865AAF909950A49F"
@@ -5531,15 +5531,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:PCAB_DebuggerGUI"
-        "ProductCode" = "8:{08BFEFE4-849F-4D5D-8740-E45B97EEDF44}"
-        "PackageCode" = "8:{726F1DF9-BFC7-4A4E-B8CF-8C26ECE5AA06}"
+        "ProductCode" = "8:{3D944D7E-14D2-41C0-B69B-4E5C76346384}"
+        "PackageCode" = "8:{D4BC1A23-412D-4141-9E85-5F09B99A4AA5}"
         "UpgradeCode" = "8:{198D4CD5-58E0-4489-9EBD-6C88B79D8A3B}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.4.5"
+        "ProductVersion" = "8:1.4.5-beta"
         "Manufacturer" = "8:OrientMicrowaveCorp."
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
@@ -6137,7 +6137,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_BB0B3FA9675E4238AB958486A9056B13"
             {
-            "SourcePath" = "8:"
+            "SourcePath" = "8:..\\PCAB_Debugger_ComLib\\obj\\Release\\PCAB_Debugger_ComLib.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_74480F6C3B5E4178865AAF909950A49F"
