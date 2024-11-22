@@ -27,7 +27,7 @@ namespace PCAB_Debugger_GUI
         SerialPortTable[] ports;
         public List<PCAB> _ioList = new List<PCAB>();
         private winMonitor monitor;
-        private int visa32Resource;
+        private int? visa32Resource;
 
         public winMain()
         {
@@ -68,7 +68,14 @@ namespace PCAB_Debugger_GUI
             this.Title += "_DEBUG MODE";
             BOARD_GRID.IsEnabled = true;
 #endif
-            visa32Resource = VisaControlNI.NewResourceManager();
+            try
+            {
+                visa32Resource = VisaControlNI.NewResourceManager();
+            }
+            catch
+            {
+                visa32Resource = null;
+            }
             SERIAL_PORTS_COMBOBOX_RELOAD(sender, e);
             SERIAL_PORTS_CHECKBOX1.IsChecked = Settings.Default.spEnable1;
             SERIAL_PORTS_CHECKBOX2.IsChecked = Settings.Default.spEnable2;

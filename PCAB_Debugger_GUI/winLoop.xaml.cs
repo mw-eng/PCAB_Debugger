@@ -110,7 +110,7 @@ namespace PCAB_Debugger_GUI
             {
                 if (owner.GetScreen_Enable == true) { saveSCR = true; }
                 if (owner.GetTrace_Enable == true) { saveTRA = true; }
-                instr = new agPNA835x(new IEEE488(new VisaControlNI(owner.setResourceManager, owner.VISA_Address)));
+                instr = new agPNA835x(new IEEE488(new VisaControlNI((int)owner.setResourceManager, owner.VISA_Address)));
                 instr.Instrument.IEEE488_VisaControl.SetTimeout(owner.VISA_Timeout);
                 //Get instrument configure
                 try

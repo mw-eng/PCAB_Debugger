@@ -14,10 +14,29 @@ namespace PCAB_Debugger_GUI
     /// </summary>
     public partial class cntAUTO : UserControl
     {
-        private int sesn;
+        private int? sesn;
         public delegate void StartButtonClickEventHandler(object sender, RoutedEventArgs e, string dirPath);
         public event StartButtonClickEventHandler ButtonClickEvent;
-        public int setResourceManager { get { return sesn; } set { sesn = value; } }
+        public int? setResourceManager
+        {
+            get { return sesn; }
+            set
+            {
+                if(value == null)
+                {
+                    VISA_CONFIG_GRID.IsEnabled = false;
+                    INSTER_CONFIG_GRID.IsEnabled = false;
+                    SAVE_CONFIG_GRID.IsEnabled = false;
+                }
+                else
+                {
+                    VISA_CONFIG_GRID.IsEnabled = true;
+                    INSTER_CONFIG_GRID.IsEnabled = true;
+                    SAVE_CONFIG_GRID.IsEnabled = true;
+                }
+                sesn = value;
+            }
+        }
         public string SerialNumber { get; private set; }
 
         public string VISA_Address { get { return VNALOOP_VISAADDR_TEXTBOX.Text; } }
@@ -120,7 +139,7 @@ namespace PCAB_Debugger_GUI
             try
             {
                 IEEE488 instr;
-                instr = new IEEE488(new VisaControlNI(sesn, strBF));
+                instr = new IEEE488(new VisaControlNI((int)sesn, strBF));
                 instr.IEEE488_VisaControl.SetTimeout(uint.Parse(VNALOOP_TIMEOUT_TEXTBOX.Text));
                 IEEE488_IDN idn = instr.IDN();
                 instr.Dispose();
@@ -149,7 +168,7 @@ namespace PCAB_Debugger_GUI
                 VNALOOP_CHANNEL_COMBOBOX.Items.Clear();
                 try
                 {
-                    agPNA835x pna = new agPNA835x(new IEEE488(new VisaControlNI(sesn, VNALOOP_VISAADDR_TEXTBOX.Text)));
+                    agPNA835x pna = new agPNA835x(new IEEE488(new VisaControlNI((int)sesn, VNALOOP_VISAADDR_TEXTBOX.Text)));
                     foreach (uint i in pna.getChannelCatalog())
                     {
                         VNALOOP_CHANNEL_COMBOBOX.Items.Add(i.ToString());

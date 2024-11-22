@@ -51,7 +51,7 @@
                 <RowDefinition Height="3*"/>
                 <RowDefinition Height="1*"/>
             </Grid.RowDefinitions>
-            <Grid Grid.Row="0">
+            <Grid Grid.Row="0" x:Name="VISA_CONFIG_GRID">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="2*"/>
                     <ColumnDefinition Width="10*"/>
@@ -78,7 +78,7 @@
                     <Label Content="[mS]"/>
                 </Viewbox>
             </Grid>
-            <Grid Grid.Row="1">
+            <Grid Grid.Row="1" x:Name="INSTER_CONFIG_GRID">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="1*"/>
@@ -105,7 +105,7 @@
                     </StackPanel>
                 </GroupBox>
             </Grid>
-            <Grid Grid.Row="2">
+            <Grid Grid.Row="2" x:Name="SAVE_CONFIG_GRID">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="6*"/>
