@@ -397,7 +397,6 @@ namespace PCAB_Debugger_GUI
                                 ((cntBOARD)_tabitem.Content).AUTO.ButtonClickEvent += AUTO_ButtonClickEvent;
                                 ((cntBOARD)_tabitem.Content).CONFIG.ButtonClickEvent += CONFIG_ButtonClickEvent;
                                 ((cntBOARD)_tabitem.Content).CONFIG.CONFIG_SETTINGS.CheckboxClickEvent += CONFIG_CONFIG_SETTINGS_CheckboxClickEventHandler;
-
                                 ((TabControl)BOARD_GRID.Children[0]).Items.Add(_tabitem);
                                 if (!readConfig(((cntBOARD)_tabitem.Content).CONFIG.CONFIG_SETTINGS))
                                 {

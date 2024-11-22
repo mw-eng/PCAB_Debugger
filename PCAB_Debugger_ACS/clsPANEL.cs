@@ -83,7 +83,7 @@ namespace PCAB_Debugger_ACS
                 if (_task != null)
                 {
                     _task = null;
-                    while (_state) { }
+                    while (_state) { Thread.Sleep(10); }
                 }
             }
             public void UNITs_SensorMonitor_TASK_Restart()

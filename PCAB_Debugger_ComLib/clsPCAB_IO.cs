@@ -123,7 +123,7 @@ namespace PCAB_Debugger_ComLib
             if (_task != null)
             {
                 _task = null;
-                while (_state) {  }
+                while (_state) { Thread.Sleep(10); }
             }
         }
 
