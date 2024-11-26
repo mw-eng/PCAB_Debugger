@@ -23,9 +23,6 @@ namespace PCAB_Debugger_ACS
     /// </summary>
     public partial class winMain : Window
     {
-        private const double HEADING_ZERO = 0.0;
-        private const double ROLL_ZERO= 0.0;
-        private const double PITCH_ZERO = 0.0;
         private POS _pos;
         private PANEL _ptp;
         private SerialPortTable[] ports;
@@ -2225,20 +2222,15 @@ namespace PCAB_Debugger_ACS
                 Angle pos_longitude = Angle.AngleSec(winPOSmonitor.DATA.LONGITUDE) + Angle.AngleDeg(corrLongitude);
                 Angle pos_latitude = Angle.AngleSec(winPOSmonitor.DATA.LATITUDE) + Angle.AngleDeg(corrLatitude);
                 double pos_altitude = winPOSmonitor.DATA.ALTITUDE + corrAltitude;
-                Angle pos_rollOFFSET = Angle.AngleDeg(winPOSmonitor.DATA.ROLL+corrRoll);
-                Angle pos_pitchOFFSET = Angle.AngleDeg(winPOSmonitor.DATA.PITCH+corrPitch);
+                Angle pos_rollOFFSET = Angle.AngleDeg(winPOSmonitor.DATA.ROLL + corrRoll);
+                Angle pos_pitchOFFSET = Angle.AngleDeg(winPOSmonitor.DATA.PITCH + corrPitch);
                 Angle pos_headingOFFSET = Angle.AngleDeg(winPOSmonitor.DATA.HEADING + corrHeading);
                 WGS84CS target = new WGS84CS(Angle.AngleDeg(targLongitude), Angle.AngleDeg(targLatitude), targAltitude);
                 WGS84CS pos = new WGS84CS(pos_longitude, pos_latitude, pos_altitude);
-                //CoordinateSystem3D rc = new CoordinateSystem3D(target.OrthogonalCoordinate) - new CoordinateSystem3D(pos.OrthogonalCoordinate);
-                //OrthogonalCS enu = AxisRotation.RotateZ(Angle.AngleDeg(90), AxisRotation.RotateY(Angle.AngleDeg(90)-pos_latitude, AxisRotation.RotateZ(pos_longitude, rc.Orthogonal)));
                 OrthogonalCS enu = WGS84CS.ENU(pos, target);
-                OrthogonalCS targNWU = new OrthogonalCS(enu.Y,-enu.X,enu.Z);
+                OrthogonalCS targNWU = new OrthogonalCS(enu.Y, -enu.X, enu.Z);
                 OrthogonalCS targCalc = AxisRotation.RotateX(-pos_rollOFFSET, AxisRotation.RotateY(pos_pitchOFFSET, AxisRotation.RotateZ(pos_headingOFFSET, targNWU)));
-
-                //OrthogonalCS targetCalcOffset = AxisRotation.RotateZ(Angle.AngleDeg(180), AxisRotation.RotateY(Angle.AngleDeg(180), targCalc));
                 OrthogonalCS targetCalcOffset = new OrthogonalCS(-targCalc.X, -targCalc.Y, -targCalc.Z);
-                //OrthogonalCS targetCalcOffset = targCalc;
 
                 CoordinateSystem3D targCalc3D = new CoordinateSystem3D(targetCalcOffset);
                 AntennaCS targCalcANT = new AntennaCS(targCalc3D.Phi, targCalc3D.Theta, null);

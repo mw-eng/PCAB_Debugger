@@ -22,12 +22,6 @@
         "Entry"
         {
         "MsmKey" = "8:_0A0ED3E8662C967D78E40C92D5BFD9D6"
-        "OwnerKey" = "8:_FC65C9A14B95E81095D387C18FE73202"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_0A0ED3E8662C967D78E40C92D5BFD9D6"
         "OwnerKey" = "8:_CC3DED6EA124E3A4DF541E2511DF5284"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -215,12 +209,6 @@
         {
         "MsmKey" = "8:_46BDD0B5BA8119F52ED0174D15BC0937"
         "OwnerKey" = "8:_DC54A4B250B54FA5A1394D3E6D46BAC6"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_478F1371B6655C77E8D45E956B341185"
-        "OwnerKey" = "8:_FC65C9A14B95E81095D387C18FE73202"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -436,12 +424,6 @@
         "Entry"
         {
         "MsmKey" = "8:_87FDBCB6C84E1FF15AEB27A022765552"
-        "OwnerKey" = "8:_CC1BDFF19D04F3EEB8671641A67242F7"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_87FDBCB6C84E1FF15AEB27A022765552"
         "OwnerKey" = "8:_55219439E27A4BB88D2EDAAFB85C87A6"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -478,12 +460,6 @@
         "Entry"
         {
         "MsmKey" = "8:_9875D85461748912CABD0277BF537A17"
-        "OwnerKey" = "8:_FC65C9A14B95E81095D387C18FE73202"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_9875D85461748912CABD0277BF537A17"
         "OwnerKey" = "8:_CC3DED6EA124E3A4DF541E2511DF5284"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -509,12 +485,6 @@
         {
         "MsmKey" = "8:_A319CD15B281D34DB79A6E6A8D30B8B3"
         "OwnerKey" = "8:_55219439E27A4BB88D2EDAAFB85C87A6"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_A319CD15B281D34DB79A6E6A8D30B8B3"
-        "OwnerKey" = "8:_F72336C8CB91AF81A83E162EF2697912"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -706,13 +676,19 @@
         "Entry"
         {
         "MsmKey" = "8:_CC3DED6EA124E3A4DF541E2511DF5284"
-        "OwnerKey" = "8:_DC54A4B250B54FA5A1394D3E6D46BAC6"
+        "OwnerKey" = "8:_DAFB4DE841D684B8793198F972D9528B"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_CC3DED6EA124E3A4DF541E2511DF5284"
         "OwnerKey" = "8:_DB40B02290D43DED622DE22A1EB63637"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_CC3DED6EA124E3A4DF541E2511DF5284"
+        "OwnerKey" = "8:_DC54A4B250B54FA5A1394D3E6D46BAC6"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -725,12 +701,6 @@
         {
         "MsmKey" = "8:_D049843CCE5E2E23AADAF26996F55FF4"
         "OwnerKey" = "8:_DC54A4B250B54FA5A1394D3E6D46BAC6"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_D0C0753623716F630295F0322B5B9004"
-        "OwnerKey" = "8:_FC65C9A14B95E81095D387C18FE73202"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -873,38 +843,8 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_F72336C8CB91AF81A83E162EF2697912"
-        "OwnerKey" = "8:_DC54A4B250B54FA5A1394D3E6D46BAC6"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_FC65C9A14B95E81095D387C18FE73202"
-        "OwnerKey" = "8:_DC54A4B250B54FA5A1394D3E6D46BAC6"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_FC65C9A14B95E81095D387C18FE73202"
-        "OwnerKey" = "8:_DAFB4DE841D684B8793198F972D9528B"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_DC54A4B250B54FA5A1394D3E6D46BAC6"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_B3CA3A9A706F5A38900E868FFE391229"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_D4A3A63964526BE39383C2E77F530103"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -929,6 +869,18 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_0A0ED3E8662C967D78E40C92D5BFD9D6"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_B3CA3A9A706F5A38900E868FFE391229"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_D4A3A63964526BE39383C2E77F530103"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -5490,68 +5442,6 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_F72336C8CB91AF81A83E162EF2697912"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:MWComLibCS.ExternalControl, Version=1.0.0.1, Culture=neutral, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_F72336C8CB91AF81A83E162EF2697912"
-                    {
-                    "Name" = "8:MWComLibCS.ExternalControl.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:MWComLibCS.ExternalControl.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_74480F6C3B5E4178865AAF909950A49F"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_FC65C9A14B95E81095D387C18FE73202"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:MWComLibCS, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_FC65C9A14B95E81095D387C18FE73202"
-                    {
-                    "Name" = "8:MWComLibCS.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:MWComLibCS.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_74480F6C3B5E4178865AAF909950A49F"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
         }
         "FileType"
         {
@@ -6219,7 +6109,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_55219439E27A4BB88D2EDAAFB85C87A6"
             {
-            "SourcePath" = "8:..\\PCAB_Debugger_GUI\\obj\\Debug_RESET\\PCAB_Debugger_GUI.exe"
+            "SourcePath" = "8:..\\PCAB_Debugger_GUI\\obj\\Release\\PCAB_Debugger_GUI.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_74480F6C3B5E4178865AAF909950A49F"
@@ -6247,7 +6137,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_BB0B3FA9675E4238AB958486A9056B13"
             {
-            "SourcePath" = "8:..\\PCAB_Debugger_ComLib\\obj\\Debug_RESET\\PCAB_Debugger_ComLib.dll"
+            "SourcePath" = "8:..\\PCAB_Debugger_ComLib\\obj\\Release\\PCAB_Debugger_ComLib.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_74480F6C3B5E4178865AAF909950A49F"
@@ -6275,7 +6165,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_DC54A4B250B54FA5A1394D3E6D46BAC6"
             {
-            "SourcePath" = "8:..\\PCAB_Debugger_ACS\\obj\\Debug_RESET\\PCAB_Debugger_ACS.exe"
+            "SourcePath" = "8:..\\PCAB_Debugger_ACS\\obj\\Release\\PCAB_Debugger_ACS.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_74480F6C3B5E4178865AAF909950A49F"
