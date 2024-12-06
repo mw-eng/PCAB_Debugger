@@ -23,6 +23,7 @@ namespace PCAB_Debugger_ACS
     /// </summary>
     public partial class winMain : Window
     {
+        #region private properties
         private POS _pos;
         private PANEL _ptp;
         private SerialPortTable[] ports;
@@ -64,7 +65,7 @@ namespace PCAB_Debugger_ACS
         private double targLongitude = 0;
         private double targAltitude = 0;
         private bool? coordSYS = true;
-
+        #endregion
 
         public winMain()
         {
@@ -111,10 +112,10 @@ namespace PCAB_Debugger_ACS
             CONTROL_GRID.IsEnabled = true;
 #endif
             SERIAL_PORTS_COMBOBOX_RELOAD(sender, e);
-            SERIAL_PORTS_COMBOBOX0.SelectedIndex = Settings.Default.spBaudRate0;
-            SERIAL_PORTS_COMBOBOX1.SelectedIndex = Settings.Default.spBaudRate1;
-            SERIAL_PORTS_COMBOBOX2.SelectedIndex = Settings.Default.spBaudRate2;
-            SERIAL_PORTS_COMBOBOX3.SelectedIndex = Settings.Default.spBaudRate3;
+            BAUD_RATE_COMBOBOX0.SelectedIndex = Settings.Default.spBaudRate0;
+            BAUD_RATE_COMBOBOX1.SelectedIndex = Settings.Default.spBaudRate1;
+            BAUD_RATE_COMBOBOX2.SelectedIndex = Settings.Default.spBaudRate2;
+            BAUD_RATE_COMBOBOX3.SelectedIndex = Settings.Default.spBaudRate3;
             if (SERIAL_PORTS_COMBOBOX0.Items.Count > 0) { SERIAL_PORTS_COMBOBOX0.SelectedIndex = 0; }
             if (SERIAL_PORTS_COMBOBOX1.Items.Count > 1) { SERIAL_PORTS_COMBOBOX1.SelectedIndex = 1; }
             if (SERIAL_PORTS_COMBOBOX2.Items.Count > 2) { SERIAL_PORTS_COMBOBOX2.SelectedIndex = 2; }
@@ -133,6 +134,9 @@ namespace PCAB_Debugger_ACS
                     { SERIAL_PORTS_COMBOBOX3.SelectedIndex = i; }
                 }
             }
+            POS_SERIAL_CHECKBOX.IsChecked = Settings.Default.sp0Enabled;
+            SERIAL_PORTS_COMBOBOX0.IsEnabled = Settings.Default.sp0Enabled;
+            BAUD_RATE_COMBOBOX0.IsEnabled = Settings.Default.sp0Enabled;
             SERIAL_NUMBERS_TEXTBOX11.Text = Settings.Default.sn11;
             SERIAL_NUMBERS_TEXTBOX12.Text = Settings.Default.sn12;
             SERIAL_NUMBERS_TEXTBOX13.Text = Settings.Default.sn13;
@@ -185,10 +189,12 @@ namespace PCAB_Debugger_ACS
             Settings.Default.spCaption1 = SERIAL_PORTS_COMBOBOX1.Text;
             Settings.Default.spCaption2 = SERIAL_PORTS_COMBOBOX2.Text;
             Settings.Default.spCaption3 = SERIAL_PORTS_COMBOBOX3.Text;
-            Settings.Default.spBaudRate0 = SERIAL_PORTS_COMBOBOX0.SelectedIndex;
-            Settings.Default.spBaudRate1 = SERIAL_PORTS_COMBOBOX1.SelectedIndex;
-            Settings.Default.spBaudRate2 = SERIAL_PORTS_COMBOBOX2.SelectedIndex;
-            Settings.Default.spBaudRate3 = SERIAL_PORTS_COMBOBOX3.SelectedIndex;
+            Settings.Default.spBaudRate0 = BAUD_RATE_COMBOBOX0.SelectedIndex;
+            Settings.Default.spBaudRate1 = BAUD_RATE_COMBOBOX1.SelectedIndex;
+            Settings.Default.spBaudRate2 = BAUD_RATE_COMBOBOX2.SelectedIndex;
+            Settings.Default.spBaudRate3 = BAUD_RATE_COMBOBOX3.SelectedIndex;
+            if (POS_SERIAL_CHECKBOX.IsChecked == true) { Settings.Default.sp0Enabled = true; }
+            else { Settings.Default.sp0Enabled = false; }
             Settings.Default.sn11 = SERIAL_NUMBERS_TEXTBOX11.Text;
             Settings.Default.sn12 = SERIAL_NUMBERS_TEXTBOX12.Text;
             Settings.Default.sn13 = SERIAL_NUMBERS_TEXTBOX13.Text;
@@ -573,12 +579,14 @@ namespace PCAB_Debugger_ACS
 
         private void POS_SERIAL_CHECKBOX_Checked(object sender, RoutedEventArgs e)
         {
-
+            SERIAL_PORTS_COMBOBOX0.IsEnabled = true;
+            BAUD_RATE_COMBOBOX0.IsEnabled = true;
         }
 
         private void POS_SERIAL_CHECKBOX_Unchecked(object sender, RoutedEventArgs e)
         {
-
+            SERIAL_PORTS_COMBOBOX0.IsEnabled = false;
+            BAUD_RATE_COMBOBOX0.IsEnabled = false;
         }
 
 

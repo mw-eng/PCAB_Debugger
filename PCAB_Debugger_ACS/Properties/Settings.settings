@@ -155,5 +155,8 @@
     <Setting Name="targetALTITUDE" Type="System.Single" Scope="User">
       <Value Profile="(Default)">1666.6</Value>
     </Setting>
+    <Setting Name="sp0Enabled" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
