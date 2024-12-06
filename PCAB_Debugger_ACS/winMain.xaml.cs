@@ -2199,6 +2199,7 @@ namespace PCAB_Debugger_ACS
             targLatitude = TARGET_POSITION_INPUT.Latitude;
             targLongitude = TARGET_POSITION_INPUT.Longitude;
             targAltitude = TARGET_POSITION_INPUT.Altitude;
+            MessageBox.Show("Setting of target value and correction value is completed.", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         private void TRACK_TASK_BUTTON_Click(object sender, RoutedEventArgs e)
