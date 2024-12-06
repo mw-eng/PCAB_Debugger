@@ -570,6 +570,18 @@ namespace PCAB_Debugger_ACS
         #endregion
 
         #region CONTROL CONFIG EVENTs
+
+        private void POS_SERIAL_CHECKBOX_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void POS_SERIAL_CHECKBOX_Unchecked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+
         private void SAVELOGs_CHECKBOX_Click(object sender, RoutedEventArgs e)
         {
             if (e.RoutedEvent.Name == "Checked") { LogDirPathSelect_BUTTON.IsEnabled = true; LogDirPath_TextBox.IsEnabled = true; SAVELOGs_SELECT_GRID.IsEnabled = true; }
@@ -2339,5 +2351,6 @@ namespace PCAB_Debugger_ACS
         }
 
         #endregion
+
     }
 }
