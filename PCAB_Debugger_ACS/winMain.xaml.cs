@@ -581,14 +581,49 @@ namespace PCAB_Debugger_ACS
         {
             SERIAL_PORTS_COMBOBOX0.IsEnabled = true;
             BAUD_RATE_COMBOBOX0.IsEnabled = true;
+            if ((POS_SERIAL_CHECKBOX.IsChecked == false || (
+                POS_SERIAL_CHECKBOX.IsChecked == true &&
+                SERIAL_PORTS_COMBOBOX0.SelectedIndex >= 0)) &&
+                SERIAL_PORTS_COMBOBOX1.SelectedIndex >= 0 &&
+                SERIAL_PORTS_COMBOBOX2.SelectedIndex >= 0 &&
+                SERIAL_PORTS_COMBOBOX3.SelectedIndex >= 0 &&
+                SERIAL_NUMBERS_TEXTBOX11.Text.Replace(" ", "").Length > 0 &&
+                SERIAL_NUMBERS_TEXTBOX12.Text.Replace(" ", "").Length > 0 &&
+                SERIAL_NUMBERS_TEXTBOX13.Text.Replace(" ", "").Length > 0 &&
+                SERIAL_NUMBERS_TEXTBOX21.Text.Replace(" ", "").Length > 0 &&
+                SERIAL_NUMBERS_TEXTBOX22.Text.Replace(" ", "").Length > 0 &&
+                SERIAL_NUMBERS_TEXTBOX23.Text.Replace(" ", "").Length > 0 &&
+                SERIAL_NUMBERS_TEXTBOX31.Text.Replace(" ", "").Length > 0 &&
+                SERIAL_NUMBERS_TEXTBOX32.Text.Replace(" ", "").Length > 0 &&
+                SERIAL_NUMBERS_TEXTBOX33.Text.Replace(" ", "").Length > 0
+                )
+            { CONNECT_BUTTON.IsEnabled = true; }
+            else { CONNECT_BUTTON.IsEnabled = false; }
         }
 
         private void POS_SERIAL_CHECKBOX_Unchecked(object sender, RoutedEventArgs e)
         {
             SERIAL_PORTS_COMBOBOX0.IsEnabled = false;
             BAUD_RATE_COMBOBOX0.IsEnabled = false;
+            if ((POS_SERIAL_CHECKBOX.IsChecked == false || (
+                POS_SERIAL_CHECKBOX.IsChecked == true &&
+                SERIAL_PORTS_COMBOBOX0.SelectedIndex >= 0)) &&
+                SERIAL_PORTS_COMBOBOX1.SelectedIndex >= 0 &&
+                SERIAL_PORTS_COMBOBOX2.SelectedIndex >= 0 &&
+                SERIAL_PORTS_COMBOBOX3.SelectedIndex >= 0 &&
+                SERIAL_NUMBERS_TEXTBOX11.Text.Replace(" ", "").Length > 0 &&
+                SERIAL_NUMBERS_TEXTBOX12.Text.Replace(" ", "").Length > 0 &&
+                SERIAL_NUMBERS_TEXTBOX13.Text.Replace(" ", "").Length > 0 &&
+                SERIAL_NUMBERS_TEXTBOX21.Text.Replace(" ", "").Length > 0 &&
+                SERIAL_NUMBERS_TEXTBOX22.Text.Replace(" ", "").Length > 0 &&
+                SERIAL_NUMBERS_TEXTBOX23.Text.Replace(" ", "").Length > 0 &&
+                SERIAL_NUMBERS_TEXTBOX31.Text.Replace(" ", "").Length > 0 &&
+                SERIAL_NUMBERS_TEXTBOX32.Text.Replace(" ", "").Length > 0 &&
+                SERIAL_NUMBERS_TEXTBOX33.Text.Replace(" ", "").Length > 0
+                )
+            { CONNECT_BUTTON.IsEnabled = true; }
+            else { CONNECT_BUTTON.IsEnabled = false; }
         }
-
 
         private void SAVELOGs_CHECKBOX_Click(object sender, RoutedEventArgs e)
         {
@@ -675,7 +710,9 @@ namespace PCAB_Debugger_ACS
 
         private void SERIAL_PORTS_COMBOBOX_DropDownClosed(object sender, EventArgs e)
         {
-            if (SERIAL_PORTS_COMBOBOX0.SelectedIndex >= 0 &&
+            if ((POS_SERIAL_CHECKBOX.IsChecked == false ||( 
+                POS_SERIAL_CHECKBOX.IsChecked == true &&
+                SERIAL_PORTS_COMBOBOX0.SelectedIndex >= 0)) &&
                 SERIAL_PORTS_COMBOBOX1.SelectedIndex >= 0 &&
                 SERIAL_PORTS_COMBOBOX2.SelectedIndex >= 0 &&
                 SERIAL_PORTS_COMBOBOX3.SelectedIndex >= 0 &&
@@ -1810,7 +1847,6 @@ namespace PCAB_Debugger_ACS
             return result;
         }
 
-
         private bool WriteDSAinxx(
             uint ptu11, uint ptu12, uint ptu13,
             uint ptu21, uint ptu22, uint ptu23,
@@ -2073,7 +2109,6 @@ namespace PCAB_Debugger_ACS
             catch { ptuDAT.ptux3 = null; }
             return ptuDAT;
         }
-
 
         private bool ReadDSAinxx(
             out int ptu11, out int ptu12, out int ptu13,
